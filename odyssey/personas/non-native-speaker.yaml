@@ -1,27 +1,27 @@
-persona_id: odyssey-busy-parent
+persona_id: odyssey-non-native-speaker
 version: '2.0'
 source: hand-specified from dimensions.json (MatrAIx 1290-dim schema)
-note: 'Suburban parent juggling work and kids: comfortable but not expert with tech,
-  drives daily, cautious, short on time, wants a clear plan.'
+note: 'Recent immigrant with limited English: capable adult, uses a phone translator,
+  unfamiliar with local websites and customs, careful with money.'
 attributes:
   age_bracket:
-    value: 45-54
+    value: 25-34
     label: Age bracket
     category: 'Demographic: Core'
   region:
-    value: North America
+    value: East Asia
     label: Region
     category: 'Demographic: Core'
   urbanicity:
-    value: Suburban
+    value: Dense urban
     label: Urbanicity
     category: 'Demographic: Core'
   socioeconomic_band:
-    value: Middle
+    value: Lower-middle
     label: Socioeconomic band
     category: 'Demographic: Core'
   demo_driver_status:
-    value: Daily driver
+    value: Non-driver
     label: Driving status
     category: 'Demographic: Core'
   lifex_travel_breadth:
@@ -29,11 +29,11 @@ attributes:
     label: Travel breadth
     category: 'Demographic: Life Events'
   lifex_geographic_mobility:
-    value: Moved within region
+    value: Moved internationally
     label: Geographic mobility
     category: 'Demographic: Life Events'
   ind_travel_tourism:
-    value: Some exposure
+    value: None
     label: 'Industry: Travel & tourism'
     category: 'Professional: Industry'
   ind_transportation:
@@ -41,7 +41,7 @@ attributes:
     label: 'Industry: Transportation'
     category: 'Professional: Industry'
   seniority:
-    value: Manager
+    value: Entry
     label: Seniority
     category: 'Professional: Career'
   tech_savviness:
@@ -53,11 +53,11 @@ attributes:
     label: 'Skill: Budgeting'
     category: 'Expertise: Skills'
   skill_driving:
-    value: Advanced
+    value: None
     label: 'Skill: Driving'
     category: 'Expertise: Skills'
   fam_urban_planning:
-    value: Aware
+    value: None
     label: 'Familiarity: Urban planning'
     category: 'Expertise: Domains'
   topic_travel:
@@ -69,7 +69,7 @@ attributes:
     label: 'Interest: Technology'
     category: 'Interests: Topics'
   lstyle_travel_freq:
-    value: A few trips/yr
+    value: Occasional
     label: Travel frequency
     category: 'Interests: Culture'
   lstyle_planning_horizon:
@@ -77,11 +77,11 @@ attributes:
     label: Planning horizon
     category: 'Interests: Culture'
   lstyle_frugality:
-    value: Balanced
+    value: Frugal saver
     label: Spending vs saving
     category: 'Interests: Culture'
   att_public_transit:
-    value: Skeptical
+    value: Positive
     label: 'Attitude: Public transit'
     category: 'Worldview: Beliefs'
   att_new_technology:
@@ -101,7 +101,7 @@ attributes:
     label: Detail orientation
     category: 'Linguistic: Communication'
   cog_patience:
-    value: Low
+    value: High
     label: Patience
     category: 'Linguistic: Communication'
   cog_attention_span:
@@ -121,7 +121,7 @@ attributes:
     label: Mobility
     category: 'Health: Physical'
   health_vision:
-    value: Corrected
+    value: Normal
     label: Vision
     category: 'Health: Physical'
   health_assistive_tech:
@@ -137,11 +137,11 @@ attributes:
     label: Save vs spend
     category: 'Behavior: Preferences'
   pref_detail_brief_vs_full:
-    value: Balanced
+    value: Brief-leaning
     label: Brief vs full detail
     category: 'Behavior: Preferences'
   accessibility_needs:
-    value: None
+    value: Language barrier
     label: Accessibility needs
     category: 'Behavior: Preferences'
   device_context:
@@ -149,10 +149,10 @@ attributes:
     label: Device context
     category: 'State: Emotional'
   economic_motivation:
-    value: Value-driven
+    value: Cost-sensitive
     label: Economic motivation
     category: Values & Motivation
   habit_budget_tracking:
-    value: Monthly
+    value: Weekly
     label: 'Habit: Budget tracking'
     category: 'Behavior: Habits'
