@@ -1,0 +1,122 @@
+diff --git a/scripts/python/run_full_trajectory_per_rubric.py b/scripts/python/run_full_trajectory_per_rubric.py
+index 2d2ca0b..a02df9c 100644
+--- a/scripts/python/run_full_trajectory_per_rubric.py
++++ b/scripts/python/run_full_trajectory_per_rubric.py
+@@ -73,6 +73,10 @@ def make_client(args: argparse.Namespace) -> tuple[str, Any]:
+     kwargs = {"api_key": api_key}
+     if args.api_base:
+         kwargs["base_url"] = args.api_base
++    if args.timeout_seconds is not None:
++        kwargs["timeout"] = args.timeout_seconds
++    if args.max_retries is not None:
++        kwargs["max_retries"] = args.max_retries
+     return "openai", AsyncOpenAI(**kwargs)
+ 
+ 
+@@ -89,6 +93,16 @@ def empty_result(run_dir: Path, task_id: str, task: str, rubrics: list[dict[str,
+     }
+ 
+ 
++def has_judge_error(result: dict[str, Any]) -> bool:
++    if result.get("error"):
++        return True
++    return any(
++        str(rubric.get("final_reasoning", "")).startswith("Error judging rubric")
++        for rubric in result.get("rubric_results", [])
++        if isinstance(rubric, dict)
++    )
++
++
+ def infer_task_id(run_dir: Path) -> str:
+     name = run_dir.name
+     if re.fullmatch(r"[0-9a-f]{32}(?:_\S+)?", name, re.IGNORECASE):
+@@ -97,7 +111,16 @@ def infer_task_id(run_dir: Path) -> str:
+     return match.group(1) if match else name
+ 
+ 
+-async def evaluate_run(run_dir: Path, client: Any, backend: str, model: str, task_index: dict[str, dict[str, Any]], max_images: int, max_steps: Optional[int] = None) -> dict[str, Any]:
++async def evaluate_run(
++    run_dir: Path,
++    client: Any,
++    backend: str,
++    model: str,
++    task_index: dict[str, dict[str, Any]],
++    max_images: int,
++    max_steps: Optional[int] = None,
++    reasoning_effort: Optional[str] = None,
++) -> dict[str, Any]:
+     task_id = infer_task_id(run_dir)
+     meta = task_index[task_id]
+     task = meta["task"].strip()
+@@ -223,10 +246,15 @@ async def evaluate_run(run_dir: Path, client: Any, backend: str, model: str, tas
+                 )
+                 result_text = str(response.text or "").strip()
+             else:
++                request = {
++                    "model": model,
++                    "messages": [{"role": "system", "content": FULL_TRAJ_JUDGMENT_SYSTEM}, {"role": "user", "content": [{"type": "text", "text": user_text}] + [{"type": "image_url", "image_url": {"url": s["data_url"], "detail": "high"}} for s in screenshot_assets]}],
++                    "max_completion_tokens": FINAL_JUDGMENT_MAX_COMPLETION_TOKENS,
++                }
++                if reasoning_effort:
++                    request["reasoning_effort"] = reasoning_effort
+                 response = await client.chat.completions.create(
+-                    model=model,
+-                    messages=[{"role": "system", "content": FULL_TRAJ_JUDGMENT_SYSTEM}, {"role": "user", "content": [{"type": "text", "text": user_text}] + [{"type": "image_url", "image_url": {"url": s["data_url"], "detail": "high"}} for s in screenshot_assets]}],
+-                    max_completion_tokens=FINAL_JUDGMENT_MAX_COMPLETION_TOKENS,
++                    **request,
+                 )
+                 result_text = str(response.choices[0].message.content or "").strip()
+             status_match = re.search(r'Status:\s*["\']?(success|failure)["\']?', result_text, re.IGNORECASE)
+@@ -322,7 +350,14 @@ async def main_async(args: argparse.Namespace) -> None:
+         existing = {
+             str(Path(item["run_dir"])): item
+             for item in json.loads(output_path.read_text(encoding="utf-8")).get("tasks", [])
+-            if isinstance(item, dict) and not item.get("error") and isinstance(item.get("run_dir"), str) and isinstance(item.get("rubric_scores"), dict) and item["rubric_scores"]
++            if (
++                isinstance(item, dict)
++                and not item.get("error")
++                and isinstance(item.get("run_dir"), str)
++                and isinstance(item.get("rubric_scores"), dict)
++                and item["rubric_scores"]
++                and not has_judge_error(item)
++            )
+         }
+     except Exception:
+         existing = {}
+@@ -340,7 +375,16 @@ async def main_async(args: argparse.Namespace) -> None:
+ 
+         async def run_one(run_dir: Path) -> dict[str, Any]:
+             async with semaphore:
+-                return await evaluate_run(run_dir, client, backend, args.model, task_index, args.max_images, args.max_steps)
++                return await evaluate_run(
++                    run_dir,
++                    client,
++                    backend,
++                    args.model,
++                    task_index,
++                    args.max_images,
++                    args.max_steps,
++                    args.reasoning_effort,
++                )
+ 
+         tasks = [asyncio.create_task(run_one(run_dir)) for run_dir in pending]
+         for i, future in enumerate(asyncio.as_completed(tasks), start=1):
+@@ -367,7 +411,7 @@ async def main_async(args: argparse.Namespace) -> None:
+         "perfect_task_rate": round(sum(1 for result in results if result.get("perfect")) / len(results), 4) if results else 0.0,
+         "trajectory_efficiency": round(traj_eff, 6),
+         "trajectory_efficiency_x100": round(traj_eff * 100, 4),
+-        "errored_tasks": sum(1 for result in results if result.get("error")),
++        "errored_tasks": sum(1 for result in results if has_judge_error(result)),
+     }
+     by_level = {}
+     for result in results:
+@@ -415,6 +459,9 @@ def main() -> None:
+     parser.add_argument("--model", default=DEFAULT_MODEL)
+     parser.add_argument("--api-key", default=None)
+     parser.add_argument("--api-base", default=None)
++    parser.add_argument("--timeout-seconds", type=float, default=None, help="OpenAI-compatible request timeout in seconds.")
++    parser.add_argument("--max-retries", type=int, default=None, help="OpenAI-compatible client retry count.")
++    parser.add_argument("--reasoning-effort", default=None, help="Optional reasoning effort for OpenAI reasoning models (for example, low).")
+     parser.add_argument("--gemini-api-key", default=None)
+     parser.add_argument("--env-file", type=Path, default=None, help="Path to a .env file to load before reading API keys (default: ./.env if present).")
+     parser.add_argument("--max-images", type=int, default=DEFAULT_MAX_IMAGES, help="Keep the last N screenshots per trajectory; 0 = unlimited.")

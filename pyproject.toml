@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "personacuabench"
+version = "0.2.0"
+description = "Persona-conditioned computer-use evaluation on a six-task Odysseys subset"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+dependencies = [
+  "Jinja2>=3.1.6,<4",
+  "openai>=1.102.0,<3",
+  "PyYAML>=6.0.2,<7",
+]
+
+[project.scripts]
+pcuab-run = "personacuabench.run:main"
+pcuab-judge = "personacuabench.judge:main"
+pcuab-experience-judge = "personacuabench.experience_judge:main"
+pcuab-report = "personacuabench.report:main"
+pcuab-report-detail = "personacuabench.detailed_report:main"
+pcuab-make-personas = "personacuabench.make_personas:main"
+pcuab-make-matched-personas = "personacuabench.make_matched_personas:main"
+
+[tool.setuptools]
+include-package-data = false
+packages = ["personacuabench"]
+
+[tool.setuptools.package-data]
+personacuabench = [
+  "*.json",
+  "*.md",
+  "*.txt",
+  "personas/*.yaml",
+  "personas/matched_pairs/*.yaml",
+  "prompts/*.md",
+  "schemas/*.json",
+]

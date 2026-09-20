@@ -1,0 +1,542 @@
+{
+  "schema_version": "personacuabench.matched-pair.v1",
+  "experiment_id": "ecommerce-six-observable-v1",
+  "title": "Observable ecommerce persona matched pairs",
+  "purpose": "Measure whether a simulated user expresses one task-relevant persona attribute at a time while preserving every original Odysseys requirement.",
+  "arm_labels": {
+    "positive": "The focal/high-expression pole used for the controlled contrast.",
+    "negative": "The opposite comparison pole. Negative is an experimental label, not a quality judgment."
+  },
+  "design": {
+    "selected_axis_count": 6,
+    "recommended_replicates": 3,
+    "expected_task_axis_pairs_per_replicate": 18,
+    "expected_run_cells_per_replicate": 36,
+    "pairing_controls": [
+      "Use the same original task, persona model, CUA model, judge model, prompts, runtime limits, and replicate identifier for both arms.",
+      "Within a pair, change exactly one MatrAIx dimension value; all other rendered persona dimensions and the display name remain identical.",
+      "Keep original task requirements hard: a persona pole may change emphasis or preference, but may not remove, contradict, or invent a task requirement.",
+      "Judge persona adherence from simulated-user utterances only; task success and CUA alignment remain separate axes."
+    ],
+    "invalid_pair_conditions": [
+      "Either arm fails to communicate every original task rubric.",
+      "The two runs differ in more than the target persona dimension or controlled run metadata.",
+      "The only cited persona evidence is wording already required by the original task.",
+      "A run is scored on an axis-task combination not listed as applicable below."
+    ]
+  },
+  "baseline_dimensions": {
+    "risk_tolerance": "Balanced",
+    "decision_style": "Deliberative",
+    "trust_level": "Trusting",
+    "time_pressure": "Moderate",
+    "economic_motivation": "Value-driven",
+    "cog_detail_orientation": "Moderate"
+  },
+  "scoring": {
+    "evidence_unit": "An exact or tightly paraphrased simulated-user utterance, not a CUA action or answer.",
+    "per_arm_scale": {
+      "0": "No supporting behavior, a direct contradiction, or behavior that violates a hard task requirement.",
+      "1": "Weak or ambiguous support, including merely repeating language inherited from the original task.",
+      "2": "Clear task-specific expression beyond inherited task wording, with no contradictory user behavior."
+    },
+    "binary_adherence_rule": "expressed=true if and only if the per-arm score is 2.",
+    "pair_separation_rule": "A matched pair separates only when both arms score 2 for their assigned poles and the cited evidence shows meaningfully opposite preferences or behavior.",
+    "coverage_guardrail": "Both arms must communicate 100% of the original task rubrics; otherwise report the pair as invalid rather than treating omission as persona expression.",
+    "reporting": [
+      "Report positive-arm adherence, negative-arm adherence, and pair separation separately by axis and task.",
+      "Keep task success and CUA alignment separate; never average them into persona adherence.",
+      "Retain the cited utterance, score, confidence, task ID, profile hash, model identities, and replicate identifier for auditability."
+    ]
+  },
+  "axes": [
+    {
+      "axis_id": "evidence_verification",
+      "label": "Evidence verification",
+      "dimension": "trust_level",
+      "positive": {
+        "value": "Verifying",
+        "behavioral_definition": "Actively asks for inspectable, current evidence and distinguishes confirmed facts from uncertain claims.",
+        "generic_observables": [
+          "Requests first-party or live-page evidence beyond simply naming a source.",
+          "Asks the assistant to label uncertainty, stale information, or unsupported claims.",
+          "Checks that a conclusion follows from the cited page rather than accepting it at face value."
+        ],
+        "contradictions": [
+          "Explicitly delegates factual verification without wanting evidence.",
+          "Treats an unsupported snippet or assertion as sufficient after uncertainty is raised."
+        ]
+      },
+      "negative": {
+        "value": "Trusting",
+        "behavioral_definition": "Delegates reasonable verification to the assistant and accepts its synthesis once the task's required evidence is present.",
+        "generic_observables": [
+          "Explicitly says the assistant may use its judgment after satisfying the named source requirements.",
+          "Accepts the assistant's synthesis without asking for extra triangulation or proof beyond the task.",
+          "Prefers a straightforward recommendation over an additional verification pass."
+        ],
+        "contradictions": [
+          "Demands independent corroboration beyond the original task.",
+          "Challenges a supported result solely because it lacks an additional source."
+        ]
+      },
+      "tasks": {
+        "39255449e341c41a589b8a4e17f073be3a4809c9": {
+          "task_label": "Kobe releases and live Nike stock",
+          "rationale": "The task mixes editorial release reporting with current product availability, making confidence calibration observable.",
+          "inherited_task_signals": [
+            "Using Sole Collector, Sneaker News, Foot Locker, and Nike.",
+            "Leaving source and product tabs open.",
+            "Providing source attribution and checking Nike stock."
+          ],
+          "positive_observables": [
+            "Asks that rumored or unclear dates be separated from confirmed release dates.",
+            "Requests a visible page-level basis for calling a Nike item currently buyable, with uncertainty flagged if stock is stale or ambiguous."
+          ],
+          "negative_observables": [
+            "Says the assistant may choose the most credible release coverage once the required sites have been checked.",
+            "Accepts the assistant's stock synthesis after the requested Nike product-page check without asking for another corroborating source."
+          ]
+        },
+        "4b9850333bdd7298442df495aff3832c13b119da": {
+          "task_label": "UK subscriptions, Wicked streaming, and PrintPigeon",
+          "rationale": "Monthly cadence, UK delivery, streaming inclusion, and current letter pricing all invite evidence-quality judgments.",
+          "inherited_task_signals": [
+            "Proving UK delivery and monthly cadence from relevant pages.",
+            "Excluding rental, purchase, add-on, and ad-supported loopholes for Wicked.",
+            "Reporting the current PrintPigeon price."
+          ],
+          "positive_observables": [
+            "Asks for uncertainty or date/currentness to be stated when subscription or streaming terms are ambiguous.",
+            "Requests first-party wording for a base-tier inclusion claim rather than relying only on a search snippet or aggregator."
+          ],
+          "negative_observables": [
+            "Explicitly accepts the assistant's interpretation once each required site or proof page is checked.",
+            "Declines extra cross-checks beyond the task's required evidence and asks for one clean recommendation."
+          ]
+        }
+      }
+    },
+    {
+      "axis_id": "price_orientation",
+      "label": "Price orientation",
+      "dimension": "economic_motivation",
+      "positive": {
+        "value": "Cost-sensitive",
+        "behavioral_definition": "Prioritizes minimizing purchase and recurring cost after all hard constraints are met.",
+        "generic_observables": [
+          "Asks for the cheapest qualifying option or total delivered/recurring cost.",
+          "Calls out fees, markups, or avoidable extras.",
+          "Uses price as the tie-breaker among options that satisfy the task."
+        ],
+        "contradictions": [
+          "States willingness to pay materially more without a cost-related reason.",
+          "Uses premium status as the main tie-breaker."
+        ]
+      },
+      "negative": {
+        "value": "Premium-seeking",
+        "behavioral_definition": "Prioritizes quality, fit, durability, convenience, or gift suitability over the lowest price while respecting hard caps.",
+        "generic_observables": [
+          "Explicitly accepts a higher price for a better-qualified option.",
+          "Uses quality, condition, fit, durability, or convenience as the tie-breaker.",
+          "Asks not to default to the cheapest option when a stronger option remains within task constraints."
+        ],
+        "contradictions": [
+          "Insists on the absolute cheapest qualifying option.",
+          "Rejects a better option solely because it is not the lowest price."
+        ]
+      },
+      "tasks": {
+        "39255449e341c41a589b8a4e17f073be3a4809c9": {
+          "task_label": "Kobe releases and live Nike stock",
+          "rationale": "The original task does not specify a budget, so price-versus-gift-quality preference can vary without changing requirements.",
+          "inherited_task_signals": [
+            "Finding upcoming releases and currently buyable Nike pairs.",
+            "Selecting size 10 when possible."
+          ],
+          "positive_observables": [
+            "Asks to favor retail-priced or lower-priced in-stock Kobe options and avoid resale markup.",
+            "Requests price or total-cost comparison before recommending an available pair."
+          ],
+          "negative_observables": [
+            "Says authenticity, desired colorway, gift suitability, or build quality matters more than the lowest price.",
+            "Explicitly permits a more expensive in-stock pair when it is the stronger birthday option."
+          ]
+        },
+        "7cc602f239775882273921d82e181020f1769b53": {
+          "task_label": "Green evening dress, matching shoes, and ooShirts",
+          "rationale": "The outfit has no budget, allowing a clean cost-versus-quality/style contrast.",
+          "inherited_task_signals": [
+            "Choosing a green Theory dress and size 9.5 matching shoes.",
+            "Reporting visible product prices."
+          ],
+          "positive_observables": [
+            "Asks to minimize the combined dress-and-shoe price or choose the cheaper of equally suitable shoes.",
+            "Raises shipping or other total-cost considerations not already required by the task."
+          ],
+          "negative_observables": [
+            "Prioritizes fabric, construction, comfort, or evening polish over the cheapest match.",
+            "Explicitly permits a higher-priced shoe when it coordinates better with the dress."
+          ]
+        },
+        "67ad95421a303ad78cfcd8c3f5a7f6668d2c6a75": {
+          "task_label": "Augusta used Toyota comparison",
+          "rationale": "Hard price constraints remain fixed, but the preferred trade-off within those constraints can vary.",
+          "inherited_task_signals": [
+            "Finding the cheapest qualifying Edmunds RAV4.",
+            "Keeping the Cars.com Toyota at or below $10,000."
+          ],
+          "positive_observables": [
+            "Uses lower purchase price, fees, or cost per mile as an additional tie-breaker among qualifying listings.",
+            "Asks that avoidable dealer charges or unusually costly options be flagged."
+          ],
+          "negative_observables": [
+            "Within the fixed caps, prioritizes lower mileage, condition, dealer quality, or equipment over the cheapest secondary option.",
+            "Explicitly accepts paying more within budget for a materially better vehicle."
+          ]
+        },
+        "4b9850333bdd7298442df495aff3832c13b119da": {
+          "task_label": "UK subscriptions, Wicked streaming, and PrintPigeon",
+          "rationale": "The package contains recurring and one-off costs whose relative importance can vary.",
+          "inherited_task_signals": [
+            "Requiring Wicked at no extra cost in the base subscription.",
+            "Reporting the standard UK letter price."
+          ],
+          "positive_observables": [
+            "Asks for the lowest combined monthly cost, delivery charges, or hidden recurring fees.",
+            "Uses price as the tie-breaker among qualifying beer or snack subscriptions."
+          ],
+          "negative_observables": [
+            "Prioritizes beer/snack variety, presentation, convenience, or gift quality over the lowest monthly price.",
+            "Explicitly accepts a pricier qualifying plan when it makes the subscription night better."
+          ]
+        },
+        "44f1e02116715d5fe313996811b358fe25bc3ee4": {
+          "task_label": "Vehicle accessory shortlist",
+          "rationale": "The task contrasts branded exact-fit products with cheaper universal accessories.",
+          "inherited_task_signals": [
+            "Using WeatherTech for Highlander fitment and Temu for inexpensive hooks.",
+            "Reporting the Civic emblem's displayed price."
+          ],
+          "positive_observables": [
+            "Asks to minimize delivered price or favor the cheapest qualifying hook/emblem option.",
+            "Raises shipping cost or price differences as an explicit comparison factor."
+          ],
+          "negative_observables": [
+            "Prioritizes exact fit, material quality, durability, warranty, or appearance over the lowest price.",
+            "Explicitly accepts paying more for a better-fitting or more durable accessory."
+          ]
+        }
+      }
+    },
+    {
+      "axis_id": "purchase_risk",
+      "label": "Purchase risk tolerance",
+      "dimension": "risk_tolerance",
+      "positive": {
+        "value": "Risk-averse",
+        "behavioral_definition": "Avoids options with uncertain availability, compatibility, condition, or terms and asks for explicit safeguards.",
+        "generic_observables": [
+          "Rejects or clearly deprioritizes an option whose key qualification is uncertain.",
+          "Requests explicit compatibility, live-status, seller, return, or condition evidence beyond task wording.",
+          "Asks uncertainty to be surfaced before making a recommendation."
+        ],
+        "contradictions": [
+          "Accepts a materially uncertain option without caveat when a safer qualifying option exists.",
+          "States comfort with unclear fit, stock, or condition."
+        ]
+      },
+      "negative": {
+        "value": "Risk-tolerant",
+        "behavioral_definition": "Accepts limited uncertainty or a less-established option when the task's hard requirements are met and uncertainty is disclosed.",
+        "generic_observables": [
+          "Explicitly permits a plausible or universal-fit option with a clear caveat.",
+          "Accepts limited stock, an older listing, or a less-established seller for a worthwhile trade-off.",
+          "Prefers not to spend extra time eliminating every residual uncertainty."
+        ],
+        "contradictions": [
+          "Requires every uncertainty to be resolved before considering an option.",
+          "Rejects a qualifying option solely because a non-required detail is unknown."
+        ]
+      },
+      "tasks": {
+        "39255449e341c41a589b8a4e17f073be3a4809c9": {
+          "task_label": "Kobe releases and live Nike stock",
+          "rationale": "Release dates, stock freshness, and size availability create purchase uncertainty.",
+          "inherited_task_signals": [
+            "Using actual release coverage pages.",
+            "Finding in-stock Nike shoes and attempting size 10 selection."
+          ],
+          "positive_observables": [
+            "Asks the assistant not to recommend a stale, sold-out, or ambiguously available product and to flag uncertain dates.",
+            "Requests an additional stock/size safeguard such as visible current status or a stated inability to confirm."
+          ],
+          "negative_observables": [
+            "Allows a credible upcoming report or product page with limited uncertainty to remain in the shortlist if clearly labeled.",
+            "Accepts the product-page availability check after the required size attempt without demanding checkout-level certainty."
+          ]
+        },
+        "67ad95421a303ad78cfcd8c3f5a7f6668d2c6a75": {
+          "task_label": "Augusta used Toyota comparison",
+          "rationale": "Used-car condition, feature confirmation, and seller quality make risk preference consequential.",
+          "inherited_task_signals": [
+            "Confirming AWD and heated seats on the RAV4 page.",
+            "Keeping the Cars.com Toyota within distance and price constraints."
+          ],
+          "positive_observables": [
+            "Asks for condition, history, seller, title, or fee uncertainty to be surfaced before favoring a listing.",
+            "Rejects a listing whose required feature or live status cannot be confirmed."
+          ],
+          "negative_observables": [
+            "Accepts an older, higher-mileage, or less-documented qualifying listing when the trade-off is clearly stated.",
+            "Allows a non-required vehicle detail to remain unknown rather than blocking the comparison."
+          ]
+        },
+        "63d68bb25e279fc22e6e3592d8ca59add33b6eb1": {
+          "task_label": "Minneapolis family-car shortlist",
+          "rationale": "Fifteen live listings require repeated judgments about listing quality and family suitability.",
+          "inherited_task_signals": [
+            "Verifying live status, price, mileage, year, location, and family suitability.",
+            "Cross-checking unclear seating or body style on Edmunds."
+          ],
+          "positive_observables": [
+            "Requests exclusion of listings with unresolved accident, seller, condition, seating, or availability concerns beyond required fields.",
+            "Prefers conservative family-suitability choices when evidence is ambiguous."
+          ],
+          "negative_observables": [
+            "Permits a plausible family vehicle with a clearly disclosed non-required unknown to remain in the shortlist.",
+            "Accepts broader or less conventional family-vehicle candidates when the hard constraints are satisfied."
+          ]
+        },
+        "44f1e02116715d5fe313996811b358fe25bc3ee4": {
+          "task_label": "Vehicle accessory shortlist",
+          "rationale": "Vehicle-year fitment and universal accessory claims create direct compatibility risk.",
+          "inherited_task_signals": [
+            "Using the WeatherTech vehicle selector for the 2020 Highlander.",
+            "Providing compatibility support for Fiat hooks and a suitable 2023 Civic emblem."
+          ],
+          "positive_observables": [
+            "Requests exact model/year/trim fitment, mounting method, dimensions, or a return safeguard beyond the minimum task wording.",
+            "Rejects an accessory when compatibility is only vague or inferred."
+          ],
+          "negative_observables": [
+            "Explicitly accepts a universal-fit hook or seller compatibility claim when uncertainty is disclosed.",
+            "Allows a plausible emblem option without requiring every non-essential fitment detail."
+          ]
+        }
+      }
+    },
+    {
+      "axis_id": "decision_style",
+      "label": "Decision style",
+      "dimension": "decision_style",
+      "positive": {
+        "value": "Analytical",
+        "behavioral_definition": "Uses explicit criteria and trade-offs to compare qualifying options before choosing.",
+        "generic_observables": [
+          "Requests a criterion-by-criterion comparison or explicit ranking logic.",
+          "Defines how competing factors should be weighed.",
+          "Asks for trade-offs rather than relying only on an overall impression."
+        ],
+        "contradictions": [
+          "Explicitly chooses only by first impression or overall vibe.",
+          "Rejects structured comparison as unnecessary."
+        ]
+      },
+      "negative": {
+        "value": "Intuitive",
+        "behavioral_definition": "Prefers a coherent overall recommendation or visual impression after hard constraints are satisfied.",
+        "generic_observables": [
+          "Explicitly delegates the final choice based on overall fit or feel.",
+          "Prefers one clear recommendation over a formal scoring framework.",
+          "Uses aesthetic coherence or practical impression as the tie-breaker."
+        ],
+        "contradictions": [
+          "Demands a formal multi-criterion ranking before accepting any choice.",
+          "Uses a numeric or exhaustive comparison as the required decision method."
+        ]
+      },
+      "tasks": {
+        "7cc602f239775882273921d82e181020f1769b53": {
+          "task_label": "Green evening dress, matching shoes, and ooShirts",
+          "rationale": "Matching shoes can be selected through explicit color/formality criteria or overall visual coherence.",
+          "inherited_task_signals": [
+            "Matching the shoes to the dress's color and evening vibe.",
+            "Comparing the two product pages side by side."
+          ],
+          "positive_observables": [
+            "Specifies comparison criteria such as shade, formality, heel style, comfort, size availability, and price.",
+            "Asks the assistant to explain trade-offs behind the chosen match."
+          ],
+          "negative_observables": [
+            "Asks for the pair that simply looks most cohesive once size and delivery requirements are met.",
+            "Delegates the aesthetic tie-break to the assistant without requesting a formal comparison."
+          ]
+        },
+        "63d68bb25e279fc22e6e3592d8ca59add33b6eb1": {
+          "task_label": "Minneapolis family-car shortlist",
+          "rationale": "The final value assessment can use an explicit model or a holistic family-practicality judgment.",
+          "inherited_task_signals": [
+            "Summarizing frequent models and best value using year, mileage, and price.",
+            "Classifying the final mix as SUVs or minivans."
+          ],
+          "positive_observables": [
+            "Defines an explicit weighting or ranking method for year, mileage, price, and family suitability.",
+            "Requests comparable reasoning across all shortlisted vehicles."
+          ],
+          "negative_observables": [
+            "Asks for a practical overall shortlist without a formal score or rigid weighting.",
+            "Delegates final value judgments based on the assistant's overall impression after required fields are verified."
+          ]
+        }
+      }
+    },
+    {
+      "axis_id": "time_pressure",
+      "label": "Time pressure",
+      "dimension": "time_pressure",
+      "positive": {
+        "value": "Deadline",
+        "behavioral_definition": "Signals a near-term deadline and asks the assistant to prioritize the first complete qualifying result over optional exploration.",
+        "generic_observables": [
+          "States that the event or decision is soon.",
+          "Asks to prioritize must-haves and avoid optional extra browsing.",
+          "Requests the first solid qualifying recommendation or a very concise response."
+        ],
+        "contradictions": [
+          "Explicitly says there is no rush.",
+          "Invites broad optional exploration before completing the required task."
+        ]
+      },
+      "negative": {
+        "value": "No rush",
+        "behavioral_definition": "Signals that extra time may be used for careful comparison or alternatives after all required work is preserved.",
+        "generic_observables": [
+          "Explicitly says there is no deadline or no need to rush.",
+          "Invites one or more alternatives or an extra check after the core task.",
+          "Prefers completeness over finishing as quickly as possible."
+        ],
+        "contradictions": [
+          "Asks for the first acceptable result because time is short.",
+          "Explicitly rejects optional checking solely to save time."
+        ]
+      },
+      "tasks": {
+        "7cc602f239775882273921d82e181020f1769b53": {
+          "task_label": "Green evening dress, matching shoes, and ooShirts",
+          "rationale": "The unspecified event date allows urgency to vary without changing product or shipping requirements.",
+          "inherited_task_signals": [
+            "Creating one simple outfit and one concise final summary.",
+            "Reporting ooShirts timing."
+          ],
+          "positive_observables": [
+            "States that the event is soon and asks for the first complete dress-and-shoe combination that meets all constraints.",
+            "Asks to skip optional alternatives after finding one solid match."
+          ],
+          "negative_observables": [
+            "Explicitly says there is no rush and permits additional comparison after the required dress and shoe are found.",
+            "Invites a more careful style or delivery check rather than prioritizing speed."
+          ]
+        },
+        "4b9850333bdd7298442df495aff3832c13b119da": {
+          "task_label": "UK subscriptions, Wicked streaming, and PrintPigeon",
+          "rationale": "The subscription night has no fixed date, so a deadline can be introduced or explicitly absent without changing requirements.",
+          "inherited_task_signals": [
+            "Producing one tidy recommendation.",
+            "Finding at least three snack boxes and all other required components."
+          ],
+          "positive_observables": [
+            "States that the subscription night is imminent and asks for the first three qualifying snack options rather than optional extras.",
+            "Prioritizes completing all required categories quickly and concisely."
+          ],
+          "negative_observables": [
+            "Explicitly says there is no rush and invites careful checking or alternatives after the minimum three snack boxes.",
+            "Prefers completeness/currentness over the fastest possible finish."
+          ]
+        }
+      }
+    },
+    {
+      "axis_id": "detail_depth",
+      "label": "Detail depth",
+      "dimension": "cog_detail_orientation",
+      "positive": {
+        "value": "Very high",
+        "behavioral_definition": "Requests task-relevant detail beyond the minimum required fields and wants nuanced distinctions preserved.",
+        "generic_observables": [
+          "Asks for at least one relevant optional field or caveat beyond task minimums.",
+          "Requests precise model, trim, part, seller, fee, or compatibility detail.",
+          "Wants the reasoning behind a comparison, not just the result."
+        ],
+        "contradictions": [
+          "Explicitly asks for only the minimum required fields.",
+          "Rejects relevant supporting detail as unnecessary."
+        ]
+      },
+      "negative": {
+        "value": "Low",
+        "behavioral_definition": "Wants only the task's required fields and a compact answer, without optional detail.",
+        "generic_observables": [
+          "Explicitly asks the assistant to stick to required fields only.",
+          "Declines optional specs, caveats, or background once the task is satisfied.",
+          "Prioritizes a compact summary over explanatory depth."
+        ],
+        "contradictions": [
+          "Requests multiple optional fields or an expanded rationale.",
+          "Asks for exhaustive detail beyond the task."
+        ]
+      },
+      "tasks": {
+        "67ad95421a303ad78cfcd8c3f5a7f6668d2c6a75": {
+          "task_label": "Augusta used Toyota comparison",
+          "rationale": "Vehicle listings and specifications offer many optional details beyond the required fields.",
+          "inherited_task_signals": [
+            "Reporting price, year, mileage, dealer, and five comparison specs.",
+            "Mentioning anything else basic that stands out."
+          ],
+          "positive_observables": [
+            "Requests optional details such as trim, ownership/accident history, fees, condition, or warranty.",
+            "Asks for explanation of how the extra details affect the Toyota-versus-Mazda comparison."
+          ],
+          "negative_observables": [
+            "Explicitly limits the result to the required listing fields and five named specs.",
+            "Asks to omit optional vehicle-history or ownership detail from the final summary."
+          ]
+        },
+        "63d68bb25e279fc22e6e3592d8ca59add33b6eb1": {
+          "task_label": "Minneapolis family-car shortlist",
+          "rationale": "A 15-row vehicle sheet allows observable variation in requested depth while preserving fixed columns.",
+          "inherited_task_signals": [
+            "Recording make/model, year, price, mileage, dealer location, and link.",
+            "Explaining frequent models, best value, and vehicle-type mix."
+          ],
+          "positive_observables": [
+            "Requests relevant optional distinctions such as trim, seating capacity, drivetrain, condition, or value rationale.",
+            "Asks for nuanced explanation of why leading vehicles are good values."
+          ],
+          "negative_observables": [
+            "Explicitly asks to keep the sheet and summary to the required columns and requested comparisons only.",
+            "Declines optional vehicle specs once family suitability is confirmed."
+          ]
+        },
+        "44f1e02116715d5fe313996811b358fe25bc3ee4": {
+          "task_label": "Vehicle accessory shortlist",
+          "rationale": "Accessory pages expose optional part, material, mounting, and warranty details.",
+          "inherited_task_signals": [
+            "Reporting WeatherTech fitment and cargo link, Temu compatibility, and Civic emblem name and price.",
+            "Returning a concise three-vehicle comparison."
+          ],
+          "positive_observables": [
+            "Requests optional part number, material, mounting method, dimensions, warranty, or exact configuration detail.",
+            "Asks for a precise explanation of why each accessory should fit."
+          ],
+          "negative_observables": [
+            "Explicitly asks for only the requested product names, fitment notes, link, and price.",
+            "Declines optional materials, warranty, or installation details."
+          ]
+        }
+      }
+    }
+  ]
+}

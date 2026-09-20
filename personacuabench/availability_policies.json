@@ -1,0 +1,60 @@
+{
+  "schema_version": "persona-cua-availability-policy/v1",
+  "tasks": {
+    "39255449e341c41a589b8a4e17f073be3a4809c9": {
+      "description": "R1 is exclusively blocked when both Sole Collector aliases are externally unavailable. Composite R5 remains in the denominator because it also evaluates Sneaker News, Foot Locker, Nike, and the final synthesis. The original task and rubrics remain unchanged.",
+      "rubric_mapping_semantics": "exclusive_blocking_dependency",
+      "endpoints": [
+        {
+          "key": "solecollector_apex",
+          "role": "target",
+          "url": "https://solecollector.com/",
+          "label": "Sole Collector apex",
+          "affected_rubric_ids": ["R1"]
+        },
+        {
+          "key": "solecollector_www",
+          "role": "target",
+          "url": "https://www.solecollector.com/",
+          "label": "Sole Collector www alias",
+          "affected_rubric_ids": ["R1"]
+        },
+        {
+          "key": "sneakernews_control",
+          "role": "control",
+          "url": "https://sneakernews.com/",
+          "label": "Sneaker News control",
+          "affected_rubric_ids": []
+        },
+        {
+          "key": "nike_control",
+          "role": "control",
+          "url": "https://www.nike.com/",
+          "label": "Nike control",
+          "affected_rubric_ids": []
+        },
+        {
+          "key": "footlocker_control",
+          "role": "control",
+          "url": "https://www.footlocker.com/",
+          "label": "Foot Locker control",
+          "affected_rubric_ids": []
+        },
+        {
+          "key": "google_control",
+          "role": "control",
+          "url": "https://www.google.com/",
+          "label": "General HTTPS control (Google)",
+          "affected_rubric_ids": []
+        },
+        {
+          "key": "example_control",
+          "role": "control",
+          "url": "https://example.com/",
+          "label": "General HTTPS control (IANA example domain)",
+          "affected_rubric_ids": []
+        }
+      ]
+    }
+  }
+}

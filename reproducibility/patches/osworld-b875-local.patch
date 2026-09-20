@@ -1,0 +1,109 @@
+diff --git a/desktop_env/providers/vmware/manager.py b/desktop_env/providers/vmware/manager.py
+index 3bb60174..b9ad6a62 100644
+--- a/desktop_env/providers/vmware/manager.py
++++ b/desktop_env/providers/vmware/manager.py
+@@ -84,6 +84,18 @@ def _update_vm(vmx_path, target_vm_name):
+ 
+         # Update the content
+         updated_content = re.sub(r'displayName = ".*?"', f'displayName = "{target_vm_name}"', original_content)
++        updated_content = re.sub(
++            r'^nvram = ".*?"$',
++            f'nvram = "{target_vm_name}.nvram"',
++            updated_content,
++            flags=re.MULTILINE,
++        )
++        updated_content = re.sub(
++            r'^extendedConfigFile = ".*?"$',
++            f'extendedConfigFile = "{target_vm_name}.vmxf"',
++            updated_content,
++            flags=re.MULTILINE,
++        )
+         updated_content = re.sub(r'uuid.bios = ".*?"', f'uuid.bios = "{new_uuid_bios}"', updated_content)
+         updated_content = re.sub(r'uuid.location = ".*?"', f'uuid.location = "{new_uuid_location}"', updated_content)
+         updated_content = re.sub(r'ethernet0.generatedAddress = ".*?"',
+@@ -269,11 +281,43 @@ def _install_vm(vm_name, vms_dir, downloaded_file_name, os_type, original_vm_nam
+ 
+     def create_vm_snapshot(vm_path, max_retries=20):
+         command = f'vmrun {get_vmrun_type()} snapshot "{vm_path}" "init_state"'
++
++        def snapshot_exists():
++            try:
++                result = subprocess.run(
++                    f'vmrun {get_vmrun_type()} listSnapshots "{vm_path}"',
++                    shell=True,
++                    text=True,
++                    capture_output=True,
++                    encoding="utf-8",
++                    timeout=30,
++                )
++            except subprocess.TimeoutExpired:
++                return False
++            return result.returncode == 0 and "init_state" in result.stdout.splitlines()
++
+         for attempt in range(max_retries):
+-            result = subprocess.run(command, shell=True, text=True, capture_output=True, encoding="utf-8")
++            try:
++                result = subprocess.run(
++                    command,
++                    shell=True,
++                    text=True,
++                    capture_output=True,
++                    encoding="utf-8",
++                    timeout=60,
++                )
++            except subprocess.TimeoutExpired:
++                if snapshot_exists():
++                    logger.info("Snapshot created (vmrun client timed out after completion).")
++                    return True
++                logger.error(f"Attempt {attempt + 1} timed out while creating snapshot.")
++                continue
+             if result.returncode == 0:
+                 logger.info("Snapshot created.")
+                 return True
++            elif snapshot_exists():
++                logger.info("Snapshot exists despite vmrun returning an error.")
++                return True
+             else:
+                 if "Error" in result.stderr:
+                     logger.error(f"Attempt {attempt + 1} failed with specific error: {result.stderr}")
+diff --git a/pyproject.toml b/pyproject.toml
+index 0fee74ab..b4559e6c 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -72,7 +72,9 @@ dependencies = [
+     "PyYaml",
+     "mutagen",
+     "easyocr",
+-    "borb",
++    # borb 3.0.2's published wheel contains duplicate paths with conflicting
++    # contents and cannot be extracted by uv. OSWorld only uses the 2.x API.
++    "borb==2.1.25",
+     "pypdf2",
+     "pdfplumber",
+     "wandb",
+diff --git a/scripts/python/run_multienv.py b/scripts/python/run_multienv.py
+index 89f7ec9f..f7c85bd6 100644
+--- a/scripts/python/run_multienv.py
++++ b/scripts/python/run_multienv.py
+@@ -17,6 +17,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../.."))
+ import lib_run_single
+ from desktop_env.desktop_env import DesktopEnv
+ from mm_agents.agent import PromptAgent
++from mm_agents.azure_foundry_agent import AzureFoundryPromptAgent
+ 
+ # Global variables for signal handling
+ active_environments = []
+@@ -187,7 +188,12 @@ def run_env_tasks(task_queue: Queue, args: argparse.Namespace, shared_scores: li
+             env_kwargs["snapshot_name"] = ami_id
+         env = DesktopEnv(**env_kwargs)
+         active_environments.append(env)
+-        agent = PromptAgent(
++        agent_class = (
++            AzureFoundryPromptAgent
++            if os.environ.get("OSWORLD_LLM_PROVIDER") == "azure-foundry"
++            else PromptAgent
++        )
++        agent = agent_class(
+             model=args.model,
+             max_tokens=args.max_tokens,
+             top_p=args.top_p,

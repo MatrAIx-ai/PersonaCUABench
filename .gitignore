@@ -1,5 +1,41 @@
+# Secrets and local configuration
 .env
-.idea/
+.env.*
+!.env.example
+azure_api_key.txt
+*_api_key.txt
+*.pem
+*.key
+credentials*.json
+
+# Python environments and caches
+.venv/
+venv/
 __pycache__/
-.DS_Store
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+build/
+dist/
+
+# Large third-party runtimes (recreated from reproducibility/ pins)
+.osworld/
+.upstream/
+MatrAIx-Persona-8B/
+
+# Generated benchmark artifacts and caches
+artifacts/
+osworld-results/
 grid.log
+
+# Private working notes
+PROJECT_STATUS_AND_TODO.md
+
+# Editors and operating systems
+.cursor/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

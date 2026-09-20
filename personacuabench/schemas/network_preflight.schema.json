@@ -1,0 +1,369 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://personacuabench.local/schemas/network-preflight-v1.json",
+  "title": "PersonaCUABench network preflight",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "task_id",
+    "run_id",
+    "phase",
+    "evidence_scope",
+    "observed_at",
+    "execution",
+    "network",
+    "classification",
+    "feasibility",
+    "policy",
+    "probes"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "persona-cua-network-preflight/v1"
+    },
+    "task_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255
+    },
+    "phase": {
+      "const": "after_reset_before_agent"
+    },
+    "evidence_scope": {
+      "const": "same_run"
+    },
+    "observed_at": {
+      "type": "string",
+      "minLength": 1
+    },
+    "execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "controller_status",
+        "return_code",
+        "error",
+        "warnings"
+      ],
+      "properties": {
+        "status": {
+          "enum": ["complete", "error"]
+        },
+        "controller_status": {
+          "type": ["string", "null"]
+        },
+        "return_code": {
+          "type": ["integer", "null"]
+        },
+        "error": {
+          "type": ["string", "null"]
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "network": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["default_route_present", "error"],
+      "properties": {
+        "default_route_present": {
+          "type": ["boolean", "null"]
+        },
+        "error": {
+          "type": ["string", "null"]
+        }
+      }
+    },
+    "classification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "confidence",
+        "assessment_complete",
+        "infeasible_candidate",
+        "adjustment_eligibility",
+        "raw_score_affected",
+        "reason_codes",
+        "control_summary"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "feasible",
+            "target_external_unavailable",
+            "general_dns_failure",
+            "general_network_failure",
+            "target_http_blocked",
+            "target_timeout",
+            "target_tls_failure",
+            "target_connection_failure",
+            "target_http_error",
+            "indeterminate",
+            "preflight_error"
+          ]
+        },
+        "confidence": {
+          "enum": ["high", "medium", "low"]
+        },
+        "assessment_complete": {
+          "type": "boolean"
+        },
+        "infeasible_candidate": {
+          "type": "boolean"
+        },
+        "adjustment_eligibility": {
+          "enum": [
+            "eligible_for_policy_review",
+            "not_eligible_from_preflight"
+          ]
+        },
+        "raw_score_affected": {
+          "const": false
+        },
+        "reason_codes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "control_summary": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "configured",
+            "quorum",
+            "dns_resolved",
+            "http_responded",
+            "http_reachable",
+            "healthy",
+            "dns_quorum",
+            "http_quorum",
+            "healthy_minimum_met"
+          ],
+          "properties": {
+            "configured": {"type": "integer", "minimum": 2},
+            "quorum": {"type": "integer", "minimum": 2},
+            "dns_resolved": {"type": "integer", "minimum": 0},
+            "http_responded": {"type": "integer", "minimum": 0},
+            "http_reachable": {"type": "integer", "minimum": 0},
+            "healthy": {"type": "integer", "minimum": 0},
+            "dns_quorum": {"type": "boolean"},
+            "http_quorum": {"type": "boolean"},
+            "healthy_minimum_met": {"type": "boolean"}
+          }
+        }
+      }
+    },
+    "feasibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "affected_rubric_ids",
+        "affected_target_keys",
+        "raw_score_affected"
+      ],
+      "properties": {
+        "status": {
+          "enum": ["infeasible_candidate", "feasible", "indeterminate"]
+        },
+        "affected_rubric_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^R[0-9]+$"
+          }
+        },
+        "affected_target_keys": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        "raw_score_affected": {
+          "const": false
+        }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "dns_only",
+        "rubric_mapping_semantics",
+        "assessment_complete",
+        "adjustment_eligibility",
+        "affected_rubric_ids",
+        "raw_score_affected"
+      ],
+      "properties": {
+        "version": {"const": "dns-only-v1"},
+        "dns_only": {"const": true},
+        "rubric_mapping_semantics": {
+          "const": "exclusive_blocking_dependency"
+        },
+        "assessment_complete": {"type": "boolean"},
+        "adjustment_eligibility": {
+          "enum": [
+            "eligible_for_policy_review",
+            "not_eligible_from_preflight"
+          ]
+        },
+        "affected_rubric_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^R[0-9]+$"
+          }
+        },
+        "raw_score_affected": {"const": false}
+      }
+    },
+    "probes": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "$ref": "#/$defs/probe"
+      }
+    }
+  },
+  "$defs": {
+    "nullableString": {
+      "type": ["string", "null"]
+    },
+    "probe": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["endpoint", "dns", "http", "probe_error"],
+      "properties": {
+        "endpoint": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "key",
+            "role",
+            "url",
+            "host",
+            "label",
+            "affected_rubric_ids"
+          ],
+          "properties": {
+            "key": {"type": "string", "minLength": 1},
+            "role": {"enum": ["target", "control"]},
+            "url": {"type": "string", "pattern": "^https?://"},
+            "host": {"type": "string", "minLength": 1},
+            "label": {"$ref": "#/$defs/nullableString"},
+            "affected_rubric_ids": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "pattern": "^R[0-9]+$"
+              }
+            }
+          }
+        },
+        "dns": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "addresses",
+            "attempt_count",
+            "successful_attempts",
+            "all_attempts_unresolved",
+            "elapsed_ms",
+            "error_type",
+            "error"
+          ],
+          "properties": {
+            "status": {
+              "enum": ["resolved", "unresolved", "resolver_error", "unknown"]
+            },
+            "addresses": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {"type": "string"}
+            },
+            "attempt_count": {"type": "integer", "minimum": 0},
+            "successful_attempts": {"type": "integer", "minimum": 0},
+            "all_attempts_unresolved": {"type": "boolean"},
+            "elapsed_ms": {"type": ["number", "null"], "minimum": 0},
+            "error_type": {"$ref": "#/$defs/nullableString"},
+            "error": {"$ref": "#/$defs/nullableString"}
+          }
+        },
+        "http": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "response_received",
+            "status_code",
+            "final_host",
+            "elapsed_ms",
+            "diagnostic_headers",
+            "block_signals",
+            "error_type",
+            "error"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "reachable",
+                "blocked",
+                "auth_required",
+                "not_found",
+                "client_error",
+                "server_error",
+                "dns_error",
+                "timeout",
+                "tls_error",
+                "proxy_error",
+                "connection_error",
+                "transport_error",
+                "unknown",
+                "not_run"
+              ]
+            },
+            "response_received": {"type": "boolean"},
+            "status_code": {
+              "type": ["integer", "null"],
+              "minimum": 100,
+              "maximum": 599
+            },
+            "final_host": {"$ref": "#/$defs/nullableString"},
+            "elapsed_ms": {"type": ["number", "null"], "minimum": 0},
+            "diagnostic_headers": {
+              "type": "object",
+              "additionalProperties": {"type": "string"}
+            },
+            "block_signals": {
+              "type": "array",
+              "items": {"type": "string"}
+            },
+            "error_type": {"$ref": "#/$defs/nullableString"},
+            "error": {"$ref": "#/$defs/nullableString"}
+          }
+        },
+        "probe_error": {"$ref": "#/$defs/nullableString"}
+      }
+    }
+  }
+}
