@@ -43,6 +43,10 @@ import persona as persona_lib  # noqa: E402  (odyssey/persona.py)
 PROVIDERS = {
     "openrouter": ("OPENROUTER_API_KEY", "https://openrouter.ai/api/v1"),
     "openai": ("OPENAI_API_KEY", None),          # None = the SDK's default endpoint
+    # A collaborator's Azure AI Foundry endpoint. Its /openai/v1 surface speaks
+    # the same chat API and takes the key directly, so no azure-identity needed.
+    # Only gpt-5.6-terra is deployed there; other model ids 404.
+    "azure": ("AZURA_API_KEY", "https://MatrAIxWild.services.ai.azure.com/openai/v1"),
 }
 
 
