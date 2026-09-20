@@ -62,6 +62,20 @@ def load_dotenv(path: Path = REPO / ".env") -> None:
         key, _, value = line.partition("=")
         os.environ.setdefault(key.strip(), value.strip().strip("'\""))
 
+PROMPTS = HERE / "prompts"
+
+
+def prompt(name: str) -> str:
+    """The text of odyssey/prompts/<name>.md, without its leading HTML comment.
+
+    Prompts live as files so they can be read and revised without touching the
+    pipeline; the comment at the top of each one documents its placeholders and
+    is stripped here so it never reaches a model.
+    """
+    text = (PROMPTS / f"{name}.md").read_text(encoding="utf-8")
+    return re.sub(r"\A<!--.*?-->\s*", "", text, flags=re.S).strip()
+
+
 TASKS = json.loads((HERE / "tasks.json").read_text(encoding="utf-8"))
 PAGE_CHARS = 6000          # per read_page slice
 MAX_TABS = 8
@@ -69,40 +83,7 @@ DEFAULT_PROFILE = HERE / ".chrome-profile"   # gitignored; keeps consent cookies
 
 MAX_QUESTIONS = 5          # ask_user calls per run
 
-AGENT_RULES = """
-You are an assistant browsing the live internet in a real Chromium browser to
-carry out a request from a user. Work through it yourself with the tools; never
-claim you visited a page you did not open, and never invent numbers -- every
-figure you report must come from text you actually read with read_page.
-
-Users differ: some spell out exactly which sites and details they want, others
-describe their situation loosely. If something you need is genuinely unclear,
-you may ask the user with ask_user (at most {max_questions} questions) -- but do
-not ask about what you can reasonably decide yourself.
-
-How to work:
-- For directions, use Google's official Maps URL form:
-  https://www.google.com/maps/dir/?api=1&origin=<from>&destination=<to>&travelmode=transit
-  (travelmode = transit | driving | walking | bicycling).
-- For a specific place, use:
-  https://www.google.com/maps/search/?api=1&query=<place+name>
-  Do NOT hand-build /maps/place/<name> or /maps/dir/<a>/<b> URLs without the
-  ?api=1 form -- Google silently drops you at a default location and the page
-  you read will be empty.
-- To search the web, open_tab on https://www.google.com/search?q=<url-encoded
-  query>. Google sometimes answers with an "unusual traffic" / captcha page --
-  if it does, fall back to https://html.duckduckgo.com/html/?q=<query> for the
-  search, then open_tab the real result URL directly (metra.com, weather.com,
-  booking.com ... ) so the source page itself is what stays open.
-- Prefer navigating straight to a known site's URL over searching for it.
-- read_page returns a slice of the page text; call it again with a larger
-  offset to keep reading a long page.
-- If a page blocks you, is empty, or shows a consent/captcha wall, try click on
-  the consent button, or open a different source. Do not get stuck: after two
-  failed attempts on one page, move on and say so in your summary.
-- Leave open every tab the request asks you to keep open. Do not close them.
-- When you are done, call finish with your complete final answer to the user.
-""".strip().format(max_questions=MAX_QUESTIONS)
+AGENT_RULES = prompt("agent").format(max_questions=MAX_QUESTIONS)
 
 TOOLS = [
     {"type": "function", "function": {
@@ -412,34 +393,7 @@ def _create_with_retry(client, *, attempts: int = 5, **kwargs):
             time.sleep(delay)
 
 
-PERSONA_USER_RULES = """
-You need help with something, and you are about to ask an AI assistant that can
-browse the web to do it for you.
-
-Below is a complete checklist of what would fully satisfy you. An expert wrote
-it, not you: its website names, step order and instructions about tabs are the
-expert's, and most people would never phrase a request like that. Use it only
-to know what you are after.
-
-Now ask for help the way YOU actually would, given who you are:
-- Talk about your situation and what you want to find out or decide -- not a
-  step-by-step procedure, unless you are the kind of person who writes those.
-- Mention a specific website, tool or technical step only if someone with your
-  background would know it and care about it. Otherwise describe what you want
-  in your own terms, or leave it out.
-- Say as much or as little as you really would. Leaving things unsaid that you
-  would not think to mention is fine -- the assistant can ask.
-- Use your own vocabulary and tone.
-
-When the assistant asks you something, answer as yourself, truthfully according
-to the checklist -- including details you left out at first, if you are asked
-about them. If it asks about something the checklist does not settle, answer
-the way you plausibly would. Keep replies short and natural. Never say you are
-an AI, a simulation, or that you were given a task or a checklist.
-
-# What would fully satisfy you (the expert's checklist -- not your words)
-{goal}
-""".strip()
+PERSONA_USER_RULES = prompt("persona_user")
 
 
 class PersonaUser:
@@ -584,44 +538,7 @@ def run_agent(task: dict, user: PersonaUser, model: str, *, max_steps: int,
 # --------------------------------------------------------------------------- #
 # Judge
 # --------------------------------------------------------------------------- #
-JUDGE_PROMPT = """You are grading a web agent against a fixed rubric. A user \
-asked the agent for help in their own words; the agent browsed the live \
-internet and produced a final answer.
-
-For each rubric item decide two things independently:
-
-- met: was the requirement actually satisfied, by evidence in the final answer, \
-the action log and the tabs left open? A requirement that a page be left open is \
-met only if that page appears in the open tabs. A reported figure counts only if \
-the agent actually visited a page that would show it. Judge this the same way \
-whether or not the user asked for it.
-- communicated: did the conversation make this requirement known to the agent -- \
-said explicitly, or implied clearly enough that a reasonable assistant would act \
-on it? A specific site or detail the user never mentioned and the agent never \
-asked about is NOT communicated.
-
-Do not reward or penalise tone, personality, verbosity or writing style.
-
-## What the user actually needed (hidden from the agent)
-{task}
-
-## Conversation between the user and the agent
-{conversation}
-
-## Rubric
-{rubric}
-
-## Agent's final answer
-{answer}
-
-## Action log (tool calls the agent made)
-{actions}
-
-## Tabs left open at the end
-{tabs}
-
-Return ONLY a JSON object, one entry per rubric id:
-{{"R1": {{"met": true, "communicated": true, "reason": "<one sentence citing the evidence>"}}, ...}}"""
+JUDGE_PROMPT = prompt("rubric_judge")
 
 
 def judge_run(task: dict, run: dict, *, judge_model: str, judge_provider: str) -> dict:

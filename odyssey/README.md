@@ -71,21 +71,25 @@ python3 odyssey/report.py                                    # tables
 If it's interrupted, run the same command again. It picks up where it stopped.
 For a single cell: `python3 odyssey/run.py --task 1 --persona <p1> --headless`.
 
-**5. Push.** Push your tasks, personas and results to your branch.
-`results/` is gitignored, hence the `-f`:
+**5. Push.** Push your tasks and personas to your branch. `results/` stays
+gitignored and local -- send it separately, or push it only when asked:
 
 ```bash
 git add odyssey/tasks.json odyssey/make_personas.py odyssey/personas
-git add -f odyssey/results
-git commit -m "<your-name>: tasks + personas + results"
+git commit -m "<your-name>: tasks + personas"
 git push -u origin <your-name>
 ```
 
 ## Output
 
-`odyssey/results/<task>/<persona>__<model>__<stamp>/result.json`:
+`odyssey/results/<task>/<persona>__<model>__<stamp>/result.json` (gitignored):
 `run.conversation`, `run.trajectory`, `run.answer`, `run.open_tabs`, `run.stop_reason`,
 `judgement.verdicts`, `judgement.score`, `judgement.score_communicated`.
+
+Prompts live in `odyssey/prompts/*.md`, one per role, and are loaded at import:
+`agent.md`, `persona_user.md`, `rubric_judge.md`, `experience_judge.md`. Each
+file's leading HTML comment lists its placeholders and is stripped before the
+text reaches a model.
 
 Check a low score before you trust it. If the trajectory shows `403`, a captcha,
 or empty page reads, the environment failed, not the agent. Rerun the cell and

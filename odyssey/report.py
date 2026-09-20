@@ -35,7 +35,8 @@ def main() -> None:
         key = (rec["task_id"][:12], arm)
         stamp = path.parent.name.rsplit("__", 1)[-1]
         if key not in best or stamp > best[key][0]:
-            best[key] = (stamp, judged, rec["run"].get("max_steps"))
+            best[key] = (stamp, judged, rec["run"].get("max_steps"),
+                         rec.get("experience"))
 
     # A score compared across different step budgets is not a comparison.
     budgets = {v[2] for v in best.values() if v[2] is not None}
@@ -51,6 +52,66 @@ def main() -> None:
     # A gap between the two tables is the conversation's, not the agent's.
     print()
     table(best, "score: communicated items only", "score_communicated")
+    experience(best)
+
+
+DIMENSIONS = ("P1_asked_for", "P2_readable_for_them", "P3_actionable",
+              "P4_gap_handling", "P5_overall")
+
+
+def dim_score(verdict: dict | None, dim: str) -> float | None:
+    """One judge's 1-5 score for one dimension, or None for 'n/a'/missing."""
+    raw = ((verdict or {}).get(dim) or {}).get("score")
+    if isinstance(raw, bool) or not isinstance(raw, (int, float)):
+        return None
+    return float(raw) if 1 <= raw <= 5 else None
+
+
+def experience(best: dict) -> None:
+    """The person's axis, kept beside the task axis and never blended into it.
+
+    Two judges scored every run from the same prompt; their scores are reported
+    side by side, never averaged, because a hidden disagreement is the thing
+    worth seeing. The last block is the only place the two axes meet: the
+    experience of the runs that actually did the job, so a readable answer can
+    never paper over a task the agent failed.
+    """
+    scored = {k: v for k, v in best.items() if len(v) > 3 and v[3]}
+    if not scored:
+        return
+    arms = sorted({a for _, a in scored})
+    print("\n\nexperience 1-5 per dimension, judge A / judge B (never averaged)")
+    width = max(len(a) for a in arms) + 2
+    print(f"{'dimension':<24}" + "".join(f"{a:<{width}}" for a in arms))
+    for dim in DIMENSIONS:
+        row = f"{dim:<24}"
+        for arm in arms:
+            pairs = [(dim_score(v[3].get("a"), dim), dim_score(v[3].get("b"), dim))
+                     for k, v in scored.items() if k[1] == arm]
+            a = [x for x, _ in pairs if x is not None]
+            b = [y for _, y in pairs if y is not None]
+            cell = (f"{sum(a)/len(a):.1f} / {sum(b)/len(b):.1f}" if a and b else "-")
+            row += f"{cell:<{width}}"
+        print(row)
+
+    # How far apart the two judges are, the way the MatrAIx paper reports it.
+    deltas = [d["within_one"] for v in scored.values()
+              for d in (v[3].get("agreement") or {}).values() if d]
+    if deltas:
+        print(f"\njudges within one point: {sum(deltas)}/{len(deltas)} "
+              f"({sum(deltas)/len(deltas):.1%})")
+
+    # Style never offsets a failed task: condition on the task being done.
+    print("\nP5 among runs that did everything they were asked "
+          "(score_communicated = 1.0)")
+    for arm in arms:
+        done = [v for k, v in scored.items()
+                if k[1] == arm and v[1].get("score_communicated") == 1.0]
+        vals = [s for v in done for s in
+                (dim_score(v[3].get("a"), "P5_overall"),
+                 dim_score(v[3].get("b"), "P5_overall")) if s is not None]
+        print(f"  {arm:<{width}}{'-' if not vals else f'{sum(vals)/len(vals):.1f}'}"
+              f"   ({len(done)} of {sum(1 for k in scored if k[1] == arm)} runs)")
 
 
 def table(best: dict, title: str, field: str) -> None:
