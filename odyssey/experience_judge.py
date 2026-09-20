@@ -100,8 +100,10 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--results", default=str(HERE / "results"))
-    ap.add_argument("--judge-a", default="gpt-5.5")
+    ap.add_argument("--judge-a", default="gpt-5.6-terra")
+    ap.add_argument("--judge-a-provider", default="azure")
     ap.add_argument("--judge-b", default="anthropic/claude-opus-4.8")
+    ap.add_argument("--judge-b-provider", default="openrouter")
     ap.add_argument("--redo", action="store_true", help="rescore results that already have one")
     ap.add_argument("--print-prompt", action="store_true",
                     help="print the prompt for the first result and exit, no API calls")
@@ -120,8 +122,8 @@ def main() -> None:
             continue
         print(f"{record['task_id'][:12]} {record['persona']}", flush=True)
         prompt = build_prompt(record)
-        a = score_once(prompt, args.judge_a)
-        b = score_once(prompt, args.judge_b)
+        a = score_once(prompt, args.judge_a, args.judge_a_provider)
+        b = score_once(prompt, args.judge_b, args.judge_b_provider)
         record["experience"] = {"a": a, "b": b, "agreement": agreement(a, b)}
         path.write_text(json.dumps(record, ensure_ascii=False, indent=2), encoding="utf-8")
         for dim in DIMENSIONS:
