@@ -80,6 +80,44 @@ minimum and because they target genuinely distinct constructs. They are expected
 separate weakly or not at all on the short tasks. Under the protocol's scoring policy a
 non-separating pair is reported as non-separating rather than dropped or averaged away.
 
+## What replicate r1 actually measured
+
+One replicate, 18 cells, `gpt-5.6-terra` throughout. Results are not committed
+(`artifacts/` is gitignored and the acceptance checklist forbids committing them).
+
+| | |
+|---|---|
+| pairs separating (both arms score 2) | **2 of 9** |
+| coverage guardrail | **18/18 cells communicated 100% of rubric items** |
+| truncated at the step ceiling | 2/18 |
+| mean raw task score | 0.600 — **environment-depressed, see Known limits** |
+
+Separation by axis:
+
+| axis | positive scored 2 | negative scored 2 | pairs separating |
+|---|---|---|---|
+| `request_directness` | 2/3 | 3/3 | **2/3** |
+| `detail_depth` | 0/3 | 0/3 | 0/3 |
+| `decision_style` | 0/3 | 0/3 | 0/3 |
+
+**The pre-run screening picked the wrong winner, and that is worth recording.** Screening
+ranked candidates by the word-count delta between the two arms' openings, which made
+`cog_detail_orientation` look strongest (96- and 67-word deltas) and `cog_directness`
+middling. The fidelity judge inverted that: `request_directness` is the only axis that
+separates at all, and `detail_depth` never scored above 1. Length delta measures how much
+the arms differ in bulk; the judge scores whether an arm made a *task-specific, affirmative*
+statement of its pole. Those turn out to be nearly unrelated. Anyone screening axes should
+score candidate openings with the fidelity judge rather than with a text proxy.
+
+A second, more general pattern: the `detail_depth` **negative** pole ("Low", wants only the
+required fields) scored 0 with the judge recording **no evidence at all** at 0.94
+confidence. When the prompt already forces the user to communicate every requirement,
+asking for "only the required fields" is indistinguishable from simply stating them, so a
+"less of X" pole tends to have nothing affirmative to say. That is the "detectable only by
+silence" failure the runbook warns about, and it is a property of low-magnitude poles in
+general rather than of this dimension. `request_directness` avoids it because both Blunt
+and Indirect are affirmative ways of phrasing the same content.
+
 ## Commands
 
 ```bash
@@ -115,24 +153,43 @@ deliberately overridden so this suite matches Shopping rather than the older gri
 
 ## Known limits
 
-**Cold Chrome profiles are served Google's bot wall.** `run_matched_pairs.py` gives each
-cell its own isolated profile under `artifacts/chrome-profiles/matched-pairs/...`, which is
-correct — no browser state should leak between arms — but it means every cell starts cold.
-Measured on the contributor's machine, in the same minute and from the same IP, with only
-the profile directory differing: a warm profile returned real results for 3 of 3 Google
-searches, two independently created cold profiles returned `google.com/sorry/...` for 3 of 3.
+**Google walls automated search, and a warm profile is necessary but not sufficient.**
+Two separate factors, and it took a full replicate to see the second one.
 
-This matters here because **8 of the 32 rubric items name Google** in their verification
-text. Cells were therefore run with each per-cell profile pre-seeded from one identical
-warm cookie template — five files (`Local State`, `Default/Cookies`, `Default/Preferences`,
-`Default/Secure Preferences`, `Default/Network Persistent State`, about 900 KB against
-1.6 GB for a full profile). Seeding every cell from the same source keeps the arms isolated
-from each other while giving both an identical, non-cold starting state; seeding one arm
-and not the other would be worse than seeding neither. A couple of scripted page visits is
-**not** sufficient to warm a profile — the state that works came from a profile with hours
-of real browsing behind it.
+*Profile state.* A cold Chrome profile is walled immediately. Measured in one minute from
+one IP with only the profile differing: warm profile 3/3 searches returned real results,
+two independently created cold profiles returned `google.com/sorry/...` 3/3.
 
-Anyone can check their own runs with `grep -rl "/sorry" <results dir>`.
+*Per-IP volume.* A warm profile is not a licence. After a full 18-cell replicate the same
+warm profile gets roughly one search through and is then walled, and a freshly seeded
+profile behaves identically — so the limit is not carried in the profile.
+
+What that did to `r1`: the two-cell smoke pair, run first, reached Google 10 and 12 times
+with zero walls. The replicate that followed exhausted the budget, and **17 of its 18 cells
+never reached Google at all** (57 wall hits, 9 successful searches total). Bing was
+unaffected throughout — a cold profile still searches Bing fine.
+
+This matters because **8 of the 32 rubric items name Google** in their verification text
+and cannot pass while the wall is up, so `r1`'s task-success numbers are depressed by the
+environment and should not be read as agent quality.
+
+**It does not touch the persona-side results.** `persona_fidelity_judge.py` and the
+`communicated` determination both read the conversation — the simulated user's utterances —
+not the browsing trajectory. Pair separation and the 100%-coverage guardrail are therefore
+valid as reported; only raw task score is affected.
+
+Cells were run with each per-cell profile pre-seeded from one identical warm cookie
+template — five files (`Local State`, `Default/Cookies`, `Default/Preferences`,
+`Default/Secure Preferences`, `Default/Network Persistent State`), about 900 KB against
+1.6 GB for a full profile. Same seed for every cell, so arms stay isolated from each other
+while neither starts cold; seeding one arm and not the other would be worse than seeding
+neither. That fixes the cold-start half of the problem and not the volume half. A couple of
+scripted visits will not warm a profile — the state that works came from one with hours of
+real browsing behind it.
+
+Anyone can check their own runs with `grep -rl "/sorry" <results dir>`. Getting clean
+task-success numbers for a Google-heavy suite likely needs a different network, a slower
+cadence, or both.
 
 **`gpt-5.6-*` needs `reasoning_effort="none"` to use function tools.** Running the
 runbook's documented command as written fails immediately on the first CUA turn:
