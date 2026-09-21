@@ -51,11 +51,11 @@ it renders the same profile through `persona.py` and the same
 was read from the two arms' openings, using the length delta between them as the
 discriminating signal:
 
-| candidate dimension | outcome |
+| candidate dimension | pre-run screening result (superseded by r1, see below) |
 |---|---|
-| `cog_detail_orientation` | **separates** — 96- and 67-word deltas on tasks 4 and 5 |
-| `cog_directness` | separates on the long field-rich tasks only — 42-word delta on task 4, 1 word on task 3 |
-| `decision_style` | weak — 11-word delta on task 5 |
+| `cog_detail_orientation` | screened strongest — 96- and 67-word deltas on tasks 4 and 5; **0/3 pairs separated in r1** |
+| `cog_directness` | middling — 42-word delta on task 4, 1 word on task 3; **2/3 pairs separated in r1** |
+| `decision_style` | weak — 11-word delta on task 5; **0/3 pairs separated in r1** |
 | `tone_expected` | moderate, but conceptually an alias of `cog_detail_orientation`; not used |
 | `trust_level` | **fails** — the tasks already demand peer review, exact quotes and real pages, so the Trusting arm only repeats inherited task wording, which scores 1 by the protocol's own rubric |
 | `time_pressure` | **fails** — the Deadline arm would have to invent a deadline, which the prompt forbids as adding a requirement |
@@ -71,14 +71,19 @@ Two general lessons that likely apply beyond this suite:
   budget, a prior attempt) cannot separate either, because the prompt forbids adding
   requirements.
 
-`detail_depth` works because depth of the deliverable is orthogonal to coverage of the
+Before r1, `detail_depth` was expected to work because depth of the deliverable is orthogonal to coverage of the
 requirements: an arm can ask for more or less around the required fields without touching
 them.
 
-`request_directness` and `decision_style` are retained to meet the 3-pair protocol
-minimum and because they target genuinely distinct constructs. They are expected to
-separate weakly or not at all on the short tasks. Under the protocol's scoring policy a
+`request_directness` and `decision_style` were retained to meet the 3-pair protocol
+minimum and because they target genuinely distinct constructs. Before r1 they were
+expected to separate weakly or not at all on the short tasks; in r1 `request_directness`
+turned out to be the only axis that separated. Under the protocol's scoring policy a
 non-separating pair is reported as non-separating rather than dropped or averaged away.
+
+The `axis_selection_note` in `persona_experiment.json` records this pre-run screening and
+is superseded by the r1 results below. It is left unedited because the protocol's hash is
+embedded in the six generated personas and in every r1 result record.
 
 ## What replicate r1 actually measured
 
@@ -204,10 +209,10 @@ Checked across the family on this account: `gpt-5.6-terra`, `gpt-5.6-sol` and
 `gpt-5.6-luna` all fail with tools and all succeed with `reasoning_effort="none"`;
 `gpt-5.5` succeeds either way. The CUA turn is the only call that sends tools.
 `odyssey/run.py` previously set the argument nowhere, so the model's own default applied
-and was rejected. This PR adds four lines in `_create_with_retry` that set
+and was rejected. This PR adds 11 lines in `_create_with_retry` that set
 `reasoning_effort="none"` when a `gpt-5*` call carries tools and the caller has not set it.
 Without that change the model named throughout the runbook and the Shopping suite cannot
-drive the agent at all. It is the only change outside this suite's own directories.
+drive the agent at all. It is the only code change outside this suite's own directories.
 
 **Step and tab ceilings.** `--max-steps 50` bounds model turns; note that `run.steps` in a
 result counts tool calls, one per trajectory entry, and routinely exceeds 50 without that
