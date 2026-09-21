@@ -8,19 +8,32 @@ the tool loop or the rubric scoring breaks.
 from __future__ import annotations
 
 import json
+import copy
+import io
+import os
+import subprocess
 import sys
+import tempfile
 import types
+from contextlib import redirect_stdout
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 
 import run as R  # noqa: E402
+import task_router  # noqa: E402
 
 
 def test_tasks():
-    # Invariants only, not the count: teammates add tasks to tasks.json.
+    # The branch default remains Shopping even though the shared tasks.json was
+    # restored as its own main-original suite.
     assert len(R.TASKS) >= 2, len(R.TASKS)
+    assert R.TASK_CATALOG.default_suite_id == "shopping"
+    assert "Kobe Bryant" in R.TASKS[0]["confirmed_task"]
+    assert "Aurora, Illinois" in (
+        R.TASK_CATALOG.get_suite("main-original").tasks[0]["confirmed_task"]
+    )
     ids = [t["task_id"] for t in R.TASKS]
     assert len(set(ids)) == len(ids), "duplicate task_id in tasks.json"
     for t in R.TASKS:
@@ -29,6 +42,329 @@ def test_tasks():
     assert len(R.resolve_tasks("1,3", False)) == 2
     assert R.resolve_tasks(R.TASKS[4]["task_id"][:8], False)[0] is R.TASKS[4]
     assert len(R.resolve_tasks(None, True)) == len(R.TASKS)
+
+
+def test_task_router():
+    catalog = task_router.TaskCatalog.load()
+    shopping = catalog.get_suite("shopping")
+    assert [task["task_id"] for task in shopping.tasks] == [
+        task["task_id"] for task in R.TASKS
+    ]
+    assert shopping.task_snapshot(shopping.tasks[0])["task_source"] == (
+        "task_suites/shopping/000-core.json"
+    )
+    assert len(shopping.sha256) == 64
+    tampered = {
+        "task_id": shopping.tasks[0]["task_id"],
+        "task_snapshot": shopping.tasks[0],
+        "task_sha256": "0" * 64,
+    }
+    try:
+        R.task_for_record(tampered)
+    except ValueError as exc:
+        assert "hash mismatch" in str(exc)
+    else:
+        raise AssertionError("tampered task snapshot was accepted")
+    assert task_router.load_route(catalog=catalog) is shopping
+    assert task_router.load_route(suite_id="main-original", catalog=catalog).suite_id == (
+        "main-original"
+    )
+    assert shopping.resolve("39255449")[0]["task_id"] == shopping.tasks[0]["task_id"]
+
+    for invalid in ("0", str(len(shopping.tasks) + 1), "1,1", "does-not-exist"):
+        try:
+            shopping.resolve(invalid)
+        except task_router.TaskRoutingError:
+            pass
+        else:
+            raise AssertionError(f"invalid selector {invalid!r} was accepted")
+
+    first = copy.deepcopy(shopping.tasks[0])
+    second = copy.deepcopy(shopping.tasks[1])
+    first["task_id"], second["task_id"] = "same-prefix-a", "same-prefix-b"
+    ambiguous = task_router.TaskSuite(
+        "ambiguous", "Ambiguous", "1", ["none"], [first, second], [], {}
+    )
+    try:
+        ambiguous.resolve("same-prefix")
+    except task_router.TaskRoutingError as exc:
+        assert "ambiguous" in str(exc)
+    else:
+        raise AssertionError("ambiguous ID prefix was accepted")
+
+    numeric = copy.deepcopy(second)
+    numeric["task_id"] = "1"
+    numeric_suite = task_router.TaskSuite(
+        "numeric", "Numeric", "1", ["none"], [first, numeric], [], {}
+    )
+    assert numeric_suite.resolve("1")[0]["task_id"] == "1"
+
+    with tempfile.TemporaryDirectory() as directory:
+        root = Path(directory)
+        parts = root / "parts"
+        parts.mkdir()
+        a, b = copy.deepcopy(shopping.tasks[0]), copy.deepcopy(shopping.tasks[1])
+        a["task_id"], b["task_id"] = "temporary-a", "temporary-b"
+        (parts / "01.json").write_text(json.dumps([a]), encoding="utf-8")
+        (parts / "02.json").write_text(json.dumps([b]), encoding="utf-8")
+        manifest = root / "task_suites.json"
+        manifest.write_text(json.dumps({
+            "schema_version": task_router.MANIFEST_SCHEMA,
+            "default_suite": "temporary",
+            "suites": {
+                "temporary": {
+                    "title": "Temporary",
+                    "version": "7",
+                    "task_files": ["parts/*.json"],
+                    "default_personas": ["none"],
+                }
+            },
+        }), encoding="utf-8")
+        temporary = task_router.TaskCatalog.load(
+            manifest_path=manifest, legacy_tasks_path=root / "unused.json"
+        ).default_suite
+        assert [task["task_id"] for task in temporary.tasks] == [
+            "temporary-a", "temporary-b"
+        ]
+        assert temporary.resolve("2")[0]["task_id"] == "temporary-b"
+
+        legacy_path = root / "legacy.json"
+        legacy_path.write_text(json.dumps([a]), encoding="utf-8")
+        legacy = task_router.TaskCatalog.load(
+            manifest_path=root / "missing-manifest.json",
+            legacy_tasks_path=legacy_path,
+        )
+        assert legacy.default_suite_id == "legacy"
+        assert legacy.default_suite.tasks[0]["task_id"] == "temporary-a"
+
+        ad_hoc_path = root / "draft.json"
+        ad_hoc_path.write_text(json.dumps({
+            "suite_id": "draft-suite",
+            "title": "Draft",
+            "version": "3",
+            "default_personas": ["none"],
+            "tasks": [a],
+        }), encoding="utf-8")
+        ad_hoc = task_router.suite_from_file(ad_hoc_path)
+        assert ad_hoc.suite_id == "draft-suite" and ad_hoc.tasks[0] == a
+
+        plain_a, plain_b = root / "one.json", root / "renamed.json"
+        plain_a.write_text(json.dumps([a]), encoding="utf-8")
+        plain_b.write_text(json.dumps([a]), encoding="utf-8")
+        assert task_router.suite_from_file(plain_a).suite_id == (
+            task_router.suite_from_file(plain_b).suite_id
+        )
+
+        collision = root / "collision.json"
+        collision.write_text(json.dumps({
+            "suite_id": "shopping", "tasks": [a]
+        }), encoding="utf-8")
+        try:
+            task_router.load_route(tasks_file=collision, catalog=catalog)
+        except task_router.TaskRoutingError as exc:
+            assert "conflicts with a registered suite" in str(exc)
+        else:
+            raise AssertionError("ad-hoc suite shadowed a registered suite")
+
+        unsafe = root / "unsafe.json"
+        unsafe.write_text(json.dumps({
+            "schema_version": task_router.MANIFEST_SCHEMA,
+            "default_suite": "bad",
+            "suites": {"bad": {"task_files": ["../outside.json"]}},
+        }), encoding="utf-8")
+        try:
+            task_router.TaskCatalog.load(
+                manifest_path=unsafe, legacy_tasks_path=root / "unused.json"
+            )
+        except task_router.TaskRoutingError as exc:
+            assert "stay under" in str(exc)
+        else:
+            raise AssertionError("manifest path escape was accepted")
+
+        malformed = root / "malformed.json"
+        bad_task = copy.deepcopy(a)
+        del bad_task["rubrics"]
+        malformed.write_text(json.dumps([bad_task]), encoding="utf-8")
+        try:
+            task_router.suite_from_file(malformed)
+        except task_router.TaskRoutingError as exc:
+            assert "rubric" in str(exc)
+        else:
+            raise AssertionError("malformed task was accepted")
+
+        unsafe_task = copy.deepcopy(a)
+        unsafe_task["task_id"] = "../escape"
+        malformed.write_text(json.dumps([unsafe_task]), encoding="utf-8")
+        try:
+            task_router.suite_from_file(malformed)
+        except task_router.TaskRoutingError as exc:
+            assert "path-safe" in str(exc)
+        else:
+            raise AssertionError("path-unsafe task id was accepted")
+
+        bad_persona = root / "bad-persona.json"
+        bad_persona.write_text(json.dumps({
+            "suite_id": "draft-bad-persona",
+            "default_personas": ["../escape"],
+            "tasks": [a],
+        }), encoding="utf-8")
+        try:
+            task_router.suite_from_file(bad_persona)
+        except task_router.TaskRoutingError as exc:
+            assert "path-safe persona" in str(exc)
+        else:
+            raise AssertionError("path-unsafe persona id was accepted")
+
+
+def test_report_task_routing():
+    import report
+
+    catalog = task_router.TaskCatalog.load()
+    try:
+        report._explicit_suite({"suite_id": "shopping", "task_suite": "other"})
+    except ValueError:
+        pass
+    else:
+        raise AssertionError("conflicting result suite identities were accepted")
+
+    with tempfile.TemporaryDirectory() as directory:
+        root = Path(directory)
+        result_dir = root / "later" / "future-task" / "arm__model__20260101T000000Z"
+        result_dir.mkdir(parents=True)
+        future_task = copy.deepcopy(R.TASKS[0])
+        future_task["task_id"] = "future-task"
+        future_task["level"] = "hard"
+        record = {
+            "suite_id": "later",
+            "task_id": "future-task",
+            "task_snapshot": future_task,
+            "persona": "none",
+            "run": {"arm": {"model": "stub", "backend": "stub"}, "max_steps": 5},
+            "judgement": {"score": 1.0, "score_communicated": 1.0},
+        }
+        (result_dir / "result.json").write_text(json.dumps(record), encoding="utf-8")
+        best, order, levels = report.collect_results(
+            root, catalog, list(catalog.suites.values()), all_suites=True
+        )
+        digest = task_router.canonical_sha256(future_task)
+        task_key = ("later", "future-task", digest)
+        result_key = (*task_key, "none/stub@stub#legacy")
+        assert task_key in order
+        assert levels[task_key] == "hard"
+        assert result_key in best
+        rendered = io.StringIO()
+        with redirect_stdout(rendered):
+            report.table(best, order, levels, "test scores", "score")
+        assert "future-task" in rendered.getvalue()
+        assert digest[:8] in rendered.getvalue()
+
+        draft_file = root / "future-draft.json"
+        draft_file.write_text(json.dumps([future_task]), encoding="utf-8")
+        draft_route = task_router.suite_from_file(draft_file)
+        custom_best, _, _ = report.collect_results(
+            root, catalog, [draft_route], custom_selection=True
+        )
+        assert (draft_route.suite_id, "future-task", digest,
+                "none/stub@stub#legacy") in custom_best
+
+        # A newer judge failure must not replace the older valid score.
+        unscored_dir = root / "later" / "future-task" / "arm__model__20270101T000000Z"
+        unscored_dir.mkdir(parents=True)
+        unscored = copy.deepcopy(record)
+        unscored["judgement"] = {"score": None, "error": "judge failed"}
+        (unscored_dir / "result.json").write_text(
+            json.dumps(unscored), encoding="utf-8"
+        )
+        best, order, levels = report.collect_results(
+            root, catalog, list(catalog.suites.values()), all_suites=True
+        )
+        assert best[result_key][1]["score"] == 1.0
+
+        configured_dir = (
+            root / "later" / "future-task" / "arm__model__20270102T000000Z"
+        )
+        configured_dir.mkdir(parents=True)
+        configured = copy.deepcopy(record)
+        configured["run_config"] = {"temperature": 1, "max_steps": 50}
+        configured_hash = task_router.canonical_sha256(configured["run_config"])
+        configured["run_config_sha256"] = configured_hash
+        configured["judgement"] = {"score": 0.75, "score_communicated": 0.75}
+        (configured_dir / "result.json").write_text(
+            json.dumps(configured), encoding="utf-8"
+        )
+        best, order, levels = report.collect_results(
+            root, catalog, list(catalog.suites.values()), all_suites=True
+        )
+        assert (*task_key, f"none/stub@stub#{configured_hash[:8]}") in best
+        assert result_key in best
+
+        # Reusing an ID after changing the task/rubric creates another version
+        # row; it can never silently mix arms with the first version.
+        changed_task = copy.deepcopy(future_task)
+        changed_task["confirmed_task"] += " Changed."
+        changed_digest = task_router.canonical_sha256(changed_task)
+        changed_dir = root / "later" / "future-task" / "arm2__model__20280101T000000Z"
+        changed_dir.mkdir(parents=True)
+        changed = copy.deepcopy(record)
+        changed["task_snapshot"] = changed_task
+        changed["task_sha256"] = changed_digest
+        changed["persona"] = "elderly-novice"
+        changed["judgement"] = {"score": 0.5, "score_communicated": None}
+        (changed_dir / "result.json").write_text(json.dumps(changed), encoding="utf-8")
+        best, order, levels = report.collect_results(
+            root, catalog, list(catalog.suites.values()), all_suites=True
+        )
+        assert ("later", "future-task", digest) in order
+        assert ("later", "future-task", changed_digest) in order
+        assert ("later", "future-task", changed_digest,
+                "elderly-novice/stub@stub#legacy") in best
+        assert report.mixed_revision_groups(best) == [("later", "future-task")]
+
+        # Unknown pre-router records are kept under 'unrouted' for an all-suite
+        # audit, never mislabeled as today's default Shopping suite.
+        unknown_dir = root / "unknown" / "arm__model__20290101T000000Z"
+        unknown_dir.mkdir(parents=True)
+        unknown = copy.deepcopy(record)
+        unknown.pop("suite_id")
+        unknown["task_id"] = "unknown-task"
+        unknown["task_snapshot"]["task_id"] = "unknown-task"
+        unknown["judgement"] = {"score": 0.25, "score_communicated": 0.25}
+        (unknown_dir / "result.json").write_text(json.dumps(unknown), encoding="utf-8")
+        best, _, _ = report.collect_results(
+            root, catalog, list(catalog.suites.values()), all_suites=True
+        )
+        assert any(key[:2] == ("unrouted", "unknown-task") for key in best)
+
+        selected, _, _ = report.collect_results(
+            root, catalog, [catalog.default_suite]
+        )
+        assert not selected
+
+
+def test_grid_shell_contract():
+    script = HERE / "run_grid.sh"
+    syntax = subprocess.run(["/bin/bash", "-n", str(script)], capture_output=True)
+    assert syntax.returncode == 0, syntax.stderr.decode()
+
+    env = {**os.environ, "PYTHON_BIN": "/usr/bin/true",
+           "PERSONAS": "none", "TASKS": "1,2"}
+    default_route = subprocess.run(
+        ["/bin/bash", str(script)],
+        cwd=HERE.parent, env=env, capture_output=True, text=True,
+    )
+    assert default_route.returncode == 0 and "GRID DONE" in default_route.stdout
+    dry = subprocess.run(
+        ["/bin/bash", str(script), "--suite", "shopping"],
+        cwd=HERE.parent, env=env, capture_output=True, text=True,
+    )
+    assert dry.returncode == 0 and "GRID DONE" in dry.stdout, dry.stderr
+
+    rejected = subprocess.run(
+        ["/bin/bash", str(script), "--task", "1"],
+        cwd=HERE.parent, env=env, capture_output=True, text=True,
+    )
+    assert rejected.returncode == 2
+    assert "use TASKS=" in rejected.stderr
 
 
 def test_personas_differ():  # the profiles the persona LLM is given
@@ -415,7 +751,6 @@ def test_experience_uses_frozen_profile():
 
 
 def test_skip_existing_ignores_unscored(tmp: Path = Path("/tmp")):
-    import tempfile
     with tempfile.TemporaryDirectory() as d:
         scored, unscored = Path(d) / "a.json", Path(d) / "b.json"
         scored.write_text(json.dumps({"judgement": {"score": 0.5}}))
@@ -423,6 +758,59 @@ def test_skip_existing_ignores_unscored(tmp: Path = Path("/tmp")):
         assert R._is_scored(scored)
         assert not R._is_scored(unscored)
         assert not R._is_scored(Path(d) / "missing.json")
+
+        snapshot = copy.deepcopy(R.TASKS[0])
+        digest = task_router.canonical_sha256(snapshot)
+        run_config = {"temperature": 1, "max_steps": 50}
+        run_config_digest = task_router.canonical_sha256(run_config)
+        resume_config = {"run_config_sha256": run_config_digest,
+                         "profile_path_sha256": "p" * 64}
+        resume_config_digest = task_router.canonical_sha256(resume_config)
+        routed = Path(d) / "routed.json"
+        routed.write_text(json.dumps({
+            "suite_id": "shopping",
+            "task_sha256": digest,
+            "task_snapshot": snapshot,
+            "run_config": run_config,
+            "run_config_sha256": run_config_digest,
+            "resume_config": resume_config,
+            "resume_config_sha256": resume_config_digest,
+            "judgement": {"score": 0.5},
+        }), encoding="utf-8")
+        assert R._is_scored(
+            routed, suite_id="shopping", task_sha256=digest,
+            run_config_sha256=run_config_digest,
+            resume_config_sha256=resume_config_digest,
+        )
+        assert not R._is_scored(routed, suite_id="main-original", task_sha256=digest)
+        assert not R._is_scored(routed, suite_id="shopping", task_sha256="0" * 64)
+        assert not R._is_scored(
+            routed, suite_id="shopping", task_sha256=digest,
+            run_config_sha256="b" * 64,
+        )
+        assert not R._is_scored(
+            routed, suite_id="shopping", task_sha256=digest,
+            run_config_sha256=run_config_digest, resume_config_sha256="d" * 64,
+        )
+
+        tampered = json.loads(routed.read_text(encoding="utf-8"))
+        tampered["run_config"]["temperature"] = 0
+        routed.write_text(json.dumps(tampered), encoding="utf-8")
+        assert not R._is_scored(
+            routed, suite_id="shopping", task_sha256=digest,
+            run_config_sha256=run_config_digest,
+            resume_config_sha256=resume_config_digest,
+        )
+
+        tampered = json.loads(routed.read_text(encoding="utf-8"))
+        tampered["run_config"] = run_config
+        tampered["task_snapshot"]["confirmed_task"] += " tampered"
+        routed.write_text(json.dumps(tampered), encoding="utf-8")
+        assert not R._is_scored(
+            routed, suite_id="shopping", task_sha256=digest,
+            run_config_sha256=run_config_digest,
+            resume_config_sha256=resume_config_digest,
+        )
 
 
 def test_judge(run):
@@ -447,6 +835,9 @@ def test_judge(run):
 
 if __name__ == "__main__":
     test_tasks()
+    test_task_router()
+    test_report_task_routing()
+    test_grid_shell_contract()
     test_personas_differ()
     run = test_agent_loop(None)
     test_persona_user()

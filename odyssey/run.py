@@ -15,8 +15,9 @@ The hidden need is fixed per task; only how it is said varies with the persona.
 Scoring each rubric item as met AND communicated keeps "the user never asked
 for that" apart from "the agent could not do it".
 
-    python odyssey/run.py --task 1 --persona elderly-novice
-    python odyssey/run.py --all --persona none        # control: Odysseys text verbatim
+    python odyssey/run.py --list-suites
+    python odyssey/run.py --suite shopping --task 1 --persona elderly-novice
+    python odyssey/run.py --all --persona none        # default suite, verbatim control
 
 Keys come from the repo's .env / env vars (OPENROUTER_API_KEY, OPENAI_API_KEY ...).
 """
@@ -38,6 +39,7 @@ REPO = HERE.parent
 sys.path.insert(0, str(HERE))
 
 import persona as persona_lib  # noqa: E402  (odyssey/persona.py)
+import task_router  # noqa: E402
 
 # Every model here speaks the OpenAI chat API; providers differ only in where
 # they live and which env var holds the key.
@@ -76,7 +78,11 @@ def prompt(name: str) -> str:
     return re.sub(r"\A<!--.*?-->\s*", "", text, flags=re.S).strip()
 
 
-TASKS = json.loads((HERE / "tasks.json").read_text(encoding="utf-8"))
+TASK_CATALOG = task_router.TaskCatalog.load()
+DEFAULT_TASK_SUITE = TASK_CATALOG.default_suite
+# Backward-compatible import surface for tests and notebooks.  It now means
+# "the manifest's default suite", rather than the hard-coded tasks.json file.
+TASKS = DEFAULT_TASK_SUITE.tasks
 PAGE_CHARS = 6000          # per read_page slice
 MAX_TABS = 8
 DEFAULT_PROFILE = HERE / ".chrome-profile"   # gitignored; keeps consent cookies
@@ -90,10 +96,18 @@ def task_for_record(record: dict) -> tuple[dict, str]:
     snapshot = record.get("task_snapshot")
     if (isinstance(snapshot, dict) and snapshot.get("task_id") == task_id
             and snapshot.get("confirmed_task") and snapshot.get("rubrics")):
+        expected_hash = record.get("task_sha256")
+        if (expected_hash and expected_hash != task_router.canonical_sha256(snapshot)):
+            raise ValueError(f"frozen task snapshot hash mismatch for {task_id!r}")
         return snapshot, "frozen_snapshot"
-    task = next((item for item in TASKS if item["task_id"] == task_id), None)
-    if task is None:
-        raise ValueError(f"task {task_id} is not in the run or current tasks.json")
+    suite_id = (record.get("suite_id") or record.get("task_suite")
+                or (record.get("suite_snapshot") or {}).get("id"))
+    try:
+        task, _ = TASK_CATALOG.find_task(task_id, suite_id=suite_id)
+    except task_router.TaskRoutingError as exc:
+        raise ValueError(
+            f"task {task_id!r} is not recoverable from the frozen run or task catalog: {exc}"
+        ) from exc
     return task, "unverified_current_tasks"
 
 AGENT_RULES = prompt("agent").format(max_questions=MAX_QUESTIONS)
@@ -419,11 +433,16 @@ def _provider_config(provider: str) -> tuple[str, str | None]:
     return key, base_url
 
 
+def _resolved_provider(model: str, provider: str = "") -> str:
+    return provider or (
+        "openai" if model.startswith(("gpt-", "o1", "o3", "o4")) else "openrouter"
+    )
+
+
 def _client(model: str, provider: str = ""):
     from openai import OpenAI
 
-    provider = provider or ("openai" if model.startswith(("gpt-", "o1", "o3", "o4"))
-                            else "openrouter")
+    provider = _resolved_provider(model, provider)
     key, base_url = _provider_config(provider)
     return OpenAI(api_key=key, base_url=base_url), provider
 
@@ -433,6 +452,19 @@ def _provider_backend(provider: str) -> str:
     if provider == "openai" and os.environ.get("AZURE_OPENAI_BASE_URL", "").strip():
         return "azure-openai-compatible"
     return provider
+
+
+def _endpoint_sha256(provider: str) -> str:
+    """Stable endpoint identity without persisting the endpoint or a secret."""
+    if provider == "openai":
+        endpoint = (
+            os.environ.get("AZURE_OPENAI_BASE_URL", "").strip()
+            or os.environ.get("OPENAI_BASE_URL", "").strip()
+            or "https://api.openai.com/v1"
+        )
+    else:
+        endpoint = PROVIDERS.get(provider, ("", f"provider:{provider}"))[1]
+    return hashlib.sha256(str(endpoint).encode("utf-8")).hexdigest()
 
 
 def extract_json(text: str) -> dict | None:
@@ -485,13 +517,15 @@ class PersonaUser:
 
     def __init__(self, task: dict, persona_path: Path | None, model: str,
                  provider: str = "", temperature: float = 0.7):
-        self.client, self.provider = _client(model, provider)
+        self.client = None
+        self.provider = _resolved_provider(model, provider)
         self.model, self.temperature = model, temperature
         self.profile_snapshot = None
         rules = PERSONA_USER_RULES.format(goal=task["confirmed_task"])
         if persona_path is None:
             system = "You are a person.\n\n" + rules
         else:
+            self.client, self.provider = _client(model, provider)
             profile_doc = persona_lib.load_persona(persona_path)
             evaluation_dimensions = profile_doc.get("evaluation_dimensions") or []
             if (not isinstance(evaluation_dimensions, list)
@@ -534,6 +568,10 @@ class PersonaUser:
         self.transcript = [{"role": "user", "text": self.opening}]
 
     def _say(self, prompt: str) -> str:
+        # The control opening is deterministic and needs no API key.  Only
+        # create its persona client if the CUA later asks a question.
+        if self.client is None:
+            self.client, self.provider = _client(self.model, self.provider)
         self.messages.append({"role": "user", "content": prompt})
         resp = _create_with_retry(self.client, model=self.model, messages=self.messages,
                                   temperature=self.temperature)
@@ -550,7 +588,8 @@ class PersonaUser:
 
     def info(self) -> dict:
         info = {"model": self.model, "provider": self.provider,
-                "backend": _provider_backend(self.provider)}
+                "backend": _provider_backend(self.provider),
+                "temperature": self.temperature}
         if self.profile_snapshot is not None:
             info["persona_profile"] = self.profile_snapshot
         return info
@@ -725,7 +764,10 @@ def score_verdicts(task: dict, verdicts: dict, steps: int) -> dict:
 # --------------------------------------------------------------------------- #
 # CLI
 # --------------------------------------------------------------------------- #
-def _is_scored(path: Path) -> bool:
+def _is_scored(path: Path, *, suite_id: str | None = None,
+               task_sha256: str | None = None,
+               run_config_sha256: str | None = None,
+               resume_config_sha256: str | None = None) -> bool:
     """True only for a result that actually carries a score.
 
     A run whose judge failed writes a result.json with score None; treating that
@@ -735,30 +777,87 @@ def _is_scored(path: Path) -> bool:
         rec = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
         return False
-    return (rec.get("judgement") or {}).get("score") is not None
+    score = (rec.get("judgement") or {}).get("score")
+    if (isinstance(score, bool) or not isinstance(score, (int, float))
+            or not 0 <= float(score) <= 1):
+        return False
+    if task_sha256:
+        stored_hash = rec.get("task_sha256")
+        snapshot_hash = (
+            task_router.canonical_sha256(rec["task_snapshot"])
+            if isinstance(rec.get("task_snapshot"), dict) else None
+        )
+        if stored_hash and snapshot_hash and stored_hash != snapshot_hash:
+            return False
+        recorded_hash = snapshot_hash or stored_hash
+        if recorded_hash != task_sha256:
+            return False
+    if suite_id:
+        recorded_suite = (rec.get("suite_id") or rec.get("task_suite")
+                          or (rec.get("suite_snapshot") or {}).get("id"))
+        # A legacy result has no suite field.  A matching frozen task hash is
+        # sufficient to identify it without guessing from its old directory.
+        if recorded_suite is not None and recorded_suite != suite_id:
+            return False
+        if recorded_suite is None and not task_sha256:
+            return False
+    if run_config_sha256:
+        stored_config_hash = rec.get("run_config_sha256")
+        actual_config_hash = (
+            task_router.canonical_sha256(rec["run_config"])
+            if isinstance(rec.get("run_config"), dict) else None
+        )
+        if (stored_config_hash and actual_config_hash
+                and stored_config_hash != actual_config_hash):
+            return False
+        if (actual_config_hash or stored_config_hash) != run_config_sha256:
+            return False
+    if resume_config_sha256:
+        stored_resume_hash = rec.get("resume_config_sha256")
+        actual_resume_hash = (
+            task_router.canonical_sha256(rec["resume_config"])
+            if isinstance(rec.get("resume_config"), dict) else None
+        )
+        if (stored_resume_hash and actual_resume_hash
+                and stored_resume_hash != actual_resume_hash):
+            return False
+        if (actual_resume_hash or stored_resume_hash) != resume_config_sha256:
+            return False
+    return True
 
 
-def resolve_tasks(spec: str | None, run_all: bool) -> list[dict]:
-    if run_all or not spec:
-        return TASKS
-    picked = []
-    for token in spec.split(","):
-        token = token.strip()
-        if token.isdigit():
-            picked.append(TASKS[int(token) - 1])
-        else:
-            hits = [t for t in TASKS if t["task_id"].startswith(token)]
-            if not hits:
-                raise SystemExit(f"no task matching {token!r}")
-            picked.append(hits[0])
-    return picked
+def resolve_tasks(spec: str | None, run_all: bool,
+                  tasks: list[dict] | None = None) -> list[dict]:
+    """Resolve ordinals or ID prefixes, retaining the old public helper."""
+    suite = DEFAULT_TASK_SUITE
+    if tasks is not None and tasks is not TASKS:
+        suite = task_router.TaskSuite(
+            suite_id="selected",
+            title="Selected tasks",
+            version="adhoc",
+            default_personas=[],
+            tasks=tasks,
+            sources=[],
+            task_sources={},
+        )
+    try:
+        return suite.resolve(spec, run_all)
+    except task_router.TaskRoutingError as exc:
+        raise SystemExit(f"task routing error: {exc}") from exc
 
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--task", help="1-6, a task_id prefix, or a comma-separated list")
-    ap.add_argument("--all", action="store_true", help="run all 6 tasks")
+    route = ap.add_mutually_exclusive_group()
+    route.add_argument("--suite", help="registered task suite (default: catalog default)")
+    route.add_argument("--tasks-file", help="one unregistered JSON task file for an ad-hoc run")
+    ap.add_argument("--list-suites", action="store_true",
+                    help="validate and list registered task suites, then exit")
+    ap.add_argument("--list-tasks", action="store_true",
+                    help="validate and list tasks in the selected suite/file, then exit")
+    ap.add_argument("--task", help="1-based ordinal, task_id prefix, or comma-separated list")
+    ap.add_argument("--all", action="store_true", help="run every task in the selected suite")
     ap.add_argument("--persona", default="elderly-novice",
                     help="the user asking: a name under odyssey/personas/ (omit .yaml), "
                          "or 'none' for the Odysseys task text verbatim")
@@ -777,9 +876,9 @@ def main() -> None:
     ap.add_argument("--temperature", type=float, default=0.7)
     ap.add_argument("--headless", action="store_true",
                     help="no browser window (recommended; required on a server without a display)")
-    ap.add_argument("--profile", default=str(DEFAULT_PROFILE),
-                    help="Chrome user-data dir; reused across runs so a captcha "
-                         "solved by hand once keeps working")
+    ap.add_argument("--profile", default="",
+                    help="Chrome user-data dir; default is an isolated persistent "
+                         "profile under artifacts/chrome-profiles/<suite>/<persona>")
     ap.add_argument("--no-judge", action="store_true", help="run the agent only")
     ap.add_argument("--preview", action="store_true",
                     help="only print what the persona would say to open each task -- "
@@ -791,37 +890,129 @@ def main() -> None:
     args = ap.parse_args()
     load_dotenv()
 
+    if args.list_suites:
+        print("\n".join(task_router.format_suites(TASK_CATALOG)))
+        return
+    try:
+        selected_suite = task_router.load_route(
+            suite_id=args.suite,
+            tasks_file=args.tasks_file,
+            catalog=TASK_CATALOG,
+        )
+    except task_router.TaskRoutingError as exc:
+        raise SystemExit(f"task routing error: {exc}") from exc
+    if args.list_tasks:
+        print("\n".join(task_router.format_tasks(selected_suite)))
+        return
+
+    if not task_router.PERSONA_ID_RE.fullmatch(args.persona):
+        raise SystemExit(f"invalid path-unsafe persona id {args.persona!r}")
     persona_path = HERE / "personas" / f"{args.persona}.yaml"
     if args.persona != "none" and not persona_path.is_file():
         raise SystemExit(f"no persona at {persona_path}")
     judge_provider = args.judge_provider      # "" -> inferred from the model id
+    profile_dir = args.profile or str(
+        REPO / "artifacts" / "chrome-profiles" / selected_suite.suite_id / args.persona
+    )
 
     if args.preview:
-        for task in resolve_tasks(args.task, args.all):
+        for task in resolve_tasks(args.task, args.all, selected_suite.tasks):
             user = PersonaUser(task, None if args.persona == "none" else persona_path,
                                args.persona_model, args.persona_provider,
                                temperature=args.temperature)
-            print(f"\n=== {task['task_id'][:12]} [{task['level']}] persona={args.persona} "
+            print(f"\n=== {selected_suite.suite_id}/{task['task_id'][:12]} "
+                  f"[{task['level']}] persona={args.persona} "
                   f"({len(user.opening.split())} words; Odysseys original "
                   f"{len(task['confirmed_task'].split())}) ===\n{user.opening}")
         return
 
-    for task in resolve_tasks(args.task, args.all):
+    resolved_agent_provider = _resolved_provider(args.model, args.provider)
+    resolved_persona_provider = _resolved_provider(
+        args.persona_model, args.persona_provider
+    )
+    resolved_judge_provider = _resolved_provider(args.judge_model, judge_provider)
+    profile_identity = hashlib.sha256(
+        str(Path(profile_dir).expanduser().resolve()).encode("utf-8")
+    ).hexdigest()
+    run_config = {
+        "persona": args.persona,
+        "persona_profile_sha256": (
+            hashlib.sha256(persona_path.read_bytes()).hexdigest()
+            if args.persona != "none" else None
+        ),
+        "agent": {
+            "model": args.model,
+            "provider": resolved_agent_provider,
+            "backend": _provider_backend(resolved_agent_provider),
+            "endpoint_sha256": _endpoint_sha256(resolved_agent_provider),
+            "temperature": args.temperature,
+            "max_steps": args.max_steps,
+        },
+        "persona_user": {
+            "model": args.persona_model,
+            "provider": resolved_persona_provider,
+            "backend": _provider_backend(resolved_persona_provider),
+            "endpoint_sha256": _endpoint_sha256(resolved_persona_provider),
+            "temperature": args.temperature,
+        },
+        "judge": {
+            "enabled": not args.no_judge,
+            "model": args.judge_model,
+            "provider": resolved_judge_provider,
+            "backend": _provider_backend(resolved_judge_provider),
+            "endpoint_sha256": _endpoint_sha256(resolved_judge_provider),
+        },
+        "browser": {
+            "headless": args.headless,
+            "profile_mode": "explicit" if args.profile else "isolated-per-suite-persona",
+        },
+        "prompt_sha256": {
+            "agent": hashlib.sha256(AGENT_RULES.encode("utf-8")).hexdigest(),
+            "persona_user": hashlib.sha256(PERSONA_USER_RULES.encode("utf-8")).hexdigest(),
+            "rubric_judge": hashlib.sha256(JUDGE_PROMPT.encode("utf-8")).hexdigest(),
+        },
+    }
+    run_config_hash = task_router.canonical_sha256(run_config)
+    resume_config = {
+        "run_config_sha256": run_config_hash,
+        "profile_path_sha256": profile_identity,
+    }
+    resume_config_hash = task_router.canonical_sha256(resume_config)
+    had_failures = False
+    for task in resolve_tasks(args.task, args.all, selected_suite.tasks):
         stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
         # A model id like "qwen/qwen3.8-27b" would otherwise split the run
         # directory across an extra path level.
         safe_model = args.model.replace("/", "-")
-        cell = Path(args.out) / task["task_id"][:12]
+        task_hash = task_router.canonical_sha256(task)
+        # v2 paths are namespaced by suite and use the full ID.  Also inspect
+        # the old short-ID cell so --skip-existing remains useful after upgrade.
+        cell = (
+            Path(args.out) / selected_suite.suite_id / task["task_id"] / task_hash
+        )
+        legacy_cell = Path(args.out) / task["task_id"][:12]
+        candidate_dirs = list(cell.glob(f"{args.persona}__{safe_model}__*"))
+        candidate_dirs += list(legacy_cell.glob(f"{args.persona}__{safe_model}__*"))
         if args.skip_existing and any(
-            _is_scored(d / "result.json")
-            for d in cell.glob(f"{args.persona}__{safe_model}__*")
+            _is_scored(
+                directory / "result.json",
+                suite_id=selected_suite.suite_id,
+                task_sha256=task_hash,
+                run_config_sha256=run_config_hash,
+                resume_config_sha256=resume_config_hash,
+            )
+            for directory in candidate_dirs
         ):
-            print(f"skip {task['task_id'][:12]} [{task['level']}] persona={args.persona} "
+            print(f"skip {selected_suite.suite_id}/{task['task_id'][:12]} "
+                  f"[{task['level']}] persona={args.persona} "
                   f"-- already has a result")
             continue
-        out_dir = cell / f"{args.persona}__{safe_model}__{stamp}"
+        out_dir = cell / (
+            f"{args.persona}__{safe_model}__{resume_config_hash[:10]}__{stamp}"
+        )
         out_dir.mkdir(parents=True, exist_ok=True)
-        print(f"\n=== {task['task_id'][:12]} [{task['level']}] persona={args.persona} "
+        print(f"\n=== {selected_suite.suite_id}/{task['task_id'][:12]} "
+              f"[{task['level']}] persona={args.persona} "
               f"model={args.model} ===")
 
         try:
@@ -831,23 +1022,38 @@ def main() -> None:
             print(f"  user says: {user.opening[:300]!r}", flush=True)
             run = run_agent(task, user, args.model, max_steps=args.max_steps,
                             headless=args.headless, temperature=args.temperature,
-                            profile_dir=args.profile, provider=args.provider)
+                            profile_dir=profile_dir, provider=args.provider)
         except Exception as exc:  # a dead task must not take the grid with it
+            had_failures = True
             print(f"FAILED: {type(exc).__name__}: {exc}")
             (out_dir / "error.txt").write_text(f"{type(exc).__name__}: {exc}\n",
                                                encoding="utf-8")
             continue
-        record = {"task_id": task["task_id"], "level": task["level"],
-                  "task_snapshot": task,
-                  "persona": args.persona, "run": run}
+        record = {
+            "schema_version": task_router.RESULT_SCHEMA,
+            "suite_id": selected_suite.suite_id,
+            "suite_snapshot": selected_suite.task_snapshot(task),
+            "task_id": task["task_id"],
+            "task_sha256": task_hash,
+            "level": task["level"],
+            "task_snapshot": task,
+            "run_config": run_config,
+            "run_config_sha256": run_config_hash,
+            "resume_config": resume_config,
+            "resume_config_sha256": resume_config_hash,
+            "persona": args.persona,
+            "run": run,
+        }
         if run["stop_reason"] == "no_model_output":
+            had_failures = True
             # Not a result. Leave it unscored so a resume retries the cell.
-            record = {"task_id": task["task_id"], "level": task["level"],
-                      "task_snapshot": task,
-                      "persona": args.persona, "run": run,
-                      "judgement": {"error": "model returned no output", "verdicts": {},
-                                    "met": None, "total": len(task["rubrics"]),
-                                    "score": None}}
+            record["judgement"] = {
+                "error": "model returned no output",
+                "verdicts": {},
+                "met": None,
+                "total": len(task["rubrics"]),
+                "score": None,
+            }
             (out_dir / "result.json").write_text(
                 json.dumps(record, ensure_ascii=False, indent=2), encoding="utf-8")
             print(f"UNSCORED: model returned no output -> {out_dir / 'result.json'}")
@@ -862,6 +1068,7 @@ def main() -> None:
                                        "total": len(task["rubrics"]), "score": None}
             j = record["judgement"]
             if j.get("score") is None:
+                had_failures = True
                 print(f"UNJUDGED ({j.get('error')})  "
                       f"(steps {run['steps']}, stop={run['stop_reason']})")
             else:
@@ -873,6 +1080,8 @@ def main() -> None:
         (out_dir / "result.json").write_text(
             json.dumps(record, ensure_ascii=False, indent=2), encoding="utf-8")
         print(f"-> {out_dir / 'result.json'}")
+    if had_failures:
+        raise SystemExit(1)
 
 
 if __name__ == "__main__":

@@ -2,6 +2,25 @@
 
 The runnable benchmark on this branch lives under [`odyssey/`](odyssey/README.md).
 
+## Task-suite router
+
+This branch defaults to the `shopping` suite (Task 1 is the Kobe task), while
+the original `main` tasks remain available as `main-original` instead of being
+overwritten:
+
+```bash
+python odyssey/run.py --list-suites
+python odyssey/run.py --suite shopping --list-tasks
+python odyssey/run.py --suite main-original --task 1 --persona none --preview
+```
+
+Future Shopping batches can be added as another JSON shard under
+`odyssey/task_suites/shopping/`; the existing manifest glob picks them up
+without any runner changes. New domains get their own suite entry in
+[`odyssey/task_suites.json`](odyssey/task_suites.json). See the
+[`odyssey` guide](odyssey/README.md#task-suites-and-future-batches) for the
+registered-suite, ad-hoc file, grid, and reporting workflows.
+
 ## Local Azure configuration
 
 The runner reads `.env` from the repository root. It is parsed by

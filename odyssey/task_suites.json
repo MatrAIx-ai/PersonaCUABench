@@ -1,0 +1,31 @@
+{
+  "schema_version": "personacuabench.task-suites.v1",
+  "default_suite": "shopping",
+  "suites": {
+    "main-original": {
+      "title": "Original main-branch assignments",
+      "version": "1",
+      "task_files": [
+        "tasks.json"
+      ],
+      "default_personas": [
+        "none",
+        "travel-expert",
+        "elderly-novice"
+      ]
+    },
+    "shopping": {
+      "title": "Ecommerce & Shopping — Defu Cao",
+      "version": "1",
+      "task_files": [
+        "task_suites/shopping/*.json"
+      ],
+      "default_personas": [
+        "none",
+        "budget-student",
+        "non-native-speaker",
+        "elderly-novice"
+      ]
+    }
+  }
+}
