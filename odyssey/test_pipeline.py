@@ -22,6 +22,7 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 
 import run as R  # noqa: E402
+import persona_experiment  # noqa: E402
 import task_router  # noqa: E402
 
 
@@ -298,6 +299,57 @@ def test_report_task_routing():
         assert (*task_key, f"none/stub@stub#{configured_hash[:8]}") in best
         assert result_key in best
 
+        # Task-bound opening/order fields do not fragment one arm across task
+        # rows, but two browser profile identities for the same row are never
+        # silently folded together.
+        comparable_a = copy.deepcopy(configured)
+        comparable_a["run_config"] = {
+            **configured["run_config"],
+            "persona_opening_cache_key": "a" * 64,
+            "pair_order": "positive-negative",
+            "pair_position": 1,
+        }
+        comparable_a["run_config_sha256"] = task_router.canonical_sha256(
+            comparable_a["run_config"]
+        )
+        comparable_a["resume_config"] = {"profile_path_sha256": "1" * 64}
+        comparable_a["resume_config_sha256"] = task_router.canonical_sha256(
+            comparable_a["resume_config"]
+        )
+        profile_a_dir = root / "later" / "future-task" / "profile-a__20300101T000000Z"
+        profile_a_dir.mkdir(parents=True)
+        (profile_a_dir / "result.json").write_text(
+            json.dumps(comparable_a), encoding="utf-8"
+        )
+        comparable_b = copy.deepcopy(comparable_a)
+        comparable_b["resume_config"] = {"profile_path_sha256": "2" * 64}
+        comparable_b["resume_config_sha256"] = task_router.canonical_sha256(
+            comparable_b["resume_config"]
+        )
+        profile_b_dir = root / "later" / "future-task" / "profile-b__20300102T000000Z"
+        profile_b_dir.mkdir(parents=True)
+        (profile_b_dir / "result.json").write_text(
+            json.dumps(comparable_b), encoding="utf-8"
+        )
+        best, _, _ = report.collect_results(
+            root, catalog, list(catalog.suites.values()), all_suites=True
+        )
+        profile_keys = [
+            key for key in best
+            if key[:3] == task_key and "~profile-" in key[3]
+        ]
+        # The earlier fixture has the same comparison config but no recorded
+        # browser resume identity ("legacy"), so all three identities must be
+        # retained instead of selecting whichever result happened to be latest.
+        assert len(profile_keys) == 3
+        assert {
+            key[3].rsplit("~profile-", 1)[-1] for key in profile_keys
+        } == {
+            "legacy",
+            report.resume_config_version(comparable_a)[:8],
+            report.resume_config_version(comparable_b)[:8],
+        }
+
         # Reusing an ID after changing the task/rubric creates another version
         # row; it can never silently mix arms with the first version.
         changed_task = copy.deepcopy(future_task)
@@ -376,6 +428,79 @@ def test_personas_differ():  # the profiles the persona LLM is given
     # The profile carries no task: the need is added separately, per task.
     for p in prompts.values():
         assert "Aurora" not in p
+
+
+def test_matched_persona_experiment():
+    suite = R.TASK_CATALOG.get_suite("shopping")
+    assert suite.persona_experiment is not None
+    catalog = persona_experiment.dimension_catalog()
+    protocol = persona_experiment.validate_protocol(
+        persona_experiment.load_json(suite.persona_experiment),
+        catalog=catalog,
+        task_ids=[task["task_id"] for task in suite.tasks],
+        expected_suite_id=suite.suite_id,
+    )
+    profiles = persona_experiment.expected_profiles(
+        protocol,
+        catalog=catalog,
+        suite_id=suite.suite_id,
+        protocol_path=suite.persona_experiment,
+    )
+    assert len(protocol["axes"]) == 6
+    assert len(profiles) == 12
+    malformed = copy.deepcopy(protocol)
+    del malformed["design"]["pairing_controls"]
+    try:
+        persona_experiment.validate_protocol(
+            malformed,
+            catalog=catalog,
+            task_ids=[task["task_id"] for task in suite.tasks],
+            expected_suite_id=suite.suite_id,
+        )
+    except persona_experiment.ExperimentDefinitionError as exc:
+        assert "pairing_controls" in str(exc)
+    else:
+        raise AssertionError("protocol without pairing controls was accepted")
+    persona_experiment.materialize_profiles(
+        profiles,
+        output_dir=HERE / "personas" / "shopping" / "matched_pairs",
+        check=True,
+    )
+
+    cells = persona_experiment.build_cells(protocol, suite.tasks, replicate_id="r1")
+    assert len(cells) == 36
+    assert {cell["task_id"] for cell in cells} == {
+        task["task_id"] for task in suite.tasks
+    }
+    for task in suite.tasks:
+        assert sum(cell["task_id"] == task["task_id"] for cell in cells) == 6
+
+    kobe_id = suite.tasks[0]["task_id"]
+    kobe_cells = persona_experiment.build_cells(
+        protocol, suite.tasks, selected_task_ids={kobe_id}
+    )
+    assert len(kobe_cells) == 6
+    assert {cell["axis_id"] for cell in kobe_cells} == {
+        "evidence_verification", "price_orientation", "purchase_risk"
+    }
+    r2_cells = persona_experiment.build_cells(
+        protocol, suite.tasks, replicate_id="r2"
+    )
+    r1_order = {
+        (cell["task_id"], cell["axis_id"]): cell["pair_order"] for cell in cells
+    }
+    r2_order = {
+        (cell["task_id"], cell["axis_id"]): cell["pair_order"] for cell in r2_cells
+    }
+    assert all(
+        r2_order[key] == "-".join(reversed(r1_order[key].split("-")))
+        for key in r1_order
+    )
+    verifying = R.resolve_persona_path(
+        "mp_evidence_verification_positive", suite.suite_id
+    )
+    rendered = R.persona_lib.persona_system_prompt(verifying)
+    assert "Verifying" in rendered and "Trust level" in rendered
 
 
 class _StubBrowser:
@@ -496,6 +621,84 @@ def test_persona_user():
     assert "75-84" in snapshot["profile_narrative"]
     assert user.reply("Which days?") == client.reply
     assert [t["role"] for t in user.transcript] == ["user", "assistant", "user"]
+
+    cache_r1 = R.persona_opening_cache(
+        task,
+        suite_id="shopping",
+        persona="elderly-novice",
+        replicate_id="r1",
+        persona_path=HERE / "personas" / "elderly-novice.yaml",
+        model="stub",
+        provider="stub",
+        temperature=0.7,
+    )
+    cache_r2 = R.persona_opening_cache(
+        task,
+        suite_id="shopping",
+        persona="elderly-novice",
+        replicate_id="r2",
+        persona_path=HERE / "personas" / "elderly-novice.yaml",
+        model="stub",
+        provider="stub",
+        temperature=0.7,
+    )
+    assert cache_r1["cache_key"] != cache_r2["cache_key"]
+
+    with tempfile.TemporaryDirectory() as directory:
+        cache_path = Path(directory) / "opening.json"
+        cache_spec = {
+            "path": cache_path,
+            "cache_key": "c" * 64,
+            "identity": {"replicate_id": "r1", "task_id": task["task_id"]},
+        }
+        cache_client = _TextClient(reply="A frozen opening")
+        R._client = lambda model, provider="": (cache_client, "stub")
+        first = R.PersonaUser(
+            task,
+            HERE / "personas" / "elderly-novice.yaml",
+            "stub",
+            opening_cache=cache_spec,
+        )
+        assert first.opening == "A frozen opening" and cache_path.is_file()
+        assert first.info()["opening_cache"]["cache_hit"] is False
+
+        cache_client_2 = _TextClient(reply="A different sampled opening")
+        R._client = lambda model, provider="": (cache_client_2, "stub")
+        second = R.PersonaUser(
+            task,
+            HERE / "personas" / "elderly-novice.yaml",
+            "stub",
+            opening_cache={
+                "path": cache_path,
+                "cache_key": "c" * 64,
+                "identity": {"replicate_id": "r1", "task_id": task["task_id"]},
+            },
+        )
+        assert second.opening == first.opening
+        assert not cache_client_2.sent
+        assert second.info()["opening_cache"]["cache_hit"] is True
+
+    matched_path = R.resolve_persona_path(
+        "mp_evidence_verification_positive", "shopping"
+    )
+    matched_client = _TextClient(reply="Please distinguish confirmed dates from rumors.")
+    R._client = lambda model, provider="": (matched_client, "stub")
+    matched_user = R.PersonaUser(task, matched_path, "stub")
+    matched_system = matched_client.sent[0][0]["content"]
+    assert "In your INITIAL message" in matched_system
+    assert "complete requirement set" in matched_system
+    matched = matched_user.info()["persona_profile"]["matched_pair"]
+    assert matched["axis_id"] == "evidence_verification"
+    assert matched["arm"] == "positive"
+    assert matched["protocol_sha256"]
+    assert matched["adherence_rubric"]["task_observables"]
+    assert matched["adherence_rubric"]["opposite_task_observables"]
+    try:
+        R.PersonaUser(R.TASKS[1], matched_path, "stub")
+    except ValueError as exc:
+        assert "not applicable" in str(exc)
+    else:
+        raise AssertionError("matched persona ran on an undeclared task")
 
     # Control arm: no profile, and the opening is the Odysseys text verbatim
     # without an LLM call.
@@ -658,6 +861,61 @@ def test_persona_fidelity_contract():
     task, integrity = R.task_for_record(record)
     assert task["confirmed_task"] == "FROZEN KOBE TASK"
     assert integrity == "frozen_snapshot"
+
+    matched_snapshot = copy.deepcopy(snapshot)
+    matched_snapshot["evaluation_dimensions"] = ["economic_motivation"]
+    matched_snapshot["evaluation_values"] = {
+        "economic_motivation": "Cost-sensitive"
+    }
+    matched_snapshot["matched_pair"] = {
+        "axis_id": "price_orientation",
+        "axis_label": "Price orientation",
+        "arm": "positive",
+        "opposite_value": "Premium-seeking",
+        "adherence_rubric": {
+            "behavioral_definition": "Prioritizes total cost.",
+            "generic_observables": ["Asks to avoid a premium."],
+            "task_observables": ["Asks for the cheapest qualifying option."],
+            "inherited_task_signals": ["Reports a visible price."],
+            "contradictions": ["Explicitly prefers a premium option."],
+            "opposite_behavioral_definition": "Pays more for quality.",
+            "opposite_generic_observables": ["Accepts a premium."],
+            "opposite_task_observables": ["Chooses a higher-priced option for fit."],
+        },
+    }
+    target = fidelity.requested_targets(matched_snapshot)[0]
+    assert target["task_observables"] == [
+        "Asks for the cheapest qualifying option."
+    ]
+    assert target["opposite_task_observables"] == [
+        "Chooses a higher-priced option for fit."
+    ]
+    matched_record = copy.deepcopy(record)
+    matched_record["run"]["user"]["persona_profile"] = matched_snapshot
+    matched_record["judgement"] = {
+        "communicated": len(R.TASKS[0]["rubrics"]) - 1,
+        "total": len(R.TASKS[0]["rubrics"]),
+        "verdicts": {
+            rubric_id: {"communicated": index > 0}
+            for index, rubric_id in enumerate(R.TASKS[0]["rubrics"])
+        },
+    }
+    coverage = fidelity.communication_guardrail(matched_record)
+    assert coverage["applicable"] and coverage["passed"] is False
+    matched_prompt = fidelity.build_prompt(matched_record)
+    assert "must receive score 0" in matched_prompt
+    assert "cannot count as persona expression" in matched_prompt
+    guarded = fidelity.apply_communication_guardrail(
+        {
+            "targets": [{"score": 2, "expressed": True, "note": "clear"}],
+            "expressed_target_count": 1,
+            "fidelity_issues": [],
+        },
+        coverage,
+    )
+    assert guarded["targets"][0]["score"] == 0
+    assert guarded["targets"][0]["score_before_coverage_guardrail"] == 2
+    assert guarded["expressed_target_count"] == 0
 
     parsed = {
         "targets": [
@@ -839,6 +1097,7 @@ if __name__ == "__main__":
     test_report_task_routing()
     test_grid_shell_contract()
     test_personas_differ()
+    test_matched_persona_experiment()
     run = test_agent_loop(None)
     test_persona_user()
     test_budget_exhausted_still_answers()

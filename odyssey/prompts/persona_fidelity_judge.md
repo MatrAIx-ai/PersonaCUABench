@@ -1,15 +1,26 @@
 <!-- Prompt text for the persona-fidelity judge. Filled with str.format(), so every
-     literal brace is doubled: {{ and }}. Placeholders: {task} {targets} {utterances}. -->
+     literal brace is doubled: {{ and }}. Placeholders: {task} {targets}
+     {coverage_policy} {utterances}. -->
 
 You are a strict persona-fidelity judge. Score only the simulated user's own
 utterances. Ignore task success and the computer-use assistant's behavior.
 
 For each declared target, use this 0/1/2 rubric:
 
-- 0: there is no affirmative evidence for the target behavior.
+- 0: there is no affirmative evidence for the target behavior. For a controlled
+  matched-pair arm, also use 0 when the apparent expression depends on omitting,
+  weakening, or contradicting a hard requirement in the original task.
 - 1: evidence is weak or ambiguous, comes from the utterance's style rather
   than an explicit preference, or is merely inherited from the original task.
 - 2: the user's words clearly express the assigned value in a task-specific way.
+
+When a target includes matched-pair metadata, use its `task_observables` and
+`generic_observables` as concrete examples rather than mandatory wording. Do
+not count an `inherited_task_signal` by itself: it already appears in the base
+task and therefore cannot establish persona separation. Treat listed
+`contradictions` and clear movement toward the `opposite_value` as evidence
+against the assigned arm; `opposite_task_observables` are task-specific examples
+of that opposite behavior.
 
 Do not require the user to explicitly name a trait. The form of an utterance can
 be evidence: for example, a concise focused request is weak evidence for a
@@ -26,8 +37,8 @@ Separately set `contradicted=true` only when the user's words clearly conflict
 with the assigned value. Contradiction requires score 0 and quoted evidence.
 No evidence is not a contradiction.
 
-The user may naturally omit details from the expert task. Omission alone is not
-a contradiction; judge whether the declared behavioral target was expressed.
+## Communication coverage policy
+{coverage_policy}
 
 ## Original task
 This is the inherited-wording baseline, not persona evidence by itself.

@@ -505,6 +505,61 @@ def _create_with_retry(client, *, attempts: int = 5, **kwargs):
 
 
 PERSONA_USER_RULES = prompt("persona_user")
+MATCHED_PAIR_PERSONA_USER_RULES = prompt("persona_user_matched_pair")
+OPENING_CACHE_SCHEMA = "odyssey.persona-opening.v1"
+
+
+def _persona_rules(profile_doc: dict | None) -> str:
+    return (
+        MATCHED_PAIR_PERSONA_USER_RULES
+        if isinstance(profile_doc, dict) and profile_doc.get("matched_pair")
+        else PERSONA_USER_RULES
+    )
+
+
+def persona_opening_cache(
+    task: dict,
+    *,
+    suite_id: str,
+    persona: str,
+    replicate_id: str,
+    persona_path: Path | None,
+    model: str,
+    provider: str,
+    temperature: float,
+) -> dict | None:
+    """Return a content-addressed cache spec for one simulated-user opening."""
+    if persona_path is None:
+        return None
+    profile_doc = persona_lib.load_persona(persona_path)
+    resolved_provider = _resolved_provider(model, provider)
+    rules = _persona_rules(profile_doc)
+    identity = {
+        "schema_version": OPENING_CACHE_SCHEMA,
+        "suite_id": suite_id,
+        "task_id": task["task_id"],
+        "task_sha256": task_router.canonical_sha256(task),
+        "persona": persona,
+        "persona_profile_sha256": hashlib.sha256(persona_path.read_bytes()).hexdigest(),
+        "persona_model": model,
+        "persona_provider": resolved_provider,
+        "persona_backend": _provider_backend(resolved_provider),
+        "persona_endpoint_sha256": _endpoint_sha256(resolved_provider),
+        "temperature": temperature,
+        "persona_prompt_sha256": hashlib.sha256(rules.encode("utf-8")).hexdigest(),
+        "replicate_id": replicate_id,
+    }
+    cache_key = task_router.canonical_sha256(identity)
+    path = (
+        REPO
+        / "artifacts"
+        / "persona-openings"
+        / suite_id
+        / task["task_id"]
+        / persona
+        / f"{replicate_id}__{cache_key[:16]}.json"
+    )
+    return {"path": path, "cache_key": cache_key, "identity": identity}
 
 
 class PersonaUser:
@@ -516,13 +571,14 @@ class PersonaUser:
     """
 
     def __init__(self, task: dict, persona_path: Path | None, model: str,
-                 provider: str = "", temperature: float = 0.7):
+                 provider: str = "", temperature: float = 0.7,
+                 opening_cache: dict | None = None):
         self.client = None
         self.provider = _resolved_provider(model, provider)
         self.model, self.temperature = model, temperature
         self.profile_snapshot = None
-        rules = PERSONA_USER_RULES.format(goal=task["confirmed_task"])
         if persona_path is None:
+            rules = PERSONA_USER_RULES.format(goal=task["confirmed_task"])
             system = "You are a person.\n\n" + rules
         else:
             self.client, self.provider = _client(model, provider)
@@ -548,11 +604,112 @@ class PersonaUser:
             self.profile_snapshot = {
                 "persona_id": profile_doc.get("persona_id"),
                 "version": profile_doc.get("version"),
+                "interaction_protocol": profile_doc.get(
+                    "interaction_protocol", "natural_user.v1"
+                ),
                 "profile_sha256": hashlib.sha256(persona_path.read_bytes()).hexdigest(),
                 "profile_narrative": profile_narrative,
                 "evaluation_dimensions": list(evaluation_dimensions),
                 "evaluation_values": values,
             }
+            matched_pair = profile_doc.get("matched_pair")
+            if matched_pair is not None:
+                if not isinstance(matched_pair, dict):
+                    raise ValueError(f"invalid matched_pair metadata in {persona_path}")
+                applicable = matched_pair.get("applicable_task_ids")
+                criteria = matched_pair.get("task_criteria")
+                task_id = task["task_id"]
+                if not isinstance(applicable, list) or task_id not in applicable:
+                    raise ValueError(
+                        f"persona {persona_path.stem!r} is not applicable to task {task_id}"
+                    )
+                if not isinstance(criteria, dict) or not isinstance(criteria.get(task_id), dict):
+                    raise ValueError(
+                        f"persona {persona_path.stem!r} has no task criterion for {task_id}"
+                    )
+                protocol_hash = str(matched_pair.get("protocol_sha256") or "")
+                if not re.fullmatch(r"[0-9a-f]{64}", protocol_hash):
+                    raise ValueError(f"invalid matched-pair protocol hash in {persona_path}")
+                raw_protocol_path = matched_pair.get("protocol_path")
+                if not isinstance(raw_protocol_path, str) or not raw_protocol_path.strip():
+                    raise ValueError(f"missing matched-pair protocol path in {persona_path}")
+                protocol_path = Path(raw_protocol_path).expanduser()
+                if not protocol_path.is_absolute():
+                    protocol_path = HERE / protocol_path
+                if not protocol_path.is_file():
+                    raise ValueError(
+                        f"matched-pair protocol is missing for {persona_path}: {protocol_path}"
+                    )
+                actual_protocol_hash = hashlib.sha256(protocol_path.read_bytes()).hexdigest()
+                if actual_protocol_hash != protocol_hash:
+                    raise ValueError(
+                        f"matched-pair profile is stale for {persona_path}; regenerate it"
+                    )
+                criterion = criteria[task_id]
+                arm = matched_pair.get("arm")
+                if arm not in {"positive", "negative"}:
+                    raise ValueError(f"invalid matched-pair arm in {persona_path}")
+                changed_dimension = matched_pair.get("changed_dimension")
+                if evaluation_dimensions != [changed_dimension]:
+                    raise ValueError(
+                        f"matched-pair evaluation dimension mismatch in {persona_path}"
+                    )
+                if values[changed_dimension] != matched_pair.get("target_value"):
+                    raise ValueError(
+                        f"matched-pair target value mismatch in {persona_path}"
+                    )
+                task_observables = criterion.get(f"{arm}_observables")
+                if not isinstance(task_observables, list) or not task_observables:
+                    raise ValueError(
+                        f"matched-pair criterion has no {arm}_observables in {persona_path}"
+                    )
+                self.profile_snapshot["matched_pair"] = {
+                    key: matched_pair.get(key)
+                    for key in (
+                        "schema_version",
+                        "experiment_id",
+                        "protocol_path",
+                        "protocol_sha256",
+                        "pair_id",
+                        "axis_id",
+                        "axis_label",
+                        "arm",
+                        "profile_name",
+                        "counterpart_profile_name",
+                        "changed_dimension",
+                        "target_value",
+                        "opposite_value",
+                    )
+                }
+                self.profile_snapshot["matched_pair"]["adherence_rubric"] = {
+                    "behavioral_definition": matched_pair.get("behavioral_definition"),
+                    "generic_observables": matched_pair.get("generic_observables"),
+                    "task_observables": task_observables,
+                    "opposite_task_observables": criterion.get(
+                        f"{'negative' if arm == 'positive' else 'positive'}_observables"
+                    ),
+                    "inherited_task_signals": criterion.get("inherited_task_signals"),
+                    "contradictions": matched_pair.get("contradictions"),
+                    "opposite_behavioral_definition": matched_pair.get(
+                        "opposite_behavioral_definition"
+                    ),
+                    "opposite_generic_observables": matched_pair.get(
+                        "opposite_generic_observables"
+                    ),
+                    "task_label": criterion.get("task_label"),
+                    "rationale": criterion.get("rationale"),
+                }
+            interaction_protocol = profile_doc.get("interaction_protocol")
+            if matched_pair is not None:
+                if interaction_protocol != "matched_pair_full_coverage.v1":
+                    raise ValueError(
+                        f"matched-pair profile has an invalid interaction_protocol "
+                        f"in {persona_path}"
+                    )
+                rules_template = MATCHED_PAIR_PERSONA_USER_RULES
+            else:
+                rules_template = PERSONA_USER_RULES
+            rules = rules_template.format(goal=task["confirmed_task"])
             system = persona_lib.persona_system_prompt(persona_path, role="a person") + \
                 "\n\n# Right now\n\n" + rules
         self.messages = [{"role": "system", "content": system}]
@@ -561,11 +718,89 @@ class PersonaUser:
             self.messages += [{"role": "user", "content": "What do you ask the assistant?"},
                               {"role": "assistant", "content": self.opening}]
         else:
-            self.opening = self._say("Write the message you send the assistant. "
-                                     "Only the message itself.")
+            instruction = "Write the message you send the assistant. Only the message itself."
+            self.opening = self._cached_opening(opening_cache)
+            if self.opening is None:
+                self.opening = self._say(instruction)
+                self._store_opening(opening_cache, self.opening)
+            else:
+                # Preserve the exact chat history a generated opening would
+                # have produced, so clarification replies remain comparable.
+                self.messages += [
+                    {"role": "user", "content": instruction},
+                    {"role": "assistant", "content": self.opening},
+                ]
             if not self.opening:
                 raise RuntimeError("persona LLM produced no opening request")
+        self.opening_cache = self._opening_cache_metadata(opening_cache)
         self.transcript = [{"role": "user", "text": self.opening}]
+
+    @staticmethod
+    def _cached_opening(spec: dict | None) -> str | None:
+        if spec is None:
+            return None
+        path = spec["path"]
+        if not path.is_file():
+            return None
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            raise ValueError(f"invalid persona opening cache {path}: {exc}") from exc
+        opening = payload.get("opening")
+        if (
+            payload.get("schema_version") != OPENING_CACHE_SCHEMA
+            or payload.get("cache_key") != spec["cache_key"]
+            or payload.get("identity") != spec["identity"]
+            or not isinstance(opening, str)
+            or not opening.strip()
+            or payload.get("opening_sha256")
+            != hashlib.sha256(opening.encode("utf-8")).hexdigest()
+        ):
+            raise ValueError(
+                f"persona opening cache failed integrity checks: {path}; "
+                "delete that one cache file and regenerate the opening"
+            )
+        spec["hit"] = True
+        return opening.strip()
+
+    @staticmethod
+    def _store_opening(spec: dict | None, opening: str) -> None:
+        if spec is None or not opening.strip():
+            return
+        path = spec["path"]
+        path.parent.mkdir(parents=True, exist_ok=True)
+        payload = {
+            "schema_version": OPENING_CACHE_SCHEMA,
+            "cache_key": spec["cache_key"],
+            "identity": spec["identity"],
+            "opening": opening.strip(),
+            "opening_sha256": hashlib.sha256(opening.strip().encode("utf-8")).hexdigest(),
+            "created_at": datetime.now(timezone.utc).isoformat(),
+        }
+        temporary = path.with_suffix(".json.tmp")
+        temporary.write_text(
+            json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8"
+        )
+        os.replace(temporary, path)
+        spec["hit"] = False
+
+    def _opening_cache_metadata(self, spec: dict | None) -> dict | None:
+        if spec is None:
+            return None
+        path = spec["path"]
+        try:
+            display_path = path.resolve().relative_to(REPO.resolve()).as_posix()
+        except ValueError:
+            display_path = path.name
+        return {
+            "schema_version": OPENING_CACHE_SCHEMA,
+            "cache_key": spec["cache_key"],
+            "path": display_path,
+            "cache_hit": bool(spec.get("hit")),
+            "opening_sha256": hashlib.sha256(
+                self.opening.encode("utf-8")
+            ).hexdigest(),
+        }
 
     def _say(self, prompt: str) -> str:
         # The control opening is deterministic and needs no API key.  Only
@@ -590,6 +825,8 @@ class PersonaUser:
         info = {"model": self.model, "provider": self.provider,
                 "backend": _provider_backend(self.provider),
                 "temperature": self.temperature}
+        if self.opening_cache is not None:
+            info["opening_cache"] = self.opening_cache
         if self.profile_snapshot is not None:
             info["persona_profile"] = self.profile_snapshot
         return info
@@ -846,6 +1083,25 @@ def resolve_tasks(spec: str | None, run_all: bool,
         raise SystemExit(f"task routing error: {exc}") from exc
 
 
+def resolve_persona_path(persona: str, suite_id: str) -> Path:
+    """Resolve suite-scoped generated personas before legacy global profiles."""
+    candidates = [
+        HERE / "personas" / suite_id / "matched_pairs" / f"{persona}.yaml",
+        HERE / "personas" / suite_id / f"{persona}.yaml",
+        HERE / "personas" / f"{persona}.yaml",
+    ]
+    hits = [path for path in candidates if path.is_file()]
+    if not hits:
+        searched = ", ".join(str(path) for path in candidates)
+        raise SystemExit(f"no persona {persona!r}; searched: {searched}")
+    if len(hits) > 1:
+        raise SystemExit(
+            f"persona {persona!r} is ambiguous for suite {suite_id!r}: "
+            + ", ".join(str(path) for path in hits)
+        )
+    return hits[0]
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -859,8 +1115,15 @@ def main() -> None:
     ap.add_argument("--task", help="1-based ordinal, task_id prefix, or comma-separated list")
     ap.add_argument("--all", action="store_true", help="run every task in the selected suite")
     ap.add_argument("--persona", default="elderly-novice",
-                    help="the user asking: a name under odyssey/personas/ (omit .yaml), "
-                         "or 'none' for the Odysseys task text verbatim")
+                    help="the user asking: a suite-scoped matched-pair name, a name "
+                         "under odyssey/personas/ (omit .yaml), or 'none' for the "
+                         "Odysseys task text verbatim")
+    ap.add_argument("--replicate-id", default="default",
+                    help="controlled repeat label; included in the run/cache identity")
+    ap.add_argument("--pair-order", choices=("positive-negative", "negative-positive"),
+                    help="auditable matched-pair execution order supplied by the planner")
+    ap.add_argument("--pair-position", type=int, choices=(1, 2),
+                    help="this arm's 1-based position within --pair-order")
     ap.add_argument("--model", default="qwen/qwen3.8-27b", help="the CUA doing the work")
     ap.add_argument("--provider", default="openrouter",
                     help="override routing for --model, e.g. openrouter for a "
@@ -907,19 +1170,60 @@ def main() -> None:
 
     if not task_router.PERSONA_ID_RE.fullmatch(args.persona):
         raise SystemExit(f"invalid path-unsafe persona id {args.persona!r}")
-    persona_path = HERE / "personas" / f"{args.persona}.yaml"
-    if args.persona != "none" and not persona_path.is_file():
-        raise SystemExit(f"no persona at {persona_path}")
+    if not task_router.PERSONA_ID_RE.fullmatch(args.replicate_id):
+        raise SystemExit(f"invalid path-unsafe replicate id {args.replicate_id!r}")
+    if (args.pair_order is None) != (args.pair_position is None):
+        raise SystemExit("--pair-order and --pair-position must be supplied together")
+    persona_path = (
+        HERE / "personas" / "none.yaml"
+        if args.persona == "none"
+        else resolve_persona_path(args.persona, selected_suite.suite_id)
+    )
+    persona_document = (
+        None if args.persona == "none" else persona_lib.load_persona(persona_path)
+    )
+    matched_pair_document = (
+        persona_document.get("matched_pair")
+        if isinstance(persona_document, dict) else None
+    )
+    if matched_pair_document is not None:
+        if args.pair_order is None and not args.preview:
+            raise SystemExit(
+                "matched-pair execution requires --pair-order/--pair-position; "
+                "use odyssey/run_matched_pairs.py"
+            )
+        if args.pair_order is not None:
+            ordered_arms = args.pair_order.split("-")
+            expected_arm = matched_pair_document.get("arm")
+            if ordered_arms[args.pair_position - 1] != expected_arm:
+                raise SystemExit(
+                    f"pair order/position selects {ordered_arms[args.pair_position - 1]!r} "
+                    f"but persona arm is {expected_arm!r}"
+                )
+    elif args.pair_order is not None:
+        raise SystemExit("--pair-order/--pair-position require a matched-pair persona")
     judge_provider = args.judge_provider      # "" -> inferred from the model id
     profile_dir = args.profile or str(
         REPO / "artifacts" / "chrome-profiles" / selected_suite.suite_id / args.persona
     )
+    selected_tasks = resolve_tasks(args.task, args.all, selected_suite.tasks)
 
     if args.preview:
-        for task in resolve_tasks(args.task, args.all, selected_suite.tasks):
+        for task in selected_tasks:
+            opening_cache = persona_opening_cache(
+                task,
+                suite_id=selected_suite.suite_id,
+                persona=args.persona,
+                replicate_id=args.replicate_id,
+                persona_path=None if args.persona == "none" else persona_path,
+                model=args.persona_model,
+                provider=args.persona_provider,
+                temperature=args.temperature,
+            )
             user = PersonaUser(task, None if args.persona == "none" else persona_path,
                                args.persona_model, args.persona_provider,
-                               temperature=args.temperature)
+                               temperature=args.temperature,
+                               opening_cache=opening_cache)
             print(f"\n=== {selected_suite.suite_id}/{task['task_id'][:12]} "
                   f"[{task['level']}] persona={args.persona} "
                   f"({len(user.opening.split())} words; Odysseys original "
@@ -934,8 +1238,16 @@ def main() -> None:
     profile_identity = hashlib.sha256(
         str(Path(profile_dir).expanduser().resolve()).encode("utf-8")
     ).hexdigest()
-    run_config = {
+    base_run_config = {
         "persona": args.persona,
+        "replicate_id": args.replicate_id,
+        "pair_order": args.pair_order,
+        "pair_position": args.pair_position,
+        "persona_interaction_protocol": (
+            "verbatim_control.v1"
+            if persona_document is None
+            else persona_document.get("interaction_protocol", "natural_user.v1")
+        ),
         "persona_profile_sha256": (
             hashlib.sha256(persona_path.read_bytes()).hexdigest()
             if args.persona != "none" else None
@@ -968,23 +1280,46 @@ def main() -> None:
         },
         "prompt_sha256": {
             "agent": hashlib.sha256(AGENT_RULES.encode("utf-8")).hexdigest(),
-            "persona_user": hashlib.sha256(PERSONA_USER_RULES.encode("utf-8")).hexdigest(),
+            "persona_user": hashlib.sha256(
+                (
+                    MATCHED_PAIR_PERSONA_USER_RULES
+                    if persona_document is not None
+                    and persona_document.get("matched_pair")
+                    else PERSONA_USER_RULES
+                ).encode("utf-8")
+            ).hexdigest(),
             "rubric_judge": hashlib.sha256(JUDGE_PROMPT.encode("utf-8")).hexdigest(),
         },
     }
-    run_config_hash = task_router.canonical_sha256(run_config)
-    resume_config = {
-        "run_config_sha256": run_config_hash,
-        "profile_path_sha256": profile_identity,
-    }
-    resume_config_hash = task_router.canonical_sha256(resume_config)
     had_failures = False
-    for task in resolve_tasks(args.task, args.all, selected_suite.tasks):
+    for task in selected_tasks:
         stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
         # A model id like "qwen/qwen3.8-27b" would otherwise split the run
         # directory across an extra path level.
         safe_model = args.model.replace("/", "-")
         task_hash = task_router.canonical_sha256(task)
+        opening_cache = persona_opening_cache(
+            task,
+            suite_id=selected_suite.suite_id,
+            persona=args.persona,
+            replicate_id=args.replicate_id,
+            persona_path=None if args.persona == "none" else persona_path,
+            model=args.persona_model,
+            provider=args.persona_provider,
+            temperature=args.temperature,
+        )
+        run_config = {
+            **base_run_config,
+            "persona_opening_cache_key": (
+                opening_cache["cache_key"] if opening_cache is not None else None
+            ),
+        }
+        run_config_hash = task_router.canonical_sha256(run_config)
+        resume_config = {
+            "run_config_sha256": run_config_hash,
+            "profile_path_sha256": profile_identity,
+        }
+        resume_config_hash = task_router.canonical_sha256(resume_config)
         # v2 paths are namespaced by suite and use the full ID.  Also inspect
         # the old short-ID cell so --skip-existing remains useful after upgrade.
         cell = (
@@ -1018,7 +1353,8 @@ def main() -> None:
         try:
             user = PersonaUser(task, None if args.persona == "none" else persona_path,
                                args.persona_model, args.persona_provider,
-                               temperature=args.temperature)
+                               temperature=args.temperature,
+                               opening_cache=opening_cache)
             print(f"  user says: {user.opening[:300]!r}", flush=True)
             run = run_agent(task, user, args.model, max_steps=args.max_steps,
                             headless=args.headless, temperature=args.temperature,
@@ -1042,6 +1378,7 @@ def main() -> None:
             "resume_config": resume_config,
             "resume_config_sha256": resume_config_hash,
             "persona": args.persona,
+            "replicate_id": args.replicate_id,
             "run": run,
         }
         if run["stop_reason"] == "no_model_output":

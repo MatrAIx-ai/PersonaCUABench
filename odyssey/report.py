@@ -10,6 +10,7 @@ suite/task snapshot, so historical or ad-hoc tasks are not silently dropped.
 from __future__ import annotations
 
 import argparse
+import copy
 import json
 import math
 import sys
@@ -24,7 +25,7 @@ import task_router  # noqa: E402
 RESULTS = HERE / "results"
 TaskKey = tuple[str, str, str]  # suite id, full task id, task sha256/revision
 ResultKey = tuple[str, str, str, str]  # task key + arm
-ResultValue = tuple[str, dict, int | None, dict | None, dict | None]
+ResultValue = tuple[str, dict, int | None, dict | None, dict | None, str]
 
 
 def _explicit_suite(record: dict) -> str | None:
@@ -87,6 +88,36 @@ def run_config_version(record: dict) -> str:
     return actual or "legacy"
 
 
+def comparison_config_version(record: dict) -> str:
+    """A cross-task arm identity, excluding task-bound scheduling/cache fields."""
+    exact = run_config_version(record)
+    config = record.get("run_config")
+    if exact == "legacy" or not isinstance(config, dict):
+        return "legacy"
+    comparable = copy.deepcopy(config)
+    for field in (
+        "persona_opening_cache_key",
+        "pair_order",
+        "pair_position",
+    ):
+        comparable.pop(field, None)
+    return task_router.canonical_sha256(comparable)
+
+
+def resume_config_version(record: dict) -> str:
+    stored = record.get("resume_config_sha256")
+    config = record.get("resume_config")
+    actual = task_router.canonical_sha256(config) if isinstance(config, dict) else None
+    if stored is not None:
+        if (not isinstance(stored, str) or len(stored) != 64
+                or any(char not in "0123456789abcdef" for char in stored.lower())):
+            raise ValueError("result has an invalid resume_config_sha256")
+        if actual and actual != stored:
+            raise ValueError("result resume_config_sha256 does not match resume_config")
+        return stored
+    return actual or "legacy"
+
+
 def collect_results(
     results: Path,
     catalog: task_router.TaskCatalog,
@@ -115,6 +146,7 @@ def collect_results(
                 level[key] = task["level"]
 
     best: dict[ResultKey, ResultValue] = {}
+    resume_keys: dict[ResultKey, dict[str, ResultKey]] = {}
     for path in sorted(results.rglob("result.json")):
         try:
             relative_parts = path.relative_to(results).parts
@@ -140,7 +172,8 @@ def collect_results(
         try:
             suite_id = suite_for_record(record, catalog)
             task_version = task_version_for_record(record)
-            config_version = run_config_version(record)
+            config_version = comparison_config_version(record)
+            resume_version = resume_config_version(record)
         except ValueError:
             continue
         if not all_suites:
@@ -164,7 +197,30 @@ def collect_results(
             snapshot_level = snapshot.get("level") if isinstance(snapshot, dict) else None
             level[row_key] = str(snapshot_level or record.get("level") or "?")
             order.append(row_key)
-        key = (suite_id, task_id, task_version, arm)
+        base_key = (suite_id, task_id, task_version, arm)
+        identities = resume_keys.setdefault(base_key, {})
+        key = identities.get(resume_version)
+        if key is None:
+            if not identities:
+                key = base_key
+            else:
+                if len(identities) == 1 and base_key in best:
+                    old_resume = next(iter(identities))
+                    old_key = (
+                        suite_id,
+                        task_id,
+                        task_version,
+                        f"{arm}~profile-{old_resume[:8]}",
+                    )
+                    best[old_key] = best.pop(base_key)
+                    identities[old_resume] = old_key
+                key = (
+                    suite_id,
+                    task_id,
+                    task_version,
+                    f"{arm}~profile-{resume_version[:8]}",
+                )
+            identities[resume_version] = key
         stamp = path.parent.name.rsplit("__", 1)[-1]
         value: ResultValue = (
             stamp,
@@ -172,6 +228,7 @@ def collect_results(
             run.get("max_steps"),
             record.get("experience"),
             record.get("persona_fidelity"),
+            resume_version,
         )
         if key not in best or stamp > best[key][0]:
             best[key] = value

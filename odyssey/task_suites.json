@@ -20,11 +20,9 @@
       "task_files": [
         "task_suites/shopping/*.json"
       ],
+      "persona_experiment": "task_suites/shopping/personas/persona_experiment.json",
       "default_personas": [
-        "none",
-        "budget-student",
-        "non-native-speaker",
-        "elderly-novice"
+        "none"
       ]
     }
   }

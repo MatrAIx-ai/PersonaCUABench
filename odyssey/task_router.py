@@ -174,6 +174,7 @@ class TaskSuite:
     tasks: list[dict]
     sources: list[Path]
     task_sources: dict[str, Path]
+    persona_experiment: Path | None = None
 
     @property
     def sha256(self) -> str:
@@ -342,6 +343,30 @@ class TaskCatalog:
             personas = spec.get("default_personas", [
                 "none", "travel-expert", "elderly-novice"
             ])
+            experiment_path = None
+            raw_experiment = spec.get("persona_experiment")
+            if raw_experiment is not None:
+                if not isinstance(raw_experiment, str) or not raw_experiment.strip():
+                    raise TaskRoutingError(
+                        f"suite {suite_id!r} has an invalid persona_experiment"
+                    )
+                relative_experiment = Path(raw_experiment)
+                if relative_experiment.is_absolute() or ".." in relative_experiment.parts:
+                    raise TaskRoutingError(
+                        f"suite {suite_id!r} persona_experiment must stay under {root}"
+                    )
+                experiment_path = (root / relative_experiment).resolve()
+                try:
+                    experiment_path.relative_to(root)
+                except ValueError as exc:
+                    raise TaskRoutingError(
+                        f"suite {suite_id!r} persona_experiment escapes {root}"
+                    ) from exc
+                if experiment_path.suffix.lower() != ".json" or not experiment_path.is_file():
+                    raise TaskRoutingError(
+                        f"suite {suite_id!r} persona_experiment is not a JSON file: "
+                        f"{experiment_path}"
+                    )
             if not isinstance(title, str) or not title.strip():
                 raise TaskRoutingError(f"suite {suite_id!r} has an invalid title")
             if not isinstance(version, (str, int, float)) or isinstance(version, bool):
@@ -371,6 +396,7 @@ class TaskCatalog:
                 tasks=tasks,
                 sources=files,
                 task_sources=sources_by_id,
+                persona_experiment=experiment_path,
             )
         return cls(suites, default_suite_id)
 
