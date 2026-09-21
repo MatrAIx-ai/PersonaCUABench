@@ -15,12 +15,23 @@
       ]
     },
     "shopping": {
-      "title": "Ecommerce & Shopping — Defu Cao",
+      "title": "Ecommerce & Shopping \u2014 Defu Cao",
       "version": "1",
       "task_files": [
         "task_suites/shopping/*.json"
       ],
       "persona_experiment": "task_suites/shopping/personas/persona_experiment.json",
+      "default_personas": [
+        "none"
+      ]
+    },
+    "science-education": {
+      "title": "Science and Education \u2014 Jiashu He",
+      "version": "1",
+      "task_files": [
+        "task_suites/science-education/*.json"
+      ],
+      "persona_experiment": "task_suites/science-education/personas/persona_experiment.json",
       "default_personas": [
         "none"
       ]

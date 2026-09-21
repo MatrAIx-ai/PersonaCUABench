@@ -1,0 +1,318 @@
+{
+  "schema_version": "personacuabench.matched-pair.v1",
+  "experiment_id": "science-education-matched-pairs-v1",
+  "suite_id": "science-education",
+  "display_name": "Alex Rivera",
+  "title": "Science and Education matched-pair persona experiment",
+  "purpose": "Measure whether a single controlled MatrAIx dimension changes how a user expresses the same frozen Odysseys science-and-education need, while both arms preserve every original rubric requirement.",
+  "arm_labels": {
+    "positive": "positive",
+    "negative": "negative"
+  },
+  "design": {
+    "selected_axis_count": 3,
+    "expected_persona_count": 6,
+    "recommended_replicates": 1,
+    "expected_task_axis_pairs_per_replicate": 9,
+    "expected_run_cells_per_replicate": 18,
+    "pairing_controls": [
+      "Use the same original task, persona model, CUA model, judge model, prompts, runtime limits, and replicate identifier for both arms.",
+      "Within a pair, change exactly one MatrAIx dimension value; all other rendered persona dimensions and the display name remain identical.",
+      "Keep original task requirements hard: a persona pole may change emphasis, ordering or what it additionally asks for, but may not remove, weaken or contradict any R1-Rn requirement.",
+      "Seed both arms' isolated Chrome profiles from the identical warm cookie template, so neither arm starts from a different browser state."
+    ],
+    "invalid_pair_conditions": [
+      "Either arm fails to communicate 100% of the original task rubric items.",
+      "Either arm scores below 2 for its assigned pole.",
+      "The two arms' cited utterances do not show meaningfully opposite preferences.",
+      "A pole is detectable only by the absence of a behaviour rather than by an affirmative utterance."
+    ],
+    "axis_selection_note": "Seven candidate dimensions were screened against the real simulator prompt before this set was fixed (see the suite README). On this task set only cog_detail_orientation separated strongly; cog_directness separated on the long field-rich tasks only; decision_style separated weakly. Pairs that do not separate are reported as non-separating under the scoring policy rather than dropped."
+  },
+  "baseline_dimensions": {
+    "cog_detail_orientation": "Moderate",
+    "cog_directness": "Balanced",
+    "decision_style": "Deliberative"
+  },
+  "scoring": {
+    "evidence_unit": "An exact or tightly paraphrased simulated-user utterance, not a CUA action or answer.",
+    "per_arm_scale": {
+      "0": "No supporting behavior, a direct contradiction, or behavior that violates a hard task requirement.",
+      "1": "Weak or ambiguous support, including merely repeating language inherited from the original task.",
+      "2": "Clear task-specific expression beyond inherited task wording, with no contradictory user behavior."
+    },
+    "binary_adherence_rule": "expressed=true if and only if the per-arm score is 2.",
+    "pair_separation_rule": "A matched pair separates only when both arms score 2 for their assigned poles and the cited evidence shows meaningfully opposite preferences or behavior.",
+    "coverage_guardrail": "Both arms must communicate 100% of the original task rubrics; otherwise report the pair as invalid rather than treating omission as persona expression.",
+    "reporting": [
+      "Report positive-arm adherence, negative-arm adherence, and pair separation separately by axis and task.",
+      "Keep task success and CUA alignment separate; never average them into persona adherence.",
+      "Retain the cited utterance, score, confidence, task ID, profile hash, model identities, and replicate identifier for auditability."
+    ]
+  },
+  "axes": [
+    {
+      "axis_id": "detail_depth",
+      "label": "Detail depth",
+      "dimension": "cog_detail_orientation",
+      "positive": {
+        "value": "Very high",
+        "behavioral_definition": "Requests task-relevant detail beyond the minimum required fields and wants nuanced distinctions preserved.",
+        "generic_observables": [
+          "Asks for at least one relevant optional field or caveat beyond task minimums.",
+          "Requests precise identifying detail such as dates, titles, roles, or qualifiers.",
+          "Wants the reasoning behind a selection, not just the result."
+        ],
+        "contradictions": [
+          "Explicitly asks for only the minimum required fields.",
+          "Rejects relevant supporting detail as unnecessary."
+        ]
+      },
+      "negative": {
+        "value": "Low",
+        "behavioral_definition": "Wants only the task's required fields and a compact answer, without optional detail.",
+        "generic_observables": [
+          "Explicitly asks the assistant to stick to the required fields only.",
+          "Declines optional background or caveats once the task is satisfied.",
+          "Prioritises a compact summary over explanatory depth."
+        ],
+        "contradictions": [
+          "Requests multiple optional fields or an expanded rationale.",
+          "Asks for exhaustive detail beyond the task."
+        ]
+      },
+      "tasks": {
+        "e15345ed27f1933065af403601876e5f6597a943": {
+          "task_label": "Reading-support mini lesson package",
+          "rationale": "The task fixes four artefacts and their identifying fields but says nothing about how much surrounding context the teacher wants, so depth is expressible without touching any requirement.",
+          "inherited_task_signals": [
+            "A 5th-grade grammar quiz with title and URL.",
+            "An 8th-grade printable marketing worksheet with title and URL.",
+            "A Slidesgo template with name, URL and Google Slides or PowerPoint availability.",
+            "The exact lesson intro converted to bionic reading."
+          ],
+          "positive_observables": [
+            "Asks for extra identifying detail beyond the required fields, such as roughly how long the quiz runs or what the worksheet actually covers.",
+            "Asks why the chosen template suits both the warm-up and the extension, not just that it does."
+          ],
+          "negative_observables": [
+            "Asks for just the title, URL and availability for each item and nothing around them.",
+            "Says a compact list is preferred over notes explaining the choices."
+          ]
+        },
+        "6421b906fe97b3799960af31c77f20ff25f756b1": {
+          "task_label": "Six-institution graduate outreach brief",
+          "rationale": "Six lookups each have a defined minimum field set and obvious optional extras, so wanting more or less around those fields is observable without changing them.",
+          "inherited_task_signals": [
+            "Lewis & Clark representative name, email, phone and anything else listed.",
+            "Hunter Silberman Fall 2026 MSW deadline.",
+            "IU Kokomo graduate programme list.",
+            "Two recruiting UCSF glioblastoma trials with status and location.",
+            "ORU student activities director from an ORU page.",
+            "EDF Energy salary-review wording."
+          ],
+          "positive_observables": [
+            "Asks for optional context beyond the required fields, such as how territories are assigned or what stage each trial is at.",
+            "Asks for the programme list to carry enough qualifiers to tell similar entries apart."
+          ],
+          "negative_observables": [
+            "Asks for only the named fields per institution and no surrounding description.",
+            "Says the brief should stay compact even if that means leaving out context."
+          ]
+        },
+        "4614aa083147e45cbc2977cc8634b9d9db25edfe": {
+          "task_label": "Maryland/DC law school outreach plan",
+          "rationale": "The three schools have defined deliverables and a final recommendation, but nothing fixes how much supporting detail accompanies them.",
+          "inherited_task_signals": [
+            "Maryland Carey materials request route and an upcoming online event with date and time.",
+            "Baltimore admissions-meeting scheduling instructions with registration link or contact.",
+            "American University PIPS scholarship summary and application form link.",
+            "A first-contact recommendation with specific next actions."
+          ],
+          "positive_observables": [
+            "Asks for extra qualifying detail around each route, such as what the event format is or what the scholarship's conditions are.",
+            "Wants the specific next action spelled out per school rather than summarised."
+          ],
+          "negative_observables": [
+            "Asks for the link or contact method per school and nothing further.",
+            "Says a short plan is preferred over one with explanation attached."
+          ]
+        }
+      }
+    },
+    {
+      "axis_id": "request_directness",
+      "label": "Request directness",
+      "dimension": "cog_directness",
+      "positive": {
+        "value": "Blunt",
+        "behavioral_definition": "States the request as bare instructions with no softening, framing or explanation of why.",
+        "generic_observables": [
+          "Issues the requirements as flat imperatives without hedging or pleasantries.",
+          "Omits rationale and context that would not change what is delivered.",
+          "States constraints as conditions rather than as requests."
+        ],
+        "contradictions": [
+          "Wraps the request in extended courtesy or apology.",
+          "Explains at length why the request is being made."
+        ]
+      },
+      "negative": {
+        "value": "Indirect",
+        "behavioral_definition": "States the same request through softened, hedged phrasing and explains the situation around it.",
+        "generic_observables": [
+          "Frames requirements as things they would appreciate or were hoping for.",
+          "Supplies surrounding context for why the work is needed.",
+          "Hedges instructions rather than issuing them."
+        ],
+        "contradictions": [
+          "Issues bare imperatives with no softening.",
+          "Strips all framing and context from the request."
+        ]
+      },
+      "tasks": {
+        "65c9e7d383e015d946572f04512d5aa166a8f015": {
+          "task_label": "Latent growth models study workflow",
+          "rationale": "Four sequential instructions with fixed sites and a verbatim note give a clear frame in which phrasing can be blunt or hedged while the instruction set is unchanged.",
+          "inherited_task_signals": [
+            "Bing search and the top three first-page organic results, opened in tabs.",
+            "A Google-found page showing the full ChatGPT prompt template wording.",
+            "The 10015.io bionic conversion left visible.",
+            "A free plagiarism checker opened live."
+          ],
+          "positive_observables": [
+            "Issues the four steps as bare numbered instructions with no framing about why the study note is needed.",
+            "States the tab and visibility conditions flatly rather than as requests."
+          ],
+          "negative_observables": [
+            "Explains the studying situation the request comes out of before listing what is needed.",
+            "Phrases the steps as things they would appreciate rather than as instructions."
+          ]
+        },
+        "6421b906fe97b3799960af31c77f20ff25f756b1": {
+          "task_label": "Six-institution graduate outreach brief",
+          "rationale": "Six separate lookups with named fields make the difference between flat instruction and hedged request visible across a long message without altering any field.",
+          "inherited_task_signals": [
+            "Lewis & Clark representative for San Diego.",
+            "Hunter Silberman Fall 2026 MSW deadline.",
+            "IU Kokomo graduate programme list.",
+            "Two recruiting UCSF glioblastoma trials.",
+            "ORU student activities director from an ORU page.",
+            "EDF Energy salary-review wording."
+          ],
+          "positive_observables": [
+            "Lists the six institutions as flat directives with no explanation of the student's situation.",
+            "States the tab and sourcing conditions as requirements rather than preferences."
+          ],
+          "negative_observables": [
+            "Sets out the student's circumstances and why each institution is of interest before the asks.",
+            "Softens each institutional lookup into a hope rather than an instruction."
+          ]
+        },
+        "976970ff5d37116847b8a9351a0922196bee88a2": {
+          "task_label": "Youth mental-health workshop evidence pack",
+          "rationale": "A sensitive topic gives natural room for hedged framing, while the required sources and quote stay fixed.",
+          "inherited_task_signals": [
+            "A peer-reviewed source on adolescent onset with exact quote and citation detail.",
+            "Credible sources on post-childhood brain development and evolutionary influence on cognitive bias.",
+            "At least five song titles from the Wikipedia album page.",
+            "One chosen title tied to the evidence."
+          ],
+          "positive_observables": [
+            "States the three source requirements and the track-list requirement as a bare list.",
+            "Gives no framing about the workshop or the audience beyond what the deliverable needs."
+          ],
+          "negative_observables": [
+            "Explains the workshop setting and why the evidence matters before asking.",
+            "Phrases the citation and quote requirements as things they are hoping for."
+          ]
+        }
+      }
+    },
+    {
+      "axis_id": "decision_style",
+      "label": "Decision style",
+      "dimension": "decision_style",
+      "positive": {
+        "value": "Analytical",
+        "behavioral_definition": "Wants choices derived from stated, comparable criteria that can be inspected and challenged.",
+        "generic_observables": [
+          "Asks for the options to be set against each other on named factors before a choice is made.",
+          "Asks what would change the conclusion.",
+          "Wants the reasoning behind a selection made explicit rather than implied."
+        ],
+        "contradictions": [
+          "Asks for a single pick with no basis given.",
+          "Declines a comparison as unnecessary detail."
+        ]
+      },
+      "negative": {
+        "value": "Intuitive",
+        "behavioral_definition": "Wants one confident, well-judged choice and a short reason, trusting the assistant's feel for what fits.",
+        "generic_observables": [
+          "Asks the assistant to just pick the one it judges best and say briefly why.",
+          "Prefers a decisive answer over a worked comparison.",
+          "Signals that a clear next move matters more than seeing the weighing."
+        ],
+        "contradictions": [
+          "Demands an explicit criteria table before accepting a choice.",
+          "Rejects a recommendation solely because the alternatives were not enumerated."
+        ]
+      },
+      "tasks": {
+        "8c30f2f9ceeac75b05c725c5397022bb4f9d32a0": {
+          "task_label": "Choosing categories and the hardware tie-back",
+          "rationale": "The task requires selecting at least three of IBM's categories and then connecting a hardware example back to AI, so the basis for those two choices is observable.",
+          "inherited_task_signals": [
+            "Selecting at least three categories and rewriting them in one plain sentence each.",
+            "Connecting the Granite Rapids example back to why strong chips matter for AI.",
+            "Producing one combined beginner write-up."
+          ],
+          "positive_observables": [
+            "Asks for the basis on which those particular three categories were picked, in terms a beginner-ordering argument can be checked against.",
+            "Asks for the chip-to-AI connection to be stated as an explicit reason rather than left implied."
+          ],
+          "negative_observables": [
+            "Asks the assistant to pick whichever three categories read most naturally first for a beginner and not belabour the choice.",
+            "Wants the hardware tie-back to read as a natural closing line rather than a justified step."
+          ]
+        },
+        "4614aa083147e45cbc2977cc8634b9d9db25edfe": {
+          "task_label": "Which Maryland/DC law school to contact first",
+          "rationale": "The task ends in an explicit recommendation across three schools with different outreach and funding options, which is exactly where decision style shows.",
+          "inherited_task_signals": [
+            "Finding the Maryland Carey request route and an upcoming online admissions event with date and time.",
+            "Finding the Baltimore admissions-meeting scheduling instructions and registration link or contact.",
+            "Summarising the American University PIPS scholarship and its application form link.",
+            "Recommending which school to contact first with a specific next action for each."
+          ],
+          "positive_observables": [
+            "Asks for the three schools to be set against each other on comparable factors before the recommendation is given.",
+            "Asks what would change the ranking, for example if the event date or the funding route did not work out."
+          ],
+          "negative_observables": [
+            "Asks for one confident pick with a short reason rather than a side-by-side comparison.",
+            "Says a clear first move matters more than seeing how the three were weighed."
+          ]
+        },
+        "976970ff5d37116847b8a9351a0922196bee88a2": {
+          "task_label": "Choosing the discussion-prompt song title",
+          "rationale": "The task requires selecting one track from at least five and justifying it against three sources, so the selection method is observable.",
+          "inherited_task_signals": [
+            "Pulling at least five song titles from the album page.",
+            "Choosing one title as the best discussion prompt for teens.",
+            "Explaining why the chosen title fits the themes from the three sources."
+          ],
+          "positive_observables": [
+            "Asks for the chosen title to be checked against the themes of each of the three sources in turn.",
+            "Asks which other titles were close and why they were not chosen."
+          ],
+          "negative_observables": [
+            "Asks the assistant to go with the title that will land best with teenagers and give a brief reason.",
+            "Says a single well-judged pick is preferable to working through the shortlist."
+          ]
+        }
+      }
+    }
+  ]
+}
