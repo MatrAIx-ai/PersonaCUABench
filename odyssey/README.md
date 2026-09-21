@@ -27,12 +27,17 @@ These are the defaults in `run.py`. Don't change them, and don't change `--max-s
 ```bash
 git clone git@github.com:MatrAIx-ai/PersonaCUABench.git && cd PersonaCUABench
 pip install -r odyssey/requirements.txt   # also needs Google Chrome installed
-cat > .env <<EOF                           # repo root, never commit
-OPENROUTER_API_KEY=...
-OPENAI_API_KEY=...
-EOF
+cp .env.example .env                     # repo root; both files are explained below
 python3 odyssey/test_pipeline.py          # offline self-check
 ```
+
+`odyssey/run.py` reads `.env` from the **repository root**. For the local Azure
+setup, `.env` contains only `AZURE_OPENAI_API_KEY_FILE=azure_api_key.txt` and
+`AZURE_OPENAI_BASE_URL=...`; the secret itself remains in the ignored,
+permission-restricted key file. Direct `OPENAI_API_KEY=...` and exported shell
+variables remain supported, but a key file avoids copying a secret into shell
+history. The OpenAI SDK route is used because the Azure project endpoint is
+OpenAI-compatible.
 
 ## Your job
 
@@ -71,6 +76,39 @@ python3 odyssey/report.py                                    # tables
 If it's interrupted, run the same command again. It picks up where it stopped.
 For a single cell: `python3 odyssey/run.py --task 1 --persona <p1> --headless`.
 
+For the local Azure GPT-5.6 Terra setup, run a real persona arm and its two
+separate persona-side evaluations with:
+
+```bash
+.osworld/OSWorld/.venv/bin/python odyssey/run.py \
+  --task 1 --persona budget-student \
+  --model gpt-5.6-terra --provider openai \
+  --persona-model gpt-5.6-terra --persona-provider openai \
+  --judge-model gpt-5.6-terra --judge-provider openai \
+  --temperature 1 --max-steps 50 --headless \
+  --profile artifacts/chrome-profiles/budget-student \
+  --out artifacts/main-playwright-results
+
+# P1-P5: how well the CUA served this particular person. Pass the new run
+# directory, not the whole results root, if only that run should be scored.
+.osworld/OSWorld/.venv/bin/python odyssey/experience_judge.py \
+  --results <new-run-directory> \
+  --judge-a gpt-5.6-terra --judge-b gpt-5.6-terra
+
+# Fidelity: whether the simulated user clearly expressed each frozen,
+# behaviorally observable persona target (0/1/2 per target).
+.osworld/OSWorld/.venv/bin/python odyssey/persona_fidelity_judge.py \
+  --results <new-run-directory> \
+  --judge-model gpt-5.6-terra --judge-provider openai
+```
+
+Terra requires `--temperature 1` for the agent/persona calls. Using Terra in
+both P1-P5 judge slots makes two independent calls to the same model; a genuine
+cross-model agreement study still requires a second configured provider/model.
+Use a separate persistent Chrome profile per persona arm. This prevents a stale
+or still-locked profile from blocking a later cell and keeps consent/captcha
+cookies reproducible within that arm.
+
 **5. Push.** Push your tasks and personas to your branch. `results/` stays
 gitignored and local -- send it separately, or push it only when asked:
 
@@ -85,6 +123,25 @@ git push -u origin <your-name>
 `odyssey/results/<task>/<persona>__<model>__<stamp>/result.json` (gitignored):
 `run.conversation`, `run.trajectory`, `run.answer`, `run.open_tabs`, `run.stop_reason`,
 `judgement.verdicts`, `judgement.score`, `judgement.score_communicated`.
+
+Running `experience_judge.py` adds `experience` (P1-P5, two judge outputs and
+agreement). Running `persona_fidelity_judge.py` adds `persona_fidelity`
+(per-target 0/1/2 expression scores, an independent contradiction flag,
+evidence, issues and confidence). The
+profile values and hash are frozen into the run before browsing, so later YAML
+edits cannot silently change what is judged. These axes remain separate from
+task success.
+
+The fidelity field is specifically **persona target-expression coverage**, not
+one overall or cross-persona fidelity score. A zero can mean that this task gave
+the persona no natural reason to express a target; compare individual evidence
+and contradictions, not just raw target counts. Future task-specific persona
+rubrics can narrow the denominator further.
+
+New runs also freeze the complete task text and rubrics in `task_snapshot`, and
+record the API backend separately from the provider name. Post-hoc judges prefer
+those frozen snapshots; legacy results are explicitly marked unverified when a
+live task/profile fallback is unavoidable.
 
 Prompts live in `odyssey/prompts/*.md`, one per role, and are loaded at import:
 `agent.md`, `persona_user.md`, `rubric_judge.md`, `experience_judge.md`. Each

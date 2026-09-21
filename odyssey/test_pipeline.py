@@ -152,6 +152,12 @@ def test_persona_user():
     assert "75-84" in system                      # persona profile
     assert task["confirmed_task"] in system       # hidden need
     assert user.opening == client.reply           # said in its own words
+    snapshot = user.info()["persona_profile"]
+    assert snapshot["persona_id"] == "odyssey-elderly-novice"
+    assert snapshot["evaluation_dimensions"]
+    assert set(snapshot["evaluation_dimensions"]) == set(snapshot["evaluation_values"])
+    assert len(snapshot["profile_sha256"]) == 64
+    assert "75-84" in snapshot["profile_narrative"]
     assert user.reply("Which days?") == client.reply
     assert [t["role"] for t in user.transcript] == ["user", "assistant", "user"]
 
@@ -244,6 +250,170 @@ def test_extract_json():
     assert R.extract_json("[1, 2]") is None
 
 
+def test_azure_key_file_config():
+    """Azure aliases may point at a file, so the key stays out of .env."""
+    import os
+    import tempfile
+
+    names = (
+        "OPENAI_API_KEY", "OPENAI_API_KEY_FILE", "OPENAI_BASE_URL",
+        "AZURE_OPENAI_API_KEY", "AZURE_OPENAI_API_KEY_FILE",
+        "AZURE_OPENAI_BASE_URL",
+    )
+    before = {name: os.environ.get(name) for name in names}
+    try:
+        for name in names:
+            os.environ.pop(name, None)
+        with tempfile.TemporaryDirectory() as d:
+            key_file = Path(d) / "azure.key"
+            key_file.write_text("test-secret\n", encoding="utf-8")
+            # Stale direct OpenAI settings must not be mixed with Azure.
+            os.environ["OPENAI_API_KEY"] = "wrong-secret"
+            os.environ["OPENAI_BASE_URL"] = "https://wrong.example/v1"
+            os.environ["AZURE_OPENAI_API_KEY_FILE"] = str(key_file)
+            os.environ["AZURE_OPENAI_BASE_URL"] = "https://example.test/openai/v1"
+            key, base_url = R._provider_config("openai")
+            assert key == "test-secret"
+            assert base_url == "https://example.test/openai/v1"
+    finally:
+        for name, value in before.items():
+            if value is None:
+                os.environ.pop(name, None)
+            else:
+                os.environ[name] = value
+
+
+def test_persona_fidelity_contract():
+    import copy
+    import persona_fidelity_judge as fidelity
+
+    snapshot = {
+        "persona_id": "odyssey-budget-student",
+        "version": "2.0",
+        "profile_sha256": "a" * 64,
+        "evaluation_dimensions": ["tech_savviness", "economic_motivation"],
+        "evaluation_values": {
+            "tech_savviness": "Digital native",
+            "economic_motivation": "Cost-sensitive",
+        },
+    }
+    record = {
+        "task_id": R.TASKS[0]["task_id"],
+        "task_snapshot": {
+            **R.TASKS[0],
+            "confirmed_task": "FROZEN KOBE TASK",
+        },
+        "persona": "budget-student",
+        "run": {
+            "answer": "stub",
+            "user": {"model": "stub", "provider": "stub", "persona_profile": snapshot},
+            "conversation": [
+                {"role": "user", "text": "Please keep it quick and show me cheaper Kobe shoes."},
+                {"role": "assistant", "text": "Do you care about size?"},
+                {"role": "user", "text": "Men's 10, and I want a page I can check myself."},
+            ],
+        },
+    }
+    rendered = fidelity.build_prompt(record)
+    assert '"expected_value": "Cost-sensitive"' in rendered
+    assert "PERSON TURN 1: Please keep it quick" in rendered
+    assert "Do you care about size?" not in rendered
+    assert "FROZEN KOBE TASK" in rendered
+    task, integrity = R.task_for_record(record)
+    assert task["confirmed_task"] == "FROZEN KOBE TASK"
+    assert integrity == "frozen_snapshot"
+
+    parsed = {
+        "targets": [
+            {"attribute": "tech_savviness", "score": 1, "expressed": False,
+             "contradicted": False, "confidence": 0.7,
+             "evidence": "quick", "note": "weak"},
+            {"attribute": "economic_motivation", "score": 2, "expressed": True,
+             "contradicted": False, "confidence": 0.9,
+             "evidence": "cheaper", "note": "clear"},
+        ],
+        "fidelity_issues": [],
+        "judge_confidence": 0.8,
+    }
+    normalized = fidelity.normalize_verdict(
+        parsed, model="stub-judge", provider="stub", snapshot=snapshot
+    )
+    assert normalized["expressed_target_count"] == 1
+    assert normalized["total_target_count"] == 2
+    assert normalized["contradicted_target_count"] == 0
+    assert normalized["judge"] == {
+        "model": "stub-judge", "provider": "stub", "backend": "stub"
+    }
+    assert normalized["profile_integrity"] == "frozen_snapshot"
+    assert all(item["criterion_source"] == "declared_profile_dimension"
+               for item in normalized["targets"])
+
+    invalid_cases = []
+    boolean_score = copy.deepcopy(parsed)
+    boolean_score["targets"][0]["score"] = True
+    invalid_cases.append(boolean_score)
+    mismatch = copy.deepcopy(parsed)
+    mismatch["targets"][0]["expressed"] = True
+    invalid_cases.append(mismatch)
+    bad_confidence = copy.deepcopy(parsed)
+    bad_confidence["targets"][0]["confidence"] = 1.1
+    invalid_cases.append(bad_confidence)
+    boolean_confidence = copy.deepcopy(parsed)
+    boolean_confidence["targets"][0]["confidence"] = True
+    invalid_cases.append(boolean_confidence)
+    no_evidence = copy.deepcopy(parsed)
+    no_evidence["targets"][1]["evidence"] = ""
+    invalid_cases.append(no_evidence)
+    bad_issue = copy.deepcopy(parsed)
+    bad_issue["fidelity_issues"] = [123]
+    invalid_cases.append(bad_issue)
+    duplicate = copy.deepcopy(parsed)
+    duplicate["targets"].append(copy.deepcopy(duplicate["targets"][0]))
+    invalid_cases.append(duplicate)
+    missing = copy.deepcopy(parsed)
+    missing["targets"].pop()
+    invalid_cases.append(missing)
+    for invalid in invalid_cases:
+        try:
+            fidelity.normalize_verdict(
+                invalid, model="stub-judge", provider="stub", snapshot=snapshot
+            )
+        except ValueError:
+            pass
+        else:
+            raise AssertionError("invalid fidelity verdict must be rejected")
+
+
+def test_experience_uses_frozen_profile():
+    import experience_judge
+
+    record = {
+        "task_id": R.TASKS[0]["task_id"],
+        "task_snapshot": {
+            **R.TASKS[0],
+            "confirmed_task": "FROZEN EXPERIENCE TASK",
+        },
+        "persona": "budget-student",
+        "run": {
+            "answer": "stub",
+            "trajectory": [],
+            "open_tabs": [],
+            "conversation": [{"role": "user", "text": "A short request."}],
+            "user": {"persona_profile": {"profile_narrative": "FROZEN PROFILE"}},
+        },
+    }
+    rendered = experience_judge.build_prompt(record)
+    assert "FROZEN PROFILE" in rendered
+    assert "FROZEN EXPERIENCE TASK" in rendered
+    complete = {
+        "a": {dimension: {"score": 4} for dimension in experience_judge.DIMENSIONS},
+        "b": {dimension: {"score": 4} for dimension in experience_judge.DIMENSIONS},
+    }
+    assert experience_judge.experience_complete(complete)
+    complete["a"]["error"] = "transient"
+    assert not experience_judge.experience_complete(complete)
+
+
 def test_skip_existing_ignores_unscored(tmp: Path = Path("/tmp")):
     import tempfile
     with tempfile.TemporaryDirectory() as d:
@@ -284,6 +454,9 @@ if __name__ == "__main__":
     test_mute_model_is_not_scored_as_zero()
     test_judge_failure_keeps_the_run(run)
     test_extract_json()
+    test_azure_key_file_config()
+    test_persona_fidelity_contract()
+    test_experience_uses_frozen_profile()
     test_skip_existing_ignores_unscored()
     test_judge(run)
     print("odyssey pipeline self-check OK")

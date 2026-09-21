@@ -31,12 +31,14 @@ def main() -> None:
         judged = rec.get("judgement")
         if not judged:
             continue
-        arm = f"{rec['persona']}/{rec['run']['arm']['model']}"
+        arm_meta = rec["run"]["arm"]
+        backend = arm_meta.get("backend") or arm_meta.get("provider") or "unknown"
+        arm = f"{rec['persona']}/{arm_meta['model']}@{backend}"
         key = (rec["task_id"][:12], arm)
         stamp = path.parent.name.rsplit("__", 1)[-1]
         if key not in best or stamp > best[key][0]:
             best[key] = (stamp, judged, rec["run"].get("max_steps"),
-                         rec.get("experience"))
+                         rec.get("experience"), rec.get("persona_fidelity"))
 
     # A score compared across different step budgets is not a comparison.
     budgets = {v[2] for v in best.values() if v[2] is not None}
@@ -53,6 +55,7 @@ def main() -> None:
     print()
     table(best, "score: communicated items only", "score_communicated")
     experience(best)
+    persona_fidelity(best)
 
 
 DIMENSIONS = ("P1_asked_for", "P2_readable_for_them", "P3_actionable",
@@ -112,6 +115,29 @@ def experience(best: dict) -> None:
                  dim_score(v[3].get("b"), "P5_overall")) if s is not None]
         print(f"  {arm:<{width}}{'-' if not vals else f'{sum(vals)/len(vals):.1f}'}"
               f"   ({len(done)} of {sum(1 for k in scored if k[1] == arm)} runs)")
+
+
+def persona_fidelity(best: dict) -> None:
+    """Report target score distributions, separate from CUA quality."""
+    scored = {k: v for k, v in best.items()
+              if len(v) > 4 and (v[4] or {}).get("status") == "complete"}
+    if not scored:
+        return
+    arms = sorted({arm for _, arm in scored})
+    width = max(len(arm) for arm in arms) + 2
+    print("\n\npersona fidelity targets: 0=no affirmative evidence, "
+          "1=weak, 2=clearly expressed; contradictions reported separately")
+    print(f"{'arm':<{width}}score 0   score 1   score 2   contradicted   total")
+    for arm in arms:
+        records = [value[4] for key, value in scored.items() if key[1] == arm]
+        values = [target["score"] for record in records for target in record["targets"]]
+        counts = [values.count(score) for score in (0, 1, 2)]
+        contradicted = sum(
+            bool(target.get("contradicted"))
+            for record in records for target in record["targets"]
+        )
+        print(f"{arm:<{width}}{counts[0]:<10}{counts[1]:<10}{counts[2]:<10}"
+              f"{contradicted:<15}{len(values)}")
 
 
 def table(best: dict, title: str, field: str) -> None:

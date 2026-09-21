@@ -23,6 +23,7 @@ Keys come from the repo's .env / env vars (OPENROUTER_API_KEY, OPENAI_API_KEY ..
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import re
@@ -44,7 +45,6 @@ PROVIDERS = {
     "openrouter": ("OPENROUTER_API_KEY", "https://openrouter.ai/api/v1"),
     "openai": ("OPENAI_API_KEY", None),          # None = the SDK's default endpoint
 }
-
 
 def load_dotenv(path: Path = REPO / ".env") -> None:
     """Read KEY=VALUE lines from the repo .env into the environment.
@@ -82,6 +82,19 @@ MAX_TABS = 8
 DEFAULT_PROFILE = HERE / ".chrome-profile"   # gitignored; keeps consent cookies
 
 MAX_QUESTIONS = 5          # ask_user calls per run
+
+
+def task_for_record(record: dict) -> tuple[dict, str]:
+    """Return the run's frozen task, with a marked legacy fallback."""
+    task_id = record.get("task_id")
+    snapshot = record.get("task_snapshot")
+    if (isinstance(snapshot, dict) and snapshot.get("task_id") == task_id
+            and snapshot.get("confirmed_task") and snapshot.get("rubrics")):
+        return snapshot, "frozen_snapshot"
+    task = next((item for item in TASKS if item["task_id"] == task_id), None)
+    if task is None:
+        raise ValueError(f"task {task_id} is not in the run or current tasks.json")
+    return task, "unverified_current_tasks"
 
 AGENT_RULES = prompt("agent").format(max_questions=MAX_QUESTIONS)
 
@@ -341,19 +354,85 @@ class Browser:
 # --------------------------------------------------------------------------- #
 # Agent loop
 # --------------------------------------------------------------------------- #
+def _provider_config(provider: str) -> tuple[str, str | None]:
+    """Resolve a provider key and endpoint without ever logging the secret."""
+    if provider not in PROVIDERS:
+        raise SystemExit(f"unknown provider {provider!r}; known: {sorted(PROVIDERS)}")
+
+    def read_key(direct_names: tuple[str, ...], file_names: tuple[str, ...]) -> str:
+        key = next(
+            (os.environ.get(name, "").strip() for name in direct_names
+             if os.environ.get(name, "").strip()),
+            "",
+        )
+        if key:
+            return key
+        for name in file_names:
+            raw_path = os.environ.get(name, "").strip()
+            if not raw_path:
+                continue
+            path = Path(raw_path).expanduser()
+            if not path.is_absolute():
+                path = REPO / path
+            try:
+                key = path.read_text(encoding="utf-8").strip()
+            except OSError as exc:
+                raise SystemExit(f"cannot read {name} at {path}: {exc}") from exc
+            if not key:
+                raise SystemExit(f"{name} points to an empty file: {path}")
+            return key
+        return ""
+
+    # Keep Azure credentials paired with the Azure endpoint.  Otherwise a stale
+    # exported OPENAI_API_KEY could accidentally be sent to an Azure URL (or the
+    # reverse) because dotenv intentionally does not override shell variables.
+    if provider == "openai":
+        azure_base_url = os.environ.get("AZURE_OPENAI_BASE_URL", "").strip()
+        azure_configured = azure_base_url or any(
+            os.environ.get(name, "").strip()
+            for name in ("AZURE_OPENAI_API_KEY", "AZURE_OPENAI_API_KEY_FILE")
+        )
+        if azure_configured:
+            if not azure_base_url:
+                raise SystemExit(
+                    "Azure credentials are configured but AZURE_OPENAI_BASE_URL is missing"
+                )
+            key = read_key(
+                ("AZURE_OPENAI_API_KEY",), ("AZURE_OPENAI_API_KEY_FILE",)
+            )
+            names = "AZURE_OPENAI_API_KEY, AZURE_OPENAI_API_KEY_FILE"
+            base_url = azure_base_url
+        else:
+            key = read_key(("OPENAI_API_KEY",), ("OPENAI_API_KEY_FILE",))
+            names = "OPENAI_API_KEY, OPENAI_API_KEY_FILE"
+            base_url = os.environ.get("OPENAI_BASE_URL", "").strip() or None
+    else:
+        key = read_key(("OPENROUTER_API_KEY",), ("OPENROUTER_API_KEY_FILE",))
+        names = "OPENROUTER_API_KEY, OPENROUTER_API_KEY_FILE"
+        base_url = PROVIDERS[provider][1]
+
+    if not key:
+        raise SystemExit(
+            f"no API key for provider {provider!r}; set one of {names} "
+            f"(in the repo-root .env, or exported)"
+        )
+    return key, base_url
+
+
 def _client(model: str, provider: str = ""):
     from openai import OpenAI
 
     provider = provider or ("openai" if model.startswith(("gpt-", "o1", "o3", "o4"))
                             else "openrouter")
-    if provider not in PROVIDERS:
-        raise SystemExit(f"unknown provider {provider!r}; known: {sorted(PROVIDERS)}")
-    key_env, base_url = PROVIDERS[provider]
-    key = os.environ.get(key_env, "").strip()
-    if not key:
-        raise SystemExit(f"no API key for provider {provider!r}: set {key_env} "
-                         f"(in the repo-root .env, or exported)")
+    key, base_url = _provider_config(provider)
     return OpenAI(api_key=key, base_url=base_url), provider
+
+
+def _provider_backend(provider: str) -> str:
+    """Auditable backend label without exposing the endpoint or credentials."""
+    if provider == "openai" and os.environ.get("AZURE_OPENAI_BASE_URL", "").strip():
+        return "azure-openai-compatible"
+    return provider
 
 
 def extract_json(text: str) -> dict | None:
@@ -408,10 +487,38 @@ class PersonaUser:
                  provider: str = "", temperature: float = 0.7):
         self.client, self.provider = _client(model, provider)
         self.model, self.temperature = model, temperature
+        self.profile_snapshot = None
         rules = PERSONA_USER_RULES.format(goal=task["confirmed_task"])
         if persona_path is None:
             system = "You are a person.\n\n" + rules
         else:
+            profile_doc = persona_lib.load_persona(persona_path)
+            evaluation_dimensions = profile_doc.get("evaluation_dimensions") or []
+            if (not isinstance(evaluation_dimensions, list)
+                    or len(evaluation_dimensions) != len(set(evaluation_dimensions))):
+                raise ValueError(f"invalid evaluation_dimensions in {persona_path}")
+            attributes = profile_doc.get("attributes") or {}
+            missing = [key for key in evaluation_dimensions if key not in attributes]
+            if missing:
+                raise ValueError(
+                    f"evaluation dimensions missing from {persona_path}: {missing}"
+                )
+            values = {
+                key: (attributes[key].get("value")
+                      if isinstance(attributes[key], dict) else attributes[key])
+                for key in evaluation_dimensions
+            }
+            profile_narrative = "\n\n".join(
+                persona_lib.build_dimension_narrative(profile_doc)
+            )
+            self.profile_snapshot = {
+                "persona_id": profile_doc.get("persona_id"),
+                "version": profile_doc.get("version"),
+                "profile_sha256": hashlib.sha256(persona_path.read_bytes()).hexdigest(),
+                "profile_narrative": profile_narrative,
+                "evaluation_dimensions": list(evaluation_dimensions),
+                "evaluation_values": values,
+            }
             system = persona_lib.persona_system_prompt(persona_path, role="a person") + \
                 "\n\n# Right now\n\n" + rules
         self.messages = [{"role": "system", "content": system}]
@@ -442,7 +549,11 @@ class PersonaUser:
         return answer
 
     def info(self) -> dict:
-        return {"model": self.model, "provider": self.provider}
+        info = {"model": self.model, "provider": self.provider,
+                "backend": _provider_backend(self.provider)}
+        if self.profile_snapshot is not None:
+            info["persona_profile"] = self.profile_snapshot
+        return info
 
 
 def run_agent(task: dict, user: PersonaUser, model: str, *, max_steps: int,
@@ -532,7 +643,8 @@ def run_agent(task: dict, user: PersonaUser, model: str, *, max_steps: int,
     return {"answer": answer, "stop_reason": stop_reason, "steps": len(trajectory),
             "max_steps": max_steps, "trajectory": trajectory, "open_tabs": open_tabs,
             "conversation": user.transcript, "user": user.info(),
-            "arm": {"model": model, "provider": provider, "temperature": temperature}}
+            "arm": {"model": model, "provider": provider,
+                    "backend": _provider_backend(provider), "temperature": temperature}}
 
 
 # --------------------------------------------------------------------------- #
@@ -542,7 +654,7 @@ JUDGE_PROMPT = prompt("rubric_judge")
 
 
 def judge_run(task: dict, run: dict, *, judge_model: str, judge_provider: str) -> dict:
-    client, _ = _client(judge_model, judge_provider)
+    client, resolved_provider = _client(judge_model, judge_provider)
     rubric = "\n".join(
         f"- {rid}: {r['requirement']}\n  verification: {r['verification']}"
         for rid, r in task["rubrics"].items())
@@ -580,10 +692,13 @@ def judge_run(task: dict, run: dict, *, judge_model: str, judge_provider: str) -
 
     if verdicts is None:
         # Grading failed; the run itself is still worth keeping.
-        return {"judge_model": judge_model, "error": last_error or "empty judge response",
+        return {"judge_model": judge_model, "judge_provider": resolved_provider,
+                "judge_backend": _provider_backend(resolved_provider),
+                "error": last_error or "empty judge response",
                 "verdicts": {}, "met": None, "total": len(task["rubrics"]),
                 "score": None, "trajectory_efficiency": None}
-    return {"judge_model": judge_model, "verdicts": verdicts,
+    return {"judge_model": judge_model, "judge_provider": resolved_provider,
+            "judge_backend": _provider_backend(resolved_provider), "verdicts": verdicts,
             **score_verdicts(task, verdicts, run["steps"])}
 
 
@@ -723,10 +838,12 @@ def main() -> None:
                                                encoding="utf-8")
             continue
         record = {"task_id": task["task_id"], "level": task["level"],
+                  "task_snapshot": task,
                   "persona": args.persona, "run": run}
         if run["stop_reason"] == "no_model_output":
             # Not a result. Leave it unscored so a resume retries the cell.
             record = {"task_id": task["task_id"], "level": task["level"],
+                      "task_snapshot": task,
                       "persona": args.persona, "run": run,
                       "judgement": {"error": "model returned no output", "verdicts": {},
                                     "met": None, "total": len(task["rubrics"]),
