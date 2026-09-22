@@ -364,7 +364,7 @@ def _write_record(path: Path, record: dict) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--results", default=str(HERE / "results"))
-    parser.add_argument("--judge-model", default="gpt-5.5")
+    parser.add_argument("--judge-model", default="gpt-5.6-terra")
     parser.add_argument("--judge-provider", default="")
     parser.add_argument("--redo", action="store_true")
     parser.add_argument("--print-prompt", action="store_true")

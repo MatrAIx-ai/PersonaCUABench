@@ -124,7 +124,7 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--results", default=str(HERE / "results"))
-    ap.add_argument("--judge-a", default="gpt-5.5")
+    ap.add_argument("--judge-a", default="gpt-5.6-terra")
     ap.add_argument("--judge-b", default="anthropic/claude-opus-4.8")
     ap.add_argument("--redo", action="store_true", help="rescore results that already have one")
     ap.add_argument("--print-prompt", action="store_true",
