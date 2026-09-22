@@ -490,6 +490,17 @@ def _create_with_retry(client, *, attempts: int = 5, **kwargs):
     """
     import openai as openai_sdk
 
+    # OpenAI's gpt-5.6-* models carry a non-none default reasoning_effort, and
+    # /v1/chat/completions rejects function tools when one is set:
+    #   "Function tools with reasoning_effort are not supported for gpt-5.6-terra
+    #    ... use /v1/responses or set reasoning_effort to 'none'."
+    # The CUA turn is the only call that sends tools, so without this the model
+    # named throughout the runbook and the Shopping suite cannot drive the agent at
+    # all. gpt-5.5 accepts the same argument, so this is safe across both.
+    model_id = str(kwargs.get("model") or "")
+    if kwargs.get("tools") and "reasoning_effort" not in kwargs and model_id.startswith("gpt-5"):
+        kwargs["reasoning_effort"] = "none"
+
     retryable = (openai_sdk.RateLimitError, openai_sdk.APIConnectionError,
                  openai_sdk.InternalServerError)
     for attempt in range(attempts):
