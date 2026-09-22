@@ -47,6 +47,7 @@ say "pair separation"
 $PY odyssey/pair_separation.py --evidence 2>&1 | tee logs/pair_separation.log
 
 say "report"
-$PY odyssey/report.py 2>&1 | tee logs/report.log
+# report.py otherwise falls back to the catalog default suite (shopping).
+$PY odyssey/report.py --suite "$SUITE" 2>&1 | tee logs/report.log
 
 say "done${failed:+; replicates with failed cells:$failed}"
