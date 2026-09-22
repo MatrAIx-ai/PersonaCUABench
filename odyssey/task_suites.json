@@ -12,10 +12,11 @@
         "none",
         "travel-expert",
         "elderly-novice"
-      ]
+      ],
+      "persona_experiment": "task_suites/main-original/personas/persona_experiment.json"
     },
     "shopping": {
-      "title": "Ecommerce & Shopping \u2014 Defu Cao",
+      "title": "Ecommerce & Shopping — Defu Cao",
       "version": "1",
       "task_files": [
         "task_suites/shopping/*.json"
@@ -26,7 +27,7 @@
       ]
     },
     "science-education": {
-      "title": "Science and Education \u2014 Jiashu He",
+      "title": "Science and Education — Jiashu He",
       "version": "1",
       "task_files": [
         "task_suites/science-education/*.json"

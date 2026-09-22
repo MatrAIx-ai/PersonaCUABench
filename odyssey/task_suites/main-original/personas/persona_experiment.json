@@ -1,0 +1,411 @@
+{
+  "schema_version": "personacuabench.matched-pair.v1",
+  "experiment_id": "travel-four-observable-v1",
+  "suite_id": "main-original",
+  "display_name": "Matched-pair traveller",
+  "title": "Observable travel persona matched pairs",
+  "purpose": "Measure whether a simulated traveller expresses one task-relevant persona attribute at a time while preserving every original Odysseys requirement.",
+  "arm_labels": {
+    "positive": "The focal/high-expression pole used for the controlled contrast.",
+    "negative": "The opposite comparison pole. Negative is an experimental label, not a quality judgment."
+  },
+  "design": {
+    "selected_axis_count": 4,
+    "expected_persona_count": 8,
+    "recommended_replicates": 3,
+    "expected_task_axis_pairs_per_replicate": 13,
+    "expected_run_cells_per_replicate": 26,
+    "pairing_controls": [
+      "Use the same original task, persona model, CUA model, judge model, prompts, runtime limits, and replicate identifier for both arms.",
+      "Within a pair, change exactly one MatrAIx dimension value; all other rendered persona dimensions and the display name remain identical.",
+      "Keep original task requirements hard: a persona pole may change emphasis or preference, but may not remove, contradict, or invent a task requirement.",
+      "Judge persona adherence from simulated-user utterances only; task success and CUA alignment remain separate axes."
+    ],
+    "invalid_pair_conditions": [
+      "Either arm fails to communicate every original task rubric.",
+      "The two runs differ in more than the target persona dimension or controlled run metadata.",
+      "The only cited persona evidence is wording already required by the original task.",
+      "A run is scored on an axis-task combination not listed as applicable below."
+    ]
+  },
+  "baseline_dimensions": {
+    "risk_tolerance": "Balanced",
+    "decision_style": "Deliberative",
+    "trust_level": "Trusting",
+    "time_pressure": "Moderate",
+    "economic_motivation": "Value-driven",
+    "att_public_transit": "Neutral",
+    "pref_detail_brief_vs_full": "Balanced"
+  },
+  "scoring": {
+    "evidence_unit": "An exact or tightly paraphrased simulated-user utterance, not a CUA action or answer.",
+    "per_arm_scale": {
+      "0": "No supporting behavior, a direct contradiction, or behavior that violates a hard task requirement.",
+      "1": "Weak or ambiguous support, including merely repeating language inherited from the original task.",
+      "2": "Clear task-specific expression beyond inherited task wording, with no contradictory user behavior."
+    },
+    "binary_adherence_rule": "expressed=true if and only if the per-arm score is 2.",
+    "pair_separation_rule": "A matched pair separates only when both arms score 2 for their assigned poles and the cited evidence shows meaningfully opposite preferences or behavior.",
+    "coverage_guardrail": "Both arms must communicate 100% of the original task rubrics; otherwise report the pair as invalid rather than treating omission as persona expression.",
+    "reporting": [
+      "Report positive-arm adherence, negative-arm adherence, and pair separation separately by axis and task.",
+      "Keep task success and CUA alignment separate; never average them into persona adherence.",
+      "Retain the cited utterance, score, confidence, task ID, profile hash, model identities, and replicate identifier for auditability."
+    ]
+  },
+  "axes": [
+    {
+      "axis_id": "price_orientation",
+      "label": "Price orientation",
+      "dimension": "economic_motivation",
+      "positive": {
+        "value": "Cost-sensitive",
+        "behavioral_definition": "Treats the lowest defensible total cost as the deciding factor and wants prices made comparable before choosing.",
+        "generic_observables": [
+          "Asks for the cheapest qualifying option and for the total, not just a headline rate.",
+          "Wants fees, taxes or per-person costs surfaced so options compare like for like.",
+          "Says an upgrade is only worth it when the extra money is justified explicitly."
+        ],
+        "contradictions": [
+          "Chooses a costlier option for comfort or prestige when a qualifying cheaper one is available.",
+          "Says the price difference does not matter."
+        ]
+      },
+      "negative": {
+        "value": "Premium-seeking",
+        "behavioral_definition": "Treats quality, comfort and a better experience as the deciding factor and accepts paying more within the task's stated limits.",
+        "generic_observables": [
+          "Asks for the best-regarded or most comfortable qualifying option rather than the cheapest.",
+          "Says it is fine to spend up to the stated ceiling if the experience is better.",
+          "Prioritises ratings, location or class of service over saving money."
+        ],
+        "contradictions": [
+          "Optimises for the lowest total cost when a better qualifying option fits the stated limit.",
+          "Asks to cut a requested comfort or quality element to save money."
+        ]
+      },
+      "tasks": {
+        "ada70bfe81da1cd33bec47d79a9d279d7734a686": {
+          "task_label": "Yorkshire festive family day out",
+          "rationale": "Two paid festive attractions are compared, so what counts as good value is the persona's to state.",
+          "inherited_task_signals": [
+            "Checking what a standard Stockeld Park festive ticket includes.",
+            "Finding the official Harrogate Christmas Funland page with dates and location.",
+            "Pulling York Maze visitor details as a backup."
+          ],
+          "positive_observables": [
+            "Asks which option gives more per pound and for ticket prices to be stated side by side.",
+            "Asks whether the cheaper option still counts as a full day out."
+          ],
+          "negative_observables": [
+            "Says the pricier attraction is fine if the day feels better for the children.",
+            "Asks which option is the nicer experience regardless of the ticket gap."
+          ]
+        },
+        "b21a86441ddca8186175bfffcaae0358ed66eec4": {
+          "task_label": "Pittsburgh-to-LA two-day trip",
+          "rationale": "Flights under a time constraint and a hotel under a nightly cap both carry visible prices.",
+          "inherited_task_signals": [
+            "Searching roundtrip PIT-LAX with the stated arrival and return limits.",
+            "Finding a Koreatown or West Hollywood hotel rated 4.5+ under the nightly cap.",
+            "Sequencing the two-day itinerary around rush hour."
+          ],
+          "positive_observables": [
+            "Asks for the cheapest flight and hotel pair that still meets the stated limits.",
+            "Asks to stay well under the nightly cap rather than near it."
+          ],
+          "negative_observables": [
+            "Says the nightly cap may be used in full for a better-located or better-rated hotel.",
+            "Asks for the shortest or most comfortable qualifying flight even at a higher fare."
+          ]
+        },
+        "73c63095aeed43efb10a74eee7db7459c5ea9f84": {
+          "task_label": "Grand Rapids housing plan",
+          "rationale": "The task explicitly compares a normal rental against cheaper live-in alternatives.",
+          "inherited_task_signals": [
+            "Finding a Zillow rental inside the stated monthly range.",
+            "Finding at least three cheaper live-in Craigslist listings below that benchmark.",
+            "Summarising a Booking.com hotel's guest reviews."
+          ],
+          "positive_observables": [
+            "Asks how far below the Zillow benchmark the alternatives actually land.",
+            "Asks for total move-in cost, not just the monthly rent."
+          ],
+          "negative_observables": [
+            "Says the normal rental is worth its premium over the cheaper alternatives.",
+            "Asks which option is the most comfortable place to actually live."
+          ]
+        }
+      }
+    },
+    {
+      "axis_id": "evidence_verification",
+      "label": "Evidence verification",
+      "dimension": "trust_level",
+      "positive": {
+        "value": "Verifying",
+        "behavioral_definition": "Actively asks for inspectable, current evidence and distinguishes confirmed facts from uncertain claims.",
+        "generic_observables": [
+          "Requests first-party or live-page evidence beyond simply naming a source.",
+          "Asks the assistant to label uncertainty, stale information or unsupported claims.",
+          "Checks that a conclusion follows from the cited page rather than accepting it at face value."
+        ],
+        "contradictions": [
+          "Explicitly delegates factual verification without wanting evidence.",
+          "Treats an unsupported snippet as sufficient after uncertainty has been raised."
+        ]
+      },
+      "negative": {
+        "value": "Trusting",
+        "behavioral_definition": "Delegates reasonable verification to the assistant and accepts its synthesis once the task's required evidence is present.",
+        "generic_observables": [
+          "Explicitly says the assistant may use its judgment after the named sources have been checked.",
+          "Accepts the assistant's synthesis without asking for extra triangulation beyond the task.",
+          "Prefers a straightforward recommendation over an additional verification pass."
+        ],
+        "contradictions": [
+          "Demands independent corroboration beyond the original task.",
+          "Challenges a supported result solely because it lacks an additional source."
+        ]
+      },
+      "tasks": {
+        "ada70bfe81da1cd33bec47d79a9d279d7734a686": {
+          "task_label": "Yorkshire festive family day out",
+          "rationale": "Festive event pages go stale between seasons, so currency of evidence is observable.",
+          "inherited_task_signals": [
+            "Using the official Stockeld Park and Harrogate Christmas Funland pages.",
+            "Confirming the listing is live before relying on it.",
+            "Leaving the key ticket and event pages open."
+          ],
+          "positive_observables": [
+            "Asks for confirmation that the event page is for this season and still live.",
+            "Asks that what is included be quoted from the page rather than summarised."
+          ],
+          "negative_observables": [
+            "Says the assistant may pick the most official-looking listing it finds.",
+            "Accepts the comparison without asking how each page was confirmed."
+          ]
+        },
+        "b6b8ad71aa3112840790066d7d62b498babdfa5c": {
+          "task_label": "Multi-state driving weather risk",
+          "rationale": "Forecasts and active alerts are time-sensitive and come from several named sources.",
+          "inherited_task_signals": [
+            "Reporting current Baltimore conditions.",
+            "Reading the Syracuse 7-day low on Wunderground.",
+            "Checking the NWS Rittman forecast and active alerts, and the Mount Holly snowfall graphic."
+          ],
+          "positive_observables": [
+            "Asks whether each figure is the current reading and when it was issued.",
+            "Asks that the alert text be quoted from the NWS page rather than paraphrased."
+          ],
+          "negative_observables": [
+            "Says the assistant may summarise the forecast in its own words.",
+            "Accepts the risk verdict without asking to see the alert page."
+          ]
+        },
+        "795bfe117e0f58e49ca37ae8e453a507859a2a2b": {
+          "task_label": "Cheap London trip for two",
+          "rationale": "Displayed prices and live listings are exactly what can be stale here.",
+          "inherited_task_signals": [
+            "Finding a Booking.com London hotel under the stated total for two nights.",
+            "Recording the NOX Hotel comparison price.",
+            "Finding two DC hotels meeting the rating and price rules, and three Amazon ANC options."
+          ],
+          "positive_observables": [
+            "Asks that every price be the total actually displayed for those dates, taxes included.",
+            "Asks for confirmation that each hotel page is live rather than cached."
+          ],
+          "negative_observables": [
+            "Says the assistant may use its judgment on which listing is representative.",
+            "Accepts the price list without asking how each figure was read."
+          ]
+        },
+        "73c63095aeed43efb10a74eee7db7459c5ea9f84": {
+          "task_label": "Grand Rapids housing plan",
+          "rationale": "The task requires checking that cheaper listings are still live.",
+          "inherited_task_signals": [
+            "Opening an actual Zillow rental page.",
+            "Verifying the Craigslist postings are still live.",
+            "Reporting the hotel's guest review score and recent takeaways."
+          ],
+          "positive_observables": [
+            "Asks for proof each Craigslist posting is still active rather than expired.",
+            "Asks that review takeaways be quoted from recent reviews with dates."
+          ],
+          "negative_observables": [
+            "Says the assistant may judge which listings look genuine.",
+            "Accepts the shortlist without asking which postings were re-checked."
+          ]
+        }
+      }
+    },
+    {
+      "axis_id": "time_pressure",
+      "label": "Time pressure",
+      "dimension": "time_pressure",
+      "positive": {
+        "value": "Deadline",
+        "behavioral_definition": "Is working against a near-term deadline and wants the fastest route to a decision, without dropping any requirement.",
+        "generic_observables": [
+          "States that a decision is needed today or within a fixed short window.",
+          "Asks the assistant to start with whatever settles the decision soonest.",
+          "Asks to be told immediately if something will take long or block the decision."
+        ],
+        "contradictions": [
+          "Says there is no hurry and the work can take as long as it needs.",
+          "Asks for extra exploration that does not move the decision forward."
+        ]
+      },
+      "negative": {
+        "value": "No rush",
+        "behavioral_definition": "Has no deadline and prefers a thorough, unhurried pass over the options.",
+        "generic_observables": [
+          "Says explicitly that there is no rush and the work can take its time.",
+          "Invites extra options or checks that a hurried pass would skip.",
+          "Prefers getting the choice right over getting it quickly."
+        ],
+        "contradictions": [
+          "Asks for the fastest possible answer.",
+          "Says a decision has to be made within a fixed short window."
+        ]
+      },
+      "tasks": {
+        "890a6880049a42684ac91a2e1809442846f9394c": {
+          "task_label": "Chicago-to-Aurora public-transit outing",
+          "rationale": "The outing is described as soon, so urgency is natural to state or to disclaim.",
+          "inherited_task_signals": [
+            "Finding the recommended transit route and total travel time.",
+            "Summarising the Metra BNSF line and where fares are listed.",
+            "Reporting the Aurora highs and lows for the next three days."
+          ],
+          "positive_observables": [
+            "Says the outing may happen in the next day or two and asks for the route first.",
+            "Asks to be told at once if fares or schedules cannot be confirmed quickly."
+          ],
+          "negative_observables": [
+            "Says the trip is not fixed yet, so the fare and schedule pages can be read properly.",
+            "Invites a look at alternative routes once the main one is covered."
+          ]
+        },
+        "b6b8ad71aa3112840790066d7d62b498babdfa5c": {
+          "task_label": "Multi-state driving weather risk",
+          "rationale": "The decision is explicitly about driving this week.",
+          "inherited_task_signals": [
+            "Reporting current Baltimore conditions.",
+            "Reporting the Syracuse 7-day low and its day.",
+            "Checking NWS Rittman alerts and the Mount Holly snowfall graphic."
+          ],
+          "positive_observables": [
+            "Says the drive decision has to be made today and asks for the riskiest leg first.",
+            "Asks for a go or no-go answer as soon as the alerts are known."
+          ],
+          "negative_observables": [
+            "Says the drive can wait, so every location should be checked carefully.",
+            "Invites extra days of forecast beyond the ones required."
+          ]
+        },
+        "b21a86441ddca8186175bfffcaae0358ed66eec4": {
+          "task_label": "Pittsburgh-to-LA two-day trip",
+          "rationale": "A two-day trip inside the next month can be urgent or leisurely.",
+          "inherited_task_signals": [
+            "Searching qualifying PIT-LAX flights.",
+            "Finding a qualifying hotel and leaving its page open.",
+            "Building the two-day itinerary around rush hour."
+          ],
+          "positive_observables": [
+            "Says the flight has to be booked today before the fare moves.",
+            "Asks for the itinerary only after the bookable parts are settled."
+          ],
+          "negative_observables": [
+            "Says the dates are flexible, so the flight and hotel options can be compared unhurriedly.",
+            "Invites a second pass over the itinerary once the flight is chosen."
+          ]
+        }
+      }
+    },
+    {
+      "axis_id": "transit_attitude",
+      "label": "Public-transit attitude",
+      "dimension": "att_public_transit",
+      "positive": {
+        "value": "Enthusiast",
+        "behavioral_definition": "Prefers public transit and walking for getting around and wants options framed that way.",
+        "generic_observables": [
+          "Asks for transit or walking routes rather than assuming a car.",
+          "Treats being near a station, stop or a walkable area as a reason to prefer an option.",
+          "Asks whether a car is needed at all before accepting one."
+        ],
+        "contradictions": [
+          "Asks to plan around driving when transit or walking would serve.",
+          "Dismisses transit as impractical for this trip."
+        ]
+      },
+      "negative": {
+        "value": "Skeptical",
+        "behavioral_definition": "Doubts public transit is worth it here and prefers driving, taxis or rideshare, while still meeting every stated requirement.",
+        "generic_observables": [
+          "Asks for driving, parking, taxi or rideshare details rather than transit.",
+          "Says transit is likely slow, awkward or unreliable for this particular outing.",
+          "Treats door-to-door convenience as the reason to pick an option."
+        ],
+        "contradictions": [
+          "Asks for transit routes or a station-adjacent option by preference.",
+          "Says the trip is better done without a car."
+        ]
+      },
+      "tasks": {
+        "b6b8ad71aa3112840790066d7d62b498babdfa5c": {
+          "task_label": "Multi-state driving weather risk",
+          "rationale": "The task is about whether to drive, so a transit attitude reframes it without dropping a requirement.",
+          "inherited_task_signals": [
+            "Reporting current Baltimore conditions.",
+            "Reporting the Syracuse 7-day low.",
+            "Checking NWS Rittman alerts and the Mount Holly snowfall graphic."
+          ],
+          "positive_observables": [
+            "Asks whether the trip could be done by train or bus if the forecast looks bad.",
+            "Says driving is the fallback rather than the plan."
+          ],
+          "negative_observables": [
+            "Says driving is the only realistic way to make this trip.",
+            "Asks about road and parking conditions rather than any transit alternative."
+          ]
+        },
+        "b21a86441ddca8186175bfffcaae0358ed66eec4": {
+          "task_label": "Pittsburgh-to-LA two-day trip",
+          "rationale": "The task already allows transit where it makes sense, so the preference is observable in how the days are sequenced.",
+          "inherited_task_signals": [
+            "Searching qualifying PIT-LAX flights.",
+            "Finding a qualifying Koreatown or West Hollywood hotel.",
+            "Sequencing the stops to avoid rush-hour driving."
+          ],
+          "positive_observables": [
+            "Asks for the itinerary built around Metro, buses or walking instead of a rental car.",
+            "Asks whether the hotel is near a transit line."
+          ],
+          "negative_observables": [
+            "Asks for driving times and parking between the itinerary stops.",
+            "Says a rental car or rideshare is how the two days will actually be covered."
+          ]
+        },
+        "73c63095aeed43efb10a74eee7db7459c5ea9f84": {
+          "task_label": "Grand Rapids housing plan",
+          "rationale": "Where to live in Grand Rapids turns on how the person expects to get around.",
+          "inherited_task_signals": [
+            "Finding a Zillow rental inside the stated range.",
+            "Finding three cheaper live-in Craigslist listings.",
+            "Summarising the hotel's guest reviews."
+          ],
+          "positive_observables": [
+            "Asks whether each place is walkable or on a bus route.",
+            "Says no car is planned, so car-dependent listings are less useful."
+          ],
+          "negative_observables": [
+            "Asks about parking and driving times for each listing.",
+            "Says everything will be done by car, so transit access does not matter."
+          ]
+        }
+      }
+    }
+  ]
+}
