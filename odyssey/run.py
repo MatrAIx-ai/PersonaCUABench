@@ -211,11 +211,21 @@ class Browser:
         # headless shell: sites reject the shell outright, and a profile that
         # survives runs keeps consent/captcha cookies so a wall solved by hand
         # once does not come back every run.
+        #
+        # A machine where Chrome cannot be installed (no root) sets
+        # CHROME_CHANNEL=chromium to use Playwright's own download, or
+        # CHROME_PATH to an extracted Chrome binary. Both are a fallback: some
+        # sites treat the bundled build differently, so record which one a run
+        # used when comparing results across machines.
         self._pw = sync_playwright().start()
         Path(profile_dir).mkdir(parents=True, exist_ok=True)
+        executable = os.environ.get("CHROME_PATH", "").strip()
+        channel = os.environ.get("CHROME_CHANNEL", "chrome").strip()
+        browser_choice = ({"executable_path": executable} if executable
+                          else {"channel": channel} if channel else {})
         self._ctx = self._pw.chromium.launch_persistent_context(
             user_data_dir=str(profile_dir),
-            channel="chrome",
+            **browser_choice,
             headless=headless,
             viewport={"width": 1440, "height": 900},
             locale="en-US",
