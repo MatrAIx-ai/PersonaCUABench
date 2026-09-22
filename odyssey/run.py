@@ -1142,7 +1142,10 @@ def main() -> None:
     ap.add_argument("--persona-model", default="qwen/qwen3.8-27b",
                     help="the LLM playing the persona user")
     ap.add_argument("--persona-provider", default="openrouter")
-    ap.add_argument("--judge-model", default="gpt-5.5")
+    # Azure serves gpt-5.6-terra; once AZURE_OPENAI_* is configured every
+    # "openai" provider call goes there, and a real OpenAI id such as gpt-5.5
+    # would 404 with DeploymentNotFound.
+    ap.add_argument("--judge-model", default="gpt-5.6-terra")
     ap.add_argument("--judge-provider", default="",
                     help="default: openai for gpt-*/o* ids, openrouter otherwise")
     # 30 demonstrably truncates the medium tasks before the agent can finish.

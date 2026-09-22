@@ -15,7 +15,7 @@ Contributors adding another task or scenario should follow the repository-wide
 |---|---|---|---|
 | Persona LLM | `qwen/qwen3.8-27b` (OpenRouter) | persona profile + Odysseys task | the request in character; answers the CUA's questions |
 | CUA | `qwen/qwen3.8-27b` (OpenRouter) | only what the persona says | browses, may `ask_user` ≤ 5 times, final answer |
-| Judge | `gpt-5.5` (OpenAI) | task, conversation, actions, answer, open tabs | per rubric item: `met`, `communicated` |
+| Judge | `gpt-5.6-terra` (Azure) | task, conversation, actions, answer, open tabs | per rubric item: `met`, `communicated` |
 
 These are the legacy exploratory defaults in `run.py`. Within any comparison,
 pin the models and `--max-steps` (default 50) and do not change them between
