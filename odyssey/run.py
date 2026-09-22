@@ -1135,13 +1135,13 @@ def main() -> None:
                     help="auditable matched-pair execution order supplied by the planner")
     ap.add_argument("--pair-position", type=int, choices=(1, 2),
                     help="this arm's 1-based position within --pair-order")
-    ap.add_argument("--model", default="qwen/qwen3.8-27b", help="the CUA doing the work")
-    ap.add_argument("--provider", default="openrouter",
+    ap.add_argument("--model", default="gpt-5.6-terra", help="the CUA doing the work")
+    ap.add_argument("--provider", default="openai",
                     help="override routing for --model, e.g. openrouter for a "
                          "qwen id served somewhere other than DashScope")
-    ap.add_argument("--persona-model", default="qwen/qwen3.8-27b",
+    ap.add_argument("--persona-model", default="gpt-5.6-terra",
                     help="the LLM playing the persona user")
-    ap.add_argument("--persona-provider", default="openrouter")
+    ap.add_argument("--persona-provider", default="openai")
     # Azure serves gpt-5.6-terra; once AZURE_OPENAI_* is configured every
     # "openai" provider call goes there, and a real OpenAI id such as gpt-5.5
     # would 404 with DeploymentNotFound.
@@ -1150,7 +1150,8 @@ def main() -> None:
                     help="default: openai for gpt-*/o* ids, openrouter otherwise")
     # 30 demonstrably truncates the medium tasks before the agent can finish.
     ap.add_argument("--max-steps", type=int, default=50)
-    ap.add_argument("--temperature", type=float, default=0.7)
+    # gpt-5.6-terra accepts only its default temperature; 0.7 is rejected.
+    ap.add_argument("--temperature", type=float, default=1.0)
     ap.add_argument("--headless", action="store_true",
                     help="no browser window (recommended; required on a server without a display)")
     ap.add_argument("--profile", default="",
