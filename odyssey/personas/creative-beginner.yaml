@@ -1,0 +1,127 @@
+persona_id: odyssey-creative-beginner
+version: '2.0'
+source: hand-specified from dimensions.json (MatrAIx 1290-dim schema)
+note: A student experimenting with drawing, image references, React, and simple visual
+  projects; prefers approachable explanations and clear visual examples over technical
+  jargon.
+attributes:
+  age_bracket:
+    value: 18-24
+    label: Age bracket
+    category: 'Demographic: Core'
+  primary_language:
+    value: English
+    label: Primary language
+    category: 'Linguistic: Language'
+  english_proficiency:
+    value: Native
+    label: English proficiency
+    category: 'Linguistic: Language'
+  highest_education:
+    value: Some college
+    label: Highest education
+    category: 'Learning: Academic'
+  seniority:
+    value: Student / intern
+    label: Seniority
+    category: 'Professional: Career'
+  years_experience:
+    value: 0-2
+    label: Years experience
+    category: 'Professional: Career'
+  linkedin_activity:
+    value: Inactive
+    label: LinkedIn activity
+    category: 'Professional: Career'
+  life_stage:
+    value: Student
+    label: Life stage
+    category: 'Demographic: Life Events'
+  risk_tolerance:
+    value: Cautious
+    label: Risk tolerance
+    category: Risk & Decision
+  decision_style:
+    value: Intuitive
+    label: Decision style
+    category: Risk & Decision
+  device_context:
+    value: Desktop, focused
+    label: Device context
+    category: 'State: Emotional'
+  accessibility_needs:
+    value: None
+    label: Accessibility needs
+    category: 'Behavior: Preferences'
+  media_diet:
+    value: Video-first
+    label: Media diet
+    category: 'Behavior: Preferences'
+  fam_art_history:
+    value: Aware
+    label: 'Familiarity: Art history'
+    category: 'Expertise: Domains'
+  fam_film_studies:
+    value: Familiar
+    label: 'Familiarity: Film studies'
+    category: 'Expertise: Domains'
+  fam_computer_networking:
+    value: None
+    label: 'Familiarity: Computer networking'
+    category: 'Expertise: Domains'
+  fam_game_development:
+    value: Aware
+    label: 'Familiarity: Game development'
+    category: 'Expertise: Domains'
+  fam_graphic_design:
+    value: Aware
+    label: 'Familiarity: Graphic design'
+    category: 'Expertise: Domains'
+  fam_project_management:
+    value: None
+    label: 'Familiarity: Project management'
+    category: 'Expertise: Domains'
+  skill_system_design:
+    value: None
+    label: 'Skill: System design'
+    category: 'Expertise: Skills'
+  skill_project_management:
+    value: Beginner
+    label: 'Skill: Project management'
+    category: 'Expertise: Skills'
+  skill_time_management:
+    value: Intermediate
+    label: 'Skill: Time management'
+    category: 'Expertise: Skills'
+  skill_design_thinking:
+    value: Beginner
+    label: 'Skill: Design thinking'
+    category: 'Expertise: Skills'
+  skill_drawing:
+    value: Beginner
+    label: 'Skill: Drawing'
+    category: 'Expertise: Skills'
+  skill_networking:
+    value: None
+    label: 'Skill: Networking'
+    category: 'Expertise: Skills'
+  tool_webflow:
+    value: Never used
+    label: 'Tool: Webflow'
+    category: 'Skills: Tools'
+  topic_technology:
+    value: Interested
+    label: 'Interest: Technology'
+    category: 'Interests: Topics'
+  topic_film:
+    value: Interested
+    label: 'Interest: Film'
+    category: 'Interests: Topics'
+  topic_visual_art:
+    value: Passionate
+    label: 'Interest: Visual art'
+    category: 'Interests: Topics'
+  topic_social_media:
+    value: Interested
+    label: 'Interest: Social media'
+    category: 'Interests: Topics'

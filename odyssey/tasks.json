@@ -1,213 +1,202 @@
 [
   {
-    "task_id": "890a6880049a42684ac91a2e1809442846f9394c",
-    "confirmed_task": "I’m thinking about doing a simple public-transit outing from downtown Chicago to Aurora, Illinois soon, and I want a practical snapshot I can actually look at in the browser. On Google, please search for the recommended public-transit route from Chicago to Aurora, Illinois and open the actual transit directions so you can tell me the main mode I’d be taking and the estimated total travel time; leave that directions page open so I can review the route myself. Since I may need a little context for rail connections and fare structure, then go to Metra’s BNSF line page and summarize what the BNSF line is, where it runs, and where on that page or site fare information is listed; if there’s a separate fares link, open that in another tab so I have a visual reference. After that, head to Weather.com and pull up the local 10-day forecast for Aurora, Illinois, then give me the high and low temperatures for the next 3 days so I can judge whether the trip will feel comfortable. Please send everything back as one concise trip-planning summary, and keep the Google transit directions tab and the relevant Metra page open for comparison.",
-    "website": "https://www.google.com",
-    "reference_length": 5,
-    "level": "easy",
-    "rubrics": {
-      "R1": {
-        "requirement": "Find a recommended public-transit route from Chicago, Illinois to Aurora, Illinois on Google and report the main mode of transit and estimated total travel time.",
-        "verification": "Grader can confirm a Google transit directions/results page is open and the response includes a specific main mode and travel-time estimate taken from that page."
-      },
-      "R2": {
-        "requirement": "Summarize Metra’s BNSF line by stating what it is and where it runs.",
-        "verification": "Grader can confirm the Metra BNSF line page is open and the response accurately describes the line and its route coverage based on visible page text."
-      },
-      "R3": {
-        "requirement": "Identify where fare information for riding the BNSF line is listed, including any relevant fares link or section.",
-        "verification": "Grader can confirm the response points to a visible fare-information location on the BNSF line page or an opened fares tab/page on metra.com."
-      },
-      "R4": {
-        "requirement": "Report the forecasted high and low temperatures for the next 3 days from Weather.com’s 10-day forecast for Aurora, Illinois.",
-        "verification": "Grader can confirm a Weather.com 10-day forecast page for Aurora is open and the response includes three day-by-day high/low pairs matching the visible forecast."
-      },
-      "R5": {
-        "requirement": "Return all findings as one concise trip-planning summary that combines the Google transit recommendation, BNSF line context, fare-info location, and 3-day weather outlook.",
-        "verification": "Grader can confirm the final response is a single concise integrated summary containing all required elements from steps 1 through 3."
-      }
-    },
-    "categories": [
-      "Travel and Tourism > Ground Transportation",
-      "Travel and Tourism > Tourist Attractions"
-    ],
-    "num_categories": 2
-  },
-  {
-    "task_id": "ada70bfe81da1cd33bec47d79a9d279d7734a686",
-    "confirmed_task": "I’m trying to plan a Yorkshire family day out around Christmas and want to compare two festive options properly before I recommend one. Could you start on the official Stockeld Park site and open their Winter or Christmas ticket page, then the main activities page if needed, and pull together exactly what’s included with a standard festive ticket so I can see whether it feels like a full day out for kids; if there are photos or activity sections on the page, open the main ticket page and the activities/details page in separate tabs and leave them open so I can glance at them later. Then use Google to find the current Harrogate Christmas Funland page or official event listing, open the actual event page, and summarize what’s included there too, along with the location and the event dates, because I want to compare whether it sounds more substantial than Stockeld Park; if you find more than one relevant result, open the most official-looking listing in its own tab and verify it’s live before using it. After that, go to the official York Maze site and pull together the practical visitor details for using it as a backup daytime activity nearby, especially where it is, the opening times or seasonal opening info, and any important ticket or visit-planning notes like booking ahead, age guidance, or whether it’s seasonal, and leave the key visitor info page open as well. In the end, give me a concise side-by-side comparison of Stockeld Park versus Harrogate Christmas Funland, then a short recommendation on which festive option seems better for a family day out and whether York Maze sounds like a realistic backup plan.",
-    "website": "https://www.google.com",
-    "reference_length": 6,
-    "level": "easy",
-    "rubrics": {
-      "R1": {
-        "requirement": "Accurately summarize the activities included with Stockeld Park Winter/Christmas tickets using the official Stockeld Park pages.",
-        "verification": "Grader can confirm the summary matches visible included activities on the open Stockeld Park ticket/details tabs."
-      },
-      "R2": {
-        "requirement": "Find and use a live, relevant Harrogate Christmas Funland page or official listing and summarize what is included in the experience.",
-        "verification": "Grader can see an open Harrogate Christmas Funland page reached via Google and verify the included features against the visible listing content."
-      },
-      "R3": {
-        "requirement": "Include Harrogate Christmas Funland’s event location and event dates.",
-        "verification": "Grader can verify the location and dates directly on the open event/listing page."
-      },
-      "R4": {
-        "requirement": "Summarize York Maze visitor details including where it is, opening times or seasonal opening information, and important ticket or visit-planning notes from the official York Maze site.",
-        "verification": "Grader can confirm these details on the open York Maze visitor information page."
-      },
-      "R5": {
-        "requirement": "Present Stockeld Park and Harrogate Christmas Funland as a concise side-by-side comparison focused on what is included and overall suitability for a family festive outing.",
-        "verification": "Final response clearly compares both attractions using findings from Steps 1 and 2 rather than listing them separately."
-      },
-      "R6": {
-        "requirement": "Provide a short recommendation on which festive attraction seems better and whether York Maze works as a backup daytime activity.",
-        "verification": "Final response includes a reasoned recommendation grounded in the gathered details from all three sites."
-      }
-    },
-    "categories": [
-      "Travel and Tourism > Tourist Attractions",
-      "Community and Society > Holidays and Seasonal Events"
-    ],
-    "num_categories": 2
-  },
-  {
-    "task_id": "b6b8ad71aa3112840790066d7d62b498babdfa5c",
-    "confirmed_task": "I’m trying to decide whether driving this week is a bad idea, so can you build me a quick weather risk snapshot that starts with what it feels like right now and then widens out to the bigger trouble spots? First, on Google, search for Baltimore, Maryland weather and grab the current temperature plus the plain-English condition like cloudy, sunny, rain, or whatever it says, just so I have a baseline for home conditions. Then go to Wunderground and look up Syracuse, New York, and check the 10-day/7-day style forecast to find the lowest temperature expected over the next 7 days, including which day it happens, because I want to compare that colder destination against Baltimore. After that, use the National Weather Service forecast page for the Rittman, Ohio area near Marshallville and tell me what the current forecast says and whether there are any active alerts posted there, since that would really affect an Ohio leg of the drive; please open the actual forecast page and leave it visible so I can see the alert area and forecast text myself. Finally, go to the NWS Mount Holly page, find the winter forecast graphic, and report the snowfall amount shown there so I can tell whether the Mid-Atlantic part looks like a nuisance event or something more serious; if the graphic opens separately, leave that tab open too so I can look at the map. In the end, send me a short location-by-location summary with the key weather risk for Baltimore, Syracuse, Rittman/Marshallville, and the Mount Holly region.",
-    "website": "https://www.google.com",
-    "reference_length": 6,
-    "level": "easy",
-    "rubrics": {
-      "R1": {
-        "requirement": "Report Baltimore, Maryland’s current temperature and current weather conditions from Google.",
-        "verification": "Grader can confirm the answer against the Google weather module showing Baltimore weather with a numeric temperature and condition label."
-      },
-      "R2": {
-        "requirement": "Report the lowest forecasted temperature in Syracuse, New York over the next 7 days from Wunderground, including the day it occurs.",
-        "verification": "Grader can verify the selected low and day on the Syracuse forecast page in Wunderground’s multi-day forecast view."
-      },
-      "R3": {
-        "requirement": "Report the current National Weather Service forecast for the Rittman, Ohio area near Marshallville.",
-        "verification": "Grader can confirm the forecast wording on the forecast.weather.gov page for the specified area."
-      },
-      "R4": {
-        "requirement": "State whether any active weather alerts are posted for the Rittman, Ohio area near Marshallville.",
-        "verification": "Grader can verify the presence or absence of alert banners, watches, warnings, or advisories on the same NWS forecast page left open by the agent."
-      },
-      "R5": {
-        "requirement": "Report the predicted snowfall amount shown in the winter forecast graphic on the NWS Mount Holly page.",
-        "verification": "Grader can confirm the snowfall amount directly from the winter forecast graphic or image tab left open from the Mount Holly page."
-      },
-      "R6": {
-        "requirement": "Return the findings as a short summary organized by location or region, with a brief key weather risk for each one.",
-        "verification": "Grader can check that the final response includes Baltimore, Syracuse, Rittman/Marshallville, and the Mount Holly region, each with the requested weather detail and a concise risk statement."
-      }
-    },
-    "categories": [
-      "Science and Education > Weather",
-      "Travel and Tourism > Travel and Tourism - Other"
-    ],
-    "num_categories": 2
-  },
-  {
-    "task_id": "b21a86441ddca8186175bfffcaae0358ed66eec4",
-    "confirmed_task": "Can you help me plan a short LA trip from Pittsburgh and keep the key pages open so I can actually look at them afterward? Start on Google Flights, Kayak, or Expedia and search a round-trip from PIT to LAX for a simple 2-day trip, making sure the outbound gets into Los Angeles before 6:00 PM and the return lands back in Pittsburgh before midnight. I’d really prefer a nonstop if one exists, but if not, pick the option with the shortest total travel time that still feels like a good value, and open the top few flight options so I can compare before you choose the best one; then leave the selected flight page open in its own tab. After that, use Google Hotels or a hotel booking site to find me a hotel around Koreatown or West Hollywood with at least a 4.5 rating and a nightly rate under $350, and open the actual hotel listing so I can see the price, rating, photos, and map location, then keep that tab open too. Once the stay looks settled, go to Google Maps and pull up Griffith Observatory, The Getty Center, Santa Monica Pier, one well-rated Korean BBQ place in Koreatown, one coffee shop rated 4.5 or better, and somewhere with a great sunset view, because I want a realistic plan instead of a random list. Use the map routes to figure out a 2-day itinerary that avoids driving during LA rush hour as much as possible, especially around 7 to 10 AM and 4 to 7 PM, and try to keep travel between stops under about 40 minutes when that’s realistic, with a little buffer time between activities so the days don’t feel crammed. Open the important map views or route checks in separate tabs if needed so I can visually compare how far apart things are, and then give me a simple trip summary with the flight you chose, the hotel you recommend, and a 2-day schedule showing activity times plus the travel time between each stop.",
-    "website": "https://www.google.com",
-    "reference_length": 6,
-    "level": "medium",
-    "rubrics": {
-      "R1": {
-        "requirement": "A round-trip PIT to LAX flight search is completed on a flight site, with top candidate options reviewed and one selected that arrives in Los Angeles before 6:00 PM outbound and returns to Pittsburgh before midnight.",
-        "verification": "Grader can see an open flight search/results or details page showing PIT, LAX, round-trip results, visible candidate options, and the selected itinerary meeting the timing constraints."
-      },
-      "R2": {
-        "requirement": "The chosen flight reasonably reflects the stated preference hierarchy: nonstop if available, otherwise the shortest total travel time, while still balancing price and schedule.",
-        "verification": "Visible comparison among top few flight options supports why the selected itinerary is a reasonable best choice based on stops, duration, and price."
-      },
-      "R3": {
-        "requirement": "A hotel in Koreatown or West Hollywood is identified with rating at least 4.5 and nightly price under $350, and the actual listing page is opened.",
-        "verification": "Open hotel listing visibly shows neighborhood or map placement, nightly price under $350, rating of 4.5 or higher, and listing details/photos."
-      },
-      "R4": {
-        "requirement": "Google Maps is used to identify all required stop types: Griffith Observatory, The Getty Center, Santa Monica Pier, a Korean BBQ spot in Koreatown, a coffee shop rated at least 4.5, and a sunset-view location.",
-        "verification": "Open Google Maps place pages or map tabs show each required destination category and allow visual confirmation of their locations."
-      },
-      "R5": {
-        "requirement": "The itinerary routing is realistic, uses map route checks, avoids LA rush hour driving where practical, keeps travel between stops under about 40 minutes when possible, and includes buffer time.",
-        "verification": "Open route/map tabs and the written plan show travel-time checks, sensible sequencing, reduced rush-hour exposure, and spacing between activities."
-      },
-      "R6": {
-        "requirement": "A final travel plan is produced with the selected flight, hotel recommendation, and a 2-day itinerary including activity timing and travel times, while keeping the key browser pages open.",
-        "verification": "Final summary includes all required trip components, and the flight tab, hotel tab, and relevant map/route tabs remain open for visual review."
-      }
-    },
-    "categories": [
-      "Travel and Tourism > Air Travel",
-      "Travel and Tourism > Accommodation and Hotels"
-    ],
-    "num_categories": 2
-  },
-  {
-    "task_id": "795bfe117e0f58e49ca37ae8e453a507859a2a2b",
-    "confirmed_task": "I’m trying to piece together a really cheap trip to London for two, so can you help me build it in a practical order and keep the actual pages open where it matters? Start on Booking.com and search London for 2 adults staying this December, then find me at least one hotel that comes in under £100 total for the 2-night stay, because that ultra-budget option is going to set the tone for everything else. Open the actual property page in its own tab so I can see the photos and location, and note the hotel name, stay dates, total displayed price, and link. Once you’ve got that baseline, stay on Booking.com and look up NOX Hotel for a 1-night stay for 2 adults on any date in 2026, just so I can tell whether my bargain London option is unusually cheap or more normal for the city; open the NOX listing page too and record the date and total displayed price you find. After that, use Google to look for at least two hotels near Washington, DC Union Station that show 4-star-or-higher guest ratings and nightly prices under $200, because I may want a backup benchmark for city lodging in another trip later; please open each hotel result in its own tab or go to the actual hotel posting page so I can verify they’re real options and still look live. Then, because I want the whole trip to stay low-cost overall, go to Amazon and shortlist three mid-to-low-priced headphones or earbuds with active noise cancellation for travel that fit the same budget mindset, and open each product page in a separate tab so I can compare them side by side. In the end, send me one clean summary with the hotel names, prices, dates, ratings where relevant, key headphone features, and links, and leave the Booking.com property tabs and the Amazon product tabs open for me.",
-    "website": "https://www.google.com",
-    "reference_length": 5,
-    "level": "medium",
-    "rubrics": {
-      "R1": {
-        "requirement": "Identify at least one Booking.com London hotel for 2 adults in December with a displayed total price under £100 for the 2-night stay, and capture the hotel name, stay dates, total price, and link.",
-        "verification": "Grader can confirm the Booking.com search results or property page shows London, 2 adults December and a total under £100, with the property tab open."
-      },
-      "R2": {
-        "requirement": "Find a Booking.com NOX Hotel result for a 1-night stay in 2026 for 2 adults and record the specific date, displayed total price, and link.",
-        "verification": "Grader can confirm the NOX Hotel listing or property page on Booking.com shows a 1-night stay for 2 adults with a visible total price and the page left open."
-      },
-      "R3": {
-        "requirement": "Find at least two hotels near Washington, DC Union Station via Google that each show a guest rating of 4 stars or higher and a nightly price under $200, and record their names, ratings, prices, and links.",
-        "verification": "Grader can confirm on Google results, hotel panels, or linked hotel pages that two qualifying hotels near Union Station display ratings of 4.0+ and nightly prices below $200, with tabs open for the chosen options."
-      },
-      "R4": {
-        "requirement": "Shortlist at least three Amazon headphones or earbuds with active noise cancellation, including each product name, current price, key features, and link.",
-        "verification": "Grader can confirm three Amazon product pages are open and each page visibly indicates ANC or active noise cancellation, along with product name and current price."
-      },
-      "R5": {
-        "requirement": "Return one consolidated summary covering the London budget hotel, the NOX Hotel comparison, the two Washington, DC Union Station hotel benchmarks, and the three Amazon UK headphone options, with all requested names, dates, prices, ratings where relevant, key features, and links.",
-        "verification": "Grader can compare the final response against the collected browser evidence from the open Booking.com, Google, and Amazon UK tabs and verify all requested fields are included."
-      }
-    },
-    "categories": [
-      "Travel and Tourism > Air Travel",
-      "Travel and Tourism > Accommodation and Hotels"
-    ],
-    "num_categories": 2
-  },
-  {
-    "task_id": "73c63095aeed43efb10a74eee7db7459c5ea9f84",
-    "confirmed_task": "I’m trying to sort out a realistic housing plan in Grand Rapids, Michigan and want to compare a normal rental against cheaper live-in alternatives, with a hotel as a short-stay fallback while I go look at places. Please start on Zillow and search Grand Rapids rentals with the monthly rent set between $1,400 and $2,400, then open one listing that looks like a real option in its own tab so I can see the photos and map, and grab the basics for it like the address, monthly price, and the Zillow listing page. Use that exact monthly rent as the benchmark for whether a trailer or other small living setup would actually save me money, then go to Craigslist for Grand Rapids and find at least three listings that seem suitable for living in and are priced below that Zillow benchmark; open the actual posting pages so you can verify they’re still live and note each title, price, and link. After that, because I may need somewhere temporary while I travel to inspect options, go to Booking.com and look up a hotel in Grand Rapids with visible guest reviews, open the property page, and summarize the overall guest review score plus at least three takeaways from recent reviews so I can tell what staying there would really be like. Leave the Zillow tab and the Booking.com hotel page open so I can compare them visually afterward, then give me a concise recommendation on how the rental and cheaper Craigslist alternatives stack up against the hotel, and say which seems better reviewed for a temporary stay.",
+    "task_id": "440ed7f388a2a4528a8d9fb75f83e11f934b5b5d",
+    "confirmed_task": "I’m putting together a small TV watchlist and want to anchor it around The Pitt first, so please go to Hulu and open the actual show page for The Pitt to confirm what service it’s on, then leave that tab open so I can see the listing myself. Once you’ve confirmed that, use Wikipedia to look up the TV series Ponies and pull the main cast names from the series page so I can compare who’s in a different show; if the cast is listed on the page, open the Ponies article itself and keep that tab available too just so I can glance at it. Then round out the watchlist with something older by going to Memory Alpha and finding the entry for Amok Time, and grab the key details from that page including which Star Trek series it belongs to, the season and episode number, and the original air date. Please give me everything back in one concise summary with the streaming service for The Pitt, the Ponies cast list, and the Amok Time details, and keep the Hulu and Memory Alpha pages open in separate tabs so I have visual proof.",
     "website": "https://www.google.com",
     "reference_length": 4,
-    "level": "medium",
+    "level": "easy",
     "rubrics": {
       "R1": {
-        "requirement": "Identify one Zillow rental listing in Grand Rapids, Michigan within the $1,400 to $2,400 monthly rent range and provide its address, monthly rent, and Zillow property page URL.",
-        "verification": "Grader can confirm the Zillow listing page is open in a tab and shows a Grand Rapids rental with rent between $1,400 and $2,400, plus the reported address and URL match the visible page."
+        "requirement": "The agent opens the Hulu page for “The Pitt,” confirms the service as Hulu, and preserves the page as visual proof.",
+        "verification": "A grader can see the Hulu title page for “The Pitt” open in a browser tab and the final answer states the service is Hulu."
       },
       "R2": {
-        "requirement": "Use the exact Zillow monthly rent from Step 1 as the benchmark and provide at least three Grand Rapids Craigslist listings suitable for living in that are priced below that benchmark, including each title, price, and posting URL.",
-        "verification": "Grader can confirm each Craigslist posting page is open or accessible, appears to be a live Grand Rapids-area listing suitable for living in, and the visible prices are all below the Zillow rent reported in Step 1."
+        "requirement": "The agent extracts the main cast members for the TV series “Ponies” from the Wikipedia series page exactly as shown there.",
+        "verification": "A grader can inspect the open Wikipedia article for “Ponies” and compare the listed cast names against the final answer."
       },
       "R3": {
-        "requirement": "For one Booking.com hotel in Grand Rapids, Michigan, report the overall guest review score and summarize at least three takeaways from recent guest reviews.",
-        "verification": "Grader can confirm the Booking.com property page is open and shows a review score, and the summarized takeaways are grounded in visible recent review content on the page."
+        "requirement": "The agent reports the Memory Alpha details for “Amok Time,” including the Star Trek series, season and episode number, and original air date.",
+        "verification": "A grader can view the open Memory Alpha page for “Amok Time” and confirm the final answer includes the correct series title, season/episode notation, and air date."
       },
       "R4": {
-        "requirement": "Return a concise recommendation comparing the Zillow rental, the cheaper Craigslist alternatives, and the Booking.com hotel, and explicitly state which appears better reviewed for a temporary stay.",
-        "verification": "Grader can confirm the final summary references the gathered Zillow, Craigslist, and Booking.com findings and includes a clear conclusion about the better-reviewed temporary-stay option."
+        "requirement": "The agent provides one concise combined summary covering the Hulu service for The Pitt, the Ponies cast list, and the Amok Time episode details.",
+        "verification": "The final response is a single concise summary containing all three requested result groups without omitting any required field."
       }
     },
     "categories": [
-      "Business and Consumer Services > Real Estate",
-      "Travel and Tourism > Accommodation and Hotels"
+      "Arts & Entertainment > Streaming & Online TV",
+      "Reference Materials > Dictionaries and Encyclopedias"
+    ],
+    "num_categories": 2
+  },
+  {
+    "task_id": "62689a0f29cfc6bd0b4510c240dec4de17a361e5",
+    "confirmed_task": "I want to send a friend a quick little roundup that mixes pop-culture, memes, and actual news, so could you start on Reddit and find a discussion thread about Coraline, open the actual thread page, and grab the exact thread title for me because I want the wording to be precise. While you’re still on Reddit, go over to r/starterpacks and pick two recent meme-style posts that feel funny enough to sit next to the Coraline item, and open each of those posts in its own tab so I can compare them later and make sure they’re really the kind of starterpack jokes I’d send to someone. Then switch to CNN and find the latest breaking news story about Iran, open the article itself, and note the exact headline plus the publication time so I can include one current-events item that’s clearly sourced. In the end, give me a short, friend-ready update that includes the Coraline thread title, the two r/starterpacks post titles, the CNN Iran headline with its publication time, and a natural sounding summary of these.",
+    "website": "https://www.google.com",
+    "reference_length": 4,
+    "level": "easy",
+    "rubrics": {
+      "R1": {
+        "requirement": "The response includes the exact title of an opened Reddit discussion thread about Coraline.",
+        "verification": "Grader can confirm the title matches the text visible on the Reddit thread page."
+      },
+      "R2": {
+        "requirement": "The response includes the titles of two recent r/starterpacks posts that are clearly meme-style/funny posts, and both selected posts are opened in separate tabs.",
+        "verification": "Grader can confirm the two visible Reddit post pages or tabs correspond to r/starterpacks posts and that their titles match the reported titles."
+      },
+      "R3": {
+        "requirement": "The response includes CNN’s latest breaking news story about Iran with both the exact headline and the publication time.",
+        "verification": "Grader can verify the opened CNN article page shows the reported headline and publication time and that it is the latest applicable Iran breaking news item found on CNN."
+      },
+      "R4": {
+        "requirement": "All gathered items are combined into a short, friend-ready mixed-interest update.",
+        "verification": "Grader can confirm the final write-up includes all four content elements in a concise roundup format suitable to send to a friend."
+      }
+    },
+    "categories": [
+      "Computers Electronics and Technology > Social Media Networks",
+      "Arts & Entertainment > Arts and Entertainment - Other",
+      "News & Media Publishers"
+    ],
+    "num_categories": 3
+  },
+  {
+    "task_id": "8e639395e157ea4df2747a4a873b5f610d70d180",
+    "confirmed_task": "I want to put together a really easy beginner sketch reference pack for a casual drawing session, and I’d like you to grab the pieces in the browser so I can look at them afterward. First, on Pinterest, find one pin with a genuinely useful person drawing reference photo for figure practice—something clear enough that a beginner could sketch from—and open the actual pin page, then keep that tab open and save the pin link for me. Once you’ve got that figure reference, go to Google Images and search for a basic one-room hut from the 1500s in an English style so I can use it as a simple background setting; open the image result or source page that looks most believable and leave that open too so I can see the picture itself. After that, go to Bored Panda and open their collection of angry cat photos as a fun mood reference for the character expression, and tell me the exact page title while keeping that page open as well. In the end, send me the Pinterest pin link, the hut image or source page link, and the Bored Panda page title, plus a short note on how the figure, the hut, and the angry-cat mood could all work together in one simple sketch idea.",
+    "website": "https://www.google.com",
+    "reference_length": 4,
+    "level": "easy",
+    "rubrics": {
+      "R1": {
+        "requirement": "Provide one Pinterest pin URL that leads to a useful person drawing reference photo suitable for figure practice.",
+        "verification": "Grader can confirm the browser is on an actual Pinterest pin page showing a person reference image and that the returned link matches that open pin."
+      },
+      "R2": {
+        "requirement": "Provide one Google Images result or source page URL showing a basic one-room hut from the 1500s in an English style.",
+        "verification": "Grader can confirm an image result or source page is open from Google Images and visually depicts a simple hut consistent with the requested historical English-style setting."
+      },
+      "R3": {
+        "requirement": "Provide the exact title of the Bored Panda collection featuring angry cat photos shared by their owners.",
+        "verification": "Grader can confirm the Bored Panda page is open and the reported title matches the visible page title/header."
+      },
+      "R4": {
+        "requirement": "Include a brief note explaining how the person reference, hut reference, and angry cat mood inspiration could fit together into one beginner-friendly sketch concept.",
+        "verification": "Grader can confirm the final note meaningfully references all three selected sources and combines them into a coherent sketch idea."
+      }
+    },
+    "categories": [
+      "Hobbies and Leisure > Hobbies and Leisure - Other",
+      "Arts & Entertainment > Visual Arts and Design"
+    ],
+    "num_categories": 2
+  },
+  {
+    "task_id": "3868f9b52e96067b4f55834a3b110e1228b48e65",
+    "confirmed_task": "I’m thinking about moving into post-production work in Los Angeles and want a realistic sense of the entry path, especially for media/entertainment IT-engineer-type roles. Please start on Google and look up what employers in media and entertainment usually expect for IT engineers, then pull together at least three recurring requirements you keep seeing and at least two concrete training or certification routes, because I want to know whether this is something I could realistically train into. Once you have that baseline, go to the Motion Picture Editors Guild site and find the actual West Coast or Los Angeles path for joining IATSE Local 700, including the steps, eligibility, and anything about applications, rosters, fees, or required experience, so I can compare the union route with the broader training path. If there are separate pages that matter, open the key Local 700 pages in their own tabs and leave the most useful one open so I can look at the exact wording myself. After that, go back to Google and search for current Los Angeles or broader West Coast jobs that actually match the skills and requirements you found earlier, and open at least two relevant live job postings in separate tabs so I can visually compare them; for each one, note the title, company, location, how it connects to the earlier requirements, and whether the posting says anything about visa sponsorship or work authorization. To round it out, use Google one more time to build me a short dated timeline of Rosie O’Donnell’s feud with Donald Trump with at least three dated moments from public sources, just as a quick check of the kind of entertainment-news research context that might overlap with this world. Please give me everything as a concise career brief with clear sections for training paths, Local 700 union entry, relevant current job examples, and the short timeline, and mention which pages you left open for me to review.",
+    "website": "https://www.google.com",
+    "reference_length": 5,
+    "level": "medium",
+    "rubrics": {
+      "R1": {
+        "requirement": "Find and summarize at least three typical job requirements for IT engineers in the media and entertainment industry and at least two concrete training or certification options.",
+        "verification": "Final brief includes a training paths section with 3+ recurring requirements and 2+ named training/certification routes sourced from Google results or opened pages."
+      },
+      "R2": {
+        "requirement": "Use the Motion Picture Editors Guild site to summarize the West Coast/Los Angeles joining path for IATSE Local 700, including steps, eligibility, and application/joining details.",
+        "verification": "Final brief includes a union requirements section tied to editorsguild.com, and the browser shows a relevant Local 700 page open with visible guild-specific joining information."
+      },
+      "R3": {
+        "requirement": "Identify at least two current live Los Angeles or West Coast job postings relevant to the earlier requirements and note whether visa sponsorship or work authorization is mentioned.",
+        "verification": "Browser has at least two relevant job postings open in separate tabs, and the final brief lists title, company, location, relevance to prior requirements, and sponsorship/work authorization notes for each."
+      },
+      "R4": {
+        "requirement": "Provide a short Rosie O’Donnell vs. Donald Trump timeline with at least three dated milestones from public sources.",
+        "verification": "Final brief includes a timeline section with 3+ dated events and enough detail to distinguish each milestone."
+      },
+      "R5": {
+        "requirement": "Return everything as a concise career brief with clearly labeled sections and mention which pages were left open for review.",
+        "verification": "Response is organized into the four requested sections and explicitly references the guild page and job-posting tabs left open."
+      }
+    },
+    "categories": [
+      "Jobs and Career > Jobs and Employment",
+      "Arts & Entertainment > Arts and Entertainment - Other"
+    ],
+    "num_categories": 2
+  },
+  {
+    "task_id": "80257c727b8e8c5426c1b03a2a4493231747e5d7",
+    "confirmed_task": "I’m mocking up a tiny React art prototype for a web page and want you to help me gather the pieces in a way I can actually look at in the browser. Start on JetBrains and figure out which IDE they specifically position for editing and organizing web code, because I want a sensible default tool before I build anything. Then use Google Images to find one cartoon mouse image with a transparent background that could work as a reference asset, and open the actual source page plus the direct image in separate tabs so I can visually confirm it really has transparency and isn’t just a white background baked in. While you’re in Google Images, also search for “taffy tails stretchy” and pick one result for Stretchy from Taffy Tails, opening the result page too so I can compare whether I want a generic mouse look or that more specific character style. After that, go to react-svgr.com and convert a simple SVG into a React component so I have a vector element to pair with the raster mouse image in the prototype, and keep the conversion result visible. Once the visual side is sorted out, use Google to find the current guidance on whether a project made in CapCut Web can be moved into the CapCut desktop app, because I may reuse these same art assets in a promo clip later, and then find instructions for changing the background color behind an imported photo in CapCut so the background can match whichever mouse style looked better from the earlier image search. Please leave the most useful image/source tabs open for comparison and give me a concise build note with the recommended IDE, both image sources, the React component code, and short CapCut instructions tailored to using those mouse assets.",
+    "website": "https://www.google.com",
+    "reference_length": 7,
+    "level": "medium",
+    "rubrics": {
+      "R1": {
+        "requirement": "Correctly identify the JetBrains IDE intended for editing and organizing web code and recommend it by name.",
+        "verification": "Grader confirms the final note names WebStorm and that the JetBrains page viewed corresponds to the web-development IDE."
+      },
+      "R2": {
+        "requirement": "Provide one cartoon mouse image with a transparent background, including a direct image file URL and the source page URL.",
+        "verification": "Grader confirms separate browser tabs were opened for the direct image file and the source page, and the final note includes both URLs."
+      },
+      "R3": {
+        "requirement": "Provide one Google Images result for Stretchy from Taffy Tails with its source/result page for visual comparison.",
+        "verification": "Grader confirms a Google Images search for “taffy tails stretchy” was performed, a result page was opened, and the final note includes the selected result/source."
+      },
+      "R4": {
+        "requirement": "Convert an SVG into a React component using SVGR and provide the resulting React component code snippet.",
+        "verification": "Grader confirms react-svgr.com shows a conversion result and the final note includes a plausible generated React component snippet."
+      },
+      "R5": {
+        "requirement": "Summarize how to move a CapCut Web project into the CapCut desktop app, including the recommended method or a confirmation that direct transfer is not possible, with supporting evidence.",
+        "verification": "Grader confirms the final note includes a clear transfer conclusion and cites or reflects information found from search results/pages opened during browsing."
+      },
+      "R6": {
+        "requirement": "Summarize instructions for changing the background color behind an imported photo in CapCut.",
+        "verification": "Grader confirms the final note includes a usable sequence of CapCut actions for changing the background color behind an imported image."
+      },
+      "R7": {
+        "requirement": "Return a concise build note that combines the recommended IDE, both image sources, the React component code, and CapCut instructions tailored to the compared mouse assets.",
+        "verification": "Grader confirms the final response synthesizes outputs from all prior steps and explicitly tailors the CapCut guidance to the generic mouse versus Stretchy comparison."
+      }
+    },
+    "categories": [
+      "Computers Electronics and Technology > Programming and Developer Software",
+      "Arts & Entertainment > Visual Arts and Design"
+    ],
+    "num_categories": 2
+  },
+  {
+    "task_id": "cbe12703e129832feb5e7b56c4141476fb423338",
+    "confirmed_task": "I’m trying to put together a compact entertainment lineup for this week that gives me a nice mix of short narrative games, a few more action-heavy palate cleansers, some quick browser-game breaks, and one cozy book. Please start on Reddit and look through real recommendation threads for at least five story-heavy games that people describe as short or easy to finish, because that’ll set the mood I’m aiming for; open the most useful Reddit threads in separate tabs and leave at least one of the key threads open so I can glance at the discussion myself. Then, still using Reddit and that same taste baseline, find at least three FPS shooters that people recommend as good contrast after emotional or story-driven games, so I can see what might work as a reset between heavier experiences. After that, go to Poki and find three mind-challenging browser games I could dip into between the bigger titles, and open each game’s actual Poki page in its own tab so I can visually confirm they’re the right kind of quick break. Finally, head to Goodreads and pull up the page for The Very Secret Society of Irregular Witches, read at least three user reviews, and give me the main takeaways from those reviews with an eye toward whether it matches the cozy, character-driven vibe from the first Reddit step; leave the Goodreads book page open too so I can look at the rating and cover. In the end, give me one concise recommendation bundle with the game and book titles, links where they make sense, and a short note on how each FPS pick, each Poki game, and the book complement the story-heavy shortlist you found first.",
+    "website": "https://www.google.com",
+    "reference_length": 5,
+    "level": "medium",
+    "rubrics": {
+      "R1": {
+        "requirement": "Identify at least five story-heavy short game recommendations sourced from Reddit threads and list their titles.",
+        "verification": "Grader confirms at least five game titles are present and that Reddit recommendation threads were opened, with at least one relevant Reddit thread visibly left open."
+      },
+      "R2": {
+        "requirement": "Identify at least three FPS shooter recommendations sourced from Reddit threads that fit as palate cleansers after the story-heavy games.",
+        "verification": "Grader confirms at least three FPS titles are listed from Reddit discussions and that the final notes frame them as contrast to the narrative shortlist."
+      },
+      "R3": {
+        "requirement": "Find three mind-challenging browser games on Poki and provide each title with its direct Poki game page link.",
+        "verification": "Grader confirms three Poki game titles and direct Poki URLs are included, and that the actual game pages were opened in separate tabs."
+      },
+      "R4": {
+        "requirement": "Read at least three Goodreads user reviews for The Very Secret Society of Irregular Witches and summarize the main takeaways from those reviews.",
+        "verification": "Grader confirms the response references takeaways from at least three user reviews and that the Goodreads book page is visibly open."
+      },
+      "R5": {
+        "requirement": "Return one concise recommendation bundle with titles, links where applicable, and brief notes explaining how the FPS picks, Poki games, and the book complement the story-heavy shortlist from step 1.",
+        "verification": "Grader confirms the final output combines all categories into one bundle and includes explicit complement notes tying later picks back to the story-heavy shortlist."
+      }
+    },
+    "categories": [
+      "Games > Video Games Consoles and Accessories",
+      "Arts & Entertainment > Books and Literature"
     ],
     "num_categories": 2
   }
