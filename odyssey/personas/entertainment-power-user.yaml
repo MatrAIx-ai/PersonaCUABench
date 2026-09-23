@@ -1,0 +1,126 @@
+persona_id: odyssey-entertainment-power-user
+version: '2.0'
+source: hand-specified from dimensions.json (MatrAIx 1290-dim schema)
+note: An online-native entertainment fan who follows streaming, Reddit discussion,
+  games, and visual culture; wants precise sources and enough detail to compare options.
+attributes:
+  age_bracket:
+    value: 25-34
+    label: Age bracket
+    category: 'Demographic: Core'
+  primary_language:
+    value: English
+    label: Primary language
+    category: 'Linguistic: Language'
+  english_proficiency:
+    value: Native
+    label: English proficiency
+    category: 'Linguistic: Language'
+  highest_education:
+    value: Bachelor's
+    label: Highest education
+    category: 'Learning: Academic'
+  seniority:
+    value: Mid
+    label: Seniority
+    category: 'Professional: Career'
+  years_experience:
+    value: 3-5
+    label: Years experience
+    category: 'Professional: Career'
+  linkedin_activity:
+    value: Lurker
+    label: LinkedIn activity
+    category: 'Professional: Career'
+  life_stage:
+    value: Early career
+    label: Life stage
+    category: 'Demographic: Life Events'
+  risk_tolerance:
+    value: Balanced
+    label: Risk tolerance
+    category: Risk & Decision
+  decision_style:
+    value: Analytical
+    label: Decision style
+    category: Risk & Decision
+  device_context:
+    value: Desktop, focused
+    label: Device context
+    category: 'State: Emotional'
+  accessibility_needs:
+    value: None
+    label: Accessibility needs
+    category: 'Behavior: Preferences'
+  media_diet:
+    value: Social-media-heavy
+    label: Media diet
+    category: 'Behavior: Preferences'
+  fam_art_history:
+    value: Aware
+    label: 'Familiarity: Art history'
+    category: 'Expertise: Domains'
+  fam_film_studies:
+    value: Proficient
+    label: 'Familiarity: Film studies'
+    category: 'Expertise: Domains'
+  fam_computer_networking:
+    value: Aware
+    label: 'Familiarity: Computer networking'
+    category: 'Expertise: Domains'
+  fam_game_development:
+    value: Familiar
+    label: 'Familiarity: Game development'
+    category: 'Expertise: Domains'
+  fam_graphic_design:
+    value: Familiar
+    label: 'Familiarity: Graphic design'
+    category: 'Expertise: Domains'
+  fam_project_management:
+    value: Familiar
+    label: 'Familiarity: Project management'
+    category: 'Expertise: Domains'
+  skill_system_design:
+    value: Beginner
+    label: 'Skill: System design'
+    category: 'Expertise: Skills'
+  skill_project_management:
+    value: Intermediate
+    label: 'Skill: Project management'
+    category: 'Expertise: Skills'
+  skill_time_management:
+    value: Advanced
+    label: 'Skill: Time management'
+    category: 'Expertise: Skills'
+  skill_design_thinking:
+    value: Intermediate
+    label: 'Skill: Design thinking'
+    category: 'Expertise: Skills'
+  skill_drawing:
+    value: Beginner
+    label: 'Skill: Drawing'
+    category: 'Expertise: Skills'
+  skill_networking:
+    value: Intermediate
+    label: 'Skill: Networking'
+    category: 'Expertise: Skills'
+  tool_webflow:
+    value: Tried it
+    label: 'Tool: Webflow'
+    category: 'Skills: Tools'
+  topic_technology:
+    value: Passionate
+    label: 'Interest: Technology'
+    category: 'Interests: Topics'
+  topic_film:
+    value: Passionate
+    label: 'Interest: Film'
+    category: 'Interests: Topics'
+  topic_visual_art:
+    value: Interested
+    label: 'Interest: Visual art'
+    category: 'Interests: Topics'
+  topic_social_media:
+    value: Passionate
+    label: 'Interest: Social media'
+    category: 'Interests: Topics'
