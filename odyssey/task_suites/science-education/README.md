@@ -105,6 +105,23 @@ Separation by axis:
 | `detail_depth` | 0/3 | 0/3 | 0/3 |
 | `decision_style` | 0/3 | 0/3 | 0/3 |
 
+Re-checked with `odyssey/pair_separation.py` (added to `main-shop` after this suite
+merged), which rebuilds the pairs and applies the protocol's separation rule mechanically.
+It reproduces the table above and marks both surviving pairs
+`separated_pending_evidence_review`, because "meaningfully opposite" is a human call. The
+two pairs were reviewed with `--evidence` and both are confirmed opposite:
+
+- task 4, `request_directness`: positive gives terse numbered imperatives ("Start at Lewis
+  & Clark's admissions site"); negative softens and explains ("Could you put together...",
+  repeated "Please", "so I can quickly inspect them afterward").
+- task 1, `request_directness`: positive is flat imperatives throughout ("Start on Bing and
+  search", "Use only", "Open all three"); negative hedges ("Could you help me set up a quick
+  study workflow...?", "I'd prefer").
+
+Note the tool counts 4 `detail_depth` pairs rather than 3, because the two-cell smoke pair
+on task 4 is a separate replicate (`smoke2`) held in the same results directory. The r1
+figures above are r1 only.
+
 **The pre-run screening picked the wrong winner, and that is worth recording.** Screening
 ranked candidates by the word-count delta between the two arms' openings, which made
 `cog_detail_orientation` look strongest (96- and 67-word deltas) and `cog_directness`
@@ -152,9 +169,10 @@ python3 odyssey/run_matched_pairs.py --suite science-education --replicate-id r1
 ```
 
 Models follow the runbook's and Shopping's worked examples (`gpt-5.6-terra` on `openai`
-for CUA, persona and judge). `run_matched_pairs.py` sets no model defaults of its own and
-forwards to `run.py`, whose defaults are still `qwen/qwen3.8-27b` and `gpt-5.5`; those are
-deliberately overridden so this suite matches Shopping rather than the older grid path.
+for CUA, persona and judge). When this suite ran, `run.py` still defaulted to
+`qwen/qwen3.8-27b` and `gpt-5.5`, so the flags above were required. `main-shop` has since
+moved those defaults to `gpt-5.6-terra` on `openai` with `--temperature 1.0`, so the flags
+are now redundant rather than wrong, and the run they describe is unchanged.
 
 ## Known limits
 
@@ -213,6 +231,12 @@ and was rejected. This PR adds 11 lines in `_create_with_retry` that set
 `reasoning_effort="none"` when a `gpt-5*` call carries tools and the caller has not set it.
 Without that change the model named throughout the runbook and the Shopping suite cannot
 drive the agent at all. It is the only code change outside this suite's own directories.
+
+**These cells ran against the OpenAI API directly, not Azure.** `run.py` routes every
+`openai` provider call to Azure once `AZURE_OPENAI_*` is configured, and `main-shop`'s judge
+default carries a note that Azure is what serves `gpt-5.6-terra`. This suite's results were
+produced with a plain `OPENAI_API_KEY` against `api.openai.com`. Same model id, different
+endpoint; worth knowing before comparing absolute numbers with a scenario that ran on Azure.
 
 **Step and tab ceilings.** `--max-steps 50` bounds model turns; note that `run.steps` in a
 result counts tool calls, one per trajectory entry, and routinely exceeds 50 without that
