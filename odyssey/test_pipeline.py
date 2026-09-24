@@ -8,19 +8,33 @@ the tool loop or the rubric scoring breaks.
 from __future__ import annotations
 
 import json
+import copy
+import io
+import os
+import subprocess
 import sys
+import tempfile
 import types
+from contextlib import redirect_stdout
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 
 import run as R  # noqa: E402
+import persona_experiment  # noqa: E402
+import task_router  # noqa: E402
 
 
 def test_tasks():
-    # Invariants only, not the count: teammates add tasks to tasks.json.
+    # Adding Health must preserve the main branch's original default tasks.
     assert len(R.TASKS) >= 2, len(R.TASKS)
+    assert R.TASK_CATALOG.default_suite_id == "main-original"
+    assert R.TASKS == json.loads((HERE / "tasks.json").read_text())
+    assert set(R.TASK_CATALOG.suites) == {"main-original", "health"}
+    assert "Aurora, Illinois" in (
+        R.TASK_CATALOG.get_suite("main-original").tasks[0]["confirmed_task"]
+    )
     ids = [t["task_id"] for t in R.TASKS]
     assert len(set(ids)) == len(ids), "duplicate task_id in tasks.json"
     for t in R.TASKS:
@@ -29,6 +43,380 @@ def test_tasks():
     assert len(R.resolve_tasks("1,3", False)) == 2
     assert R.resolve_tasks(R.TASKS[4]["task_id"][:8], False)[0] is R.TASKS[4]
     assert len(R.resolve_tasks(None, True)) == len(R.TASKS)
+
+
+def test_task_router():
+    catalog = task_router.TaskCatalog.load()
+    health = catalog.get_suite("health")
+    assert len(health.tasks) == 6
+    assert "Pilates" in health.tasks[0]["confirmed_task"]
+    assert health.task_snapshot(health.tasks[0])["task_source"] == (
+        "task_suites/health/000-core.json"
+    )
+    assert len(health.sha256) == 64
+    tampered = {
+        "task_id": health.tasks[0]["task_id"],
+        "task_snapshot": health.tasks[0],
+        "task_sha256": "0" * 64,
+    }
+    try:
+        R.task_for_record(tampered)
+    except ValueError as exc:
+        assert "hash mismatch" in str(exc)
+    else:
+        raise AssertionError("tampered task snapshot was accepted")
+    assert task_router.load_route(catalog=catalog) is catalog.get_suite("main-original")
+    assert task_router.load_route(suite_id="health", catalog=catalog) is health
+    assert task_router.load_route(suite_id="main-original", catalog=catalog).suite_id == (
+        "main-original"
+    )
+    assert health.resolve(health.tasks[0]["task_id"][:8])[0]["task_id"] == health.tasks[0]["task_id"]
+
+    for invalid in ("0", str(len(health.tasks) + 1), "1,1", "does-not-exist"):
+        try:
+            health.resolve(invalid)
+        except task_router.TaskRoutingError:
+            pass
+        else:
+            raise AssertionError(f"invalid selector {invalid!r} was accepted")
+
+    first = copy.deepcopy(health.tasks[0])
+    second = copy.deepcopy(health.tasks[1])
+    first["task_id"], second["task_id"] = "same-prefix-a", "same-prefix-b"
+    ambiguous = task_router.TaskSuite(
+        "ambiguous", "Ambiguous", "1", ["none"], [first, second], [], {}
+    )
+    try:
+        ambiguous.resolve("same-prefix")
+    except task_router.TaskRoutingError as exc:
+        assert "ambiguous" in str(exc)
+    else:
+        raise AssertionError("ambiguous ID prefix was accepted")
+
+    numeric = copy.deepcopy(second)
+    numeric["task_id"] = "1"
+    numeric_suite = task_router.TaskSuite(
+        "numeric", "Numeric", "1", ["none"], [first, numeric], [], {}
+    )
+    assert numeric_suite.resolve("1")[0]["task_id"] == "1"
+
+    with tempfile.TemporaryDirectory() as directory:
+        root = Path(directory)
+        parts = root / "parts"
+        parts.mkdir()
+        a, b = copy.deepcopy(health.tasks[0]), copy.deepcopy(health.tasks[1])
+        a["task_id"], b["task_id"] = "temporary-a", "temporary-b"
+        (parts / "01.json").write_text(json.dumps([a]), encoding="utf-8")
+        (parts / "02.json").write_text(json.dumps([b]), encoding="utf-8")
+        manifest = root / "task_suites.json"
+        manifest.write_text(json.dumps({
+            "schema_version": task_router.MANIFEST_SCHEMA,
+            "default_suite": "temporary",
+            "suites": {
+                "temporary": {
+                    "title": "Temporary",
+                    "version": "7",
+                    "task_files": ["parts/*.json"],
+                    "default_personas": ["none"],
+                }
+            },
+        }), encoding="utf-8")
+        temporary = task_router.TaskCatalog.load(
+            manifest_path=manifest, legacy_tasks_path=root / "unused.json"
+        ).default_suite
+        assert [task["task_id"] for task in temporary.tasks] == [
+            "temporary-a", "temporary-b"
+        ]
+        assert temporary.resolve("2")[0]["task_id"] == "temporary-b"
+
+        legacy_path = root / "legacy.json"
+        legacy_path.write_text(json.dumps([a]), encoding="utf-8")
+        legacy = task_router.TaskCatalog.load(
+            manifest_path=root / "missing-manifest.json",
+            legacy_tasks_path=legacy_path,
+        )
+        assert legacy.default_suite_id == "legacy"
+        assert legacy.default_suite.tasks[0]["task_id"] == "temporary-a"
+
+        ad_hoc_path = root / "draft.json"
+        ad_hoc_path.write_text(json.dumps({
+            "suite_id": "draft-suite",
+            "title": "Draft",
+            "version": "3",
+            "default_personas": ["none"],
+            "tasks": [a],
+        }), encoding="utf-8")
+        ad_hoc = task_router.suite_from_file(ad_hoc_path)
+        assert ad_hoc.suite_id == "draft-suite" and ad_hoc.tasks[0] == a
+
+        plain_a, plain_b = root / "one.json", root / "renamed.json"
+        plain_a.write_text(json.dumps([a]), encoding="utf-8")
+        plain_b.write_text(json.dumps([a]), encoding="utf-8")
+        assert task_router.suite_from_file(plain_a).suite_id == (
+            task_router.suite_from_file(plain_b).suite_id
+        )
+
+        collision = root / "collision.json"
+        collision.write_text(json.dumps({
+            "suite_id": "health", "tasks": [a]
+        }), encoding="utf-8")
+        try:
+            task_router.load_route(tasks_file=collision, catalog=catalog)
+        except task_router.TaskRoutingError as exc:
+            assert "conflicts with a registered suite" in str(exc)
+        else:
+            raise AssertionError("ad-hoc suite shadowed a registered suite")
+
+        unsafe = root / "unsafe.json"
+        unsafe.write_text(json.dumps({
+            "schema_version": task_router.MANIFEST_SCHEMA,
+            "default_suite": "bad",
+            "suites": {"bad": {"task_files": ["../outside.json"]}},
+        }), encoding="utf-8")
+        try:
+            task_router.TaskCatalog.load(
+                manifest_path=unsafe, legacy_tasks_path=root / "unused.json"
+            )
+        except task_router.TaskRoutingError as exc:
+            assert "stay under" in str(exc)
+        else:
+            raise AssertionError("manifest path escape was accepted")
+
+        malformed = root / "malformed.json"
+        bad_task = copy.deepcopy(a)
+        del bad_task["rubrics"]
+        malformed.write_text(json.dumps([bad_task]), encoding="utf-8")
+        try:
+            task_router.suite_from_file(malformed)
+        except task_router.TaskRoutingError as exc:
+            assert "rubric" in str(exc)
+        else:
+            raise AssertionError("malformed task was accepted")
+
+        unsafe_task = copy.deepcopy(a)
+        unsafe_task["task_id"] = "../escape"
+        malformed.write_text(json.dumps([unsafe_task]), encoding="utf-8")
+        try:
+            task_router.suite_from_file(malformed)
+        except task_router.TaskRoutingError as exc:
+            assert "path-safe" in str(exc)
+        else:
+            raise AssertionError("path-unsafe task id was accepted")
+
+        bad_persona = root / "bad-persona.json"
+        bad_persona.write_text(json.dumps({
+            "suite_id": "draft-bad-persona",
+            "default_personas": ["../escape"],
+            "tasks": [a],
+        }), encoding="utf-8")
+        try:
+            task_router.suite_from_file(bad_persona)
+        except task_router.TaskRoutingError as exc:
+            assert "path-safe persona" in str(exc)
+        else:
+            raise AssertionError("path-unsafe persona id was accepted")
+
+
+def test_report_task_routing():
+    import report
+
+    catalog = task_router.TaskCatalog.load()
+    try:
+        report._explicit_suite({"suite_id": "health", "task_suite": "other"})
+    except ValueError:
+        pass
+    else:
+        raise AssertionError("conflicting result suite identities were accepted")
+
+    with tempfile.TemporaryDirectory() as directory:
+        root = Path(directory)
+        result_dir = root / "later" / "future-task" / "arm__model__20260101T000000Z"
+        result_dir.mkdir(parents=True)
+        future_task = copy.deepcopy(R.TASKS[0])
+        future_task["task_id"] = "future-task"
+        future_task["level"] = "hard"
+        record = {
+            "suite_id": "later",
+            "task_id": "future-task",
+            "task_snapshot": future_task,
+            "persona": "none",
+            "run": {"arm": {"model": "stub", "backend": "stub"}, "max_steps": 5},
+            "judgement": {"score": 1.0, "score_communicated": 1.0},
+        }
+        (result_dir / "result.json").write_text(json.dumps(record), encoding="utf-8")
+        best, order, levels = report.collect_results(
+            root, catalog, list(catalog.suites.values()), all_suites=True
+        )
+        digest = task_router.canonical_sha256(future_task)
+        task_key = ("later", "future-task", digest)
+        result_key = (*task_key, "none/stub@stub#legacy")
+        assert task_key in order
+        assert levels[task_key] == "hard"
+        assert result_key in best
+        rendered = io.StringIO()
+        with redirect_stdout(rendered):
+            report.table(best, order, levels, "test scores", "score")
+        assert "future-task" in rendered.getvalue()
+        assert digest[:8] in rendered.getvalue()
+
+        draft_file = root / "future-draft.json"
+        draft_file.write_text(json.dumps([future_task]), encoding="utf-8")
+        draft_route = task_router.suite_from_file(draft_file)
+        custom_best, _, _ = report.collect_results(
+            root, catalog, [draft_route], custom_selection=True
+        )
+        assert (draft_route.suite_id, "future-task", digest,
+                "none/stub@stub#legacy") in custom_best
+
+        # A newer judge failure must not replace the older valid score.
+        unscored_dir = root / "later" / "future-task" / "arm__model__20270101T000000Z"
+        unscored_dir.mkdir(parents=True)
+        unscored = copy.deepcopy(record)
+        unscored["judgement"] = {"score": None, "error": "judge failed"}
+        (unscored_dir / "result.json").write_text(
+            json.dumps(unscored), encoding="utf-8"
+        )
+        best, order, levels = report.collect_results(
+            root, catalog, list(catalog.suites.values()), all_suites=True
+        )
+        assert best[result_key][1]["score"] == 1.0
+
+        configured_dir = (
+            root / "later" / "future-task" / "arm__model__20270102T000000Z"
+        )
+        configured_dir.mkdir(parents=True)
+        configured = copy.deepcopy(record)
+        configured["run_config"] = {"temperature": 1, "max_steps": 50}
+        configured_hash = task_router.canonical_sha256(configured["run_config"])
+        configured["run_config_sha256"] = configured_hash
+        configured["judgement"] = {"score": 0.75, "score_communicated": 0.75}
+        (configured_dir / "result.json").write_text(
+            json.dumps(configured), encoding="utf-8"
+        )
+        best, order, levels = report.collect_results(
+            root, catalog, list(catalog.suites.values()), all_suites=True
+        )
+        assert (*task_key, f"none/stub@stub#{configured_hash[:8]}") in best
+        assert result_key in best
+
+        # Task-bound opening/order fields do not fragment one arm across task
+        # rows, but two browser profile identities for the same row are never
+        # silently folded together.
+        comparable_a = copy.deepcopy(configured)
+        comparable_a["run_config"] = {
+            **configured["run_config"],
+            "persona_opening_cache_key": "a" * 64,
+            "pair_order": "positive-negative",
+            "pair_position": 1,
+        }
+        comparable_a["run_config_sha256"] = task_router.canonical_sha256(
+            comparable_a["run_config"]
+        )
+        comparable_a["resume_config"] = {"profile_path_sha256": "1" * 64}
+        comparable_a["resume_config_sha256"] = task_router.canonical_sha256(
+            comparable_a["resume_config"]
+        )
+        profile_a_dir = root / "later" / "future-task" / "profile-a__20300101T000000Z"
+        profile_a_dir.mkdir(parents=True)
+        (profile_a_dir / "result.json").write_text(
+            json.dumps(comparable_a), encoding="utf-8"
+        )
+        comparable_b = copy.deepcopy(comparable_a)
+        comparable_b["resume_config"] = {"profile_path_sha256": "2" * 64}
+        comparable_b["resume_config_sha256"] = task_router.canonical_sha256(
+            comparable_b["resume_config"]
+        )
+        profile_b_dir = root / "later" / "future-task" / "profile-b__20300102T000000Z"
+        profile_b_dir.mkdir(parents=True)
+        (profile_b_dir / "result.json").write_text(
+            json.dumps(comparable_b), encoding="utf-8"
+        )
+        best, _, _ = report.collect_results(
+            root, catalog, list(catalog.suites.values()), all_suites=True
+        )
+        profile_keys = [
+            key for key in best
+            if key[:3] == task_key and "~profile-" in key[3]
+        ]
+        # The earlier fixture has the same comparison config but no recorded
+        # browser resume identity ("legacy"), so all three identities must be
+        # retained instead of selecting whichever result happened to be latest.
+        assert len(profile_keys) == 3
+        assert {
+            key[3].rsplit("~profile-", 1)[-1] for key in profile_keys
+        } == {
+            "legacy",
+            report.resume_config_version(comparable_a)[:8],
+            report.resume_config_version(comparable_b)[:8],
+        }
+
+        # Reusing an ID after changing the task/rubric creates another version
+        # row; it can never silently mix arms with the first version.
+        changed_task = copy.deepcopy(future_task)
+        changed_task["confirmed_task"] += " Changed."
+        changed_digest = task_router.canonical_sha256(changed_task)
+        changed_dir = root / "later" / "future-task" / "arm2__model__20280101T000000Z"
+        changed_dir.mkdir(parents=True)
+        changed = copy.deepcopy(record)
+        changed["task_snapshot"] = changed_task
+        changed["task_sha256"] = changed_digest
+        changed["persona"] = "elderly-novice"
+        changed["judgement"] = {"score": 0.5, "score_communicated": None}
+        (changed_dir / "result.json").write_text(json.dumps(changed), encoding="utf-8")
+        best, order, levels = report.collect_results(
+            root, catalog, list(catalog.suites.values()), all_suites=True
+        )
+        assert ("later", "future-task", digest) in order
+        assert ("later", "future-task", changed_digest) in order
+        assert ("later", "future-task", changed_digest,
+                "elderly-novice/stub@stub#legacy") in best
+        assert report.mixed_revision_groups(best) == [("later", "future-task")]
+
+        # Unknown pre-router records are kept under 'unrouted' for an all-suite
+        # audit, never mislabeled as today's default Shopping suite.
+        unknown_dir = root / "unknown" / "arm__model__20290101T000000Z"
+        unknown_dir.mkdir(parents=True)
+        unknown = copy.deepcopy(record)
+        unknown.pop("suite_id")
+        unknown["task_id"] = "unknown-task"
+        unknown["task_snapshot"]["task_id"] = "unknown-task"
+        unknown["judgement"] = {"score": 0.25, "score_communicated": 0.25}
+        (unknown_dir / "result.json").write_text(json.dumps(unknown), encoding="utf-8")
+        best, _, _ = report.collect_results(
+            root, catalog, list(catalog.suites.values()), all_suites=True
+        )
+        assert any(key[:2] == ("unrouted", "unknown-task") for key in best)
+
+        selected, _, _ = report.collect_results(
+            root, catalog, [catalog.default_suite]
+        )
+        assert not selected
+
+
+def test_grid_shell_contract():
+    script = HERE / "run_grid.sh"
+    syntax = subprocess.run(["/bin/bash", "-n", str(script)], capture_output=True)
+    assert syntax.returncode == 0, syntax.stderr.decode()
+
+    env = {**os.environ, "PYTHON_BIN": "/usr/bin/true",
+           "PERSONAS": "none", "TASKS": "1,2"}
+    default_route = subprocess.run(
+        ["/bin/bash", str(script)],
+        cwd=HERE.parent, env=env, capture_output=True, text=True,
+    )
+    assert default_route.returncode == 0 and "GRID DONE" in default_route.stdout
+    dry = subprocess.run(
+        ["/bin/bash", str(script), "--suite", "health"],
+        cwd=HERE.parent, env=env, capture_output=True, text=True,
+    )
+    assert dry.returncode == 0 and "GRID DONE" in dry.stdout, dry.stderr
+
+    rejected = subprocess.run(
+        ["/bin/bash", str(script), "--task", "1"],
+        cwd=HERE.parent, env=env, capture_output=True, text=True,
+    )
+    assert rejected.returncode == 2
+    assert "use TASKS=" in rejected.stderr
 
 
 def test_personas_differ():  # the profiles the persona LLM is given
@@ -40,6 +428,79 @@ def test_personas_differ():  # the profiles the persona LLM is given
     # The profile carries no task: the need is added separately, per task.
     for p in prompts.values():
         assert "Aurora" not in p
+
+
+def test_matched_persona_experiment():
+    suite = R.TASK_CATALOG.get_suite("health")
+    assert suite.persona_experiment is not None
+    catalog = persona_experiment.dimension_catalog()
+    protocol = persona_experiment.validate_protocol(
+        persona_experiment.load_json(suite.persona_experiment),
+        catalog=catalog,
+        task_ids=[task["task_id"] for task in suite.tasks],
+        expected_suite_id=suite.suite_id,
+    )
+    profiles = persona_experiment.expected_profiles(
+        protocol,
+        catalog=catalog,
+        suite_id=suite.suite_id,
+        protocol_path=suite.persona_experiment,
+    )
+    assert len(protocol["axes"]) == 3
+    assert len(profiles) == 6
+    malformed = copy.deepcopy(protocol)
+    del malformed["design"]["pairing_controls"]
+    try:
+        persona_experiment.validate_protocol(
+            malformed,
+            catalog=catalog,
+            task_ids=[task["task_id"] for task in suite.tasks],
+            expected_suite_id=suite.suite_id,
+        )
+    except persona_experiment.ExperimentDefinitionError as exc:
+        assert "pairing_controls" in str(exc)
+    else:
+        raise AssertionError("protocol without pairing controls was accepted")
+    persona_experiment.materialize_profiles(
+        profiles,
+        output_dir=HERE / "personas" / "health" / "matched_pairs",
+        check=True,
+    )
+
+    cells = persona_experiment.build_cells(protocol, suite.tasks, replicate_id="r1")
+    assert len(cells) == 24
+    assert {cell["task_id"] for cell in cells} == {
+        task["task_id"] for task in suite.tasks
+    }
+    for task in suite.tasks:
+        assert sum(cell["task_id"] == task["task_id"] for cell in cells) == 4
+
+    pilates_id = suite.tasks[0]["task_id"]
+    pilates_cells = persona_experiment.build_cells(
+        protocol, suite.tasks, selected_task_ids={pilates_id}
+    )
+    assert len(pilates_cells) == 4
+    assert {cell["axis_id"] for cell in pilates_cells} == {
+        "detail_depth", "decision_style"
+    }
+    r2_cells = persona_experiment.build_cells(
+        protocol, suite.tasks, replicate_id="r2"
+    )
+    r1_order = {
+        (cell["task_id"], cell["axis_id"]): cell["pair_order"] for cell in cells
+    }
+    r2_order = {
+        (cell["task_id"], cell["axis_id"]): cell["pair_order"] for cell in r2_cells
+    }
+    assert all(
+        r2_order[key] == "-".join(reversed(r1_order[key].split("-")))
+        for key in r1_order
+    )
+    verifying = R.resolve_persona_path(
+        "mp_evidence_verification_positive", suite.suite_id
+    )
+    rendered = R.persona_lib.persona_system_prompt(verifying)
+    assert "Verifying" in rendered and "Trust level" in rendered
 
 
 class _StubBrowser:
@@ -152,8 +613,111 @@ def test_persona_user():
     assert "75-84" in system                      # persona profile
     assert task["confirmed_task"] in system       # hidden need
     assert user.opening == client.reply           # said in its own words
+    snapshot = user.info()["persona_profile"]
+    assert snapshot["persona_id"] == "odyssey-elderly-novice"
+    assert snapshot["evaluation_dimensions"]
+    assert set(snapshot["evaluation_dimensions"]) == set(snapshot["evaluation_values"])
+    assert len(snapshot["profile_sha256"]) == 64
+    assert "75-84" in snapshot["profile_narrative"]
     assert user.reply("Which days?") == client.reply
     assert [t["role"] for t in user.transcript] == ["user", "assistant", "user"]
+
+    cache_r1 = R.persona_opening_cache(
+        task,
+        suite_id="health",
+        persona="elderly-novice",
+        replicate_id="r1",
+        persona_path=HERE / "personas" / "elderly-novice.yaml",
+        model="stub",
+        provider="stub",
+        temperature=0.7,
+    )
+    cache_r2 = R.persona_opening_cache(
+        task,
+        suite_id="health",
+        persona="elderly-novice",
+        replicate_id="r2",
+        persona_path=HERE / "personas" / "elderly-novice.yaml",
+        model="stub",
+        provider="stub",
+        temperature=0.7,
+    )
+    assert cache_r1["cache_key"] != cache_r2["cache_key"]
+
+    with tempfile.TemporaryDirectory() as directory:
+        cache_path = Path(directory) / "opening.json"
+        cache_spec = {
+            "path": cache_path,
+            "cache_key": "c" * 64,
+            "identity": {"replicate_id": "r1", "task_id": task["task_id"]},
+        }
+        cache_client = _TextClient(reply="A frozen opening")
+        R._client = lambda model, provider="": (cache_client, "stub")
+        first = R.PersonaUser(
+            task,
+            HERE / "personas" / "elderly-novice.yaml",
+            "stub",
+            opening_cache=cache_spec,
+        )
+        assert first.opening == "A frozen opening" and cache_path.is_file()
+        assert first.info()["opening_cache"]["cache_hit"] is False
+
+        cache_client_2 = _TextClient(reply="A different sampled opening")
+        R._client = lambda model, provider="": (cache_client_2, "stub")
+        second = R.PersonaUser(
+            task,
+            HERE / "personas" / "elderly-novice.yaml",
+            "stub",
+            opening_cache={
+                "path": cache_path,
+                "cache_key": "c" * 64,
+                "identity": {"replicate_id": "r1", "task_id": task["task_id"]},
+            },
+        )
+        assert second.opening == first.opening
+        assert not cache_client_2.sent
+        assert second.info()["opening_cache"]["cache_hit"] is True
+
+    matched_path = R.resolve_persona_path(
+        "mp_evidence_verification_positive", "health"
+    )
+    matched_client = _TextClient()
+    R._client = lambda model, provider="": (matched_client, "stub")
+    hospital_task = R.TASK_CATALOG.get_suite("health").tasks[3]
+    matched_user = R.PersonaUser(hospital_task, matched_path, "stub")
+    assert matched_user.opening.startswith(hospital_task["confirmed_task"] + "\n\n")
+    assert matched_client.sent == []
+    matched = matched_user.info()["persona_profile"]["matched_pair"]
+    assert matched["axis_id"] == "evidence_verification"
+    assert matched["arm"] == "positive"
+    assert matched["protocol_sha256"]
+    assert matched["adherence_rubric"]["task_observables"]
+    assert matched["adherence_rubric"]["opposite_task_observables"]
+    try:
+        R.PersonaUser(R.TASKS[1], matched_path, "stub")
+    except ValueError as exc:
+        assert "not applicable" in str(exc)
+    else:
+        raise AssertionError("matched persona ran on an undeclared task")
+
+    # The opt-in Health prompt reveals only the assigned preference to the
+    # simulated user, never the opposite pole or the evaluation rubric.
+    health_task = R.TASK_CATALOG.get_suite("health").tasks[0]
+    health_path = R.resolve_persona_path("mp_detail_depth_positive", "health")
+    health_client = _TextClient()
+    R._client = lambda model, provider="": (health_client, "stub")
+    health_user = R.PersonaUser(health_task, health_path, "stub")
+    health_system = health_user.messages[0]["content"]
+    criteria = health_user.profile_snapshot["matched_pair"]["adherence_rubric"]
+    assert health_task["confirmed_task"] in health_system
+    for item in criteria["task_observables"]:
+        assert item in health_system
+    for item in criteria["opposite_task_observables"]:
+        assert item not in health_system
+    assert "per_arm_scale" not in health_system
+    assert health_user.opening.startswith(health_task["confirmed_task"] + "\n\n")
+    assert health_client.sent == []  # initial opening is authored, not sampled
+    assert "class-format or equipment note" in health_user.opening
 
     # Control arm: no profile, and the opening is the Odysseys text verbatim
     # without an LLM call.
@@ -189,6 +753,26 @@ def test_budget_exhausted_still_answers():
     assert run["stop_reason"] == "max_steps_summarised", run["stop_reason"]
     assert run["answer"] == "Partial: I found the BNSF line."
     assert run["steps"] == 3
+
+
+def test_empty_budget_summary_is_unscored():
+    class EmptySummaryClient(_NeverFinishesClient):
+        def _create(self, *, tools=None, **kwargs):
+            response = super()._create(tools=tools, **kwargs)
+            if tools is None:
+                response.choices[0].message.content = ""
+            return response
+
+    from unittest.mock import patch
+    with patch.object(R, "_client", lambda *args, **kwargs: (EmptySummaryClient(), "stub")), \
+         patch.object(R, "Browser", _StubBrowser):
+        result = R.run_agent(
+            R.TASKS[0], _StubUser(), "stub", max_steps=1,
+            headless=True, temperature=0,
+        )
+    assert result["stop_reason"] == "no_model_output"
+    assert result["answer"] == ""
+    assert len(result["trajectory"]) == 1
 
 
 class _MuteClient(_StubClient):
@@ -244,8 +828,345 @@ def test_extract_json():
     assert R.extract_json("[1, 2]") is None
 
 
-def test_skip_existing_ignores_unscored(tmp: Path = Path("/tmp")):
+def test_azure_key_file_config():
+    """Azure aliases may point at a file, so the key stays out of .env."""
+    import os
     import tempfile
+
+    names = (
+        "OPENAI_API_KEY", "OPENAI_API_KEY_FILE", "OPENAI_BASE_URL",
+        "AZURE_OPENAI_API_KEY", "AZURE_OPENAI_API_KEY_FILE",
+        "AZURE_OPENAI_BASE_URL",
+    )
+    before = {name: os.environ.get(name) for name in names}
+    try:
+        for name in names:
+            os.environ.pop(name, None)
+        with tempfile.TemporaryDirectory() as d:
+            key_file = Path(d) / "azure.key"
+            key_file.write_text("test-secret\n", encoding="utf-8")
+            # Stale direct OpenAI settings must not be mixed with Azure.
+            os.environ["OPENAI_API_KEY"] = "wrong-secret"
+            os.environ["OPENAI_BASE_URL"] = "https://wrong.example/v1"
+            os.environ["AZURE_OPENAI_API_KEY_FILE"] = str(key_file)
+            os.environ["AZURE_OPENAI_BASE_URL"] = "https://example.test/openai/v1"
+            key, base_url = R._provider_config("openai")
+            assert key == "test-secret"
+            assert base_url == "https://example.test/openai/v1"
+    finally:
+        for name, value in before.items():
+            if value is None:
+                os.environ.pop(name, None)
+            else:
+                os.environ[name] = value
+
+
+def test_bedrock_credentials_stay_with_aws():
+    """Explicit Bedrock must not reuse unrelated OpenAI/Azure credentials."""
+    from unittest.mock import patch
+
+    with tempfile.TemporaryDirectory() as d:
+        key_file = Path(d) / "bedrock.key"
+        key_file.write_text("test-aws-secret\n")
+        with patch.dict(os.environ, {
+            "AWS_REGION": "us-west-2",
+            "AWS_BEARER_TOKEN_BEDROCK_FILE": str(key_file),
+            "OPENAI_API_KEY": "wrong-openai-secret",
+            "OPENAI_BASE_URL": "https://wrong.example/v1",
+            "AZURE_OPENAI_API_KEY": "wrong-azure-secret",
+            "AZURE_OPENAI_BASE_URL": "https://wrong-azure.example/v1",
+        }, clear=True):
+            key, url = R._provider_config("bedrock")
+            assert key == "test-aws-secret"
+            assert url == "https://bedrock-mantle.us-west-2.api.aws/v1"
+            assert R._provider_backend("bedrock") == "aws-bedrock-openai-compatible"
+            old_hash = R._endpoint_sha256("bedrock")
+            os.environ["AWS_REGION"] = "us-east-1"
+            assert R._endpoint_sha256("bedrock") != old_hash
+            os.environ["AWS_BEARER_TOKEN_BEDROCK"] = "exported-aws-secret"
+            assert R._provider_config("bedrock")[0] == "exported-aws-secret"
+            os.environ["AWS_REGION"] = "us-west-2.example.com/"
+            try:
+                R._provider_config("bedrock")
+            except SystemExit as exc:
+                assert "valid AWS_REGION" in str(exc)
+            else:
+                raise AssertionError("invalid region was accepted")
+
+
+def test_main_azure_provider_compatibility():
+    """Main's explicit Azure provider and legacy key name remain usable."""
+    from unittest.mock import patch
+
+    with patch.dict(os.environ, {
+        "AZURA_API_KEY": "legacy-azure-test-secret",
+        "OPENAI_API_KEY": "unrelated-openai-test-secret",
+        "AWS_BEARER_TOKEN_BEDROCK": "unrelated-aws-test-secret",
+    }, clear=True):
+        key, url = R._provider_config("azure")
+        assert key == "legacy-azure-test-secret"
+        assert url == "https://MatrAIxWild.services.ai.azure.com/openai/v1"
+        before = R._endpoint_sha256("azure")
+        os.environ["AZURE_OPENAI_BASE_URL"] = "https://example.test/openai/v1"
+        assert R._provider_config("azure") == (
+            "legacy-azure-test-secret", "https://example.test/openai/v1"
+        )
+        assert R._endpoint_sha256("azure") != before
+        os.environ["AZURE_OPENAI_API_KEY"] = "configured-azure-test-secret"
+        assert R._provider_config("azure")[0] == "configured-azure-test-secret"
+        assert R._provider_backend("azure") == "azure-openai-compatible"
+
+
+def test_matched_pair_launcher_keeps_virtualenv_python():
+    """A symlinked Python must retain its virtualenv path in child commands."""
+    import shlex
+    import run_matched_pairs
+
+    with tempfile.TemporaryDirectory() as d:
+        interpreter = Path(d) / "venv/bin/python"
+        interpreter.parent.mkdir(parents=True)
+        interpreter.symlink_to(sys.executable)
+        output = io.StringIO()
+        with redirect_stdout(output):
+            assert run_matched_pairs.main([
+                "--suite", "health", "--replicate-id", "test-interpreter",
+                "--task", "1", "--axis", "detail_depth",
+                "--python", str(interpreter),
+            ]) == 0
+        commands = [line.strip() for line in output.getvalue().splitlines()
+                    if line.startswith("  ")]
+        assert len(commands) == 2
+        assert all(shlex.split(line)[0] == str(interpreter) for line in commands)
+
+
+def test_agent_timeout_retains_partial_evidence():
+    """A request deadline must not discard completed tools or retry indefinitely."""
+    import openai
+    from unittest.mock import patch
+
+    class TimeoutClient(_StubClient):
+        def __init__(self):
+            super().__init__()
+            self.calls = 0
+            self.limits = []
+
+        def _create(self, *, max_completion_tokens=None, **kwargs):
+            self.calls += 1
+            self.limits.append(max_completion_tokens)
+            if self.calls == 2:
+                raise openai.APITimeoutError(request=types.SimpleNamespace())
+            return super()._create(**kwargs)
+
+    client = TimeoutClient()
+    with tempfile.TemporaryDirectory() as directory, \
+         patch.dict(os.environ, {"ODYSSEY_REQUEST_TIMEOUT": "0.1"}), \
+         patch.object(R, "_client", lambda *args, **kwargs: (client, "stub")), \
+         patch.object(R, "Browser", _StubBrowser):
+        result = R.run_agent(
+            R.TASKS[0], _StubUser(), "stub", max_steps=5,
+            headless=True, temperature=0, max_completion_tokens=2000,
+            checkpoint_path=Path(directory) / "checkpoint.json",
+        )
+        partial = json.loads((Path(directory) / "checkpoint.json").read_text())
+        assert partial["status"] == "partial_trace_checkpoint"
+        assert partial["trajectory"] == result["trajectory"]
+        assert partial["last_completed_model_step"] == 1
+    assert client.calls == 2, "an explicit timeout was retried"
+    assert client.limits == [2000, 2000]
+    assert result["stop_reason"] == "model_api_error"
+    assert "APITimeoutError" in result["error"]
+    assert len(result["trajectory"]) == 1
+    assert result["trajectory"][0]["tool"] == "open_tab"
+    assert result["open_tabs"][0]["url"] == "https://example.com"
+
+
+def test_persona_fidelity_contract():
+    import copy
+    import persona_fidelity_judge as fidelity
+
+    snapshot = {
+        "persona_id": "odyssey-budget-student",
+        "version": "2.0",
+        "profile_sha256": "a" * 64,
+        "evaluation_dimensions": ["tech_savviness", "economic_motivation"],
+        "evaluation_values": {
+            "tech_savviness": "Digital native",
+            "economic_motivation": "Cost-sensitive",
+        },
+    }
+    record = {
+        "task_id": R.TASKS[0]["task_id"],
+        "task_snapshot": {
+            **R.TASKS[0],
+            "confirmed_task": "FROZEN KOBE TASK",
+        },
+        "persona": "budget-student",
+        "run": {
+            "answer": "stub",
+            "user": {"model": "stub", "provider": "stub", "persona_profile": snapshot},
+            "conversation": [
+                {"role": "user", "text": "Please keep it quick and show me cheaper Kobe shoes."},
+                {"role": "assistant", "text": "Do you care about size?"},
+                {"role": "user", "text": "Men's 10, and I want a page I can check myself."},
+            ],
+        },
+    }
+    rendered = fidelity.build_prompt(record)
+    assert '"expected_value": "Cost-sensitive"' in rendered
+    assert "PERSON TURN 1: Please keep it quick" in rendered
+    assert "Do you care about size?" not in rendered
+    assert "FROZEN KOBE TASK" in rendered
+    task, integrity = R.task_for_record(record)
+    assert task["confirmed_task"] == "FROZEN KOBE TASK"
+    assert integrity == "frozen_snapshot"
+
+    matched_snapshot = copy.deepcopy(snapshot)
+    matched_snapshot["evaluation_dimensions"] = ["economic_motivation"]
+    matched_snapshot["evaluation_values"] = {
+        "economic_motivation": "Cost-sensitive"
+    }
+    matched_snapshot["matched_pair"] = {
+        "axis_id": "price_orientation",
+        "axis_label": "Price orientation",
+        "arm": "positive",
+        "opposite_value": "Premium-seeking",
+        "adherence_rubric": {
+            "behavioral_definition": "Prioritizes total cost.",
+            "generic_observables": ["Asks to avoid a premium."],
+            "task_observables": ["Asks for the cheapest qualifying option."],
+            "inherited_task_signals": ["Reports a visible price."],
+            "contradictions": ["Explicitly prefers a premium option."],
+            "opposite_behavioral_definition": "Pays more for quality.",
+            "opposite_generic_observables": ["Accepts a premium."],
+            "opposite_task_observables": ["Chooses a higher-priced option for fit."],
+        },
+    }
+    target = fidelity.requested_targets(matched_snapshot)[0]
+    assert target["task_observables"] == [
+        "Asks for the cheapest qualifying option."
+    ]
+    assert target["opposite_task_observables"] == [
+        "Chooses a higher-priced option for fit."
+    ]
+    matched_record = copy.deepcopy(record)
+    matched_record["run"]["user"]["persona_profile"] = matched_snapshot
+    matched_record["judgement"] = {
+        "communicated": len(R.TASKS[0]["rubrics"]) - 1,
+        "total": len(R.TASKS[0]["rubrics"]),
+        "verdicts": {
+            rubric_id: {"communicated": index > 0}
+            for index, rubric_id in enumerate(R.TASKS[0]["rubrics"])
+        },
+    }
+    coverage = fidelity.communication_guardrail(matched_record)
+    assert coverage["applicable"] and coverage["passed"] is False
+    matched_prompt = fidelity.build_prompt(matched_record)
+    assert "must receive score 0" in matched_prompt
+    assert "cannot count as persona expression" in matched_prompt
+    guarded = fidelity.apply_communication_guardrail(
+        {
+            "targets": [{"score": 2, "expressed": True, "note": "clear"}],
+            "expressed_target_count": 1,
+            "fidelity_issues": [],
+        },
+        coverage,
+    )
+    assert guarded["targets"][0]["score"] == 0
+    assert guarded["targets"][0]["score_before_coverage_guardrail"] == 2
+    assert guarded["expressed_target_count"] == 0
+
+    parsed = {
+        "targets": [
+            {"attribute": "tech_savviness", "score": 1, "expressed": False,
+             "contradicted": False, "confidence": 0.7,
+             "evidence": "quick", "note": "weak"},
+            {"attribute": "economic_motivation", "score": 2, "expressed": True,
+             "contradicted": False, "confidence": 0.9,
+             "evidence": "cheaper", "note": "clear"},
+        ],
+        "fidelity_issues": [],
+        "judge_confidence": 0.8,
+    }
+    normalized = fidelity.normalize_verdict(
+        parsed, model="stub-judge", provider="stub", snapshot=snapshot
+    )
+    assert normalized["expressed_target_count"] == 1
+    assert normalized["total_target_count"] == 2
+    assert normalized["contradicted_target_count"] == 0
+    assert normalized["judge"] == {
+        "model": "stub-judge", "provider": "stub", "backend": "stub"
+    }
+    assert normalized["profile_integrity"] == "frozen_snapshot"
+    assert all(item["criterion_source"] == "declared_profile_dimension"
+               for item in normalized["targets"])
+
+    invalid_cases = []
+    boolean_score = copy.deepcopy(parsed)
+    boolean_score["targets"][0]["score"] = True
+    invalid_cases.append(boolean_score)
+    mismatch = copy.deepcopy(parsed)
+    mismatch["targets"][0]["expressed"] = True
+    invalid_cases.append(mismatch)
+    bad_confidence = copy.deepcopy(parsed)
+    bad_confidence["targets"][0]["confidence"] = 1.1
+    invalid_cases.append(bad_confidence)
+    boolean_confidence = copy.deepcopy(parsed)
+    boolean_confidence["targets"][0]["confidence"] = True
+    invalid_cases.append(boolean_confidence)
+    no_evidence = copy.deepcopy(parsed)
+    no_evidence["targets"][1]["evidence"] = ""
+    invalid_cases.append(no_evidence)
+    bad_issue = copy.deepcopy(parsed)
+    bad_issue["fidelity_issues"] = [123]
+    invalid_cases.append(bad_issue)
+    duplicate = copy.deepcopy(parsed)
+    duplicate["targets"].append(copy.deepcopy(duplicate["targets"][0]))
+    invalid_cases.append(duplicate)
+    missing = copy.deepcopy(parsed)
+    missing["targets"].pop()
+    invalid_cases.append(missing)
+    for invalid in invalid_cases:
+        try:
+            fidelity.normalize_verdict(
+                invalid, model="stub-judge", provider="stub", snapshot=snapshot
+            )
+        except ValueError:
+            pass
+        else:
+            raise AssertionError("invalid fidelity verdict must be rejected")
+
+
+def test_experience_uses_frozen_profile():
+    import experience_judge
+
+    record = {
+        "task_id": R.TASKS[0]["task_id"],
+        "task_snapshot": {
+            **R.TASKS[0],
+            "confirmed_task": "FROZEN EXPERIENCE TASK",
+        },
+        "persona": "budget-student",
+        "run": {
+            "answer": "stub",
+            "trajectory": [],
+            "open_tabs": [],
+            "conversation": [{"role": "user", "text": "A short request."}],
+            "user": {"persona_profile": {"profile_narrative": "FROZEN PROFILE"}},
+        },
+    }
+    rendered = experience_judge.build_prompt(record)
+    assert "FROZEN PROFILE" in rendered
+    assert "FROZEN EXPERIENCE TASK" in rendered
+    complete = {
+        "a": {dimension: {"score": 4} for dimension in experience_judge.DIMENSIONS},
+        "b": {dimension: {"score": 4} for dimension in experience_judge.DIMENSIONS},
+    }
+    assert experience_judge.experience_complete(complete)
+    complete["a"]["error"] = "transient"
+    assert not experience_judge.experience_complete(complete)
+
+
+def test_skip_existing_ignores_unscored(tmp: Path = Path("/tmp")):
     with tempfile.TemporaryDirectory() as d:
         scored, unscored = Path(d) / "a.json", Path(d) / "b.json"
         scored.write_text(json.dumps({"judgement": {"score": 0.5}}))
@@ -253,6 +1174,59 @@ def test_skip_existing_ignores_unscored(tmp: Path = Path("/tmp")):
         assert R._is_scored(scored)
         assert not R._is_scored(unscored)
         assert not R._is_scored(Path(d) / "missing.json")
+
+        snapshot = copy.deepcopy(R.TASKS[0])
+        digest = task_router.canonical_sha256(snapshot)
+        run_config = {"temperature": 1, "max_steps": 50}
+        run_config_digest = task_router.canonical_sha256(run_config)
+        resume_config = {"run_config_sha256": run_config_digest,
+                         "profile_path_sha256": "p" * 64}
+        resume_config_digest = task_router.canonical_sha256(resume_config)
+        routed = Path(d) / "routed.json"
+        routed.write_text(json.dumps({
+            "suite_id": "health",
+            "task_sha256": digest,
+            "task_snapshot": snapshot,
+            "run_config": run_config,
+            "run_config_sha256": run_config_digest,
+            "resume_config": resume_config,
+            "resume_config_sha256": resume_config_digest,
+            "judgement": {"score": 0.5},
+        }), encoding="utf-8")
+        assert R._is_scored(
+            routed, suite_id="health", task_sha256=digest,
+            run_config_sha256=run_config_digest,
+            resume_config_sha256=resume_config_digest,
+        )
+        assert not R._is_scored(routed, suite_id="main-original", task_sha256=digest)
+        assert not R._is_scored(routed, suite_id="health", task_sha256="0" * 64)
+        assert not R._is_scored(
+            routed, suite_id="health", task_sha256=digest,
+            run_config_sha256="b" * 64,
+        )
+        assert not R._is_scored(
+            routed, suite_id="health", task_sha256=digest,
+            run_config_sha256=run_config_digest, resume_config_sha256="d" * 64,
+        )
+
+        tampered = json.loads(routed.read_text(encoding="utf-8"))
+        tampered["run_config"]["temperature"] = 0
+        routed.write_text(json.dumps(tampered), encoding="utf-8")
+        assert not R._is_scored(
+            routed, suite_id="health", task_sha256=digest,
+            run_config_sha256=run_config_digest,
+            resume_config_sha256=resume_config_digest,
+        )
+
+        tampered = json.loads(routed.read_text(encoding="utf-8"))
+        tampered["run_config"] = run_config
+        tampered["task_snapshot"]["confirmed_task"] += " tampered"
+        routed.write_text(json.dumps(tampered), encoding="utf-8")
+        assert not R._is_scored(
+            routed, suite_id="health", task_sha256=digest,
+            run_config_sha256=run_config_digest,
+            resume_config_sha256=resume_config_digest,
+        )
 
 
 def test_judge(run):
@@ -277,13 +1251,25 @@ def test_judge(run):
 
 if __name__ == "__main__":
     test_tasks()
+    test_task_router()
+    test_report_task_routing()
+    test_grid_shell_contract()
     test_personas_differ()
+    test_matched_persona_experiment()
     run = test_agent_loop(None)
     test_persona_user()
     test_budget_exhausted_still_answers()
+    test_empty_budget_summary_is_unscored()
     test_mute_model_is_not_scored_as_zero()
     test_judge_failure_keeps_the_run(run)
     test_extract_json()
+    test_azure_key_file_config()
+    test_bedrock_credentials_stay_with_aws()
+    test_main_azure_provider_compatibility()
+    test_matched_pair_launcher_keeps_virtualenv_python()
+    test_agent_timeout_retains_partial_evidence()
+    test_persona_fidelity_contract()
+    test_experience_uses_frozen_profile()
     test_skip_existing_ignores_unscored()
     test_judge(run)
     print("odyssey pipeline self-check OK")

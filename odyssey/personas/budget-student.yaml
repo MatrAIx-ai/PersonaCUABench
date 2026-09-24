@@ -3,6 +3,18 @@ version: '2.0'
 source: hand-specified from dimensions.json (MatrAIx 1290-dim schema)
 note: 'College student on a tight budget: phone-first, fluent with apps but no travel
   expertise, spontaneous, wants it quick and cheap.'
+evaluation_dimensions:
+- tech_savviness
+- risk_tolerance
+- cog_detail_orientation
+- cog_patience
+- cog_attention_span
+- pref_plan_vs_spontaneous
+- pref_save_vs_spend
+- pref_detail_brief_vs_full
+- accessibility_needs
+- device_context
+- economic_motivation
 attributes:
   age_bracket:
     value: 18-24

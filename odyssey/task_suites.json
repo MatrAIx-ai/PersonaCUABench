@@ -1,0 +1,29 @@
+{
+  "schema_version": "personacuabench.task-suites.v1",
+  "default_suite": "main-original",
+  "suites": {
+    "main-original": {
+      "title": "Original main-branch assignments",
+      "version": "1",
+      "task_files": [
+        "tasks.json"
+      ],
+      "default_personas": [
+        "none",
+        "travel-expert",
+        "elderly-novice"
+      ]
+    },
+    "health": {
+      "title": "Health — Yiyang Wang",
+      "version": "1",
+      "task_files": [
+        "task_suites/health/*.json"
+      ],
+      "persona_experiment": "task_suites/health/personas/persona_experiment.json",
+      "default_personas": [
+        "none"
+      ]
+    }
+  }
+}

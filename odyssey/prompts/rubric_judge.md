@@ -17,6 +17,12 @@ said explicitly, or implied clearly enough that a reasonable assistant would act
 on it? A specific site or detail the user never mentioned and the agent never \
 asked about is NOT communicated.
 
+An attempted navigation, a blocked/404 page, or the agent's unsupported claim
+does not establish verification. A document or spreadsheet must actually have
+been created and populated through a tool; a proposed table in the final answer
+is not that artifact. If the required evidence is unavailable, mark met=false
+and state the evidence gap or site failure explicitly.
+
 Do not reward or penalise tone, personality, verbosity or writing style.
 
 ## What the user actually needed (hidden from the agent)

@@ -1,0 +1,30 @@
+{
+  "schema_version": "health-pilot.review-copy.v1",
+  "files": {
+    "health-pilot-results.json": {
+      "local_original_sha256": "1a5f4b1c338a22860c76c1445ef1962f70cc668d2ba1f058bce64aa9ff7f1aeb",
+      "review_copy_sha256": "b6fc89f78ba7b5e8e2b7ddafb6f550838f00f17042ba77c07697a1e8d49d7308"
+    },
+    "health-experience-scores.json": {
+      "local_original_sha256": "255cbb264f9d1c466f8e8e6fae7b1b377f121b1fd8835adbf3ae9146a7eccddc",
+      "review_copy_sha256": "53158cdeae7ae20ff35d9fc8d8b8abfafd0bd31e4e80c29eb907c13055ab63c1"
+    },
+    "health-persona-expression.json": {
+      "local_original_sha256": "ac68967e842292fc6ad4958a69d2cefa946d182dae9384a5468393e59d992469",
+      "review_copy_sha256": "790fb27b6fe5f709788c532a635240f8351123deb252fb4b03ab748bd6c12e1a"
+    }
+  },
+  "redactions": [
+    "Local workspace and user directory names replaced with placeholders.",
+    "IP addresses replaced with [IP-REDACTED].",
+    "Google /sorry/ challenge query strings removed.",
+    "Local file links rewritten for this repository copy; excerpt offsets and hashes recalculated.",
+    "Trailing whitespace normalized in Markdown display only; exact excerpt strings remain in JSON."
+  ],
+  "preserved": [
+    "All 17 attempts, all 12 final answers and all original automatic score values.",
+    "All 66 assistant audit decisions, their reasons and original task rubrics.",
+    "All saved trajectory events, final tab counts and explicit source JSON pointers."
+  ],
+  "local_original_audit_sha256": "9484915114c66ec395aea0954f9cc9bea2d7025fef999b4071536ba7b6ccc5e6"
+}

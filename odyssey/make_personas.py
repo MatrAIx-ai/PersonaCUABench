@@ -40,6 +40,23 @@ DIMENSIONS = (
     "habit_budget_tracking",
 )
 
+# Only behaviorally observable dimensions belong in the fidelity judge.  The
+# judge must not infer age, region or other demographic facts from one request.
+# Keeping the same targets for every profile also makes arms comparable.
+EVALUATION_DIMENSIONS = (
+    "tech_savviness",
+    "risk_tolerance",
+    "cog_detail_orientation",
+    "cog_patience",
+    "cog_attention_span",
+    "pref_plan_vs_spontaneous",
+    "pref_save_vs_spend",
+    "pref_detail_brief_vs_full",
+    "accessibility_needs",
+    "device_context",
+    "economic_motivation",
+)
+
 PROFILES: dict[str, dict] = {
     "travel-expert": {
         "note": "Career travel/transit professional: deep domain expertise, high "
@@ -224,6 +241,13 @@ def main() -> None:
     schema = {d["id"]: d for d in json.loads(SCHEMA.read_text(encoding="utf-8"))["dimensions"]}
     missing = [d for d in DIMENSIONS if d not in schema]
     assert not missing, f"not in dimensions.json: {missing}"
+    evaluation_unknown = [d for d in EVALUATION_DIMENSIONS if d not in DIMENSIONS]
+    assert not evaluation_unknown, (
+        f"evaluation dimensions absent from DIMENSIONS: {evaluation_unknown}"
+    )
+    assert len(set(EVALUATION_DIMENSIONS)) == len(EVALUATION_DIMENSIONS), (
+        "duplicate EVALUATION_DIMENSIONS"
+    )
 
     OUT.mkdir(parents=True, exist_ok=True)
     for name, profile in PROFILES.items():
@@ -248,6 +272,7 @@ def main() -> None:
             "version": "2.0",
             "source": "hand-specified from dimensions.json (MatrAIx 1290-dim schema)",
             "note": profile["note"],
+            "evaluation_dimensions": list(EVALUATION_DIMENSIONS),
             "attributes": attributes,
         }
         path = OUT / f"{name}.yaml"
