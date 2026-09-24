@@ -4,6 +4,13 @@ A MatrAIx persona holds an [Odysseys](https://odysseysbench.com/) task as its ow
 and asks a computer-use agent (CUA) for help in its own words. The CUA does the task
 in a real Chrome on the live web, and a judge grades the result against the task's rubric.
 
+For Yingtao Luo's Lifestyle contribution, use the
+[Lifestyle runbook](task_suites/lifestyle/README.md) and
+[first-round results](../docs/reports/lifestyle-r1-2026-09-24/README.md).
+The original tasks and model defaults below are preserved. Lifestyle is an
+additional suite selected with `--suite lifestyle`; its matched-pair workflow
+uses `run_matched_pairs.py` instead of the legacy Cartesian grid below.
+
 ## Pipeline
 
 | Role | Model | Input | Output |

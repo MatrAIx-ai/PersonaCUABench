@@ -1,0 +1,1315 @@
+{
+  "schema_version": "lifestyle.evidence_pair_review.v1",
+  "review_method": "Offline evidence review; not independent model judging",
+  "replicate_id": "r1",
+  "methodology": "Read-only, post-hoc comparison of the saved r1 positive and negative arms against Lifestyle matched-pair observables and task rubrics. Exact excerpts are copied from saved user openings and final answers. Rubric categories assess evidentiary support for the full requirement; original verdict objects are retained unchanged. This offline review is not an independent experimental judge, a replacement numerical task score, or an official Odysseys evaluation.",
+  "limitations": [
+    "One replicate and no no-persona control: directional differences are descriptive, not causal effects.",
+    "Tool observations retain at most 400 characters per action. Missing text in a preview is not evidence that the full page lacked it.",
+    "Action arguments and final tab inventory help assess navigation, but saved answer claims alone do not validate product prices, privacy policies or source fidelity.",
+    "Environment preflight is separate from agent behavior. Its Norton check does not prove the agent visited Norton.",
+    "Empty final answers remain empty; blocked cells have null opening/answer excerpts and no invented persona utterances.",
+    "No live websites or paid model APIs were accessed during this review."
+  ],
+  "pairs": {
+    "d8fe04d1/decision_style": {
+      "task_id": "d8fe04d1cf29251d68382cde58f4424e80bad07c",
+      "axis_id": "decision_style",
+      "status": "evidence_of_adaptation",
+      "opening_separation": "Both saved openings explicitly request the target and opposite decision/selection behavior beyond the inherited task requirements.",
+      "adaptation_finding": "The analytical answer includes a four-criterion tradeoff table; the intuitive answer gives a decisive YES without a weighted table. Both retain lengthy background sections, and neither resolves all task requirements.",
+      "arms": {
+        "positive": {
+          "source_file": "evidence/d8fe04d1--mp_decision_style_positive.json",
+          "source_sha256": "606744131c463bdad0e9b5630e24855fb49e6ba41785351e7086cdcb0ef9fb09",
+          "record_status": "answer_present",
+          "opening_quote": "Before delivering your final verdict, please evaluate the tradeoffs across explicit criteria—specifically access control, the sharing model, pricing value, and setup burden—rather than jumping straight to a conclusion. In the end, give me a concise recommendation on whether Journey Cloud meets the privacy expectations set by the Oura guidance, incorporating Huan Dao as the wellness example and Norton Secure VPN as our privacy reference point.",
+          "opening_evidence_ref": "/run/conversation/0/text",
+          "answer_quote": "### 5. Tradeoff Evaluation Across Criteria",
+          "answer_evidence_ref": "/run/answer",
+          "rubric_reviews": [
+            {
+              "rubric_id": "R1",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent kept the relevant Oura Member Care support article open in Tab 1 and detailed the Oura Advisor / AI access controls and privacy policies in the final response."
+              },
+              "category": "insufficient_evidence",
+              "reason": "Relevant Oura pages and an Advisor reset explanation are present. Saved previews do not establish that resetting Advisor prevents an outside AI agent from accessing membership information; these scopes must not be equated. Full membership-specific guidance cannot be independently verified.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/trajectory",
+                "/run/open_tabs"
+              ]
+            },
+            {
+              "rubric_id": "R2",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent kept Journey Cloud pages open in Tabs 2, 3, and 4, and thoroughly summarized the sharing model (tokens, E2EE passphrases) along with plan pricing tiers."
+              },
+              "category": "insufficient_evidence",
+              "reason": "Answer states sharing capabilities and prices and navigation records Journey pages. Truncated observations do not independently substantiate the complete pricing and shared-permission claims; do not infer absence on the full pages.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/trajectory",
+                "/run/open_tabs"
+              ]
+            },
+            {
+              "rubric_id": "R3",
+              "original_raw_verdict": {
+                "met": false,
+                "communicated": true,
+                "reason": "The agent never visited the requested formfacade.com page, instead visiting an Apple App Store listing."
+              },
+              "category": "not_met",
+              "reason": "The saved navigation trajectory never reaches the required Formfacade page; answer content based on other or unspecified sources does not meet the source-specific requirement.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/trajectory",
+                "/run/open_tabs"
+              ]
+            },
+            {
+              "rubric_id": "R4",
+              "original_raw_verdict": {
+                "met": false,
+                "communicated": true,
+                "reason": "The agent never searched for or navigated to Norton Secure VPN's official product page, nor is it left open in the tabs."
+              },
+              "category": "not_met",
+              "reason": "No official Norton product page is among the agent's final tabs and the saved action sequence does not record the required Google-to-Norton workflow. The separate preflight Norton check does not satisfy agent execution.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/trajectory",
+                "/run/open_tabs"
+              ]
+            },
+            {
+              "rubric_id": "R5",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The final section provides an integrated recommendation evaluating Journey Cloud against Oura's privacy baseline while explicitly incorporating Huan Dao and Norton Secure VPN as benchmarks."
+              },
+              "category": "supported",
+              "reason": "The final answer explicitly synthesizes Journey/Oura with Huan Dao and Norton. This supports the synthesis/presentation requirement only; the factual soundness of its privacy and wellness claims remains unverified.",
+              "evidence_refs": [
+                "/run/answer"
+              ]
+            }
+          ]
+        },
+        "negative": {
+          "source_file": "evidence/d8fe04d1--mp_decision_style_negative.json",
+          "source_sha256": "25a921086394f97f61602fbe8510fb5f18d6f6d4a0f10675bdd356d2e79569c2",
+          "record_status": "answer_present",
+          "opening_quote": "Once you've verified all the details, I’d prefer a decisive yes-or-no call on whether it feels right overall rather than a dense, weighted comparison table.",
+          "opening_evidence_ref": "/run/conversation/0/text",
+          "answer_quote": "**Verdict: YES**",
+          "answer_evidence_ref": "/run/answer",
+          "rubric_reviews": [
+            {
+              "rubric_id": "R1",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent visited and kept open support.ouraring.com articles (Oura Advisor and How Oura Protects Your Data) and summarized the guidance on AI access controls and separating membership data."
+              },
+              "category": "insufficient_evidence",
+              "reason": "Relevant Oura pages and an Advisor reset explanation are present. Saved previews do not establish that resetting Advisor prevents an outside AI agent from accessing membership information; these scopes must not be equated. Full membership-specific guidance cannot be independently verified.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/trajectory",
+                "/run/open_tabs"
+              ]
+            },
+            {
+              "rubric_id": "R2",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent visited and left open multiple journey.cloud pricing and shared journal pages, summarizing shared journaling options and specific plan pricing."
+              },
+              "category": "insufficient_evidence",
+              "reason": "Answer states sharing capabilities and prices and navigation records Journey pages. Truncated observations do not independently substantiate the complete pricing and shared-permission claims; do not infer absence on the full pages.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/trajectory",
+                "/run/open_tabs"
+              ]
+            },
+            {
+              "rubric_id": "R3",
+              "original_raw_verdict": {
+                "met": false,
+                "communicated": true,
+                "reason": "The agent never visited the formfacade.com page for Huan Dao Meditation (duckduckgo/bing searches failed to locate or navigate to it)."
+              },
+              "category": "not_met",
+              "reason": "The saved navigation trajectory never reaches the required Formfacade page; answer content based on other or unspecified sources does not meet the source-specific requirement.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/trajectory",
+                "/run/open_tabs"
+              ]
+            },
+            {
+              "rubric_id": "R4",
+              "original_raw_verdict": {
+                "met": false,
+                "communicated": true,
+                "reason": "The agent did not use Google to find Norton Secure VPN, never visited Norton's official product page, and did not leave Norton's page open."
+              },
+              "category": "not_met",
+              "reason": "No official Norton product page is among the agent's final tabs and the saved action sequence does not record the required Google-to-Norton workflow. The separate preflight Norton check does not satisfy agent execution.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/trajectory",
+                "/run/open_tabs"
+              ]
+            },
+            {
+              "rubric_id": "R5",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent provided a final recommendation evaluating Journey Cloud against Oura's privacy baseline while incorporating Huan Dao and Norton Secure VPN as instructed."
+              },
+              "category": "supported",
+              "reason": "The final answer explicitly synthesizes Journey/Oura with Huan Dao and Norton. This supports the synthesis/presentation requirement only; the factual soundness of its privacy and wellness claims remains unverified.",
+              "evidence_refs": [
+                "/run/answer"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "d8fe04d1/tech_confidence": {
+      "task_id": "d8fe04d1cf29251d68382cde58f4424e80bad07c",
+      "axis_id": "tech_confidence",
+      "status": "evidence_of_adaptation",
+      "opening_separation": "Both saved openings explicitly request the target and opposite decision/selection behavior beyond the inherited task requirements.",
+      "adaptation_finding": "The digital-native answer adds exact shared-journal settings and a claimed E2EE/AI mechanism; the cautious-adopter answer foregrounds low-maintenance shared access. Both remain technically detailed. This is response-framing evidence, not verification that the privacy claims are correct.",
+      "arms": {
+        "positive": {
+          "source_file": "evidence/d8fe04d1--mp_tech_confidence_positive.json",
+          "source_sha256": "e9883f92dc39a1ef9f5404ba9a9ec966e06a2958308d231692b2e9075f473959",
+          "record_status": "answer_present",
+          "opening_quote": "I prefer digging into the weeds on the actual account settings, so please highlight the exact permissions, toggles, or integration controls that govern partner access and AI features.",
+          "opening_evidence_ref": "/run/conversation/0/text",
+          "answer_quote": "* **Invitation & Setup:** Configured under `Settings > Data & Cloud Services > [Journey Cloud Sync Drive] > Shared Journal > Invite to Shared Journal`. It generates an invitation code/token (refreshed every 10 minutes) that the partner inputs under `Add a new cloud service > Add Invitation Code`.\n  * **Permissions:** Once joined, members have collaborative permissions to create, open, and edit entries, manage tags, and connect automations (Zapier/email). Only the drive owner has the authority to remove members.\n  * **End-to-End Encryption (E2EE):** If the Journey Cloud Sync drive is encrypted with a custom passphrase, the owner must manually share that passphrase with the partner  to decrypt and access the journal.\n* **AI Controls (Odyssey AI):**\n  * **Default State:** Disabled/opted-out by default.\n  * **Strict Boundary:** According to Journey's technical documentation, **Odyssey AI is completely unavailable on End-to-End Encrypted Journey Cloud Sync drives**. If you enable E2EE for your shared journal, Odyssey AI cannot index or interact with your entries at all.\n  * **Model Traini",
+          "answer_evidence_ref": "/run/answer",
+          "rubric_reviews": [
+            {
+              "rubric_id": "R1",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent navigated to the Oura Advisor article on support.ouraring.com, left it open in Tab 2, and accurately summarized how to reset and stop the AI agent from accessing data."
+              },
+              "category": "insufficient_evidence",
+              "reason": "Relevant Oura pages and an Advisor reset explanation are present. Saved previews do not establish that resetting Advisor prevents an outside AI agent from accessing membership information; these scopes must not be equated. Full membership-specific guidance cannot be independently verified.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/trajectory",
+                "/run/open_tabs"
+              ]
+            },
+            {
+              "rubric_id": "R2",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent opened Journey Cloud's membership and shared journal documentation across multiple tabs (Tabs 4 and 5) and summarized both sharing capabilities and specific plan pricing."
+              },
+              "category": "insufficient_evidence",
+              "reason": "Answer states sharing capabilities and prices and navigation records Journey pages. Truncated observations do not independently substantiate the complete pricing and shared-permission claims; do not infer absence on the full pages.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/trajectory",
+                "/run/open_tabs"
+              ]
+            },
+            {
+              "rubric_id": "R3",
+              "original_raw_verdict": {
+                "met": false,
+                "communicated": true,
+                "reason": "The agent never successfully found or visited the Huan Dao Meditation page on formfacade.com."
+              },
+              "category": "not_met",
+              "reason": "The saved navigation trajectory never reaches the required Formfacade page; answer content based on other or unspecified sources does not meet the source-specific requirement.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/trajectory",
+                "/run/open_tabs"
+              ]
+            },
+            {
+              "rubric_id": "R4",
+              "original_raw_verdict": {
+                "met": false,
+                "communicated": true,
+                "reason": "The agent never searched for, opened, or left open Norton Secure VPN's official product page."
+              },
+              "category": "not_met",
+              "reason": "No official Norton product page is among the agent's final tabs and the saved action sequence does not record the required Google-to-Norton workflow. The separate preflight Norton check does not satisfy agent execution.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/trajectory",
+                "/run/open_tabs"
+              ]
+            },
+            {
+              "rubric_id": "R5",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent provided a synthesized recommendation comparing Journey Cloud's controls against Oura's baseline while explicitly incorporating Huan Dao and Norton Secure VPN."
+              },
+              "category": "not_met",
+              "reason": "The final recommendation mentions Oura, Journey and Huan Dao but refers only to generic secure VPNs; Norton Secure VPN is not explicitly incorporated as required, despite the original judge's claim.",
+              "evidence_refs": [
+                "/run/answer"
+              ]
+            }
+          ]
+        },
+        "negative": {
+          "source_file": "evidence/d8fe04d1--mp_tech_confidence_negative.json",
+          "source_sha256": "bb41a541a8347edc99a494f23ecbb48caf8ab6f1f656b4fdfcf0d8579702a535",
+          "record_status": "answer_present",
+          "opening_quote": "For our setup, I really prefer a low-maintenance option with straightforward, plain-language controls, so having to manage a convoluted permissions workflow just to keep our entries private is a major drawback for me.",
+          "opening_evidence_ref": "/run/conversation/0/text",
+          "answer_quote": "* **Low-Maintenance Collaboration:** Unlike complex enterprise tools requiring per-folder or per-entry permission matrices, Journey uses a simple shared-drive model (passphrase + invite code). Both partners share equal access to that specific notebook drive without extra administrative overhead.\n* **Privacy Context:** Compared to specialized Eastern wellness apps like Huan Dao (which prioritize localized, zero-data-collection programs) or foundational network privacy tools like Norton Secure VPN (which enforce zero-logging and tunnel encryption), Journey offers a strong middle ground: zero AI exposure unless enabled, client-controlled end-to-end encryption passphrases, and full collaborative journaling without complex permission workflows.",
+          "answer_evidence_ref": "/run/answer",
+          "rubric_reviews": [
+            {
+              "rubric_id": "R1",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent navigated to the Oura Advisor Member Care article (left open in tab 1) and summarized how to reset Advisor and manage AI access settings."
+              },
+              "category": "insufficient_evidence",
+              "reason": "Relevant Oura pages and an Advisor reset explanation are present. Saved previews do not establish that resetting Advisor prevents an outside AI agent from accessing membership information; these scopes must not be equated. Full membership-specific guidance cannot be independently verified.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/trajectory",
+                "/run/open_tabs"
+              ]
+            },
+            {
+              "rubric_id": "R2",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent opened Journey Cloud's membership, couples journal, shared journal support, and license comparison pages across separate tabs (tabs 3-6) and summarized the shared journaling capabilities and pricing details."
+              },
+              "category": "insufficient_evidence",
+              "reason": "Answer states sharing capabilities and prices and navigation records Journey pages. Truncated observations do not independently substantiate the complete pricing and shared-permission claims; do not infer absence on the full pages.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/trajectory",
+                "/run/open_tabs"
+              ]
+            },
+            {
+              "rubric_id": "R3",
+              "original_raw_verdict": {
+                "met": false,
+                "communicated": true,
+                "reason": "The agent never visited the Formfacade page for Huan Dao Meditation, as evidenced by the action log."
+              },
+              "category": "not_met",
+              "reason": "The saved navigation trajectory never reaches the required Formfacade page; answer content based on other or unspecified sources does not meet the source-specific requirement.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/trajectory",
+                "/run/open_tabs"
+              ]
+            },
+            {
+              "rubric_id": "R4",
+              "original_raw_verdict": {
+                "met": false,
+                "communicated": true,
+                "reason": "The agent did not use Google to locate or open the official Norton Secure VPN product page, and no Norton page was left open in the final tabs."
+              },
+              "category": "not_met",
+              "reason": "No official Norton product page is among the agent's final tabs and the saved action sequence does not record the required Google-to-Norton workflow. The separate preflight Norton check does not satisfy agent execution.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/trajectory",
+                "/run/open_tabs"
+              ]
+            },
+            {
+              "rubric_id": "R5",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent provided a final recommendation comparing Journey Cloud to Oura's privacy baseline while incorporating Huan Dao as a wellness example and Norton Secure VPN as a privacy comparison point."
+              },
+              "category": "supported",
+              "reason": "The final answer explicitly synthesizes Journey/Oura with Huan Dao and Norton. This supports the synthesis/presentation requirement only; the factual soundness of its privacy and wellness claims remains unverified.",
+              "evidence_refs": [
+                "/run/answer"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "54c07bd8/decision_style": {
+      "task_id": "54c07bd8afe7d70cd55b716977d2c29f1b2a91e9",
+      "axis_id": "decision_style",
+      "status": "evidence_of_adaptation",
+      "opening_separation": "Both saved openings explicitly request the target and opposite decision/selection behavior beyond the inherited task requirements.",
+      "adaptation_finding": "The analytical arm explicitly compares recipient fit, practicality and price-to-value. The intuitive arm frames a cohesive curation with item-level reasons. Neither completes the required Lookfantastic comparison; analytical generalizations about usage/value are not demonstrated by saved product evidence.",
+      "arms": {
+        "positive": {
+          "source_file": "evidence/54c07bd8--mp_decision_style_positive.json",
+          "source_sha256": "f644c621de11288ffa5844594597266ebaecc95583d10b3b95b7da0838fefef7",
+          "record_status": "answer_present",
+          "opening_quote": "Before naming any final recommendations, please evaluate the choices against explicit criteria like recipient fit, practicality, sentiment, and price-to-value tradeoffs so the rationale is completely transparent. ",
+          "opening_evidence_ref": "/run/conversation/0/text",
+          "answer_quote": "* **Tradeoff Evaluation**:\n  * **Recipient Fit**: Duke Cannon appeals directly to men who prefer straightforward, humorous, \"no-nonsense\" self-care (mechanics, outdoor workers, dads). Lookfantastic sets suit men interested in dedicated skincare rituals (serums, multi-step face creams, eye treatments).\n  * **Practicality**: 100% of Duke Cannon’s volume (10 oz soap bricks, pocket hand balm) gets used to completion. In multi-item salon gift sets, 1–2 specialty items often sit untouched on the counter.\n  * **Price-to-Value**: Duke Cannon provides superior value per ounce ($17.50 total for both a massive soap bar and a 3 oz travel hand balm). Lookfantastic's bundles command a premium for brand packaging and active facial skincare, making Duke Cannon the far better low-risk stocking-stuffer play.",
+          "answer_evidence_ref": "/run/answer",
+          "rubric_reviews": [
+            {
+              "rubric_id": "R1",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent identified the Wirecutter '50 Gifts for People Who Have Everything' article, kept tab 2 open, and selected the Milk Street Nakiri Vegetable Knife as the practical anchor gift."
+              },
+              "category": "insufficient_evidence",
+              "reason": "Qualifying NYT article navigation and a named anchor appear in the record. The retained excerpts do not establish every verification detail, including at least three Amazon-linked article items. Original pass is not independently confirmed.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/trajectory",
+                "/run/open_tabs"
+              ]
+            },
+            {
+              "rubric_id": "R2",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "Three distinct Etsy listing pages were opened in tabs 4, 5, and 6, and their names, prices, and URLs were included in the final response."
+              },
+              "category": "insufficient_evidence",
+              "reason": "Three Etsy listing navigations and matching final names/URLs are recorded. Retained listing previews do not independently establish every stated live price and variant; full compliance remains unverified.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/trajectory",
+                "/run/open_tabs"
+              ]
+            },
+            {
+              "rubric_id": "R3",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent opened live Duke Cannon product pages in tabs 7 and 9 from their holiday search/collection and provided the names, prices, and URLs."
+              },
+              "category": "insufficient_evidence",
+              "reason": "The trajectory reaches holiday areas and selected product pages, and final answer gives two items. Saved previews do not establish that both selected products belong to the required holiday gift area or confirm all stated prices; original pass is not independently confirmed.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/trajectory",
+                "/run/open_tabs"
+              ]
+            },
+            {
+              "rubric_id": "R4",
+              "original_raw_verdict": {
+                "met": false,
+                "communicated": true,
+                "reason": "The agent hit a 404 page on Lookfantastic, failed to open three product pages, and did not list three specific gift sets with current prices and URLs."
+              },
+              "category": "not_met",
+              "reason": "The final answer does not deliver three verified Lookfantastic products with current prices and direct product URLs; required product-page coverage is missing.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ]
+            },
+            {
+              "rubric_id": "R5",
+              "original_raw_verdict": {
+                "met": false,
+                "communicated": true,
+                "reason": "The shortlist is missing the three Lookfantastic gift-set items, failing to cover all required categories and nine gift options."
+              },
+              "category": "not_met",
+              "reason": "The final shortlist omits required Lookfantastic items or their current prices/direct product details, so the combined nine-gift deliverable is incomplete.",
+              "evidence_refs": [
+                "/run/answer"
+              ]
+            }
+          ]
+        },
+        "negative": {
+          "source_file": "evidence/54c07bd8--mp_decision_style_negative.json",
+          "source_sha256": "24817f7159051ad434dbd00f582aa453ff834523e7fcfa4a7ce1ee78019f0f0f",
+          "record_status": "answer_present",
+          "opening_quote": "Once you've verified all the requirements are met, please just use your intuitive gift-giving instinct to make a confident, cohesive final curation for the list rather than breaking things down with rigid category scoring. ",
+          "opening_evidence_ref": "/run/conversation/0/text",
+          "answer_quote": "Here is your cohesive Christmas gift shortlist, anchored by a high-utility kitchen essential from *The New York Times*, complemented by sentimental handmade keepsakes from Etsy, and rounded out with everyday men’s grooming picks from Duke Cannon and Lookfantastic. All corresponding tabs have been kept open for your review.",
+          "answer_evidence_ref": "/run/answer",
+          "rubric_reviews": [
+            {
+              "rubric_id": "R1",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent identified Wirecutter/NYT's '50 Gifts for People Who Have Everything' article, kept it open in tab 2, and selected the Milk Street Nakiri Knife as the practical anchor gift."
+              },
+              "category": "insufficient_evidence",
+              "reason": "Qualifying NYT article navigation and a named anchor appear in the record. The retained excerpts do not establish every verification detail, including at least three Amazon-linked article items. Original pass is not independently confirmed.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/trajectory",
+                "/run/open_tabs"
+              ]
+            },
+            {
+              "rubric_id": "R2",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent opened three distinct Etsy personalized Christmas ornament listings in tabs 3, 4, and 5 and reported their names, prices, and URLs."
+              },
+              "category": "insufficient_evidence",
+              "reason": "Three Etsy listing navigations and matching final names/URLs are recorded. Retained listing previews do not independently establish every stated live price and variant; full compliance remains unverified.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/trajectory",
+                "/run/open_tabs"
+              ]
+            },
+            {
+              "rubric_id": "R3",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent navigated Duke Cannon's holiday collection, opened product pages for two stocking-stuffer style items (Solid Cologne and Puck of Soap) in tabs 6 and 7, and provided their names, prices, and URLs."
+              },
+              "category": "insufficient_evidence",
+              "reason": "The trajectory reaches holiday areas and selected product pages, and final answer gives two items. Saved previews do not establish that both selected products belong to the required holiday gift area or confirm all stated prices; original pass is not independently confirmed.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/trajectory",
+                "/run/open_tabs"
+              ]
+            },
+            {
+              "rubric_id": "R4",
+              "original_raw_verdict": {
+                "met": false,
+                "communicated": true,
+                "reason": "The agent never opened any Lookfantastic product pages in separate tabs (or visited them at all), failed to provide current prices for the items, and left no Lookfantastic product tabs open."
+              },
+              "category": "not_met",
+              "reason": "Three Lookfantastic names/URLs are stated but current purchase prices are absent and the agent did not open the required product pages. A quoted retail-value figure is not a current price.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ]
+            },
+            {
+              "rubric_id": "R5",
+              "original_raw_verdict": {
+                "met": false,
+                "communicated": true,
+                "reason": "The final response did not include prices for the Lookfantastic options as required by the shortlist format."
+              },
+              "category": "not_met",
+              "reason": "The final shortlist omits required Lookfantastic items or their current prices/direct product details, so the combined nine-gift deliverable is incomplete.",
+              "evidence_refs": [
+                "/run/answer"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "54c07bd8/price_orientation": {
+      "task_id": "54c07bd8afe7d70cd55b716977d2c29f1b2a91e9",
+      "axis_id": "price_orientation",
+      "status": "evidence_of_adaptation",
+      "opening_separation": "Both saved openings explicitly request the target and opposite decision/selection behavior beyond the inherited task requirements.",
+      "adaptation_finding": "The budget-oriented answer selects a $17 peanut-butter mixer; the premium-oriented answer selects a $141 ceramic bowl and uses premium material descriptions. This is a directional selection difference in the answers, not a verified optimal shopping comparison: both have incomplete retailer coverage and the premium arm lacks several prices.",
+      "arms": {
+        "positive": {
+          "source_file": "evidence/54c07bd8--mp_price_orientation_positive.json",
+          "source_sha256": "41a6e8e2a7cc327843bb4cf094ef1cbdbbbf8f9806161e078e47cf42d83709c2",
+          "record_status": "answer_present",
+          "opening_quote": "Since I really want to keep my total spend down, please prioritize the most budget-friendly qualifying options across all the categories whenever there's a choice.",
+          "opening_evidence_ref": "/run/conversation/0/text",
+          "answer_quote": "* **Selected Anchor Gift**: **Grandpa Witmer’s Old Fashioned Peanut Butter Mixer**\n  * **Price**: $17.00\n  * **Details**: A highly practical, no-mess crank tool that stirs separated oil back into natural nut and seed butters cleanly. The article includes direct Amazon and Walmart purchase links.",
+          "answer_evidence_ref": "/run/answer",
+          "rubric_reviews": [
+            {
+              "rubric_id": "R1",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent identified a qualifying NYT Wirecutter gift guide ('50 Gifts for People Who Have Everything'), provided its URL, kept the tab open, and selected a practical anchor gift from the article."
+              },
+              "category": "insufficient_evidence",
+              "reason": "Qualifying NYT article navigation and a named anchor appear in the record. The retained excerpts do not establish every verification detail, including at least three Amazon-linked article items. Original pass is not independently confirmed.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/trajectory",
+                "/run/open_tabs"
+              ]
+            },
+            {
+              "rubric_id": "R2",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent opened three separate Etsy listing tabs for personalized custom Christmas ornaments and included their names, prices, and URLs in the final answer."
+              },
+              "category": "insufficient_evidence",
+              "reason": "Three Etsy listing navigations and matching final names/URLs are recorded. Retained listing previews do not independently establish every stated live price and variant; full compliance remains unverified.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/trajectory",
+                "/run/open_tabs"
+              ]
+            },
+            {
+              "rubric_id": "R3",
+              "original_raw_verdict": {
+                "met": false,
+                "communicated": true,
+                "reason": "The agent selected standard catalog products rather than items from Duke Cannon's Holiday Collection, and failed to open the actual live product pages in separate tabs."
+              },
+              "category": "not_met",
+              "reason": "Required separate live Duke Cannon product-page tabs were not recorded for the selected products. The answer substitutes standard catalog recommendations for verified Holiday Collection picks; collection membership remains unverified.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/trajectory",
+                "/run/open_tabs"
+              ]
+            },
+            {
+              "rubric_id": "R4",
+              "original_raw_verdict": {
+                "met": false,
+                "communicated": true,
+                "reason": "The agent never visited Lookfantastic or opened any product pages, and explicitly omitted the three Lookfantastic gift-set options from the final answer."
+              },
+              "category": "not_met",
+              "reason": "The final answer does not deliver three verified Lookfantastic products with current prices and direct product URLs; required product-page coverage is missing.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ]
+            },
+            {
+              "rubric_id": "R5",
+              "original_raw_verdict": {
+                "met": false,
+                "communicated": true,
+                "reason": "The final shortlist failed to cover all required categories as it completely lacked the three Lookfantastic gift-set options."
+              },
+              "category": "not_met",
+              "reason": "The final shortlist omits required Lookfantastic items or their current prices/direct product details, so the combined nine-gift deliverable is incomplete.",
+              "evidence_refs": [
+                "/run/answer"
+              ]
+            }
+          ]
+        },
+        "negative": {
+          "source_file": "evidence/54c07bd8--mp_price_orientation_negative.json",
+          "source_sha256": "1c9c1640ed2ee519acfeca4bb074c051520e4acdb9f10b1a6ec7598006b0e17f",
+          "record_status": "answer_present",
+          "opening_quote": "I'm very comfortable leaning toward higher-priced selections if the craftsmanship, packaging, or durability clearly makes them feel more elevated and gift-worthy, rather than just trying to minimize the total spend. ",
+          "opening_evidence_ref": "/run/conversation/0/text",
+          "answer_quote": "* **Practical Anchor Gift Pick:**\n  * **Product:** **Emile Henry French Ceramic Fruit Storage Bowl**\n  * **Price:** $141\n  * **Amazon Link:** [https://www.amazon.com/Emile-Henry-Vegetable-Storage-diameter/dp/B08X7D17HR](https://www.amazon.com/Emile-Henry-Vegetable-Storage-diameter/dp/B08X7D17HR)\n  * *(Alternative anchor from the guide: **Milk Street Nakiri Japanese Kitchen Knife** – $70)*",
+          "answer_evidence_ref": "/run/answer",
+          "rubric_reviews": [
+            {
+              "rubric_id": "R1",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The NYT Wirecutter gift article '50 Gifts for People Who Have Everything' was opened, left open in tab 2, shows prices and Amazon links, and the Emile Henry bowl was selected from it."
+              },
+              "category": "insufficient_evidence",
+              "reason": "Qualifying NYT article navigation and a named anchor appear in the record. The retained excerpts do not establish every verification detail, including at least three Amazon-linked article items. Original pass is not independently confirmed.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/trajectory",
+                "/run/open_tabs"
+              ]
+            },
+            {
+              "rubric_id": "R2",
+              "original_raw_verdict": {
+                "met": false,
+                "communicated": true,
+                "reason": "The agent never opened three separate live Etsy listing tabs (or left them open), failed to retrieve prices for the items, and one of the links is fictitious."
+              },
+              "category": "not_met",
+              "reason": "The final answer omits prices for all three Etsy ornaments. This explicit output omission fails the requirement regardless of whether prices existed on full pages.",
+              "evidence_refs": [
+                "/run/answer"
+              ]
+            },
+            {
+              "rubric_id": "R3",
+              "original_raw_verdict": {
+                "met": false,
+                "communicated": true,
+                "reason": "The agent did not open the live product pages for the Duke Cannon items in separate tabs, and the items selected were not from the Holiday Collection."
+              },
+              "category": "not_met",
+              "reason": "Required separate live Duke Cannon product-page tabs were not recorded for the selected products. The answer substitutes standard catalog recommendations for verified Holiday Collection picks; collection membership remains unverified.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/trajectory",
+                "/run/open_tabs"
+              ]
+            },
+            {
+              "rubric_id": "R4",
+              "original_raw_verdict": {
+                "met": false,
+                "communicated": true,
+                "reason": "The agent never visited Lookfantastic, did not open any product pages, provided generic brand list URLs instead of product URLs, and omitted prices entirely."
+              },
+              "category": "not_met",
+              "reason": "The final answer does not deliver three verified Lookfantastic products with current prices and direct product URLs; required product-page coverage is missing.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ]
+            },
+            {
+              "rubric_id": "R5",
+              "original_raw_verdict": {
+                "met": false,
+                "communicated": true,
+                "reason": "The final shortlist lacks prices for all Etsy ornaments and Lookfantastic sets, provides brand landing URLs instead of product URLs for Lookfantastic, and missed requested tabs."
+              },
+              "category": "not_met",
+              "reason": "The final shortlist omits required Lookfantastic items or their current prices/direct product details, so the combined nine-gift deliverable is incomplete.",
+              "evidence_refs": [
+                "/run/answer"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "54c07bd8/purchase_risk": {
+      "task_id": "54c07bd8afe7d70cd55b716977d2c29f1b2a91e9",
+      "axis_id": "purchase_risk",
+      "status": "inconclusive",
+      "opening_separation": "Both saved openings explicitly request the target and opposite decision/selection behavior beyond the inherited task requirements.",
+      "adaptation_finding": "Openings separate extra seller/delivery/return checks from acceptance of ordinary marketplace uncertainty. The risk-averse arm exhausted its run with no final answer; the risk-tolerant arm returns six gifts. A completed response adaptation contrast cannot be established.",
+      "arms": {
+        "positive": {
+          "source_file": "evidence/54c07bd8--mp_purchase_risk_positive.json",
+          "source_sha256": "ee5230a2c70135a173a7ea274299aa3f541580d7fb68bfd899fc20b74da257f6",
+          "record_status": "empty_final_answer",
+          "opening_quote": "As you choose listings, please prioritize items that have clear seller track records, definite delivery dates, and transparent return policies rather than ambiguous live listings where arrival or product conditions are uncertain.",
+          "opening_evidence_ref": "/run/conversation/0/text",
+          "answer_quote": null,
+          "answer_evidence_ref": "/run/answer",
+          "rubric_reviews": [
+            {
+              "rubric_id": "R1",
+              "original_raw_verdict": {
+                "met": false,
+                "communicated": true,
+                "reason": "The agent navigated to an NYT Wirecutter article but produced no final answer identifying the anchor gift or providing the details."
+              },
+              "category": "not_met",
+              "reason": "The saved final answer is empty, so the rubric's requested final output was not delivered. The historical communicated=true flag is preserved but is not evidence of communication.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/stop_reason",
+                "/judgement/verdicts/R1"
+              ]
+            },
+            {
+              "rubric_id": "R2",
+              "original_raw_verdict": {
+                "met": false,
+                "communicated": true,
+                "reason": "No final answer was produced, and three Etsy listing tabs were neither successfully examined nor left open."
+              },
+              "category": "not_met",
+              "reason": "The saved final answer is empty, so the rubric's requested final output was not delivered. The historical communicated=true flag is preserved but is not evidence of communication.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/stop_reason",
+                "/judgement/verdicts/R2"
+              ]
+            },
+            {
+              "rubric_id": "R3",
+              "original_raw_verdict": {
+                "met": false,
+                "communicated": true,
+                "reason": "The agent produced no final answer listing any Duke Cannon Holiday Collection gifts."
+              },
+              "category": "not_met",
+              "reason": "The saved final answer is empty, so the rubric's requested final output was not delivered. The historical communicated=true flag is preserved but is not evidence of communication.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/stop_reason",
+                "/judgement/verdicts/R3"
+              ]
+            },
+            {
+              "rubric_id": "R4",
+              "original_raw_verdict": {
+                "met": false,
+                "communicated": true,
+                "reason": "The agent never visited Lookfantastic and produced no final answer."
+              },
+              "category": "not_met",
+              "reason": "The saved final answer is empty, so the rubric's requested final output was not delivered. The historical communicated=true flag is preserved but is not evidence of communication.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/stop_reason",
+                "/judgement/verdicts/R4"
+              ]
+            },
+            {
+              "rubric_id": "R5",
+              "original_raw_verdict": {
+                "met": false,
+                "communicated": true,
+                "reason": "The agent timed out or stopped without producing any final answer."
+              },
+              "category": "not_met",
+              "reason": "The saved final answer is empty, so the rubric's requested final output was not delivered. The historical communicated=true flag is preserved but is not evidence of communication.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/stop_reason",
+                "/judgement/verdicts/R5"
+              ]
+            }
+          ]
+        },
+        "negative": {
+          "source_file": "evidence/54c07bd8--mp_purchase_risk_negative.json",
+          "source_sha256": "cf88f4b372e94cad0e8c9f58ac3fbd7454d751a354a63563dd39392a984ccf35",
+          "record_status": "answer_present",
+          "opening_quote": "For the Etsy ornaments, I'm completely comfortable accepting ordinary marketplace uncertainty in exchange for bold style and unique personalization once the live listing confirms availability, so prioritize distinctive craftsmanship over vetting extra seller policies.",
+          "opening_evidence_ref": "/run/conversation/0/text",
+          "answer_quote": "### 2. Etsy Personalized Custom Ornaments (Sentimental Add-ons)\n*(All three listing pages remain open in separate tabs for your visual inspection)*",
+          "answer_evidence_ref": "/run/answer",
+          "rubric_reviews": [
+            {
+              "rubric_id": "R1",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent identified a qualifying NYT Wirecutter gift guide for people who have everything, selected a practical anchor gift (Milk Street Nakiri Knife) from it, and left the article tab open."
+              },
+              "category": "insufficient_evidence",
+              "reason": "Qualifying NYT article navigation and a named anchor appear in the record. The retained excerpts do not establish every verification detail, including at least three Amazon-linked article items. Original pass is not independently confirmed.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/trajectory",
+                "/run/open_tabs"
+              ]
+            },
+            {
+              "rubric_id": "R2",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent opened three separate live Etsy listing tabs for personalized custom Christmas ornaments and provided their names, prices, and URLs."
+              },
+              "category": "insufficient_evidence",
+              "reason": "Three Etsy listing navigations and matching final names/URLs are recorded. Retained listing previews do not independently establish every stated live price and variant; full compliance remains unverified.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/trajectory",
+                "/run/open_tabs"
+              ]
+            },
+            {
+              "rubric_id": "R3",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent visited Duke Cannon's site, navigated their seasonal/holiday collection areas, opened two product pages in separate tabs, and reported their names, prices, and URLs."
+              },
+              "category": "insufficient_evidence",
+              "reason": "The trajectory reaches holiday areas and selected product pages, and final answer gives two items. Saved previews do not establish that both selected products belong to the required holiday gift area or confirm all stated prices; original pass is not independently confirmed.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/trajectory",
+                "/run/open_tabs"
+              ]
+            },
+            {
+              "rubric_id": "R4",
+              "original_raw_verdict": {
+                "met": false,
+                "communicated": true,
+                "reason": "The agent completely omitted Lookfantastic, never browsing the site, opening any Lookfantastic tabs, or listing any Look fantastic men's gift sets."
+              },
+              "category": "not_met",
+              "reason": "The final answer does not deliver three verified Lookfantastic products with current prices and direct product URLs; required product-page coverage is missing.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ]
+            },
+            {
+              "rubric_id": "R5",
+              "original_raw_verdict": {
+                "met": false,
+                "communicated": true,
+                "reason": "The final response fails to cover all required categories and does not include the three Lookfantastic comparison options, providing only six gifts instead of nine."
+              },
+              "category": "not_met",
+              "reason": "The final shortlist omits required Lookfantastic items or their current prices/direct product details, so the combined nine-gift deliverable is incomplete.",
+              "evidence_refs": [
+                "/run/answer"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "46ecc9a5/decision_style": {
+      "task_id": "46ecc9a5dce920d6c72198b4efb1a46855bac7d0",
+      "axis_id": "decision_style",
+      "status": "not_evaluable",
+      "opening_separation": "not_evaluable",
+      "adaptation_finding": "Both arms stopped at the required JJ's House HTTP 403 preflight before conversation or agent actions. No realized persona expression, answer adaptation or task outcome can be compared.",
+      "arms": {
+        "positive": {
+          "source_file": "evidence/46ecc9a5--mp_decision_style_positive.json",
+          "source_sha256": "31172f3d180fd415b6bc52fb12f3dea42d4a5f9918efed6ea65ff01126c36a54",
+          "record_status": "environment_blocked",
+          "opening_quote": null,
+          "opening_evidence_ref": null,
+          "answer_quote": null,
+          "answer_evidence_ref": null,
+          "rubric_reviews": [
+            {
+              "rubric_id": "R1",
+              "original_raw_verdict": null,
+              "category": "insufficient_evidence",
+              "reason": "Preflight blocked before any agent task actions. No rubric verdict was recorded; this is unscored, not task failure.",
+              "evidence_refs": [
+                "/environment/checks/2",
+                "/run/steps",
+                "/judgement"
+              ]
+            },
+            {
+              "rubric_id": "R2",
+              "original_raw_verdict": null,
+              "category": "insufficient_evidence",
+              "reason": "Preflight blocked before any agent task actions. No rubric verdict was recorded; this is unscored, not task failure.",
+              "evidence_refs": [
+                "/environment/checks/2",
+                "/run/steps",
+                "/judgement"
+              ]
+            },
+            {
+              "rubric_id": "R3",
+              "original_raw_verdict": null,
+              "category": "insufficient_evidence",
+              "reason": "Preflight blocked before any agent task actions. No rubric verdict was recorded; this is unscored, not task failure.",
+              "evidence_refs": [
+                "/environment/checks/2",
+                "/run/steps",
+                "/judgement"
+              ]
+            },
+            {
+              "rubric_id": "R4",
+              "original_raw_verdict": null,
+              "category": "insufficient_evidence",
+              "reason": "Preflight blocked before any agent task actions. No rubric verdict was recorded; this is unscored, not task failure.",
+              "evidence_refs": [
+                "/environment/checks/2",
+                "/run/steps",
+                "/judgement"
+              ]
+            },
+            {
+              "rubric_id": "R5",
+              "original_raw_verdict": null,
+              "category": "insufficient_evidence",
+              "reason": "Preflight blocked before any agent task actions. No rubric verdict was recorded; this is unscored, not task failure.",
+              "evidence_refs": [
+                "/environment/checks/2",
+                "/run/steps",
+                "/judgement"
+              ]
+            },
+            {
+              "rubric_id": "R6",
+              "original_raw_verdict": null,
+              "category": "insufficient_evidence",
+              "reason": "Preflight blocked before any agent task actions. No rubric verdict was recorded; this is unscored, not task failure.",
+              "evidence_refs": [
+                "/environment/checks/2",
+                "/run/steps",
+                "/judgement"
+              ]
+            },
+            {
+              "rubric_id": "R7",
+              "original_raw_verdict": null,
+              "category": "insufficient_evidence",
+              "reason": "Preflight blocked before any agent task actions. No rubric verdict was recorded; this is unscored, not task failure.",
+              "evidence_refs": [
+                "/environment/checks/2",
+                "/run/steps",
+                "/judgement"
+              ]
+            },
+            {
+              "rubric_id": "R8",
+              "original_raw_verdict": null,
+              "category": "insufficient_evidence",
+              "reason": "Preflight blocked before any agent task actions. No rubric verdict was recorded; this is unscored, not task failure.",
+              "evidence_refs": [
+                "/environment/checks/2",
+                "/run/steps",
+                "/judgement"
+              ]
+            }
+          ]
+        },
+        "negative": {
+          "source_file": "evidence/46ecc9a5--mp_decision_style_negative.json",
+          "source_sha256": "0ab3e77c683297619c360d43ae8df0d81f301720bc2d5723e9c6a03c173b23f4",
+          "record_status": "environment_blocked",
+          "opening_quote": null,
+          "opening_evidence_ref": null,
+          "answer_quote": null,
+          "answer_evidence_ref": null,
+          "rubric_reviews": [
+            {
+              "rubric_id": "R1",
+              "original_raw_verdict": null,
+              "category": "insufficient_evidence",
+              "reason": "Preflight blocked before any agent task actions. No rubric verdict was recorded; this is unscored, not task failure.",
+              "evidence_refs": [
+                "/environment/checks/2",
+                "/run/steps",
+                "/judgement"
+              ]
+            },
+            {
+              "rubric_id": "R2",
+              "original_raw_verdict": null,
+              "category": "insufficient_evidence",
+              "reason": "Preflight blocked before any agent task actions. No rubric verdict was recorded; this is unscored, not task failure.",
+              "evidence_refs": [
+                "/environment/checks/2",
+                "/run/steps",
+                "/judgement"
+              ]
+            },
+            {
+              "rubric_id": "R3",
+              "original_raw_verdict": null,
+              "category": "insufficient_evidence",
+              "reason": "Preflight blocked before any agent task actions. No rubric verdict was recorded; this is unscored, not task failure.",
+              "evidence_refs": [
+                "/environment/checks/2",
+                "/run/steps",
+                "/judgement"
+              ]
+            },
+            {
+              "rubric_id": "R4",
+              "original_raw_verdict": null,
+              "category": "insufficient_evidence",
+              "reason": "Preflight blocked before any agent task actions. No rubric verdict was recorded; this is unscored, not task failure.",
+              "evidence_refs": [
+                "/environment/checks/2",
+                "/run/steps",
+                "/judgement"
+              ]
+            },
+            {
+              "rubric_id": "R5",
+              "original_raw_verdict": null,
+              "category": "insufficient_evidence",
+              "reason": "Preflight blocked before any agent task actions. No rubric verdict was recorded; this is unscored, not task failure.",
+              "evidence_refs": [
+                "/environment/checks/2",
+                "/run/steps",
+                "/judgement"
+              ]
+            },
+            {
+              "rubric_id": "R6",
+              "original_raw_verdict": null,
+              "category": "insufficient_evidence",
+              "reason": "Preflight blocked before any agent task actions. No rubric verdict was recorded; this is unscored, not task failure.",
+              "evidence_refs": [
+                "/environment/checks/2",
+                "/run/steps",
+                "/judgement"
+              ]
+            },
+            {
+              "rubric_id": "R7",
+              "original_raw_verdict": null,
+              "category": "insufficient_evidence",
+              "reason": "Preflight blocked before any agent task actions. No rubric verdict was recorded; this is unscored, not task failure.",
+              "evidence_refs": [
+                "/environment/checks/2",
+                "/run/steps",
+                "/judgement"
+              ]
+            },
+            {
+              "rubric_id": "R8",
+              "original_raw_verdict": null,
+              "category": "insufficient_evidence",
+              "reason": "Preflight blocked before any agent task actions. No rubric verdict was recorded; this is unscored, not task failure.",
+              "evidence_refs": [
+                "/environment/checks/2",
+                "/run/steps",
+                "/judgement"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "46ecc9a5/purchase_risk": {
+      "task_id": "46ecc9a5dce920d6c72198b4efb1a46855bac7d0",
+      "axis_id": "purchase_risk",
+      "status": "not_evaluable",
+      "opening_separation": "not_evaluable",
+      "adaptation_finding": "Both arms stopped at the required JJ's House HTTP 403 preflight before conversation or agent actions. No realized persona expression, answer adaptation or task outcome can be compared.",
+      "arms": {
+        "positive": {
+          "source_file": "evidence/46ecc9a5--mp_purchase_risk_positive.json",
+          "source_sha256": "7c0157b3300610136056e2a09d0eb6a280745ee56e6ed09dc2ee5c36b4666504",
+          "record_status": "environment_blocked",
+          "opening_quote": null,
+          "opening_evidence_ref": null,
+          "answer_quote": null,
+          "answer_evidence_ref": null,
+          "rubric_reviews": [
+            {
+              "rubric_id": "R1",
+              "original_raw_verdict": null,
+              "category": "insufficient_evidence",
+              "reason": "Preflight blocked before any agent task actions. No rubric verdict was recorded; this is unscored, not task failure.",
+              "evidence_refs": [
+                "/environment/checks/2",
+                "/run/steps",
+                "/judgement"
+              ]
+            },
+            {
+              "rubric_id": "R2",
+              "original_raw_verdict": null,
+              "category": "insufficient_evidence",
+              "reason": "Preflight blocked before any agent task actions. No rubric verdict was recorded; this is unscored, not task failure.",
+              "evidence_refs": [
+                "/environment/checks/2",
+                "/run/steps",
+                "/judgement"
+              ]
+            },
+            {
+              "rubric_id": "R3",
+              "original_raw_verdict": null,
+              "category": "insufficient_evidence",
+              "reason": "Preflight blocked before any agent task actions. No rubric verdict was recorded; this is unscored, not task failure.",
+              "evidence_refs": [
+                "/environment/checks/2",
+                "/run/steps",
+                "/judgement"
+              ]
+            },
+            {
+              "rubric_id": "R4",
+              "original_raw_verdict": null,
+              "category": "insufficient_evidence",
+              "reason": "Preflight blocked before any agent task actions. No rubric verdict was recorded; this is unscored, not task failure.",
+              "evidence_refs": [
+                "/environment/checks/2",
+                "/run/steps",
+                "/judgement"
+              ]
+            },
+            {
+              "rubric_id": "R5",
+              "original_raw_verdict": null,
+              "category": "insufficient_evidence",
+              "reason": "Preflight blocked before any agent task actions. No rubric verdict was recorded; this is unscored, not task failure.",
+              "evidence_refs": [
+                "/environment/checks/2",
+                "/run/steps",
+                "/judgement"
+              ]
+            },
+            {
+              "rubric_id": "R6",
+              "original_raw_verdict": null,
+              "category": "insufficient_evidence",
+              "reason": "Preflight blocked before any agent task actions. No rubric verdict was recorded; this is unscored, not task failure.",
+              "evidence_refs": [
+                "/environment/checks/2",
+                "/run/steps",
+                "/judgement"
+              ]
+            },
+            {
+              "rubric_id": "R7",
+              "original_raw_verdict": null,
+              "category": "insufficient_evidence",
+              "reason": "Preflight blocked before any agent task actions. No rubric verdict was recorded; this is unscored, not task failure.",
+              "evidence_refs": [
+                "/environment/checks/2",
+                "/run/steps",
+                "/judgement"
+              ]
+            },
+            {
+              "rubric_id": "R8",
+              "original_raw_verdict": null,
+              "category": "insufficient_evidence",
+              "reason": "Preflight blocked before any agent task actions. No rubric verdict was recorded; this is unscored, not task failure.",
+              "evidence_refs": [
+                "/environment/checks/2",
+                "/run/steps",
+                "/judgement"
+              ]
+            }
+          ]
+        },
+        "negative": {
+          "source_file": "evidence/46ecc9a5--mp_purchase_risk_negative.json",
+          "source_sha256": "68ac20ca04f51b5c6b188b396217fc1dd722f6c0388a0838a4747eadff9175ad",
+          "record_status": "environment_blocked",
+          "opening_quote": null,
+          "opening_evidence_ref": null,
+          "answer_quote": null,
+          "answer_evidence_ref": null,
+          "rubric_reviews": [
+            {
+              "rubric_id": "R1",
+              "original_raw_verdict": null,
+              "category": "insufficient_evidence",
+              "reason": "Preflight blocked before any agent task actions. No rubric verdict was recorded; this is unscored, not task failure.",
+              "evidence_refs": [
+                "/environment/checks/2",
+                "/run/steps",
+                "/judgement"
+              ]
+            },
+            {
+              "rubric_id": "R2",
+              "original_raw_verdict": null,
+              "category": "insufficient_evidence",
+              "reason": "Preflight blocked before any agent task actions. No rubric verdict was recorded; this is unscored, not task failure.",
+              "evidence_refs": [
+                "/environment/checks/2",
+                "/run/steps",
+                "/judgement"
+              ]
+            },
+            {
+              "rubric_id": "R3",
+              "original_raw_verdict": null,
+              "category": "insufficient_evidence",
+              "reason": "Preflight blocked before any agent task actions. No rubric verdict was recorded; this is unscored, not task failure.",
+              "evidence_refs": [
+                "/environment/checks/2",
+                "/run/steps",
+                "/judgement"
+              ]
+            },
+            {
+              "rubric_id": "R4",
+              "original_raw_verdict": null,
+              "category": "insufficient_evidence",
+              "reason": "Preflight blocked before any agent task actions. No rubric verdict was recorded; this is unscored, not task failure.",
+              "evidence_refs": [
+                "/environment/checks/2",
+                "/run/steps",
+                "/judgement"
+              ]
+            },
+            {
+              "rubric_id": "R5",
+              "original_raw_verdict": null,
+              "category": "insufficient_evidence",
+              "reason": "Preflight blocked before any agent task actions. No rubric verdict was recorded; this is unscored, not task failure.",
+              "evidence_refs": [
+                "/environment/checks/2",
+                "/run/steps",
+                "/judgement"
+              ]
+            },
+            {
+              "rubric_id": "R6",
+              "original_raw_verdict": null,
+              "category": "insufficient_evidence",
+              "reason": "Preflight blocked before any agent task actions. No rubric verdict was recorded; this is unscored, not task failure.",
+              "evidence_refs": [
+                "/environment/checks/2",
+                "/run/steps",
+                "/judgement"
+              ]
+            },
+            {
+              "rubric_id": "R7",
+              "original_raw_verdict": null,
+              "category": "insufficient_evidence",
+              "reason": "Preflight blocked before any agent task actions. No rubric verdict was recorded; this is unscored, not task failure.",
+              "evidence_refs": [
+                "/environment/checks/2",
+                "/run/steps",
+                "/judgement"
+              ]
+            },
+            {
+              "rubric_id": "R8",
+              "original_raw_verdict": null,
+              "category": "insufficient_evidence",
+              "reason": "Preflight blocked before any agent task actions. No rubric verdict was recorded; this is unscored, not task failure.",
+              "evidence_refs": [
+                "/environment/checks/2",
+                "/run/steps",
+                "/judgement"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+}

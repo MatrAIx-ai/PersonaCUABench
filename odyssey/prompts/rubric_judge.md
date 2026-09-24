@@ -12,6 +12,11 @@ the action log and the tabs left open? A requirement that a page be left open is
 met only if that page appears in the open tabs. A reported figure counts only if \
 the agent actually visited a page that would show it. Judge this the same way \
 whether or not the user asked for it.
+When a rubric's verification says the grader should be able to confirm a page
+in a tab, use the FINAL open-tab list as the authority. A page visited earlier
+but later navigated away from or closed is not still open. Do not infer a
+product-page price from a search-result snippet if the requested product page
+was never visited.
 - communicated: did the conversation make this requirement known to the agent -- \
 said explicitly, or implied clearly enough that a reasonable assistant would act \
 on it? A specific site or detail the user never mentioned and the agent never \

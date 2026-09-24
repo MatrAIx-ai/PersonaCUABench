@@ -1,0 +1,223 @@
+{
+  "schema_version": "lifestyle.r1-evidence.v1",
+  "replicate_id": "r1",
+  "selection": "lifestyle-final-results, suite=lifestyle, replicate_id=r1",
+  "redactions": [
+    "local user paths",
+    "IP addresses",
+    "GCP project ID",
+    "Google challenge URLs"
+  ],
+  "files": [
+    {
+      "file": "evidence/0ce94d4e--mp_decision_style_negative.json",
+      "source": "lifestyle-final-results/lifestyle/0ce94d4e773eff1042a6920232f929a1da98c44d/99a46a379e60d676e23b278c4a64f469b400f2151a5b661400e8da17fcba6850/mp_decision_style_negative__google-gemini-3.8-flash__0ee7060603__20260924T092224Z/result.json",
+      "original_sha256": "cde529f7ff2529f4b320b4c48c5486f7b81a40f6591351708dd62011dc6a7bf2",
+      "review_copy_sha256": "b0796ec8126792e3d69ee1b8376b82b7a5b560937fcc8c54f488965e23ff908e",
+      "redacted": true
+    },
+    {
+      "file": "evidence/0ce94d4e--mp_decision_style_positive.json",
+      "source": "lifestyle-final-results/lifestyle/0ce94d4e773eff1042a6920232f929a1da98c44d/99a46a379e60d676e23b278c4a64f469b400f2151a5b661400e8da17fcba6850/mp_decision_style_positive__google-gemini-3.8-flash__d82e597454__20260924T093351Z/result.json",
+      "original_sha256": "2de6f24ad4e1df0cd9607f5a0da3447e78b916348f89af8e5a7262425947a541",
+      "review_copy_sha256": "11ecfe74acfae25057e75f2dcc75e86a7bce97902d36f6e86ef99aaf78d92299",
+      "redacted": true
+    },
+    {
+      "file": "evidence/0ce94d4e--mp_price_orientation_negative.json",
+      "source": "lifestyle-final-results/lifestyle/0ce94d4e773eff1042a6920232f929a1da98c44d/99a46a379e60d676e23b278c4a64f469b400f2151a5b661400e8da17fcba6850/mp_price_orientation_negative__google-gemini-3.8-flash__b96aa04f01__20260924T100431Z/result.json",
+      "original_sha256": "a40f29aaa47880c703b4dc66403c2aa6b16448d6bd8dbe1990391d6578c97f51",
+      "review_copy_sha256": "11a4ac5af16fafce57fcf9d3c6c56843541e3f86e18173826559cb0e5e52b850",
+      "redacted": false
+    },
+    {
+      "file": "evidence/0ce94d4e--mp_price_orientation_positive.json",
+      "source": "lifestyle-final-results/lifestyle/0ce94d4e773eff1042a6920232f929a1da98c44d/99a46a379e60d676e23b278c4a64f469b400f2151a5b661400e8da17fcba6850/mp_price_orientation_positive__google-gemini-3.8-flash__177e364e72__20260924T094656Z/result.json",
+      "original_sha256": "2b43f040530a5949bba1dfeeb44f7ccd883ea581885a133eed2ff09b3c3f0c86",
+      "review_copy_sha256": "707ff16396ce0f316adc1d8163a5be1ccc1d5de4d740a16120e371becba99398",
+      "redacted": true
+    },
+    {
+      "file": "evidence/0ce94d4e--mp_purchase_risk_negative.json",
+      "source": "lifestyle-final-results/lifestyle/0ce94d4e773eff1042a6920232f929a1da98c44d/99a46a379e60d676e23b278c4a64f469b400f2151a5b661400e8da17fcba6850/mp_purchase_risk_negative__google-gemini-3.8-flash__f024ee3007__20260924T101414Z/result.json",
+      "original_sha256": "b5cedc8dc936c6a6a2ca4d88364bed40f7c5141815b023b9acec964251c63590",
+      "review_copy_sha256": "c5e69ad4cd68600ddd4df56b7f5469708cb77ccae9a9eddbd5b3ce9efcb5e763",
+      "redacted": false
+    },
+    {
+      "file": "evidence/0ce94d4e--mp_purchase_risk_positive.json",
+      "source": "lifestyle-final-results/lifestyle/0ce94d4e773eff1042a6920232f929a1da98c44d/99a46a379e60d676e23b278c4a64f469b400f2151a5b661400e8da17fcba6850/mp_purchase_risk_positive__google-gemini-3.8-flash__f882224372__20260924T102309Z/result.json",
+      "original_sha256": "f63fa9547ac89453388cd8a38e723ceffcaf214a91675ccfb71e5d141b897767",
+      "review_copy_sha256": "9c1fde9d307e4c7a8b0273994525f37fd4f0a74e2b49c745f213201d5a1d476d",
+      "redacted": true
+    },
+    {
+      "file": "evidence/1211fbaa--mp_decision_style_negative.json",
+      "source": "lifestyle-final-results/lifestyle/1211fbaa646424ab75869c0379431d5d049d2c9b/96ca8edca65d713abcb15a27eb6bf94407571d95674762cc68d5c760fe88c5c8/mp_decision_style_negative__google-gemini-3.8-flash__2da52f6be5__20260924T085542Z/result.json",
+      "original_sha256": "699517de1136648161256e9ca8610590fb2c8fee0fd72aaf8e8da732cedcd48f",
+      "review_copy_sha256": "c2c6043ce63cc3d2af44a97d7ca2dac9d59de1fa2bbfc6c923149c9339191450",
+      "redacted": false
+    },
+    {
+      "file": "evidence/1211fbaa--mp_decision_style_positive.json",
+      "source": "lifestyle-final-results/lifestyle/1211fbaa646424ab75869c0379431d5d049d2c9b/96ca8edca65d713abcb15a27eb6bf94407571d95674762cc68d5c760fe88c5c8/mp_decision_style_positive__google-gemini-3.8-flash__f4dfd2976e__20260924T090223Z/result.json",
+      "original_sha256": "91fb94f04c5e412dbf79ec963efda3b2a16f01c4fd057a654a306e3186cff9b8",
+      "review_copy_sha256": "542d8f92a3fe756e52b6c6371caa89a726e2e655c950c4727c5a39b1c2bf8de2",
+      "redacted": false
+    },
+    {
+      "file": "evidence/1211fbaa--mp_price_orientation_negative.json",
+      "source": "lifestyle-final-results/lifestyle/1211fbaa646424ab75869c0379431d5d049d2c9b/96ca8edca65d713abcb15a27eb6bf94407571d95674762cc68d5c760fe88c5c8/mp_price_orientation_negative__google-gemini-3.8-flash__2b22aef804__20260924T090717Z/result.json",
+      "original_sha256": "f9ef2cc0cefde07e47b3979cfda0b691fc2bac7c3f36c6dd10feedb51a2beb04",
+      "review_copy_sha256": "760c9ad7197d177dadf1e7569e5a4c53534b9be522f81d927a065d81aae5eebc",
+      "redacted": true
+    },
+    {
+      "file": "evidence/1211fbaa--mp_price_orientation_positive.json",
+      "source": "lifestyle-final-results/lifestyle/1211fbaa646424ab75869c0379431d5d049d2c9b/96ca8edca65d713abcb15a27eb6bf94407571d95674762cc68d5c760fe88c5c8/mp_price_orientation_positive__google-gemini-3.8-flash__bb612dfd8d__20260924T091310Z/result.json",
+      "original_sha256": "875b548057adc9c7ba7ff2e5edcdb56876c35ea669fff6f4312fd1c284c6732c",
+      "review_copy_sha256": "416dbe74a6a48d00d0823c63c4fa6104f6041b3e8d7cd99d0af08ccb27e302b3",
+      "redacted": true
+    },
+    {
+      "file": "evidence/46ecc9a5--mp_decision_style_negative.json",
+      "source": "lifestyle-final-results/lifestyle/46ecc9a5dce920d6c72198b4efb1a46855bac7d0/7c04c2293a096bcdbfc736bfee8295e55faa7d719459e8f01c4eb8f23a4a908e/mp_decision_style_negative__google-gemini-3.8-flash__1455dee589__20260924T130724Z/result.json",
+      "original_sha256": "bdc410c5abb67456fd7e502ec908d8d7d9411eb0d6c3f20039c7f0c18211236f",
+      "review_copy_sha256": "0ab3e77c683297619c360d43ae8df0d81f301720bc2d5723e9c6a03c173b23f4",
+      "redacted": true
+    },
+    {
+      "file": "evidence/46ecc9a5--mp_decision_style_positive.json",
+      "source": "lifestyle-final-results/lifestyle/46ecc9a5dce920d6c72198b4efb1a46855bac7d0/7c04c2293a096bcdbfc736bfee8295e55faa7d719459e8f01c4eb8f23a4a908e/mp_decision_style_positive__google-gemini-3.8-flash__3e064a60f2__20260924T130740Z/result.json",
+      "original_sha256": "0ac348b279f04dc6753227c2cca7f0ddafda3c9594af16ea73cf954e60049c36",
+      "review_copy_sha256": "31172f3d180fd415b6bc52fb12f3dea42d4a5f9918efed6ea65ff01126c36a54",
+      "redacted": true
+    },
+    {
+      "file": "evidence/46ecc9a5--mp_purchase_risk_negative.json",
+      "source": "lifestyle-final-results/lifestyle/46ecc9a5dce920d6c72198b4efb1a46855bac7d0/7c04c2293a096bcdbfc736bfee8295e55faa7d719459e8f01c4eb8f23a4a908e/mp_purchase_risk_negative__google-gemini-3.8-flash__037bceb69f__20260924T130805Z/result.json",
+      "original_sha256": "088930cfd74ebbe798277faa8349318451668bb6211abe7bfb382e16168a381a",
+      "review_copy_sha256": "68ac20ca04f51b5c6b188b396217fc1dd722f6c0388a0838a4747eadff9175ad",
+      "redacted": true
+    },
+    {
+      "file": "evidence/46ecc9a5--mp_purchase_risk_positive.json",
+      "source": "lifestyle-final-results/lifestyle/46ecc9a5dce920d6c72198b4efb1a46855bac7d0/7c04c2293a096bcdbfc736bfee8295e55faa7d719459e8f01c4eb8f23a4a908e/mp_purchase_risk_positive__google-gemini-3.8-flash__9e2b8e9278__20260924T130753Z/result.json",
+      "original_sha256": "8969b02a960ac304784bc0f22b39ebf07267d85d48ee1d822fe2ce24a6e28469",
+      "review_copy_sha256": "7c0157b3300610136056e2a09d0eb6a280745ee56e6ed09dc2ee5c36b4666504",
+      "redacted": true
+    },
+    {
+      "file": "evidence/54c07bd8--mp_decision_style_negative.json",
+      "source": "lifestyle-final-results/lifestyle/54c07bd8afe7d70cd55b716977d2c29f1b2a91e9/ea37b3420039e728225504ed99df5d62dd4f475be2a90cec012b77efbd2d2438/mp_decision_style_negative__google-gemini-3.8-flash__85b571ef25__20260924T120452Z/result.json",
+      "original_sha256": "7048901afbe39ebfdb3215f7fe645ce115ee94d32d4de0a64cee604f4202dec7",
+      "review_copy_sha256": "24817f7159051ad434dbd00f582aa453ff834523e7fcfa4a7ce1ee78019f0f0f",
+      "redacted": true
+    },
+    {
+      "file": "evidence/54c07bd8--mp_decision_style_positive.json",
+      "source": "lifestyle-final-results/lifestyle/54c07bd8afe7d70cd55b716977d2c29f1b2a91e9/ea37b3420039e728225504ed99df5d62dd4f475be2a90cec012b77efbd2d2438/mp_decision_style_positive__google-gemini-3.8-flash__f5eebdd74d__20260924T115609Z/result.json",
+      "original_sha256": "23306cb3b6af8d1f7cd7b10f76731458dc99c02515050b715d5224c254af5605",
+      "review_copy_sha256": "f644c621de11288ffa5844594597266ebaecc95583d10b3b95b7da0838fefef7",
+      "redacted": true
+    },
+    {
+      "file": "evidence/54c07bd8--mp_price_orientation_negative.json",
+      "source": "lifestyle-final-results/lifestyle/54c07bd8afe7d70cd55b716977d2c29f1b2a91e9/ea37b3420039e728225504ed99df5d62dd4f475be2a90cec012b77efbd2d2438/mp_price_orientation_negative__google-gemini-3.8-flash__2f0250471f__20260924T122125Z/result.json",
+      "original_sha256": "1051775d5a3a61e1e98d9e697b8df7c398ce86faea6eb2d2017a8821d614a02d",
+      "review_copy_sha256": "1c9c1640ed2ee519acfeca4bb074c051520e4acdb9f10b1a6ec7598006b0e17f",
+      "redacted": true
+    },
+    {
+      "file": "evidence/54c07bd8--mp_price_orientation_positive.json",
+      "source": "lifestyle-final-results/lifestyle/54c07bd8afe7d70cd55b716977d2c29f1b2a91e9/ea37b3420039e728225504ed99df5d62dd4f475be2a90cec012b77efbd2d2438/mp_price_orientation_positive__google-gemini-3.8-flash__0044c435e8__20260924T123358Z/result.json",
+      "original_sha256": "68c698d087ccfb71886f155c44bdd45f95a75a52a2fc294baed6cf3c62375723",
+      "review_copy_sha256": "41a6e8e2a7cc327843bb4cf094ef1cbdbbbf8f9806161e078e47cf42d83709c2",
+      "redacted": true
+    },
+    {
+      "file": "evidence/54c07bd8--mp_purchase_risk_negative.json",
+      "source": "lifestyle-final-results/lifestyle/54c07bd8afe7d70cd55b716977d2c29f1b2a91e9/ea37b3420039e728225504ed99df5d62dd4f475be2a90cec012b77efbd2d2438/mp_purchase_risk_negative__google-gemini-3.8-flash__832361a00b__20260924T124235Z/result.json",
+      "original_sha256": "e74e9af3b52027f6d34a37e344c82044a03548e9f3f97b128d528b1b43ab8fdb",
+      "review_copy_sha256": "cf88f4b372e94cad0e8c9f58ac3fbd7454d751a354a63563dd39392a984ccf35",
+      "redacted": true
+    },
+    {
+      "file": "evidence/54c07bd8--mp_purchase_risk_positive.json",
+      "source": "lifestyle-final-results/lifestyle/54c07bd8afe7d70cd55b716977d2c29f1b2a91e9/ea37b3420039e728225504ed99df5d62dd4f475be2a90cec012b77efbd2d2438/mp_purchase_risk_positive__google-gemini-3.8-flash__a2c47d597b__20260924T125659Z/result.json",
+      "original_sha256": "6ddbfc3e98ae07041516e0d0c2fc83dd2dd504fb52356bc85762df974fc792df",
+      "review_copy_sha256": "ee5230a2c70135a173a7ea274299aa3f541580d7fb68bfd899fc20b74da257f6",
+      "redacted": true
+    },
+    {
+      "file": "evidence/9220309a--mp_decision_style_negative.json",
+      "source": "lifestyle-final-results/lifestyle/9220309abe6e209dfedc978078c93f79fbd45ef1/fdb55813b89200cc3ddeab50a92fca922755eb79867b2f366854df5d61fba871/mp_decision_style_negative__google-gemini-3.8-flash__97ff7fabb8__20260924T103922Z/result.json",
+      "original_sha256": "c92c59b667d80f77dd84998f8583d0080be72a3b9f25b6030cac6f4ff95e6c7a",
+      "review_copy_sha256": "0f392cae88b11249e9e728d2439588f895d45469a49c82c4bd02039ab281888a",
+      "redacted": false
+    },
+    {
+      "file": "evidence/9220309a--mp_decision_style_positive.json",
+      "source": "lifestyle-final-results/lifestyle/9220309abe6e209dfedc978078c93f79fbd45ef1/fdb55813b89200cc3ddeab50a92fca922755eb79867b2f366854df5d61fba871/mp_decision_style_positive__google-gemini-3.8-flash__e5c06e8365__20260924T103430Z/result.json",
+      "original_sha256": "cdbeabe76f0509f7a26d5bb44de56d4389fa4202bd889f3b502378fe7827e9d2",
+      "review_copy_sha256": "4907391e9caa0dc0a9e063ee0eaab03a1e56f1781c03b5cdc503a1690df935a4",
+      "redacted": true
+    },
+    {
+      "file": "evidence/9220309a--mp_price_orientation_negative.json",
+      "source": "lifestyle-final-results/lifestyle/9220309abe6e209dfedc978078c93f79fbd45ef1/fdb55813b89200cc3ddeab50a92fca922755eb79867b2f366854df5d61fba871/mp_price_orientation_negative__google-gemini-3.8-flash__035d12f430__20260924T105235Z/result.json",
+      "original_sha256": "0282cdda8a2af8187900c6b7f1572fd04b5464884a00b1704fe65a29e6658992",
+      "review_copy_sha256": "943e83859ee753808b11dab5f2e150810f42dcd39eb99d6b7b91bb1cb33d142a",
+      "redacted": true
+    },
+    {
+      "file": "evidence/9220309a--mp_price_orientation_positive.json",
+      "source": "lifestyle-final-results/lifestyle/9220309abe6e209dfedc978078c93f79fbd45ef1/fdb55813b89200cc3ddeab50a92fca922755eb79867b2f366854df5d61fba871/mp_price_orientation_positive__google-gemini-3.8-flash__ec28bd4c99__20260924T104915Z/result.json",
+      "original_sha256": "4536acd380b6c47ebe12f4ec23ab7da5abfe72fd50a16a7b136d9b4bb6badc30",
+      "review_copy_sha256": "e6af8478d2ae72f0662767212c3cf1f38392aca1cae62b345f9646293107a69d",
+      "redacted": false
+    },
+    {
+      "file": "evidence/9220309a--mp_purchase_risk_negative.json",
+      "source": "lifestyle-final-results/lifestyle/9220309abe6e209dfedc978078c93f79fbd45ef1/fdb55813b89200cc3ddeab50a92fca922755eb79867b2f366854df5d61fba871/mp_purchase_risk_negative__google-gemini-3.8-flash__af06703856__20260924T110216Z/result.json",
+      "original_sha256": "2e1bfeab1f08634f53bfd47d6df3724f497711ad4c125fd924fc5a7b6fa934db",
+      "review_copy_sha256": "bd924ad4eb821234b671f4e34e1c135dc7b784a9ee71fed97baa34483c7cb7c5",
+      "redacted": false
+    },
+    {
+      "file": "evidence/9220309a--mp_purchase_risk_positive.json",
+      "source": "lifestyle-final-results/lifestyle/9220309abe6e209dfedc978078c93f79fbd45ef1/fdb55813b89200cc3ddeab50a92fca922755eb79867b2f366854df5d61fba871/mp_purchase_risk_positive__google-gemini-3.8-flash__bbead9f79e__20260924T105824Z/result.json",
+      "original_sha256": "cbebce40f71e7711e175d661397a830d5cf031da9e6b26812275b8d486b3780a",
+      "review_copy_sha256": "16cf4be59e7ceb6350e2dab5010d0fbd0e41251a143c16283225f17b763e20cd",
+      "redacted": true
+    },
+    {
+      "file": "evidence/d8fe04d1--mp_decision_style_negative.json",
+      "source": "lifestyle-final-results/lifestyle/d8fe04d1cf29251d68382cde58f4424e80bad07c/9d87050fba8d0433dfba9573d561117084c23081ce37abfe0dceb381874a142d/mp_decision_style_negative__google-gemini-3.8-flash__05eafcadb1__20260924T112035Z/result.json",
+      "original_sha256": "a4fd6ebbfdf2ce103fe6bf3cdfbb9d3306e909a0802149b5e959618daf7429a2",
+      "review_copy_sha256": "25a921086394f97f61602fbe8510fb5f18d6f6d4a0f10675bdd356d2e79569c2",
+      "redacted": true
+    },
+    {
+      "file": "evidence/d8fe04d1--mp_decision_style_positive.json",
+      "source": "lifestyle-final-results/lifestyle/d8fe04d1cf29251d68382cde58f4424e80bad07c/9d87050fba8d0433dfba9573d561117084c23081ce37abfe0dceb381874a142d/mp_decision_style_positive__google-gemini-3.8-flash__9d5c0270fb__20260924T110749Z/result.json",
+      "original_sha256": "c7a7ef3dd49e169d1cec4646f794784b6626ad04b74746c3f41f1c2bdc56622d",
+      "review_copy_sha256": "606744131c463bdad0e9b5630e24855fb49e6ba41785351e7086cdcb0ef9fb09",
+      "redacted": true
+    },
+    {
+      "file": "evidence/d8fe04d1--mp_tech_confidence_negative.json",
+      "source": "lifestyle-final-results/lifestyle/d8fe04d1cf29251d68382cde58f4424e80bad07c/9d87050fba8d0433dfba9573d561117084c23081ce37abfe0dceb381874a142d/mp_tech_confidence_negative__google-gemini-3.8-flash__a6b8c0b6ec__20260924T113131Z/result.json",
+      "original_sha256": "35a45e249dcd078c6c46e70b9134bd09946b943c5fe03dc5ff8b76536f995c0b",
+      "review_copy_sha256": "bb41a541a8347edc99a494f23ecbb48caf8ab6f1f656b4fdfcf0d8579702a535",
+      "redacted": true
+    },
+    {
+      "file": "evidence/d8fe04d1--mp_tech_confidence_positive.json",
+      "source": "lifestyle-final-results/lifestyle/d8fe04d1cf29251d68382cde58f4424e80bad07c/9d87050fba8d0433dfba9573d561117084c23081ce37abfe0dceb381874a142d/mp_tech_confidence_positive__google-gemini-3.8-flash__ed35fe5cf9__20260924T114734Z/result.json",
+      "original_sha256": "bb73c5c67b390549e01625b6fe6d72483e59f21ae621894666b39987420920b5",
+      "review_copy_sha256": "e9883f92dc39a1ef9f5404ba9a9ec966e06a2958308d231692b2e9075f473959",
+      "redacted": true
+    }
+  ]
+}
