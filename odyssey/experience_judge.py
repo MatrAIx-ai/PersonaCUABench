@@ -6,7 +6,7 @@ described their situation in their own words, left things out, and cannot be
 held to requirements they never voiced -- but they can be failed by an answer
 they cannot read, cannot act on, or that ignores what they did say.
 
-Two judges (default GPT-5.5 and Claude Opus 4.8) score the same prompt
+Two judges (default GPT-5.6 Terra and Claude Opus 4.8) score the same prompt
 independently. Their scores are never averaged: both are kept, and we report
 how often they land within one point, the way the MatrAIx paper does.
 
@@ -34,19 +34,22 @@ PROMPT = odyssey.prompt("experience_judge")
 
 def build_prompt(record: dict) -> str:
     run_ = record["run"]
-    task = next((t for t in odyssey.TASKS if t["task_id"] == record["task_id"]), None)
-    if task is None:
-        raise SystemExit(f"task {record['task_id']} is not in tasks.json")
+    task, _ = odyssey.task_for_record(record)
     persona = record["persona"]
     if persona == "none":
         profile = ("Control arm: no persona. This person sent the expert brief "
                    "verbatim, so treat them as a demanding expert who asked for "
                    "every item in it.")
     else:
-        # The profile alone -- persona_system_prompt() wraps it in role-play
-        # instructions, which would tell the judge to become this person.
-        doc = odyssey.persona_lib.load_persona(HERE / "personas" / f"{persona}.yaml")
-        profile = "\n\n".join(odyssey.persona_lib.build_dimension_narrative(doc))
+        # Prefer the immutable profile used by this exact run. Legacy results
+        # predate snapshots and fall back to the local YAML for compatibility.
+        snapshot = ((run_.get("user") or {}).get("persona_profile") or {})
+        profile = str(snapshot.get("profile_narrative") or "").strip()
+        if not profile:
+            # The profile alone -- persona_system_prompt() wraps it in role-play
+            # instructions, which would tell the judge to become this person.
+            doc = odyssey.persona_lib.load_persona(HERE / "personas" / f"{persona}.yaml")
+            profile = "\n\n".join(odyssey.persona_lib.build_dimension_narrative(doc))
     conversation = "\n".join(
         f"{'PERSON' if t['role'] == 'user' else 'ASSISTANT'}: {t['text']}"
         for t in run_.get("conversation") or []) or "(none)"
@@ -61,21 +64,23 @@ def build_prompt(record: dict) -> str:
 
 def score_once(prompt: str, model: str, provider: str = "") -> dict:
     """One judge's verdict, retried while it returns nothing parseable."""
-    client, _ = odyssey._client(model, provider)
+    client, resolved_provider = odyssey._client(model, provider)
     for attempt in range(3):
         try:
             resp = odyssey._create_with_retry(
                 client, model=model, messages=[{"role": "user", "content": prompt}],
-                max_completion_tokens=4000)
+                **odyssey._judge_options(model, 4000))
             parsed = odyssey.extract_json(resp.choices[0].message.content or "")
         except Exception as exc:
             parsed, last = None, f"{type(exc).__name__}: {exc}"
         else:
             last = "unparseable judge output"
         if parsed:
-            return {"model": model, **parsed}
+            return {"model": model, "provider": resolved_provider,
+                    "backend": odyssey._provider_backend(resolved_provider), **parsed}
         print(f"    [{model}] attempt {attempt + 1}/3: {last}", flush=True)
-    return {"model": model, "error": last}
+    return {"model": model, "provider": resolved_provider,
+            "backend": odyssey._provider_backend(resolved_provider), "error": last}
 
 
 def valid_score(value) -> int | None:
@@ -94,6 +99,25 @@ def agreement(a: dict, b: dict) -> dict:
         out[dim] = None if sa is None or sb is None else {
             "delta": sa - sb, "within_one": abs(sa - sb) <= 1}
     return out
+
+
+def experience_complete(value: object) -> bool:
+    """Only successful dual-judge output is resumable as complete."""
+    if not isinstance(value, dict):
+        return False
+    for slot in ("a", "b"):
+        judge = value.get(slot)
+        if not isinstance(judge, dict) or judge.get("error"):
+            return False
+        if any(not isinstance(judge.get(dimension), dict) for dimension in DIMENSIONS):
+            return False
+    return True
+
+
+def _write_record(path: Path, record: dict) -> None:
+    temporary = path.with_suffix(".json.tmp")
+    temporary.write_text(json.dumps(record, ensure_ascii=False, indent=2), encoding="utf-8")
+    temporary.replace(path)
 
 
 def main() -> None:
@@ -118,14 +142,28 @@ def main() -> None:
         if args.print_prompt:
             print(build_prompt(record))
             return
-        if record.get("experience") and not args.redo:
+        if experience_complete(record.get("experience")) and not args.redo:
             continue
         print(f"{record['task_id'][:12]} {record['persona']}", flush=True)
         prompt = build_prompt(record)
         a = score_once(prompt, args.judge_a, args.judge_a_provider)
         b = score_once(prompt, args.judge_b, args.judge_b_provider)
-        record["experience"] = {"a": a, "b": b, "agreement": agreement(a, b)}
-        path.write_text(json.dumps(record, ensure_ascii=False, indent=2), encoding="utf-8")
+        profile_snapshot = (((record.get("run") or {}).get("user") or {})
+                            .get("persona_profile") or {})
+        profile_integrity = (
+            "frozen_snapshot"
+            if profile_snapshot.get("profile_narrative")
+            else "unverified_legacy"
+        )
+        _, task_integrity = odyssey.task_for_record(record)
+        record["experience"] = {
+            "a": a,
+            "b": b,
+            "agreement": agreement(a, b),
+            "profile_integrity": profile_integrity,
+            "task_integrity": task_integrity,
+        }
+        _write_record(path, record)
         for dim in DIMENSIONS:
             print(f"  {dim:22} {(a.get(dim) or {}).get('score')!s:>4} "
                   f"{(b.get(dim) or {}).get('score')!s:>4}")

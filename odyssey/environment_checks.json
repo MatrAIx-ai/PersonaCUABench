@@ -1,0 +1,111 @@
+{
+  "schema_version": "personacuabench.environment-checks.v1",
+  "suites": {
+    "lifestyle": {
+      "1211fbaa646424ab75869c0379431d5d049d2c9b": [
+        {
+          "url": "https://www.homedepot.com/p/Milwaukee-M12-12-Volt-Lithium-Ion-XC-High-Output-5-0-Ah-Battery-Pack-48-11-2450/320268545",
+          "must_contain": ["48-11-2450", "$" ]
+        },
+        {
+          "url": "https://www.tecovas.com/products/the-earl",
+          "must_contain": ["The Earl", "$" ]
+        },
+        {
+          "url": "https://www.footlocker.com/search?query=Nike+Ja+3",
+          "must_contain": ["Ja 3", "$" ]
+        },
+        {
+          "url": "https://shop.lululemon.com/c/men-we-made-too-much/n18mhdznrqw",
+          "must_contain": ["We Made Too Much", "$" ]
+        },
+        {
+          "url": "https://oldnavy.gap.com/browse/product.do?pid=506986002&vid=1",
+          "must_contain": ["jogger", "$" ]
+        }
+      ],
+      "0ce94d4e773eff1042a6920232f929a1da98c44d": [
+        {
+          "url": "https://us.princesspolly.com/products/anse-mini-dress-black",
+          "must_contain": ["Anse Mini Dress Black", "$" ]
+        },
+        {
+          "url": "https://demoniacult.com/collections/best-sellers/products/kera-08bpu",
+          "must_contain": ["Kera-08", "$" ]
+        },
+        {
+          "url": "https://edikted.com/products/s23008_dark-brown",
+          "must_contain": ["Jaxson Oversized Faux Leather Bomber Jacket", "dark-brown" ]
+        }
+      ],
+      "9220309abe6e209dfedc978078c93f79fbd45ef1": [
+        {
+          "url": "https://www.asos.com/us/search/?q=black%20mens%20watches",
+          "must_contain": ["watches", "black" ]
+        },
+        {
+          "url": "https://skims.com/products/skims-cotton-mens-5-inch-boxer-brief-onyx/",
+          "must_contain": ["boxer brief", "Onyx", "$" ]
+        },
+        {
+          "url": "https://poshmark.com/category/Men-Accessories",
+          "must_contain": ["Men's Accessories", "$" ]
+        }
+      ],
+      "d8fe04d1cf29251d68382cde58f4424e80bad07c": [
+        {
+          "url": "https://support.ouraring.com/hc/en-us/articles/4409086524819-Oura-Membership",
+          "must_contain": ["Oura Membership"]
+        },
+        {
+          "url": "https://journey.cloud/membership",
+          "must_contain": ["Shared Journals", "Membership"]
+        },
+        {
+          "url": "https://us.norton.com/products/norton-vpn",
+          "must_contain": ["VPN", "privacy"]
+        }
+      ],
+      "54c07bd8afe7d70cd55b716977d2c29f1b2a91e9": [
+        {
+          "url": "https://www.nytimes.com/wirecutter/gifts/",
+          "must_contain": ["Gift"]
+        },
+        {
+          "url": "https://www.etsy.com/market/personalized_christmas_ornaments",
+          "must_contain": ["ornament", "$" ]
+        },
+        {
+          "url": "https://dukecannon.com/collections/holiday-collection",
+          "must_contain": ["Holiday"]
+        },
+        {
+          "url": "https://www.lookfantastic.com/c/health-beauty/gifting/for-him/body/",
+          "must_contain": ["Men", "Gift"]
+        }
+      ],
+      "46ecc9a5dce920d6c72198b4efb1a46855bac7d0": [
+        {
+          "url": "https://www.depop.com/rainbow_bebe/",
+          "must_contain": ["rainbow_bebe", "dress"]
+        },
+        {
+          "url": "https://www.prettylittlething.us/product/plus-velvet-side-split-midi-dress_plt14647?colour=emerald+green",
+          "must_contain": ["Emerald Green", "12"]
+        },
+        {
+          "url": "https://www.jjshouse.com/all/cocktail-dresses/neckline/v-neck",
+          "must_contain": ["Cocktail", "V-Neck"]
+        },
+        {
+          "url": "https://www.tecovas.com/products/the-earl",
+          "must_contain": ["The Earl", "$" ]
+        },
+        {
+          "url": "https://secure.als.com/nike-phantom-6-academy-fgmg-lowtop-soccer-cleat-mens-10610472/p",
+          "must_contain": ["Nike Phantom 6", "$" ]
+        }
+      ]
+    }
+  }
+}

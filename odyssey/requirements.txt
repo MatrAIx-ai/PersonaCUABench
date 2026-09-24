@@ -6,3 +6,5 @@ pyyaml>=6.0
 # brotli<1.2 rejects: every API response then dies with
 # "TypeError: process() takes no keyword arguments".
 brotli>=1.2
+google-auth>=2.0
+requests>=2.0

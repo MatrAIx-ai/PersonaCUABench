@@ -1,0 +1,413 @@
+{
+  "schema_version": "personacuabench.matched-pair.v1",
+  "experiment_id": "lifestyle-four-observable-v1",
+  "suite_id": "lifestyle",
+  "display_name": "Matched-pair lifestyle shopper",
+  "design": {
+    "selected_axis_count": 4,
+    "expected_persona_count": 8,
+    "recommended_replicates": 3,
+    "expected_task_axis_pairs_per_replicate": 15,
+    "expected_run_cells_per_replicate": 30,
+    "pairing_controls": [
+      "Use the same original task, persona model, CUA model, judge model, prompts, runtime limits, and replicate identifier for both arms.",
+      "Within a pair, change exactly one MatrAIx dimension value; all other rendered persona dimensions and the display name remain identical.",
+      "Keep every original task requirement hard: a persona pole may change emphasis, comparison behavior, or presentation preference, but may not remove, contradict, or invent a task requirement.",
+      "Judge persona adherence from simulated-user utterances only; task success and CUA alignment remain separate axes."
+    ],
+    "invalid_pair_conditions": [
+      "Either arm fails to communicate every original task rubric.",
+      "The two runs differ in more than the target persona dimension or controlled run metadata.",
+      "The only cited persona evidence is wording already required by the original task.",
+      "A run is scored on an axis-task combination not listed as applicable below."
+    ]
+  },
+  "baseline_dimensions": {
+    "economic_motivation": "Value-driven",
+    "decision_style": "Deliberative",
+    "risk_tolerance": "Balanced",
+    "tech_savviness": "Comfortable"
+  },
+  "scoring": {
+    "evidence_unit": "An exact or tightly paraphrased simulated-user utterance, not a CUA action or answer.",
+    "per_arm_scale": {
+      "0": "No supporting behavior, a direct contradiction, or behavior that violates a hard task requirement.",
+      "1": "Weak or ambiguous support, including merely repeating language inherited from the original task.",
+      "2": "Clear task-specific expression beyond inherited task wording, with no contradictory user behavior."
+    },
+    "binary_adherence_rule": "expressed=true if and only if the per-arm score is 2.",
+    "pair_separation_rule": "A matched pair separates only when both arms score 2 for their assigned poles and the cited evidence shows meaningfully opposite preferences or behavior.",
+    "coverage_guardrail": "Both arms must communicate 100% of the original task rubrics; otherwise report the pair as invalid rather than treating omission as persona expression.",
+    "reporting": [
+      "Report positive-arm adherence, negative-arm adherence, and pair separation separately by axis and task.",
+      "Keep task success and CUA alignment separate; never average them into persona adherence.",
+      "Retain the cited utterance, score, confidence, task ID, profile hash, model identities, and replicate identifier for auditability."
+    ]
+  },
+  "axes": [
+    {
+      "axis_id": "price_orientation",
+      "label": "Price orientation",
+      "dimension": "economic_motivation",
+      "positive": {
+        "value": "Cost-sensitive",
+        "behavioral_definition": "Actively minimizes total spend and asks the assistant to favor a lower-cost qualifying choice when the original requirements permit it.",
+        "generic_observables": [
+          "Sets an explicit preference for the least expensive acceptable option beyond any price check already required by the task.",
+          "Asks for price differences or savings to drive the final recommendation while preserving every required item and site."
+        ],
+        "contradictions": [
+          "Says price is secondary when a more expensive option looks or feels better.",
+          "Chooses a premium option without explaining a task-required constraint that rules out the cheaper qualifying choice."
+        ]
+      },
+      "negative": {
+        "value": "Premium-seeking",
+        "behavioral_definition": "Accepts a higher price for stronger materials, styling, presentation, or perceived longevity while still honoring every explicit budget cap and price check in the task.",
+        "generic_observables": [
+          "Explicitly says the cheapest choice should not win automatically if a more polished or durable qualifying option is available.",
+          "Asks the assistant to explain what justifies paying more while retaining all required prices and comparisons."
+        ],
+        "contradictions": [
+          "Directs the assistant to choose the cheapest qualifying item as the overriding goal.",
+          "Ignores a task's explicit budget threshold or removes a required lower-cost comparison."
+        ]
+      },
+      "tasks": {
+        "1211fbaa646424ab75869c0379431d5d049d2c9b": {
+          "task_label": "Father's Day tools and apparel shortlist",
+          "rationale": "The task contrasts a battery, premium leather boots, budget sneakers, sale athletic wear, and joggers, so spending posture can change the recommendation without changing the required sweep.",
+          "inherited_task_signals": [
+            "Reporting all five required item names, prices, and links.",
+            "Checking whether the Nike Ja 3 is under $60 and using Old Navy as an affordable reference."
+          ],
+          "positive_observables": [
+            "Asks the assistant to make the lower total spend the tie-breaker after all five required pages are checked.",
+            "Prefers the footwear-and-apparel combination with the clearest savings even if the premium boot looks more distinctive."
+          ],
+          "negative_observables": [
+            "Says a higher-priced leather boot or better-constructed athletic piece may be preferred if its quality is visibly justified.",
+            "Requests a premium recommendation alongside the mandatory under-$60 finding instead of treating the cheapest footwear as the automatic winner."
+          ]
+        },
+        "0ce94d4e773eff1042a6920232f929a1da98c44d": {
+          "task_label": "All-black going-out outfit",
+          "rationale": "The dress and Mary Jane choices are open within fixed size, color, and delivery constraints, allowing price posture to affect which cohesive look is selected.",
+          "inherited_task_signals": [
+            "Finding the specified dress, shoes, and jacket and keeping the dress and shoe tabs open.",
+            "Reporting the dress and shoe prices and the required shoe size availability."
+          ],
+          "positive_observables": [
+            "Asks for the least expensive cohesive dress-and-shoe pairing among qualifying live options.",
+            "Requests that any visible sale price or meaningful savings be used in the final outfit recommendation."
+          ],
+          "negative_observables": [
+            "Says the outfit may cost more if the silhouette and finish look substantially more polished.",
+            "Asks the assistant not to downgrade the look merely to save money when all hard constraints are satisfied."
+          ]
+        },
+        "9220309abe6e209dfedc978078c93f79fbd45ef1": {
+          "task_label": "Men's accessories, basics, and resale shortlist",
+          "rationale": "The SKIMS and Poshmark selections are open-ended, so a cost-sensitive versus premium-seeking user can select and frame different qualifying products while preserving the ASOS count check.",
+          "inherited_task_signals": [
+            "Reporting the ASOS black-watch result count or its absence.",
+            "Finding a multicolor, multisize SKIMS boxer brief and a live Poshmark men's-accessory listing."
+          ],
+          "positive_observables": [
+            "Asks the assistant to favor an inexpensive live resale listing and a lower-priced qualifying basic.",
+            "Wants the shortlist framed around savings rather than brand prestige."
+          ],
+          "negative_observables": [
+            "Allows a higher-priced Poshmark accessory if condition, material, or brand makes it feel more special.",
+            "Asks for the better-finished qualifying basic even when a cheaper option exists."
+          ]
+        },
+        "54c07bd8afe7d70cd55b716977d2c29f1b2a91e9": {
+          "task_label": "Christmas gifts across NYT, Etsy, Duke Cannon, and Lookfantastic",
+          "rationale": "Many qualifying gifts are available across the required sources, making price posture observable in item selection and the final comparison.",
+          "inherited_task_signals": [
+            "Collecting the NYT anchor, three Etsy ornaments, two Duke Cannon gifts, and three Lookfantastic sets.",
+            "Reporting names, URLs, and prices when shown."
+          ],
+          "positive_observables": [
+            "Requests the strongest low-cost mix across the nine required gift slots and asks that savings guide the anchor choice.",
+            "Prefers lower-priced qualifying ornaments and gift sets when their personalization or contents remain adequate."
+          ],
+          "negative_observables": [
+            "Invites a more expensive anchor or personalized ornament when presentation or longevity makes it feel more gift-worthy.",
+            "Asks the assistant to distinguish premium picks from cheaper alternatives rather than minimizing the combined spend."
+          ]
+        }
+      }
+    },
+    {
+      "axis_id": "decision_style",
+      "label": "Decision style",
+      "dimension": "decision_style",
+      "positive": {
+        "value": "Analytical",
+        "behavioral_definition": "Wants choices evaluated against explicit criteria and tradeoffs before the assistant names a winner.",
+        "generic_observables": [
+          "States concrete comparison criteria beyond merely restating the task requirements.",
+          "Asks for a reasoned tradeoff or compact comparison before the final selection."
+        ],
+        "contradictions": [
+          "Asks the assistant to pick only by immediate visual appeal or gut feel.",
+          "Rejects a structured comparison as unnecessary."
+        ]
+      },
+      "negative": {
+        "value": "Intuitive",
+        "behavioral_definition": "Prefers a decisive recommendation based on overall feel and coherence once all hard requirements have been verified.",
+        "generic_observables": [
+          "Explicitly asks the assistant to use its taste or overall impression after completing the required checks.",
+          "Prefers a clear pick and brief rationale over a scored or exhaustive comparison."
+        ],
+        "contradictions": [
+          "Demands a formal matrix, scoring model, or exhaustive criterion-by-criterion ranking.",
+          "Refuses a recommendation until every soft preference has been quantified."
+        ]
+      },
+      "tasks": {
+        "1211fbaa646424ab75869c0379431d5d049d2c9b": {
+          "task_label": "Father's Day tools and apparel shortlist",
+          "rationale": "The task requires a cross-category recommendation where explicit gift-fit criteria or an overall intuitive judgment can produce different prioritization.",
+          "inherited_task_signals": [
+            "Comparing the required product pages and prices.",
+            "Giving a fit note for every required gift option."
+          ],
+          "positive_observables": [
+            "Defines practicality, wearability, price, and gift appeal as separate criteria for the final shortlist.",
+            "Asks for the recommended combination to be justified through those criteria."
+          ],
+          "negative_observables": [
+            "Asks the assistant to choose the most naturally giftable combination once every required product is checked.",
+            "Prefers a concise overall-vibe explanation rather than a criterion table."
+          ]
+        },
+        "0ce94d4e773eff1042a6920232f929a1da98c44d": {
+          "task_label": "All-black going-out outfit",
+          "rationale": "The outfit must be cohesive, so the user can either request a structured fit-and-style comparison or delegate the final aesthetic judgment.",
+          "inherited_task_signals": [
+            "Using the black dress as the anchor and verifying all required availability constraints.",
+            "Returning the three product links and required prices."
+          ],
+          "positive_observables": [
+            "Asks the assistant to compare silhouette, proportion, finish, and color harmony before choosing the shoes and jacket.",
+            "Requests a short tradeoff explanation for why the three pieces work together."
+          ],
+          "negative_observables": [
+            "Asks the assistant to use its styling instinct and pick the combination that feels most cohesive on sight.",
+            "Prefers one confident outfit recommendation without a formal style matrix."
+          ]
+        },
+        "9220309abe6e209dfedc978078c93f79fbd45ef1": {
+          "task_label": "Men's accessories, basics, and resale shortlist",
+          "rationale": "The task mixes three different shopping surfaces, enabling either a structured usefulness comparison or a quick taste-driven shortlist.",
+          "inherited_task_signals": [
+            "Checking the ASOS result count, SKIMS variants, and a live Poshmark listing.",
+            "Summarizing all three findings."
+          ],
+          "positive_observables": [
+            "Asks that the three findings be evaluated for versatility, condition certainty, and ease of purchase.",
+            "Wants the resale pick justified against explicit usefulness criteria."
+          ],
+          "negative_observables": [
+            "Invites the assistant to choose a resale accessory that simply feels most interesting with the basic.",
+            "Requests a brisk shortlist and one overall impression instead of a scored comparison."
+          ]
+        },
+        "d8fe04d1cf29251d68382cde58f4424e80bad07c": {
+          "task_label": "Private shared-journaling setup",
+          "rationale": "Journey Cloud must be judged against a fixed privacy baseline, allowing either a criterion-based decision or a simple overall fit recommendation without relaxing privacy requirements.",
+          "inherited_task_signals": [
+            "Using Oura's AI-access guidance as the privacy baseline.",
+            "Covering Journey Cloud pricing and sharing, Huan Dao methods, and three Norton features."
+          ],
+          "positive_observables": [
+            "Defines access control, sharing model, price, and setup burden as separate criteria for the Journey Cloud recommendation.",
+            "Asks the assistant to explain where evidence is incomplete before concluding fit."
+          ],
+          "negative_observables": [
+            "Asks for a decisive yes-or-no fit judgment after the mandated privacy checks are complete.",
+            "Prefers a brief overall recommendation over a weighted comparison table."
+          ]
+        },
+        "54c07bd8afe7d70cd55b716977d2c29f1b2a91e9": {
+          "task_label": "Christmas gifts across NYT, Etsy, Duke Cannon, and Lookfantastic",
+          "rationale": "The multi-recipient shortlist supports either explicit recipient-fit criteria or a more intuitive balance of practical, sentimental, and stocking-stuffer gifts.",
+          "inherited_task_signals": [
+            "Collecting all nine required gifts and the NYT article URL.",
+            "Returning names, prices when shown, and URLs."
+          ],
+          "positive_observables": [
+            "Asks the assistant to classify the picks by recipient, practicality, sentiment, and value before recommending the balance.",
+            "Wants overlaps or gaps in the nine-item set called out explicitly."
+          ],
+          "negative_observables": [
+            "Asks the assistant to curate the set by overall gift-giving instinct once all required slots are filled.",
+            "Prefers a compact, confident shortlist over category scoring."
+          ]
+        },
+        "46ecc9a5dce920d6c72198b4efb1a46855bac7d0": {
+          "task_label": "Budget-conscious outfit comparison",
+          "rationale": "The task explicitly requires a best-value dress judgment and several unrelated apparel checks, making decision procedure observable without changing the budget requirements.",
+          "inherited_task_signals": [
+            "Checking every required retailer and the original price and availability constraints.",
+            "Selecting one best-value dress and consolidating the complete shortlist."
+          ],
+          "positive_observables": [
+            "Defines availability, price, rewear potential, and styling versatility as the criteria for the best-value dress.",
+            "Asks for a compact side-by-side before the final dress choice."
+          ],
+          "negative_observables": [
+            "Asks the assistant to make a confident best-value pick based on which live dress feels strongest overall.",
+            "Prefers a short personal-choice note over a formal ranking of the dress candidates."
+          ]
+        }
+      }
+    },
+    {
+      "axis_id": "purchase_risk",
+      "label": "Purchase-risk tolerance",
+      "dimension": "risk_tolerance",
+      "positive": {
+        "value": "Risk-averse",
+        "behavioral_definition": "Prefers choices with clearer availability, condition, delivery, seller, or return evidence and avoids ambiguous live listings when a safer qualifying option exists.",
+        "generic_observables": [
+          "Asks for an extra confidence check on availability, condition, seller information, or returns beyond the task's basic live-page requirement.",
+          "Uses uncertainty as a reason to prefer another qualifying choice."
+        ],
+        "contradictions": [
+          "Explicitly accepts unclear condition, delivery, or seller evidence for a more exciting item.",
+          "Treats unresolved purchase uncertainty as irrelevant."
+        ]
+      },
+      "negative": {
+        "value": "Risk-tolerant",
+        "behavioral_definition": "Accepts ordinary marketplace uncertainty and prioritizes style, uniqueness, or personalization once the task's required live availability evidence is satisfied.",
+        "generic_observables": [
+          "Says the assistant need not add extra seller or return checks beyond the required live-page verification.",
+          "Accepts a less predictable but more distinctive qualifying item when the listing is currently live."
+        ],
+        "contradictions": [
+          "Demands unusually strong seller, return, or delivery proof before considering any qualifying item.",
+          "Rejects a live qualifying listing solely because every optional risk detail is not shown."
+        ]
+      },
+      "tasks": {
+        "0ce94d4e773eff1042a6920232f929a1da98c44d": {
+          "task_label": "All-black going-out outfit",
+          "rationale": "Size and delivery must be verified, while retailer policy and availability ambiguity can still influence which qualifying dress and shoe are chosen.",
+          "inherited_task_signals": [
+            "Verifying Medium delivery availability for the dress and size 9 or 9.5 for the shoe.",
+            "Keeping the selected product pages open."
+          ],
+          "positive_observables": [
+            "Requests preference for a qualifying dress and shoe with the clearest delivery and return information.",
+            "Asks that ambiguous stock or final-sale conditions be flagged before the outfit is recommended."
+          ],
+          "negative_observables": [
+            "Says the required live size and delivery checks are enough and extra return-policy research is unnecessary.",
+            "Allows the more dramatic qualifying shoe even if optional policy details are sparse."
+          ]
+        },
+        "9220309abe6e209dfedc978078c93f79fbd45ef1": {
+          "task_label": "Men's accessories, basics, and resale shortlist",
+          "rationale": "The Poshmark component introduces condition and seller uncertainty that can produce a clear risk-tolerance contrast.",
+          "inherited_task_signals": [
+            "Opening a currently live Poshmark men's-accessory listing.",
+            "Returning the ASOS and SKIMS findings unchanged."
+          ],
+          "positive_observables": [
+            "Asks for a Poshmark listing with clearer condition photos or seller evidence when more than one live option qualifies.",
+            "Wants any missing condition or return information called out in the shortlist."
+          ],
+          "negative_observables": [
+            "Says a live listing with a distinctive look is acceptable without extra seller vetting.",
+            "Prefers not to spend time on optional resale-policy checks once availability is confirmed."
+          ]
+        },
+        "54c07bd8afe7d70cd55b716977d2c29f1b2a91e9": {
+          "task_label": "Christmas gifts across NYT, Etsy, Duke Cannon, and Lookfantastic",
+          "rationale": "Personalized Etsy listings and multiple retailers expose delivery, seller, and return uncertainty while leaving many qualifying options.",
+          "inherited_task_signals": [
+            "Opening the required article and product listings and reporting all nine gift options.",
+            "Capturing prices when shown and URLs."
+          ],
+          "positive_observables": [
+            "Asks for Etsy choices with clearer seller, personalization, and delivery evidence.",
+            "Requests that uncertain arrival or final-sale conditions be flagged before recommending a gift."
+          ],
+          "negative_observables": [
+            "Accepts ordinary Etsy seller uncertainty in exchange for a more distinctive personalized ornament.",
+            "Says the live listing details are sufficient and extra policy checks are not needed."
+          ]
+        },
+        "46ecc9a5dce920d6c72198b4efb1a46855bac7d0": {
+          "task_label": "Budget-conscious outfit comparison",
+          "rationale": "The Depop seller check, multiple dress retailers, and live product availability create meaningful resale and fulfillment risk tradeoffs.",
+          "inherited_task_signals": [
+            "Checking rainbow_bebe for a live under-$100 prom dress and using the required fallback if needed.",
+            "Completing all other retailer and price checks."
+          ],
+          "positive_observables": [
+            "Asks the assistant to prefer a dress with clearer condition, availability, and return evidence when value is close.",
+            "Wants unresolved resale or delivery uncertainty included in the best-value judgment."
+          ],
+          "negative_observables": [
+            "Accepts the live under-$100 Depop option without extra seller vetting if it looks like the strongest value.",
+            "Allows a less predictable marketplace purchase to win when the style and price are compelling."
+          ]
+        }
+      }
+    },
+    {
+      "axis_id": "tech_confidence",
+      "label": "Technology confidence",
+      "dimension": "tech_savviness",
+      "positive": {
+        "value": "Digital native",
+        "behavioral_definition": "Comfortably evaluates technical controls and prefers precise information about permissions, integrations, export, and account settings.",
+        "generic_observables": [
+          "Asks for the exact control surface or mechanism behind a privacy or sharing claim.",
+          "Is comfortable following technical setup steps when they provide stronger control."
+        ],
+        "contradictions": [
+          "Rejects a suitable option merely because its settings require ordinary technical configuration.",
+          "Asks that technical controls be omitted from the explanation."
+        ]
+      },
+      "negative": {
+        "value": "Cautious adopter",
+        "behavioral_definition": "Wants privacy-preserving tools but prefers a low-complexity setup, plain-language controls, and minimal ongoing configuration.",
+        "generic_observables": [
+          "Asks the assistant to explain settings in plain language and favor fewer setup steps.",
+          "Treats complex configuration or unclear control labels as a meaningful usability cost."
+        ],
+        "contradictions": [
+          "Prefers a technically elaborate workflow without regard to setup burden.",
+          "Asks primarily for protocol-level detail while dismissing ease of use."
+        ]
+      },
+      "tasks": {
+        "d8fe04d1cf29251d68382cde58f4424e80bad07c": {
+          "task_label": "Private shared-journaling setup",
+          "rationale": "The task spans AI access controls, shared-journal configuration, pricing, and VPN features, so technical confidence can change the desired explanation and setup without weakening the fixed privacy baseline.",
+          "inherited_task_signals": [
+            "Maintaining the user's stated caution about outside AI access.",
+            "Covering Oura, Journey Cloud, Huan Dao, and Norton exactly as required."
+          ],
+          "positive_observables": [
+            "Asks for the exact setting, permission, or account control that governs AI and partner access.",
+            "Invites technically stronger controls or export/setup steps when they materially improve privacy."
+          ],
+          "negative_observables": [
+            "Asks for the simplest privacy-safe setup and wants each control translated into plain language.",
+            "Treats a complicated permissions workflow as a reason Journey Cloud may not fit even if it offers strong controls."
+          ]
+        }
+      }
+    }
+  ]
+}
