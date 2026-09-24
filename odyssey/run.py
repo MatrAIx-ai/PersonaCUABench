@@ -1027,7 +1027,9 @@ def run_agent(task: dict, user: PersonaUser, model: str, *, max_steps: int,
                     except Exception as exc:
                         result = f"{type(exc).__name__}: {exc}"
                 trajectory.append({"step": step, "tool": name, "args": args,
-                                   "result_preview": str(result)[:400]})
+                                   "result_preview": str(result)[:400],
+                                   "result": str(result),
+                                   "agent_observation": str(result)[:PAGE_CHARS + 500]})
                 messages.append({"role": "tool", "tool_call_id": call.id,
                                  "content": str(result)[:PAGE_CHARS + 500]})
             if stop_reason == "finish":
@@ -1260,6 +1262,8 @@ def main() -> None:
                          "Odysseys task text verbatim")
     ap.add_argument("--replicate-id", default="default",
                     help="controlled repeat label; included in the run/cache identity")
+    ap.add_argument("--interaction-condition", choices=("legacy", "full", "gap", "neutral"),
+                    default="legacy", help="opt-in scripted Father's Day price-disclosure pilot")
     ap.add_argument("--pair-order", choices=("positive-negative", "negative-positive"),
                     help="auditable matched-pair execution order supplied by the planner")
     ap.add_argument("--pair-position", type=int, choices=(1, 2),
@@ -1365,6 +1369,21 @@ def main() -> None:
     )
     selected_tasks = resolve_tasks(args.task, args.all, selected_suite.tasks)
 
+    controlled = args.interaction_condition != "legacy"
+    if controlled:
+        import controlled_disclosure
+        if selected_suite.suite_id != "lifestyle" or args.replicate_id in {"default", "r1"}:
+            raise SystemExit("disclosure pilot requires lifestyle and a new explicit replicate ID (not r1)")
+        for task in selected_tasks:
+            controlled_disclosure.validate(task, args.persona, args.interaction_condition)
+
+    def make_user(task, opening_cache):
+        if controlled:
+            return controlled_disclosure.ControlledUser(task, args.persona, args.interaction_condition)
+        return PersonaUser(task, None if args.persona == "none" else persona_path,
+                           args.persona_model, args.persona_provider,
+                           temperature=args.temperature, opening_cache=opening_cache)
+
     if args.preflight_only:
         if selected_suite.suite_id != "lifestyle":
             raise SystemExit("--preflight-only is currently configured for lifestyle only")
@@ -1405,10 +1424,7 @@ def main() -> None:
                 provider=args.persona_provider,
                 temperature=args.temperature,
             )
-            user = PersonaUser(task, None if args.persona == "none" else persona_path,
-                               args.persona_model, args.persona_provider,
-                               temperature=args.temperature,
-                               opening_cache=opening_cache)
+            user = make_user(task, opening_cache)
             print(f"\n=== {selected_suite.suite_id}/{task['task_id'][:12]} "
                   f"[{task['level']}] persona={args.persona} "
                   f"({len(user.opening.split())} words; Odysseys original "
@@ -1424,6 +1440,7 @@ def main() -> None:
                         str(Path(profile_dir).expanduser().resolve()))
     profile_identity = hashlib.sha256(browser_identity.encode("utf-8")).hexdigest()
     base_run_config = {
+        "observation_schema": "full-tool-result.v1",
         "persona": args.persona,
         "replicate_id": args.replicate_id,
         "pair_order": args.pair_order,
@@ -1502,6 +1519,13 @@ def main() -> None:
                 opening_cache["cache_key"] if opening_cache is not None else None
             ),
         }
+        if controlled:
+            run_config["controlled_disclosure"] = controlled_disclosure.identity(
+                task, args.persona, args.interaction_condition)
+            run_config["persona_interaction_protocol"] = controlled_disclosure.VERSION
+            run_config["persona_opening_cache_key"] = None
+            run_config["persona_user"] = {"model": None, "provider": "scripted"}
+            run_config["prompt_sha256"] = {**run_config["prompt_sha256"], "persona_user": None}
         access_plan = (environment_gate.plan_for_task(selected_suite.suite_id,
                                                        task["task_id"])
                        if selected_suite.suite_id == "lifestyle" else None)
@@ -1587,10 +1611,7 @@ def main() -> None:
                 continue
 
         try:
-            user = PersonaUser(task, None if args.persona == "none" else persona_path,
-                               args.persona_model, args.persona_provider,
-                               temperature=args.temperature,
-                               opening_cache=opening_cache)
+            user = make_user(task, opening_cache)
             print(f"  user says: {user.opening[:300]!r}", flush=True)
             run = run_agent(task, user, args.model, max_steps=args.max_steps,
                             headless=args.headless, temperature=args.temperature,

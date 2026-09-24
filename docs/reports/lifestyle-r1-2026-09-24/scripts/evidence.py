@@ -1,7 +1,7 @@
 """Export or verify the first Lifestyle replicate. No network or model calls.
 
-python docs/reports/lifestyle-r1-2026-09-24/evidence.py verify
-python docs/reports/lifestyle-r1-2026-09-24/evidence.py export --archive /path/to/artifacts
+python docs/reports/lifestyle-r1-2026-09-24/verify_audit.py
+python docs/reports/lifestyle-r1-2026-09-24/scripts/evidence.py export --archive /path/to/artifacts
 """
 from __future__ import annotations
 
@@ -12,7 +12,7 @@ import re
 from collections import Counter
 from pathlib import Path
 
-HERE = Path(__file__).resolve().parent
+HERE = Path(__file__).resolve().parents[1]
 REPO = HERE.parents[2]
 SUITE = REPO / "odyssey/task_suites/lifestyle"
 LABELS = ("Father's Day gifts", "All-black outfit", "Men's outfit",
@@ -116,9 +116,9 @@ def export(archive):
     if len(entries) != 30:
         raise ValueError(f"Expected 30 persisted r1 cells, found {len(entries)}")
     summary, markdown = rows_and_summary(entries)
-    write_json(HERE / "summary.json", summary)
-    (HERE / "RESULTS.md").write_text(markdown, encoding="utf-8", newline="\n")
-    write_json(HERE / "manifest.json", {
+    write_json(HERE / "lifestyle-score-results.json", summary)
+    (HERE / "lifestyle-score-results.md").write_text(markdown, encoding="utf-8", newline="\n")
+    write_json(HERE / "redaction-manifest.json", {
         "schema_version": "lifestyle.r1-evidence.v1", "replicate_id": "r1",
         "selection": "lifestyle-final-results, suite=lifestyle, replicate_id=r1",
         "redactions": ["local user paths", "IP addresses", "GCP project ID",
@@ -129,7 +129,7 @@ def export(archive):
 
 
 def verify():
-    manifest = load(HERE / "manifest.json")
+    manifest = load(HERE / "redaction-manifest.json")
     tasks = {task["task_id"]: task for task in load(SUITE / "000-core.json")}
     protocol = load(SUITE / "personas/persona_experiment.json")
     expected = {(task_id, f'mp_{axis["axis_id"]}_{arm}')
@@ -138,7 +138,7 @@ def verify():
     seen, outcomes = set(), Counter()
     entries = manifest["files"]
     assert len(entries) == len(expected) == 30
-    assert {p.relative_to(HERE).as_posix() for p in (HERE / "evidence").glob("*.json")} == {
+    assert {p.relative_to(HERE).as_posix() for p in (HERE / "evidence").glob("*--mp_*.json")} == {
         entry["file"] for entry in entries}
     for entry in entries:
         path = HERE / entry["file"]
@@ -176,8 +176,8 @@ def verify():
     assert seen == expected and outcomes == {"scored": 26, "unscored": 4}
     summary, markdown = rows_and_summary(entries)
     assert sum(row["scored_with_empty_answer"] for row in summary) == 2
-    assert load(HERE / "summary.json") == summary
-    assert (HERE / "RESULTS.md").read_text(encoding="utf-8") == markdown
+    assert load(HERE / "lifestyle-score-results.json") == summary
+    assert (HERE / "lifestyle-score-results.md").read_text(encoding="utf-8") == markdown
     print("r1 evidence verified: 30 cells, 26 raw scores, 4 unscored 403 outcomes")
 
 

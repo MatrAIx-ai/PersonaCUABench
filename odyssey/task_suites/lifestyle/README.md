@@ -11,6 +11,11 @@ available. Always select `--suite lifestyle` for this assignment.
 The [first-round report](../../../docs/reports/lifestyle-r1-2026-09-24/README.md)
 includes all 30 saved r1 cells: 26 raw task scores and four unscored 403 outcomes.
 
+The separate [preference-disclosure pilot](DISCLOSURE_PILOT.md) adds opt-in
+full/gap conditions and a neutral baseline for Father's Day price orientation.
+Its code and offline checks are available; no live pilot results are claimed.
+The historical full-coverage protocol below remains unchanged.
+
 This suite freezes the six assigned Odysseys Lifestyle tasks: three easy and
 three medium. The task wording and R1–Rn rubrics in `000-core.json` are copied
 unchanged from the upstream Odysseys dataset.

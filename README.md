@@ -35,8 +35,15 @@ See the runbook for Windows PowerShell commands.
 The [Lifestyle first-round report](docs/reports/lifestyle-r1-2026-09-24/README.md)
 contains redacted historical results, per-attempt evidence, failure records,
 and an offline integrity verifier for the first replicate only: 26 scored cells
-and four unscored 403 outcomes. Missing persona/experience evaluations are
-documented rather than inferred from task scores.
+and four unscored 403 outcomes. The [paired analysis](docs/reports/lifestyle-r1-2026-09-24/lifestyle-evaluation-audit.md)
+compares all 15 task–axis pairs using quoted persona preferences and saved
+answers, with per-rubric evidence reviews. This is offline evidence analysis,
+not new model scoring; missing numerical persona/experience evaluations remain
+explicitly missing. No second-round results are included.
+
+An opt-in [preference-disclosure pilot](odyssey/task_suites/lifestyle/DISCLOSURE_PILOT.md)
+adds controlled full/gap openings, fixed clarification replies and a neutral
+baseline. Offline tests pass; new live experiments have not been executed.
 
 These are local Playwright runs, not official OSWorld evaluation results.
 Raw local artifacts, browser profiles, and credentials remain excluded from Git.

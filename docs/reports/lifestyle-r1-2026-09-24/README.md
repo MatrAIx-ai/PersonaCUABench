@@ -4,16 +4,46 @@ Owner: Yingtao Luo. This report includes only the 30 saved cells from the first
 replicate of the Lifestyle matrix collected on September 24, 2026. There are
 26 records with automatic task scores and four unscored access failures.
 All six assigned tasks and all 15 applicable task–axis pairs are represented.
-No recorded 429 outcome was found among these r1 records.
+No terminal model-API 429 outcome was recorded in these original r1 runs.
+An ancillary Foot Locker fingerprint request returned HTTP 429 in the
+Father's Day cost-sensitive preflight; its main page returned 200 and the
+preflight passed. This is retained, not treated as a terminal failure.
 
 ## Results and evidence
 
-The [results table](RESULTS.md) lists every cell and links to its JSON evidence.
+Start with the [paired evidence audit](lifestyle-evaluation-audit.md): all 15 pairs,
+opposite-persona excerpts, answer differences, and limitations. Eleven pairs
+have answers on both sides and show some preference-responsive differences;
+two are inconclusive due to an empty answer and two are environment-blocked.
+This is an offline evidence review, not a new experiment or independent
+judge score. The [machine-readable audit](lifestyle-evaluation-audit.json) preserves
+per-rubric reasons and source references. Original scores remain unchanged.
+
+The [score results](lifestyle-score-results.md) list every cell and link to its JSON evidence.
 Each review copy retains the original task/rubrics, configuration fingerprints,
 persona metadata, environment checks, saved conversation and action previews,
 final tabs, final response and original automatic judgements where available.
-The [structured summary](summary.json) contains the same per-task counts and
+The [structured score results](lifestyle-score-results.json) contain the same per-task counts and
 mean raw scores. Unscored cells are excluded from means, never assigned zero.
+
+### One evidence page per task
+
+Each page groups all applicable persona axes and both arms, with the original
+task/rubrics, paired findings, rubric audit reasons and complete saved final
+answers. Expand the browser-evidence sections to see conversations, all saved
+action events, truncated observations, final tabs and environment checks.
+
+- [Father's Day gifts](lifestyle-audit-evidence/fathers-day-gifts.md)
+- [All-black outfit](lifestyle-audit-evidence/all-black-outfit.md)
+- [Men's outfit](lifestyle-audit-evidence/mens-outfit.md)
+- [Shared journaling](lifestyle-audit-evidence/shared-journaling.md)
+- [Christmas gifts](lifestyle-audit-evidence/christmas-gifts.md)
+- [Budget outfit](lifestyle-audit-evidence/budget-outfit.md)
+
+The layout follows Health's report/audit/evidence separation. Unlike Health,
+Lifestyle has multiple persona axes per task, so each task page contains all
+its pairs. Raw JSON and audit source data live in `evidence/`; generation
+helpers live in `scripts/`. There is only one score summary and one audit.
 
 | Task | Scored / planned cells | Mean raw task score |
 |---|---:|---:|
@@ -74,7 +104,10 @@ correct. No current website content has been substituted into these records.
 
 These r1 records do not contain post-hoc persona-expression or P1–P5 experience
 scores. Those measurements are **missing**, not zero; persona separation and
-alignment cannot be concluded from task scores. There is no `none` control in
+alignment cannot be concluded from task scores. The offline paired analysis
+examines visible preference expression and answer adaptation qualitatively;
+it does not substitute numerical P1–P5 scores or satisfy a two-judge protocol.
+There is no `none` control in
 this report. One replicate does not establish a stable persona effect, and the
 unscored budget task prevents a complete six-task performance comparison.
 
@@ -84,7 +117,7 @@ Odysseys leaderboard results.
 
 ## Redaction and offline verification
 
-The [manifest](manifest.json) records each source-relative path, original file
+The [redaction manifest](redaction-manifest.json) records each source-relative path, original file
 SHA-256 and review-copy SHA-256. The export removes local user paths, IP
 addresses, GCP project IDs and Google challenge URLs. Raw local originals are
 unchanged; the committed copies do not include credentials or browser profiles.
@@ -92,12 +125,18 @@ unchanged; the committed copies do not include credentials or browser profiles.
 From the repository root:
 
 ```bash
-python docs/reports/lifestyle-r1-2026-09-24/evidence.py verify
+python docs/reports/lifestyle-r1-2026-09-24/verify_audit.py
 ```
 
 This checks all 30 review-copy hashes, exact matrix coverage, task snapshots,
 configuration hashes, original score arithmetic, 26/4 accounting and generated
 tables. It does not validate the judge's interpretation of website evidence.
 No model API or website is called. To regenerate from the private archive, use
-`evidence.py export --archive <artifacts-directory>`; selection is fixed to
+`scripts/evidence.py export --archive <artifacts-directory>`; selection is fixed to
 `lifestyle-final-results`, suite `lifestyle`, replicate `r1`.
+Run `python docs/reports/lifestyle-r1-2026-09-24/scripts/paired_report.py`
+from the repository root to regenerate the audit and six task pages offline.
+
+An abandoned Vertex post-hoc judging attempt is archived outside this repository.
+Its partial evaluations and API errors are excluded from all results here;
+they did not rerun browser tasks or change the original first-round evidence.

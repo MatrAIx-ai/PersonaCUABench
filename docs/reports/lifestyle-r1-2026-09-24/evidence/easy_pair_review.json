@@ -1,0 +1,1466 @@
+{
+  "schema_version": "lifestyle.evidence_pair_review.v1",
+  "review_method": "Offline evidence review; not independent model judging",
+  "replicate_id": "r1",
+  "methodology": "Offline qualitative paired review of the original saved user opening, final answer, final tabs and truncated action observations. Opposite-arm language is compared within task and axis. Raw rubric objects are copied unchanged; categories are evidence-review findings and are not official judge scores or replacements for historical scores.",
+  "limitations": [
+    "One replicate, no no-persona control, no causal estimate or statistical significance.",
+    "Tool observations retain only 400-character previews. Missing content in a preview is not evidence that it was absent from the original page.",
+    "Answer-level preference responsiveness does not verify factual correctness, user satisfaction or optimal choice.",
+    "supported verifies only the full specific reporting/navigation criterion described; insufficient_evidence is not failure and must not be scored as zero.",
+    "Final-answer comparisons are unavailable for the empty cost-sensitive all-black arm.",
+    "An ancillary Foot Locker fingerprint request returned HTTP 429 in the price-positive Father's Day preflight despite a 200 main page and passed check; this is not a terminal run or model API 429."
+  ],
+  "pairs": {
+    "1211fbaa/price_orientation": {
+      "task_id": "1211fbaa646424ab75869c0379431d5d049d2c9b",
+      "axis_id": "price_orientation",
+      "status": "evidence_of_adaptation",
+      "adaptation_finding": "The cost-sensitive answer selects a $39 shirt and $24.99 joggers, versus $54 and $29.99 for the premium arm. Both choose the $245 Knox boot, but the premium answer emphasizes construction and prefers the boot while the cost arm emphasizes the sneaker price advantage. This is observed answer adaptation, not verified cheapest-product optimality.",
+      "arms": {
+        "positive": {
+          "source_file": "evidence/1211fbaa--mp_price_orientation_positive.json",
+          "source_sha256": "416dbe74a6a48d00d0823c63c4fa6104f6041b3e8d7cd99d0af08ccb27e302b3",
+          "opening_quote": "please lean toward the lower-cost qualifying choice to help keep my overall spend to a minimum.",
+          "opening_evidence_ref": "/run/conversation/0/text",
+          "answer_quote": "Leaning into the lowest-cost qualifying option",
+          "answer_evidence_ref": "/run/answer",
+          "caveats": [
+            "Final-answer assertions establish reported behavior, not independent verification of product prices, inventory or policy accuracy."
+          ],
+          "rubric_reviews": [
+            {
+              "rubric_id": "R1",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "Tab 1 remains open to the exact Home Depot product page for model 48-11-2450, and the response reports the matching price ($129.00) and product link."
+              },
+              "reason": "The answer reports the exact battery, price and link, and its tab is retained. The saved page previews do not independently establish the matching current price.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R2",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "Tab 2 remains open to The Knox (a genuine cowhide leather men's boot), and the response includes the name, current price ($245.00), and link."
+              },
+              "reason": "The answer and retained tab identify a leather Tecovas boot, but the current price and all construction claims cannot be independently established from the truncated observations.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R3",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "Tab 3 remains open to the Foot Locker Nike Ja 3 product page, and the response reports the $125.00 price while explicitly stating it does not come in under $60."
+              },
+              "reason": "The answer reports the Nike Ja 3 price and under-$60 finding and retains the product tab; the complete visible price evidence is not preserved.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R4",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "Tab 4 remains open to a breathable shirt chosen from Men's We Made Too Much with its $39.00 sale price reported, and the response aligns the pick with the footwear comparison."
+              },
+              "reason": "The answer identifies a sale shirt and explains the footwear relationship; retained tabs support navigation, but complete sale-price/material observations are not preserved.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R5",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "Tab 5 remains open to the Modern Jogger 2.0 product page on Old Navy, and the response includes the product name, price ($24.99), and link."
+              },
+              "reason": "The answer and retained Old Navy tab identify the jogger, but the current listed price cannot be independently established from saved previews.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            }
+          ]
+        },
+        "negative": {
+          "source_file": "evidence/1211fbaa--mp_price_orientation_negative.json",
+          "source_sha256": "760c9ad7197d177dadf1e7569e5a4c53534b9be522f81d927a065d81aae5eebc",
+          "opening_quote": "I’m more than willing to accept a higher price tag for genuinely premium materials, sharper styling, and lasting build quality",
+          "opening_evidence_ref": "/run/conversation/0/text",
+          "answer_quote": "A prime justification of higher investment for lasting build quality.",
+          "answer_evidence_ref": "/run/answer",
+          "caveats": [
+            "Final-answer assertions establish reported behavior, not independent verification of product prices, inventory or policy accuracy."
+          ],
+          "rubric_reviews": [
+            {
+              "rubric_id": "R1",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The Home Depot product page for Milwaukee model 48-11-2450 is open in tab 1 and the current price ($129.00) is accurately reported in the response."
+              },
+              "reason": "The answer reports the exact battery, price and link, and its tab is retained. The saved page previews do not independently establish the matching current price.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R2",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "Tab 2 has the product page for Tecovas 'The Knox' leather boot open, and the response reports the product name, $245.00 price, and direct link."
+              },
+              "reason": "The answer and retained tab identify a leather Tecovas boot, but the current price and all construction claims cannot be independently established from the truncated observations.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R3",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "Tab 4 displays the Foot Locker Nike Ja 3 product listing, and the final response states the price ($125.00) and explicitly confirms it does not come in under $60."
+              },
+              "reason": "The answer reports the Nike Ja 3 price and under-$60 finding and retains the product tab; the complete visible price evidence is not preserved.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R4",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "Tab 5 is open to a breathable shirt found via lululemon's We Made Too Much section at $54.00, and the response explicitly aligns this choice with the footwear comparison."
+              },
+              "reason": "The answer identifies a sale shirt and explains the footwear relationship; retained tabs support navigation, but complete sale-price/material observations are not preserved.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R5",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "Tab 6 is open to the Old Navy Lightweight Jersey-Knit Joggers listing, with the product name and current price ($29.99) provided in the response."
+              },
+              "reason": "The answer and retained Old Navy tab identify the jogger, but the current listed price cannot be independently established from saved previews.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            }
+          ]
+        }
+      }
+    },
+    "1211fbaa/decision_style": {
+      "task_id": "1211fbaa646424ab75869c0379431d5d049d2c9b",
+      "axis_id": "decision_style",
+      "status": "evidence_of_adaptation",
+      "adaptation_finding": "The analytical answer breaks the recommendation into practicality, wearability, price and gift appeal. The intuitive answer gives a decisive coherent bundle. Product choices overlap; the analytical arm also fails to retain the Foot Locker tab, so task completeness differs.",
+      "arms": {
+        "positive": {
+          "source_file": "evidence/1211fbaa--mp_decision_style_positive.json",
+          "source_sha256": "542d8f92a3fe756e52b6c6371caa89a726e2e655c950c4727c5a39b1c2bf8de2",
+          "opening_quote": "please explicitly evaluate the tradeoffs across practicality, wearability, price, and gift appeal",
+          "opening_evidence_ref": "/run/conversation/0/text",
+          "answer_quote": "Tradeoff Evaluation Across Key Criteria",
+          "answer_evidence_ref": "/run/answer",
+          "caveats": [
+            "Final-answer assertions establish reported behavior, not independent verification of product prices, inventory or policy accuracy."
+          ],
+          "rubric_reviews": [
+            {
+              "rubric_id": "R1",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "Tab 2 remains open to the exact Home Depot product page for model 48-11-2450, and the response reports the current price of $129.00 and product link."
+              },
+              "reason": "The answer reports the exact battery, price and link, and its tab is retained. The saved page previews do not independently establish the matching current price.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R2",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "Tab 4 remains open to Tecovas' 'The Earl' leather boot product page, and the final response provides its name, price ($325.00), and link."
+              },
+              "reason": "The answer and retained tab identify a leather Tecovas boot, but the current price and all construction claims cannot be independently established from the truncated observations.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R3",
+              "original_raw_verdict": {
+                "met": false,
+                "communicated": true,
+                "reason": "Although the agent visited the Foot Locker page and correctly reported the price and that it is not under $60, the Foot Locker tab was closed and does not appear in the final open tabs required by the verification."
+              },
+              "reason": "The complete final open_tabs list contains no Foot Locker product page, and the final shortlist supplies no Foot Locker link. This supports the raw failure on retained-page verification regardless of the reported price.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "not_met"
+            },
+            {
+              "rubric_id": "R4",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "Tab 6 is open to the Metal Vent Tech Short-Sleeve Shirt from We Made Too Much, reporting its sale price of $54.00 and explicitly justifying the choice relative to the footwear comparison."
+              },
+              "reason": "The answer identifies a sale shirt and explains the footwear relationship; retained tabs support navigation, but complete sale-price/material observations are not preserved.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R5",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "Tab 7 remains open to Old Navy's Lightweight Jersey-Knit Joggers product page, and the response includes the product name, price ($29.99), and link."
+              },
+              "reason": "The answer and retained Old Navy tab identify the jogger, but the current listed price cannot be independently established from saved previews.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            }
+          ]
+        },
+        "negative": {
+          "source_file": "evidence/1211fbaa--mp_decision_style_negative.json",
+          "source_sha256": "c2c6043ce63cc3d2af44a97d7ca2dac9d59de1fa2bbfc6c923149c9339191450",
+          "opening_quote": "just give me your decisive recommendation on the most naturally giftable combination",
+          "opening_evidence_ref": "/run/conversation/0/text",
+          "answer_quote": "The winning bundle:",
+          "answer_evidence_ref": "/run/answer",
+          "caveats": [
+            "Final-answer assertions establish reported behavior, not independent verification of product prices, inventory or policy accuracy."
+          ],
+          "rubric_reviews": [
+            {
+              "rubric_id": "R1",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The Home Depot product page for model 48-11-2450 was left open in tab 2 and its price ($129.00) and link were reported in the final answer."
+              },
+              "reason": "The answer reports the exact battery, price and link, and its tab is retained. The saved page previews do not independently establish the matching current price.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R2",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The Tecovas product page for 'The Earl' (made of real leather) was left open in tab 4, and its name, price ($325.00), and link were provided."
+              },
+              "reason": "The answer and retained tab identify a leather Tecovas boot, but the current price and all construction claims cannot be independently established from the truncated observations.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R3",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The Foot Locker page for the Nike Ja 3 was left open in tab 5, and the response reported the $125.00 price while explicitly stating it does not come in under $60."
+              },
+              "reason": "The answer reports the Nike Ja 3 price and under-$60 finding and retains the product tab; the complete visible price evidence is not preserved.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R4",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The lululemon Metal Vent Tech Short-Sleeve Shirt from We Made Too Much was left open in tab 7 at $54.00 sale price, and was explicitly aligned to pair with the Nike Ja 3 footwear option."
+              },
+              "reason": "The answer identifies a sale shirt and explains the footwear relationship; retained tabs support navigation, but complete sale-price/material observations are not preserved.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R5",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The Old Navy Modern Jogger 2.0 product page was left open in tab 8, with its name, price ($24.99), and link included in the shortlist."
+              },
+              "reason": "The answer and retained Old Navy tab identify the jogger, but the current listed price cannot be independently established from saved previews.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            }
+          ]
+        }
+      }
+    },
+    "0ce94d4e/price_orientation": {
+      "task_id": "0ce94d4e773eff1042a6920232f929a1da98c44d",
+      "axis_id": "price_orientation",
+      "status": "inconclusive",
+      "adaptation_finding": "Both openings express opposite spending preferences, and the premium arm produces an elevated $109 dress selection. The cost-sensitive run exhausts 50 steps with no final answer, so a paired final-recommendation comparison is unavailable. Its saved browsing does reach a $25.50 sale dress, but partial browsing is not a completed recommendation.",
+      "arms": {
+        "positive": {
+          "source_file": "evidence/0ce94d4e--mp_price_orientation_positive.json",
+          "source_sha256": "707ff16396ce0f316adc1d8163a5be1ccc1d5de4d740a16120e371becba99398",
+          "opening_quote": "please deliberately favor the lower-priced or on-sale options so we can keep the total spend as low as possible.",
+          "opening_evidence_ref": "/run/conversation/0/text",
+          "answer_quote": null,
+          "answer_evidence_ref": "/run/answer",
+          "caveats": [
+            "Final-answer assertions establish reported behavior, not independent verification of product prices, inventory or policy accuracy.",
+            "Empty final answer after the 50-step limit. Original communicated=true values are retained but cannot mean that a final answer communicated these items.",
+            "The chosen jackets are described as faux leather. The task says leather; no assumption that faux leather satisfies the material wording is made in this review."
+          ],
+          "rubric_reviews": [
+            {
+              "rubric_id": "R1",
+              "original_raw_verdict": {
+                "met": false,
+                "communicated": true,
+                "reason": "The agent produced no final answer to record the product name, price, or link, and tab 1 shows a dress where Medium/US 6 was not verified or selected as available."
+              },
+              "reason": "The final answer is empty, so required product details or final summary were not delivered. This does not imply that no relevant product was visited.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "not_met"
+            },
+            {
+              "rubric_id": "R2",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The Princess Polly dress page remains open in tab 1."
+              },
+              "reason": "A product tab survives, but no final answer establishes the anchor/pairing relation. The raw success is supported only for the retained-tab component.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R3",
+              "original_raw_verdict": {
+                "met": false,
+                "communicated": true,
+                "reason": "The agent did not provide a final answer capturing the shoe's product name, price, link, or size availability."
+              },
+              "reason": "The final answer is empty, so required product details or final summary were not delivered. This does not imply that no relevant product was visited.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "not_met"
+            },
+            {
+              "rubric_id": "R4",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The Demonia Cult shoe product page for Crux-07 remains open in tab 2."
+              },
+              "reason": "A product tab survives, but no final answer establishes the anchor/pairing relation. The raw success is supported only for the retained-tab component.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R5",
+              "original_raw_verdict": {
+                "met": false,
+                "communicated": true,
+                "reason": "Tab 3 was left on a search results page rather than an actual product page, and no jacket details were captured in a final answer."
+              },
+              "reason": "No final answer captures the jacket name/link and the final Edikted tab is a search page, not a chosen product page.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "not_met"
+            },
+            {
+              "rubric_id": "R6",
+              "original_raw_verdict": {
+                "met": false,
+                "communicated": true,
+                "reason": "The agent produced no final answer summarizing the outfit or providing any of the requested details."
+              },
+              "reason": "The final answer is empty, so required product details or final summary were not delivered. This does not imply that no relevant product was visited.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs"
+              ],
+              "category": "not_met"
+            }
+          ]
+        },
+        "negative": {
+          "source_file": "evidence/0ce94d4e--mp_price_orientation_negative.json",
+          "source_sha256": "11a4ac5af16fafce57fcf9d3c6c56843541e3f86e18173826559cb0e5e52b850",
+          "opening_quote": "I'm completely fine with a higher price tag if the materials, finish, and silhouette look significantly more elevated and durable",
+          "opening_evidence_ref": "/run/conversation/0/text",
+          "answer_quote": "Fully lined with structured satin drape detailing and sweetheart neckline.",
+          "answer_evidence_ref": "/run/answer",
+          "caveats": [
+            "Final-answer assertions establish reported behavior, not independent verification of product prices, inventory or policy accuracy.",
+            "The chosen jackets are described as faux leather. The task says leather; no assumption that faux leather satisfies the material wording is made in this review."
+          ],
+          "rubric_reviews": [
+            {
+              "rubric_id": "R1",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent identified the Aubriellah Sweetheart Neckline Draped Mini Dress Black on Princess Polly, confirmed its availability in size Medium, left its product page open in Tab 1, and reported its name, price ($109.00), and link."
+              },
+              "reason": "The answer reports a black mini dress, price, Medium availability and delivery and the product tab is retained. Saved excerpts do not conclusively establish the size conversion, live availability and delivery together.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R2",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The Princess Polly dress product page was kept open in Tab 1, and the agent explicitly used it as the anchor piece around which the outfit was built."
+              },
+              "reason": "The complete final tab list retains the selected Princess Polly page and the final answer explicitly uses the dress as the outfit anchor.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs"
+              ],
+              "category": "supported"
+            },
+            {
+              "rubric_id": "R3",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent identified the Demonia Kera-08 Platform Mary Jane, verified size 9 availability, kept its product page open in Tab 4, and recorded its name, price ($75.95), URL, and size availability."
+              },
+              "reason": "The answer reports a black Mary Jane product, price and size 9 availability and its tab is retained; the saved observations do not conclusively corroborate all availability/price details.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R4",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The chosen DemoniaCult shoe was kept open in Tab 4 and referenced as the footwear pairing for the dress."
+              },
+              "reason": "The complete final tab list retains the selected DemoniaCult page in a separate tab and the answer explicitly pairs the shoes with the dress.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs"
+              ],
+              "category": "supported"
+            },
+            {
+              "rubric_id": "R5",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent identified the Ardella Oversized Faux Leather Jacket on Edikted (which has no hood), left its product page open in Tab 6, and captured its product name and URL."
+              },
+              "reason": "An Edikted product tab and named jacket are present, but the response describes faux leather and saved observations do not settle compliance with the task's leather/no-hood/dark-brown requirements.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R6",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The final response includes an outfit summary listing all three items with their names and links, the prices for the dress and shoes, and explicitly states that size 9 was in stock on DemoniaCult."
+              },
+              "reason": "The final answer itself includes all three names and links, dress and shoe prices, and explicit shoe size availability. This verifies requested reporting, not independent accuracy of each reported fact.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs"
+              ],
+              "category": "supported"
+            }
+          ]
+        }
+      }
+    },
+    "0ce94d4e/decision_style": {
+      "task_id": "0ce94d4e773eff1042a6920232f929a1da98c44d",
+      "axis_id": "decision_style",
+      "status": "evidence_of_adaptation",
+      "adaptation_finding": "The analytical arm explicitly compares alternative shoe silhouettes and explains proportion, finish and color harmony. The intuitive arm gives a confident grunge-glam look based on visual styling. Both retain the same Landon dress and Kera-08 shoe; their jacket choice differs.",
+      "arms": {
+        "positive": {
+          "source_file": "evidence/0ce94d4e--mp_decision_style_positive.json",
+          "source_sha256": "11ecfe74acfae25057e75f2dcc75e86a7bce97902d36f6e86ef99aaf78d92299",
+          "opening_quote": "please evaluate the options against explicit criteria like silhouette, proportion, finish, and color harmony",
+          "opening_evidence_ref": "/run/conversation/0/text",
+          "answer_quote": "Its bold, architectural platform Mary Jane silhouette grounds the feminine, flirty lines of the mini dress.",
+          "answer_evidence_ref": "/run/answer",
+          "caveats": [
+            "Final-answer assertions establish reported behavior, not independent verification of product prices, inventory or policy accuracy.",
+            "The chosen jackets are described as faux leather. The task says leather; no assumption that faux leather satisfies the material wording is made in this review."
+          ],
+          "rubric_reviews": [
+            {
+              "rubric_id": "R1",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent identified the Landon Mini Dress Black on Princess Polly, left its product page open (Tab 1), confirmed Medium (US 6) availability and delivery status, and captured the name, price ($65.00), and link."
+              },
+              "reason": "The answer reports a black mini dress, price, Medium availability and delivery and the product tab is retained. Saved excerpts do not conclusively establish the size conversion, live availability and delivery together.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R2",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The Princess Polly dress page remains open in Tab 1, and the agent explicitly used it as the anchor piece to style and pair the subsequent shoes and jacket."
+              },
+              "reason": "The complete final tab list retains the selected Princess Polly page and the final answer explicitly uses the dress as the outfit anchor.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs"
+              ],
+              "category": "supported"
+            },
+            {
+              "rubric_id": "R3",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent identified Demonia Cult's Kera-08 platform Mary Jane shoes, confirmed size 9 was available in stock via the product data, and captured its name, price ($75.95), link, and size availability."
+              },
+              "reason": "The answer reports a black Mary Jane product, price and size 9 availability and its tab is retained; the saved observations do not conclusively corroborate all availability/price details.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R4",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The Demonia Cult shoe product page remains open in its own tab (Tab 2) and was referenced throughout the evaluation as the chosen pairing for the dress."
+              },
+              "reason": "The complete final tab list retains the selected DemoniaCult page in a separate tab and the answer explicitly pairs the shoes with the dress.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs"
+              ],
+              "category": "supported"
+            },
+            {
+              "rubric_id": "R5",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent identified the Jaxson Oversized Faux Leather Bomber Jacket in Dark-Brown on Edikted, which features a classic collar without a hood, and left its product page open in Tab 3 with its name and link reported."
+              },
+              "reason": "An Edikted product tab and named jacket are present, but the response describes faux leather and saved observations do not settle compliance with the task's leather/no-hood/dark-brown requirements.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R6",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The final summary lists all three items with their names and links, provides the dress ($65.00) and shoe ($75.95) prices, and explicitly states the availability for shoe size 9."
+              },
+              "reason": "The final answer itself includes all three names and links, dress and shoe prices, and explicit shoe size availability. This verifies requested reporting, not independent accuracy of each reported fact.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs"
+              ],
+              "category": "supported"
+            }
+          ]
+        },
+        "negative": {
+          "source_file": "evidence/0ce94d4e--mp_decision_style_negative.json",
+          "source_sha256": "b0796ec8126792e3d69ee1b8376b82b7a5b560937fcc8c54f488965e23ff908e",
+          "opening_quote": "just trust your styling instinct and give me one confident outfit recommendation that feels most cohesive on sight.",
+          "opening_evidence_ref": "/run/conversation/0/text",
+          "answer_quote": "Confident Outfit Recommendation: Modern Grunge-Glam Night Out",
+          "answer_evidence_ref": "/run/answer",
+          "caveats": [
+            "Final-answer assertions establish reported behavior, not independent verification of product prices, inventory or policy accuracy.",
+            "The chosen jackets are described as faux leather. The task says leather; no assumption that faux leather satisfies the material wording is made in this review."
+          ],
+          "rubric_reviews": [
+            {
+              "rubric_id": "R1",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent navigated to the Landon Mini Dress Black on Princess Polly, left the tab open, and reported the product name, price ($65.00), and link, noting Medium (US 6) availability."
+              },
+              "reason": "The answer reports a black mini dress, price, Medium availability and delivery and the product tab is retained. Saved excerpts do not conclusively establish the size conversion, live availability and delivery together.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R2",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The dress product page remains open in Tab 1, and the agent explicitly used it as the foundation/anchor for styling the rest of the outfit."
+              },
+              "reason": "The complete final tab list retains the selected Princess Polly page and the final answer explicitly uses the dress as the outfit anchor.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs"
+              ],
+              "category": "supported"
+            },
+            {
+              "rubric_id": "R3",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent identified the Kera-08 Mary Jane shoe on DemoniaCult in size 9, capturing its name, price ($75.95), URL, and size availability, with the product page verified."
+              },
+              "reason": "The answer reports a black Mary Jane product, price and size 9 availability and its tab is retained; the saved observations do not conclusively corroborate all availability/price details.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R4",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The DemoniaCult shoe page remains open in Tab 2 and was paired with the anchor dress in the styling recommendation."
+              },
+              "reason": "The complete final tab list retains the selected DemoniaCult page in a separate tab and the answer explicitly pairs the shoes with the dress.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs"
+              ],
+              "category": "supported"
+            },
+            {
+              "rubric_id": "R5",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent identified the Mori Oversized Faux Leather Jacket in Brown without a hood on Edikted, captured its name and link, and kept its product page open in Tab 4."
+              },
+              "reason": "An Edikted product tab and named jacket are present, but the response describes faux leather and saved observations do not settle compliance with the task's leather/no-hood/dark-brown requirements.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R6",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The final summary lists all three items with their names and links, provides the dress and shoe prices, and explicitly specifies that size 9 was confirmed available."
+              },
+              "reason": "The final answer itself includes all three names and links, dress and shoe prices, and explicit shoe size availability. This verifies requested reporting, not independent accuracy of each reported fact.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs"
+              ],
+              "category": "supported"
+            }
+          ]
+        }
+      }
+    },
+    "0ce94d4e/purchase_risk": {
+      "task_id": "0ce94d4e773eff1042a6920232f929a1da98c44d",
+      "axis_id": "purchase_risk",
+      "status": "evidence_of_adaptation",
+      "adaptation_finding": "The risk-averse answer gives return windows and delivery estimates and chooses the lower Sprite-02 platform. The risk-tolerant answer chooses the spiked Damned-20 and emphasizes bold styling. This shows answer-level responsiveness; saved previews do not independently establish all policy or inventory claims.",
+      "arms": {
+        "positive": {
+          "source_file": "evidence/0ce94d4e--mp_purchase_risk_positive.json",
+          "source_sha256": "9c1fde9d307e4c7a8b0273994525f37fd4f0a74e2b49c745f213201d5a1d476d",
+          "opening_quote": "I strongly prefer selecting pieces that have clear, transparent return policies and reliable delivery estimates",
+          "opening_evidence_ref": "/run/conversation/0/text",
+          "answer_quote": "The brand offers a clear 30-day return window.",
+          "answer_evidence_ref": "/run/answer",
+          "caveats": [
+            "Final-answer assertions establish reported behavior, not independent verification of product prices, inventory or policy accuracy.",
+            "The chosen jackets are described as faux leather. The task says leather; no assumption that faux leather satisfies the material wording is made in this review."
+          ],
+          "rubric_reviews": [
+            {
+              "rubric_id": "R1",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent identified the 'Anse Mini Dress Black' on Princess Polly, confirmed size Medium availability and delivery, captured the name, price ($79.00), and link, and kept the product page open in tab 2."
+              },
+              "reason": "The answer reports a black mini dress, price, Medium availability and delivery and the product tab is retained. Saved excerpts do not conclusively establish the size conversion, live availability and delivery together.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R2",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The Princess Polly dress page remains open in tab 2 and was framed as the anchor piece paired with the shoes and jacket in the outfit summary."
+              },
+              "reason": "The complete final tab list retains the selected Princess Polly page and the final answer explicitly uses the dress as the outfit anchor.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs"
+              ],
+              "category": "supported"
+            },
+            {
+              "rubric_id": "R3",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent selected the Demonia 'Sprite-02' Mary Jane platform shoe, verified size 9 is in stock on the product page, and captured its name, price ($67.95), URL, and size availability."
+              },
+              "reason": "The answer reports a black Mary Jane product, price and size 9 availability and its tab is retained; the saved observations do not conclusively corroborate all availability/price details.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R4",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The DemoniaCult shoe page remains open in tab 3 as a separate tab and is presented as the footwear paired with the anchor dress."
+              },
+              "reason": "The complete final tab list retains the selected DemoniaCult page in a separate tab and the answer explicitly pairs the shoes with the dress.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs"
+              ],
+              "category": "supported"
+            },
+            {
+              "rubric_id": "R5",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent found the 'Jaxson Oversized Faux Leather Bomber Jacket' in dark brown without a hood on Edikted, captured its name and link, and left the product page open in tab 4."
+              },
+              "reason": "An Edikted product tab and named jacket are present, but the response describes faux leather and saved observations do not settle compliance with the task's leather/no-hood/dark-brown requirements.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R6",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The final summary lists all three items with their product names and links, provides the prices for the dress and shoes, and explicitly states that size 9 was confirmed in stock."
+              },
+              "reason": "The final answer itself includes all three names and links, dress and shoe prices, and explicit shoe size availability. This verifies requested reporting, not independent accuracy of each reported fact.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs"
+              ],
+              "category": "supported"
+            }
+          ]
+        },
+        "negative": {
+          "source_file": "evidence/0ce94d4e--mp_purchase_risk_negative.json",
+          "source_sha256": "c5e69ad4cd68600ddd4df56b7f5469708cb77ccae9a9eddbd5b3ce9efcb5e763",
+          "opening_quote": "don't worry about researching return policies or marketplace fine print",
+          "opening_evidence_ref": "/run/conversation/0/text",
+          "answer_quote": "A bold 3.5″ platform Mary Jane featuring edgy cone spike studs",
+          "answer_evidence_ref": "/run/answer",
+          "caveats": [
+            "Final-answer assertions establish reported behavior, not independent verification of product prices, inventory or policy accuracy.",
+            "The chosen jackets are described as faux leather. The task says leather; no assumption that faux leather satisfies the material wording is made in this review."
+          ],
+          "rubric_reviews": [
+            {
+              "rubric_id": "R1",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent navigated to the Princess Polly Landon Mini Dress Black product page, left it open in tab 1, and captured the product name, price ($65.00), and link along with size Medium availability."
+              },
+              "reason": "The answer reports a black mini dress, price, Medium availability and delivery and the product tab is retained. Saved excerpts do not conclusively establish the size conversion, live availability and delivery together.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R2",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The dress tab (tab 1) remained open at the end, and the final response explicitly treats the dress as the anchor item for the outfit."
+              },
+              "reason": "The complete final tab list retains the selected Princess Polly page and the final answer explicitly uses the dress as the outfit anchor.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs"
+              ],
+              "category": "supported"
+            },
+            {
+              "rubric_id": "R3",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent verified that the Demonia Damned-20 Mary Jane platform shoes on DemoniaCult were available in size 9, and captured the product name, price ($97.95), URL, and exact size availability."
+              },
+              "reason": "The answer reports a black Mary Jane product, price and size 9 availability and its tab is retained; the saved observations do not conclusively corroborate all availability/price details.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R4",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The DemoniaCult product page for the Damned-20 platform shoes remains open in tab 4 and is paired with the dress in the final summary."
+              },
+              "reason": "The complete final tab list retains the selected DemoniaCult page in a separate tab and the answer explicitly pairs the shoes with the dress.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs"
+              ],
+              "category": "supported"
+            },
+            {
+              "rubric_id": "R5",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent identified the Jaxson Oversized Faux Leather Bomber Jacket in dark brown without a hood on Edikted, captured its name and link, and left the product page open in tab 6."
+              },
+              "reason": "An Edikted product tab and named jacket are present, but the response describes faux leather and saved observations do not settle compliance with the task's leather/no-hood/dark-brown requirements.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R6",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The final summary lists all three items with their names and links, includes the dress and shoe prices, and explicitly notes that size 9 was in stock while size 9.5 was not manufactured."
+              },
+              "reason": "The final answer itself includes all three names and links, dress and shoe prices, and explicit shoe size availability. This verifies requested reporting, not independent accuracy of each reported fact.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs"
+              ],
+              "category": "supported"
+            }
+          ]
+        }
+      }
+    },
+    "9220309a/price_orientation": {
+      "task_id": "9220309abe6e209dfedc978078c93f79fbd45ef1",
+      "axis_id": "price_orientation",
+      "status": "evidence_of_adaptation",
+      "adaptation_finding": "The cost arm explicitly highlights budget watches and picks $12 sunglasses; the premium arm picks a $39 Italian silk Etro tie and emphasizes materials. Both select $18 SKIMS basics. This is directionally consistent answer adaptation; products differ and price superiority is not independently verified.",
+      "arms": {
+        "positive": {
+          "source_file": "evidence/9220309a--mp_price_orientation_positive.json",
+          "source_sha256": "e6af8478d2ae72f0662767212c3cf1f38392aca1cae62b345f9646293107a69d",
+          "opening_quote": "please lean toward the most budget-friendly qualifying options whenever you have a choice between items.",
+          "opening_evidence_ref": "/run/conversation/0/text",
+          "answer_quote": "optimized for budget-friendly picks:",
+          "answer_evidence_ref": "/run/answer",
+          "caveats": [
+            "Final-answer assertions establish reported behavior, not independent verification of product prices, inventory or policy accuracy."
+          ],
+          "rubric_reviews": [
+            {
+              "rubric_id": "R1",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The ASOS search results page for black men's watches remains open in tab 1, and the agent reported the exact total item count of 244 styles found."
+              },
+              "reason": "The answer reports a specific ASOS count and the results tab is retained. Saved page excerpts do not independently confirm that exact count; query punctuation and storefront locale can change counts.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R2",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent kept the SKIMS product page open in tab 2 for the 'SKIMS COTTON Mens 5\" Boxer Brief' and listed multiple available colors and sizes."
+              },
+              "reason": "The answer names cotton boxer briefs and lists multiple sizes/colors and retains a product tab. Complete selected-product availability/color observations are not saved.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R3",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent navigated to the Poshmark men's accessories category and kept a live listing page open in tab 3, identifying it in the summary."
+              },
+              "reason": "The answer identifies a Poshmark listing and asserts live buying controls; its listing tab is retained. Complete live availability evidence is not preserved in the truncated observations.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R4",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The final response provides a concise shopping summary covering the findings from ASOS, SKIMS, and Poshmark with all requested shortlist details."
+              },
+              "reason": "The final answer includes all three sources with count status, SKIMS color/size options and an identified Poshmark listing. This supports the reporting requirement, without independently certifying those factual claims.",
+              "evidence_refs": [
+                "/run/answer"
+              ],
+              "category": "supported"
+            }
+          ]
+        },
+        "negative": {
+          "source_file": "evidence/9220309a--mp_price_orientation_negative.json",
+          "source_sha256": "943e83859ee753808b11dab5f2e150810f42dcd39eb99d6b7b91bb1cb33d142a",
+          "opening_quote": "I'm generally happy to spend a bit more if an item offers higher-grade materials, better craftsmanship, or sharper styling that will last.",
+          "opening_evidence_ref": "/run/conversation/0/text",
+          "answer_quote": "100% silk necktie made in Italy featuring Etro's signature paisley motif",
+          "answer_evidence_ref": "/run/answer",
+          "caveats": [
+            "Final-answer assertions establish reported behavior, not independent verification of product prices, inventory or policy accuracy."
+          ],
+          "rubric_reviews": [
+            {
+              "rubric_id": "R1",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent navigated to ASOS for black men's watches, reported 246 styles found, and left the search results tab open."
+              },
+              "reason": "The answer reports a specific ASOS count and the results tab is retained. Saved page excerpts do not independently confirm that exact count; query punctuation and storefront locale can change counts.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R2",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent selected the 'SKIMS COTTON Mens 3\" Boxer Brief', listed multiple color and size choices, and left the product page open in tab 2."
+              },
+              "reason": "The answer names cotton boxer briefs and lists multiple sizes/colors and retains a product tab. Complete selected-product availability/color observations are not saved.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R3",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent browsed Poshmark's men's accessories page, opened the listing page for the Etro silk tie, verified it was live, and left it open in tab 3."
+              },
+              "reason": "The answer identifies a Poshmark listing and asserts live buying controls; its listing tab is retained. Complete live availability evidence is not preserved in the truncated observations.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R4",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent provided a concise shopping summary featuring all three requested items with the necessary shortlist details."
+              },
+              "reason": "The final answer includes all three sources with count status, SKIMS color/size options and an identified Poshmark listing. This supports the reporting requirement, without independently certifying those factual claims.",
+              "evidence_refs": [
+                "/run/answer"
+              ],
+              "category": "supported"
+            }
+          ]
+        }
+      }
+    },
+    "9220309a/decision_style": {
+      "task_id": "9220309abe6e209dfedc978078c93f79fbd45ef1",
+      "axis_id": "decision_style",
+      "status": "evidence_of_adaptation",
+      "adaptation_finding": "The analytical answer uses an explicit versatility/condition/ease-of-purchase matrix before recommending; the intuitive answer gives an aesthetically coherent decisive pick. Both include required categories, but changing search query/catalog inventory and different products prevent attribution of outcome differences solely to persona.",
+      "arms": {
+        "positive": {
+          "source_file": "evidence/9220309a--mp_decision_style_positive.json",
+          "source_sha256": "4907391e9caa0dc0a9e063ee0eaab03a1e56f1781c03b5cdc503a1690df935a4",
+          "opening_quote": "please evaluate the selected options against explicit criteria like versatility, condition certainty, and ease of purchase",
+          "opening_evidence_ref": "/run/conversation/0/text",
+          "answer_quote": "Evaluation Against Explicit Criteria",
+          "answer_evidence_ref": "/run/answer",
+          "caveats": [
+            "Final-answer assertions establish reported behavior, not independent verification of product prices, inventory or policy accuracy."
+          ],
+          "rubric_reviews": [
+            {
+              "rubric_id": "R1",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent reported the item count found on ASOS (4 styles found) and left the search results page open in Tab 1."
+              },
+              "reason": "The answer reports a specific ASOS count and the results tab is retained. Saved page excerpts do not independently confirm that exact count; query punctuation and storefront locale can change counts.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R2",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent selected the SKIMS COTTON Mens 3\" Boxer Brief, listed multiple sizes (XS to 5X) and colors (Onyx, Sky, etc.), and kept the product page open in Tab 7."
+              },
+              "reason": "The answer names cotton boxer briefs and lists multiple sizes/colors and retains a product tab. Complete selected-product availability/color observations are not saved.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R3",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent navigated to Poshmark's Men's Accessories section, selected an active leather belt listing, and left the listing page open in Tab 8."
+              },
+              "reason": "The answer identifies a Poshmark listing and asserts live buying controls; its listing tab is retained. Complete live availability evidence is not preserved in the truncated observations.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R4",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The final response provides a structured and concise shopping summary covering all three stores and requested shortlist details."
+              },
+              "reason": "The final answer includes all three sources with count status, SKIMS color/size options and an identified Poshmark listing. This supports the reporting requirement, without independently certifying those factual claims.",
+              "evidence_refs": [
+                "/run/answer"
+              ],
+              "category": "supported"
+            }
+          ]
+        },
+        "negative": {
+          "source_file": "evidence/9220309a--mp_decision_style_negative.json",
+          "source_sha256": "0f392cae88b11249e9e728d2439588f895d45469a49c82c4bd02039ab281888a",
+          "opening_quote": "I'd love a decisive recommendation based on which pieces feel best and click together naturally",
+          "opening_evidence_ref": "/run/conversation/0/text",
+          "answer_quote": "The rich tortoise-and-gold frames bring instant character, warmth, and vintage elegance",
+          "answer_evidence_ref": "/run/answer",
+          "caveats": [
+            "Final-answer assertions establish reported behavior, not independent verification of product prices, inventory or policy accuracy."
+          ],
+          "rubric_reviews": [
+            {
+              "rubric_id": "R1",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent reported the ASOS count of 18 styles found, and tab 1 remains open to the ASOS search results page."
+              },
+              "reason": "The answer reports a specific ASOS count and the results tab is retained. Saved page excerpts do not independently confirm that exact count; query punctuation and storefront locale can change counts.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R2",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent selected the SKIMS COTTON Mens 5\" Boxer Brief 3-Pack, provided color and size options, and kept the product page open in tab 3."
+              },
+              "reason": "The answer names cotton boxer briefs and lists multiple sizes/colors and retains a product tab. Complete selected-product availability/color observations are not saved.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R3",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent identified a live listing for Giorgio Armani eyeglasses from Poshmark men's accessories and left the product listing page open in tab 4."
+              },
+              "reason": "The answer identifies a Poshmark listing and asserts live buying controls; its listing tab is retained. Complete live availability evidence is not preserved in the truncated observations.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R4",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The final response provides a concise shopping summary featuring all three sources and their requested shortlist details."
+              },
+              "reason": "The final answer includes all three sources with count status, SKIMS color/size options and an identified Poshmark listing. This supports the reporting requirement, without independently certifying those factual claims.",
+              "evidence_refs": [
+                "/run/answer"
+              ],
+              "category": "supported"
+            }
+          ]
+        }
+      }
+    },
+    "9220309a/purchase_risk": {
+      "task_id": "9220309abe6e209dfedc978078c93f79fbd45ef1",
+      "axis_id": "purchase_risk",
+      "status": "evidence_of_adaptation",
+      "adaptation_finding": "The risk-averse answer selects a Coach tie and reports seller history, sales, activity and protection. The risk-tolerant answer selects a distinctive Dior scarf and focuses on silk/wool styling without extended seller vetting. Different ASOS locales (/us/ versus default) confound the 17-versus-248 result-count difference; it is not a persona effect.",
+      "arms": {
+        "positive": {
+          "source_file": "evidence/9220309a--mp_purchase_risk_positive.json",
+          "source_sha256": "16cf4be59e7ceb6350e2dab5010d0fbd0e41251a143c16283225f17b763e20cd",
+          "opening_quote": "please favor a listing that has clear condition photos and solid seller information",
+          "opening_evidence_ref": "/run/conversation/0/text",
+          "answer_quote": "Posher since 2019 with over **1,900+ items sold**",
+          "answer_evidence_ref": "/run/answer",
+          "caveats": [
+            "Final-answer assertions establish reported behavior, not independent verification of product prices, inventory or policy accuracy.",
+            "R1 raw verdict has \" met\": true (leading space), not \"met\": true. The historical score counts it as false. This review preserves the malformed object without silently repairing the score."
+          ],
+          "rubric_reviews": [
+            {
+              "rubric_id": "R1",
+              "original_raw_verdict": {
+                " met": true,
+                "communicated": true,
+                "reason": "The agent reported the ASOS count as 17 styles found and left the ASOS search results page open in Tab 1."
+              },
+              "reason": "The answer reports a specific ASOS count and the results tab is retained. Saved page excerpts do not independently confirm that exact count; query punctuation and storefront locale can change counts.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R2",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent identified the 'SKIMS COTTON Mens 5\" Boxer Brief', listed multiple colors (Onyx, Verdant, Sky, etc.) and sizes (XS-5X), and left the product page open in Tab 2."
+              },
+              "reason": "The answer names cotton boxer briefs and lists multiple sizes/colors and retains a product tab. Complete selected-product availability/color observations are not saved.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R3",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent navigated to the Poshmark men's accessories page, opened an active listing for a Coach Men's Silk Tie, and left it open in Tab 3."
+              },
+              "reason": "The answer identifies a Poshmark listing and asserts live buying controls; its listing tab is retained. Complete live availability evidence is not preserved in the truncated observations.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R4",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent provided a concise shopping summary covering all three sources with the requested shortlist details."
+              },
+              "reason": "The final answer includes all three sources with count status, SKIMS color/size options and an identified Poshmark listing. This supports the reporting requirement, without independently certifying those factual claims.",
+              "evidence_refs": [
+                "/run/answer"
+              ],
+              "category": "supported"
+            }
+          ]
+        },
+        "negative": {
+          "source_file": "evidence/9220309a--mp_purchase_risk_negative.json",
+          "source_sha256": "bd924ad4eb821234b671f4e34e1c135dc7b784a9ee71fed97baa34483c7cb7c5",
+          "opening_quote": "don't spend time on extra seller vetting or return policies",
+          "opening_evidence_ref": "/run/conversation/0/text",
+          "answer_quote": "Made in Italy, double-sided design featuring a 100% silk equestrian stirrup pattern",
+          "answer_evidence_ref": "/run/answer",
+          "caveats": [
+            "Final-answer assertions establish reported behavior, not independent verification of product prices, inventory or policy accuracy."
+          ],
+          "rubric_reviews": [
+            {
+              "rubric_id": "R1",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The ASOS search results page is left open in Tab 1, and the agent reported the search results count of 248 styles found as requested."
+              },
+              "reason": "The answer reports a specific ASOS count and the results tab is retained. Saved page excerpts do not independently confirm that exact count; query punctuation and storefront locale can change counts.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R2",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent navigated to the SKIMS cotton boxer brief product page (left open in Tab 2) and listed the product name along with multiple available sizes (XS to 5X) and colors (Onyx, Zinc, Verdant, Chalk)."
+              },
+              "reason": "The answer names cotton boxer briefs and lists multiple sizes/colors and retains a product tab. Complete selected-product availability/color observations are not saved.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R3",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent navigated to an available Christian Dior scarf listing from Poshmark's Men's Accessories category and left the live listing page open in Tab 5."
+              },
+              "reason": "The answer identifies a Poshmark listing and asserts live buying controls; its listing tab is retained. Complete live availability evidence is not preserved in the truncated observations.",
+              "evidence_refs": [
+                "/run/answer",
+                "/run/open_tabs",
+                "/run/trajectory"
+              ],
+              "category": "insufficient_evidence"
+            },
+            {
+              "rubric_id": "R4",
+              "original_raw_verdict": {
+                "met": true,
+                "communicated": true,
+                "reason": "The agent provided a concise shopping summary featuring findings from ASOS, SKIMS, and Poshmark with all requested shortlist details."
+              },
+              "reason": "The final answer includes all three sources with count status, SKIMS color/size options and an identified Poshmark listing. This supports the reporting requirement, without independently certifying those factual claims.",
+              "evidence_refs": [
+                "/run/answer"
+              ],
+              "category": "supported"
+            }
+          ]
+        }
+      }
+    }
+  }
+}
