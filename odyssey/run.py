@@ -84,7 +84,10 @@ DEFAULT_TASK_SUITE = TASK_CATALOG.default_suite
 # "the manifest's default suite", rather than the hard-coded tasks.json file.
 TASKS = DEFAULT_TASK_SUITE.tasks
 PAGE_CHARS = 6000          # per read_page slice
-MAX_TABS = 8
+# The Minneapolis Shopping task requires about 15 listing tabs plus its
+# CryptPad sheet to remain open for grading.  Keep a little headroom for the
+# search/results page and any temporary verification tab.
+MAX_TABS = 20
 DEFAULT_PROFILE = HERE / ".chrome-profile"   # gitignored; keeps consent cookies
 
 MAX_QUESTIONS = 5          # ask_user calls per run
@@ -232,8 +235,8 @@ class Browser:
                 "--mute-audio",
                 # The rubrics require tabs to stay OPEN, so tabs cannot be
                 # closed to save memory -- but they can share renderers. With
-                # site isolation off and a hard renderer cap, 8 open tabs cost
-                # 3 processes instead of 8. Text extraction is unaffected.
+                # site isolation off and a hard renderer cap, the open tabs
+                # share 3 renderer processes. Text extraction is unaffected.
                 "--renderer-process-limit=3",
                 "--disable-features=site-per-process,IsolateOrigins",
                 "--js-flags=--max-old-space-size=256",
@@ -1292,6 +1295,7 @@ def main() -> None:
         "browser": {
             "headless": args.headless,
             "profile_mode": "explicit" if args.profile else "isolated-per-suite-persona",
+            "max_tabs": MAX_TABS,
         },
         "prompt_sha256": {
             "agent": hashlib.sha256(AGENT_RULES.encode("utf-8")).hexdigest(),

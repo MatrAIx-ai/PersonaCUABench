@@ -150,7 +150,10 @@ def main(argv: Sequence[str] | None = None) -> int:
             / cell["arm"]
         )
         command = [
-            str(args.python.expanduser().resolve()),
+            # Keep a virtualenv's interpreter path intact.  Resolving the
+            # symlink here can turn ``.venv/bin/python`` into the base Python
+            # executable, which makes the child lose the venv's site-packages.
+            str(args.python.expanduser().absolute()),
             str(HERE / "run.py"),
             "--suite",
             suite.suite_id,

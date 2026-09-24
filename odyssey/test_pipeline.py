@@ -39,6 +39,10 @@ def test_tasks():
     assert len(set(ids)) == len(ids), "duplicate task_id in tasks.json"
     for t in R.TASKS:
         assert t["rubrics"] and t["confirmed_task"].strip() and t["level"]
+    # Shopping task 4 needs roughly 15 listing tabs and a CryptPad sheet left
+    # open together, so the browser cap must not make the frozen rubric
+    # impossible before the agent starts.
+    assert R.MAX_TABS >= 16
     assert R.resolve_tasks("2", False)[0]["task_id"] == R.TASKS[1]["task_id"]
     assert len(R.resolve_tasks("1,3", False)) == 2
     assert R.resolve_tasks(R.TASKS[4]["task_id"][:8], False)[0] is R.TASKS[4]
