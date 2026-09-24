@@ -1,0 +1,414 @@
+{
+  "schema_version": "personacuabench.matched-pair.v1",
+  "experiment_id": "health-matched-pairs-v3",
+  "suite_id": "health",
+  "display_name": "Alex Rivera",
+  "title": "Health matched-pair persona experiment",
+  "purpose": "Measure expression of controlled preferences and CUA response on six unchanged assigned Odysseys Health tasks.",
+  "arm_labels": {
+    "positive": "The focal/high-expression pole used for the controlled contrast.",
+    "negative": "The opposite comparison pole. Negative is an experimental label, not a quality judgment."
+  },
+  "design": {
+    "selected_axis_count": 3,
+    "expected_persona_count": 6,
+    "recommended_replicates": 3,
+    "expected_task_axis_pairs_per_replicate": 12,
+    "expected_run_cells_per_replicate": 24,
+    "pairing_controls": [
+      "Keep the frozen upstream task and all ordinary rubrics identical across both arms.",
+      "Keep display name, non-target baseline dimensions, prompts, model identities, temperature, step limit, and replicate ID fixed within a pair.",
+      "Change exactly the selected official MatrAIx dimension between arms.",
+      "Use the planner's isolated per-replicate/task/axis/arm Chrome profiles and deterministic counterbalanced order.",
+      "Materialize and review both full-coverage openings before any two-cell browser smoke run; reuse that exact opening configuration.",
+      "Declare local Chrome/Playwright as the runtime; do not describe these results as OSWorld.",
+      "Use the identical verbatim task prefix in both arms; append only that arm's authored preference from the frozen protocol."
+    ],
+    "invalid_pair_conditions": [
+      "Either arm omits, weakens, or contradicts any original task or R1-Rn requirement.",
+      "The arms differ in a controlled variable other than the target dimension.",
+      "A persona is run on a task outside its declared applicability map.",
+      "One pole is inferred only from silence or inherited task wording.",
+      "A fixed opening differs from the exact task plus its assigned authored preference."
+    ],
+    "axis_selection_note": "Six synthetic preference personas in three controlled pairs. V3 uses the verbatim original task plus a protocol-authored preference. The LLM supplies clarification replies only. This tests CUA response to explicit preferences; initial persona expression is controlled by construction, not measured as spontaneous simulator fidelity. V1/v2 failed opening previews are retained.",
+    "pilot": "One selected axis per task, two arms each: detail_depth on Pilates and local yoga; decision_style on YouTube yoga and Fresno fitness; evidence_verification on maternity hospitals and knee surgeons. Twelve pilot cells; the full applicability matrix remains 24 cells per replicate. This is a feasibility pilot, not three formal replicates."
+  },
+  "baseline_dimensions": {
+    "cog_detail_orientation": "Moderate",
+    "decision_style": "Deliberative",
+    "trust_level": "Trusting"
+  },
+  "scoring": {
+    "evidence_unit": "Cited simulated-user utterances; neither agent actions nor original task wording alone proves persona expression.",
+    "per_arm_scale": {
+      "0": "Absent, contradicted, or expressed by violating any hard task requirement.",
+      "1": "Weak or ambiguous, including evidence inherited from the original task alone.",
+      "2": "Clear task-specific expression beyond inherited wording, without contradiction or loss of requirements."
+    },
+    "binary_adherence_rule": "An arm is expressed if and only if its score is 2.",
+    "pair_separation_rule": "A valid pair separates only when both opposite arms score 2, both preserve all original requirements, and the cited evidence shows meaningfully opposite preferences.",
+    "coverage_guardrail": "Both arms must communicate 100% of the original R1-Rn requirements. Preserve all fields, counts, sites, titles, tabs, source checks, playback, and required concise comparisons.",
+    "reporting": [
+      "Report original task success and communicated coverage separately.",
+      "Report each arm's 0/1/2 expression score, citations, contradictions, and pair validity/separation separately.",
+      "Report P1-P5 experience separately; do not relabel it as CUA alignment.",
+      "Keep environment/site failures and unavailable evidence visible; never rewrite frozen tasks or quietly adjust raw scores.",
+      "Retain task, protocol, profile, model, prompt, runtime, replicate, and order identities."
+    ]
+  },
+  "axes": [
+    {
+      "axis_id": "detail_depth",
+      "label": "Detail depth",
+      "dimension": "cog_detail_orientation",
+      "positive": {
+        "value": "Very high",
+        "behavioral_definition": "Requests compact task-relevant optional detail beyond the mandatory fields without expanding a requested short answer into a long report.",
+        "generic_observables": [
+          "Asks for a specific optional field or explanation beyond the original rubric.",
+          "Names the extra detail that would help interpret the required findings."
+        ],
+        "contradictions": [
+          "Explicitly asks for mandatory fields only and rejects optional detail.",
+          "Uses extra detail as a reason to omit any required item or violate a concise-output requirement."
+        ]
+      },
+      "negative": {
+        "value": "Low",
+        "behavioral_definition": "Affirmatively asks for the mandatory fields and comparison only, omitting optional background while preserving all evidence and material qualifications.",
+        "generic_observables": [
+          "Explicitly limits optional context to keep the output focused on all required fields.",
+          "Names an optional type of background they do not want."
+        ],
+        "contradictions": [
+          "Requests substantial optional background or extra fields.",
+          "Drops a mandatory field, source, verification, count, tab, or material qualification to shorten the answer."
+        ]
+      },
+      "tasks": {
+        "69782bfcfdb3311496bc9048bf66915b33e692cd": {
+          "task_label": "Clovis and Fresno Pilates comparison",
+          "rationale": "Keep the concise comparison and every required schedule link; vary optional context around choosing a class.",
+          "inherited_task_signals": [
+            "Identify at least two Clovis, California Pilates studios that offer classes and provide each studio’s name plus a direct class schedule or booking page link.",
+            "Provide a broader Fresno-area list of at least three Pilates class options, each with the studio name and a direct schedule or booking page link.",
+            "Look up Title 29 Fitness in Fresno and capture what it offers along with the class schedule details shown on its website.",
+            "End with one concise comparison that includes the Clovis options, the wider Fresno-area list, and an explanation of where Title 29 Fitness fits among them."
+          ],
+          "positive_observables": [
+            "Asks for one compact extra note per studio about class format or equipment, where stated.",
+            "Wants a brief explanation of what makes the class options different, beyond the required Title 29 comparison."
+          ],
+          "negative_observables": [
+            "Explicitly requests only the required studios, offerings, schedule details, links, and comparison.",
+            "Says to omit optional equipment background and extended studio descriptions."
+          ],
+          "positive_opening_preference": "I like a little extra detail when comparing studios. If the sites state it, add one compact class-format or equipment note per studio and a brief explanation of what distinguishes the classes; keep the overall comparison concise.",
+          "negative_opening_preference": "Please stick to all the required studios, offerings, schedule details, links and comparison. I prefer to skip optional equipment background and extended studio descriptions, while keeping every required detail."
+        },
+        "5e09c06aa92c1e252db5106a72e8d61e59356c7e": {
+          "task_label": "Fresno yoga starter plan",
+          "rationale": "The next three classes and highest-view-count video stay fixed; optional studio and practice context can vary.",
+          "inherited_task_signals": [
+            "Summarize Coil Yoga in Fresno using its website, including the studio’s overall offerings, class types, and at least one specific detail taken from the classes page.",
+            "Report the next three upcoming classes from Tower Yoga Fresno’s schedule, each with its start time.",
+            "Identify the YouTube search result for “50 minute yin yoga” with the highest visible view count and report its title, channel, and view count.",
+            "Recommend whether Coil Yoga or Tower Yoga is the better beginner starting point based on the findings from the two local studio websites.",
+            "Provide a final Fresno yoga starter plan that pairs one local studio recommendation with the selected at-home YouTube session."
+          ],
+          "positive_observables": [
+            "Asks for a brief extra note on what a first-time visitor should bring, if the studio states it.",
+            "Wants a compact note on any props mentioned for the selected video, without changing the view-count rule."
+          ],
+          "negative_observables": [
+            "Asks to limit the plan to the required studio findings, three class times, video details, and recommendation.",
+            "Explicitly declines optional packing lists and extra practice background."
+          ],
+          "positive_opening_preference": "I like useful preparation details alongside the plan. If available, add a brief note on what the studio says a first-time visitor should bring and any props mentioned for the selected video. Keep it compact and retain the highest-view-count selection rule.",
+          "negative_opening_preference": "Please keep the plan to the required studio findings, three upcoming class times, video details and recommendation. I prefer to skip optional packing lists and extra practice background."
+        },
+        "328ce861b58b2cf2e6da520040193710f95cfe56": {
+          "task_label": "Free YouTube yoga plan",
+          "rationale": "All instructor/video fields and playback requirements remain; optional practice setup is independent.",
+          "inherited_task_signals": [
+            "Provide a shortlist of at least 3 yoga instructors who appear approachable, beginner-friendly, or funny and who post free yoga classes on YouTube, including each instructor’s name, YouTube channel name, and one example video title.",
+            "Select one morning yoga video on YouTube that is approximately 20 minutes long and is from one of the instructors in the shortlist.",
+            "Select one separate YouTube Vinyasa flow video that is approximately 30 minutes long and provide its title and link.",
+            "Open the chosen morning yoga video and the chosen Vinyasa flow video in separate browser tabs, and start playing the longer Vinyasa video briefly before leaving it open.",
+            "Present the final output as one combined yoga plan containing the instructor shortlist, the chosen morning video with title, duration, and link, and the separate Vinyasa flow video with title and link."
+          ],
+          "positive_observables": [
+            "Asks for a compact props or space-setup note for each chosen video when visible.",
+            "Wants a short optional note on the teaching pace of the two videos."
+          ],
+          "negative_observables": [
+            "Explicitly wants the instructor shortlist and required video details only.",
+            "Declines optional setup notes and extra teaching-style commentary after the selections are made."
+          ],
+          "positive_opening_preference": "If available, I would appreciate a compact props or space-setup note and a short note on teaching pace for each selected video, alongside all the required details.",
+          "negative_opening_preference": "Please give me the instructor shortlist and all the required video details without optional setup notes or extra teaching-style commentary after the selections."
+        },
+        "e8b73f739732f8aeb3c473d00f6219af5b8dcdb7": {
+          "task_label": "Ten Los Angeles maternity hospitals",
+          "rationale": "Exactly ten complete entries and all evidence remain mandatory; optional program context can be added compactly.",
+          "inherited_task_signals": [
+            "A credible Los Angeles-area candidate pool of hospitals with maternity-related care is identified using Google and reputable sources.",
+            "Exactly 10 hospitals are selected as the strongest childbirth options based on service availability plus reputation, rankings, or recognitions.",
+            "Each of the 10 selected hospitals has its official maternity, obstetrics, or labor-and-delivery page opened in a separate browser tab and left open.",
+            "For every listed hospital, labor and delivery services are explicitly verified on the official hospital page.",
+            "Ranking, recognition, or quality-indicator evidence is gathered for each of the 10 hospitals from U.S. News or similarly reputable sources.",
+            "A CryptPad Document titled exactly 'Best LA Maternity Hospitals' is created and includes for each hospital its name, location, maternity program description, ranking/recognition status, and official maternity page link.",
+            "The CryptPad Document ends with a comparative summary highlighting key differences, patterns, and top recommendations, and the doc remains open alongside the hospital tabs."
+          ],
+          "positive_observables": [
+            "Asks for one brief extra field on a hospital's stated maternity tour or education offering, where available.",
+            "Wants concise qualifiers for program differences while retaining the short comparison section."
+          ],
+          "negative_observables": [
+            "Explicitly asks to keep each hospital entry to the required name, location, program, quality status, and link.",
+            "Declines optional tour and education details, while retaining every required verification and comparison."
+          ],
+          "positive_opening_preference": "I appreciate a little extra program context. If the official sites state it, add one brief maternity-tour or education note per hospital, while keeping the comparison short and all required evidence and fields intact.",
+          "negative_opening_preference": "Please keep each hospital entry to the required name, location, program, quality status and link, with all the required verification and comparison. I prefer to leave out optional tour and education details."
+        },
+        "256342f13c0a03e080f92ee073153fe33a6881c0": {
+          "task_label": "Ten verified New York City knee surgeons",
+          "rationale": "Exactly ten verified profiles and affiliation-frequency summary remain; optional logistics do not replace evidence.",
+          "inherited_task_signals": [
+            "A spreadsheet titled 'Top ACL Surgeons NYC' is created and used as the working document.",
+            "Official hospital or practice profile pages for candidate NYC surgeons are opened in separate browser tabs.",
+            "Each included surgeon is verified on the actual profile page as performing ACL reconstruction, meniscus repair, knee ligament reconstruction, or a clearly equivalent sports knee procedure.",
+            "For every selected surgeon, the spreadsheet records full name, hospital or practice affiliation, specialty focus, confirmation note for ACL reconstruction or meniscus repair, and the direct profile link.",
+            "Exactly 10 New York City surgeons are included, and each spreadsheet entry corresponds to an official profile page that remains open in a tab.",
+            "The spreadsheet includes a short summary of which hospitals, orthopedic groups, or medical centers appear most frequently among the 10 surgeons."
+          ],
+          "positive_observables": [
+            "Asks for one optional office-location detail from each official profile, when stated.",
+            "Wants a compact extra note distinguishing any stated related knee specialty beyond the required focus."
+          ],
+          "negative_observables": [
+            "Explicitly requests only the five required spreadsheet fields and the affiliation summary.",
+            "Says to leave out optional office logistics and lengthy biographies."
+          ],
+          "positive_opening_preference": "I appreciate some useful context beyond the required fields. Where the official profiles state it, add a compact office-location detail and any related knee specialty that helps distinguish the surgeons.",
+          "negative_opening_preference": "Please keep the sheet to the five required fields and the affiliation summary. I prefer to skip optional office logistics and lengthy biographies."
+        },
+        "e1aca0ae8174c6f1847be80c82d8adc63d031b23": {
+          "task_label": "Fresno beginner fitness outing",
+          "rationale": "Every schedule, location, class and onboarding requirement remains; optional first-visit context can vary.",
+          "inherited_task_signals": [
+            "Report the days and times when Tower Yoga classes are offered from the Tower Yoga Fresno schedule.",
+            "Describe what Blue Moon Yoga is in Fresno based on the Blue Moon Yoga Studios website.",
+            "List the names of the Fresno studio locations shown for Blue Moon Yoga on the website.",
+            "Summarize the types of classes offered by Fight Girl Fitness in Fresno.",
+            "Explain how a new person can get started with Fight Girl Fitness, including any memberships, trial, booking, or participation details available on the website.",
+            "Provide a short recommendation comparing Tower Yoga, Blue Moon Yoga, and Fight Girl Fitness, and identify which option seems easiest for a beginner based on schedule convenience and onboarding details."
+          ],
+          "positive_observables": [
+            "Asks for a brief extra first-visit preparation or equipment note, where the sites state one.",
+            "Wants concise context about differences in class format in addition to the required recommendation."
+          ],
+          "negative_observables": [
+            "Explicitly asks for just the required schedules, locations, class types, onboarding, and short recommendation.",
+            "Declines optional equipment lists and extended studio background."
+          ],
+          "positive_opening_preference": "If the sites state it, I would appreciate a brief first-visit preparation or equipment note and concise context about class-format differences, alongside the required short recommendation.",
+          "negative_opening_preference": "Please stick to the required schedules, locations, class types, onboarding and short recommendation. I prefer to skip optional equipment lists and extended studio background."
+        }
+      }
+    },
+    {
+      "axis_id": "decision_style",
+      "label": "Decision style",
+      "dimension": "decision_style",
+      "positive": {
+        "value": "Analytical",
+        "behavioral_definition": "Requests a consistent set of explicit criteria and a short tradeoff explanation for choosing among qualifying fitness options.",
+        "generic_observables": [
+          "Names common comparison criteria and asks to apply them consistently.",
+          "Requests a tradeoff-based explanation of the choice."
+        ],
+        "contradictions": [
+          "Explicitly asks to decide solely by gut feel and avoid criteria.",
+          "Allows the comparison method to override a hard task condition."
+        ]
+      },
+      "negative": {
+        "value": "Intuitive",
+        "behavioral_definition": "Requests a holistic, personally inviting impression among qualifying fitness options and affirmatively prefers that to numerical scoring.",
+        "generic_observables": [
+          "Asks for an overall impression of fit from the observed teaching style or studio presentation.",
+          "Expressly prefers a holistic choice to points, weights, or a ranking matrix."
+        ],
+        "contradictions": [
+          "Insists on a weighted matrix or criteria scoring to make the choice.",
+          "Uses an impression to disregard required counts, timing, view counts, free access, or verification."
+        ]
+      },
+      "tasks": {
+        "69782bfcfdb3311496bc9048bf66915b33e692cd": {
+          "task_label": "Clovis and Fresno Pilates comparison",
+          "rationale": "Required studios and schedule evidence do not dictate how the user prefers to weigh the resulting choices.",
+          "inherited_task_signals": [
+            "Identify at least two Clovis, California Pilates studios that offer classes and provide each studio’s name plus a direct class schedule or booking page link.",
+            "Provide a broader Fresno-area list of at least three Pilates class options, each with the studio name and a direct schedule or booking page link.",
+            "Look up Title 29 Fitness in Fresno and capture what it offers along with the class schedule details shown on its website.",
+            "End with one concise comparison that includes the Clovis options, the wider Fresno-area list, and an explanation of where Title 29 Fitness fits among them."
+          ],
+          "positive_observables": [
+            "Asks to compare class format and schedule fit using the same explicit criteria for each studio.",
+            "Wants the recommendation explained as a tradeoff between those criteria."
+          ],
+          "negative_observables": [
+            "Asks which studio gives the most personally welcoming first-impression based on the actual descriptions.",
+            "Prefers a brief holistic explanation of the fit over a points-based comparison, while retaining all options and schedules."
+          ],
+          "positive_opening_preference": "I decide best with a consistent comparison: please weigh class format, schedule fit and ease of getting started across the qualifying studios, then briefly explain the tradeoffs behind the recommendation.",
+          "negative_opening_preference": "Among options that meet all those requirements, I prefer your overall impression of which studio feels most inviting from its presentation and classes. Give me that sense of fit rather than points or a weighted ranking."
+        },
+        "5e09c06aa92c1e252db5106a72e8d61e59356c7e": {
+          "task_label": "Fresno yoga starter plan",
+          "rationale": "Decision style can affect the local studio choice, but the highest-visible-view-count video rule must remain unchanged.",
+          "inherited_task_signals": [
+            "Summarize Coil Yoga in Fresno using its website, including the studio’s overall offerings, class types, and at least one specific detail taken from the classes page.",
+            "Report the next three upcoming classes from Tower Yoga Fresno’s schedule, each with its start time.",
+            "Identify the YouTube search result for “50 minute yin yoga” with the highest visible view count and report its title, channel, and view count.",
+            "Recommend whether Coil Yoga or Tower Yoga is the better beginner starting point based on the findings from the two local studio websites.",
+            "Provide a final Fresno yoga starter plan that pairs one local studio recommendation with the selected at-home YouTube session."
+          ],
+          "positive_observables": [
+            "Asks to choose between Coil and Tower by explicitly comparing beginner class suitability and the listed times.",
+            "Wants those criteria applied consistently to both studios."
+          ],
+          "negative_observables": [
+            "Asks which of Coil or Tower feels more inviting based on the site's atmosphere and teaching descriptions.",
+            "Prefers an overall first-visit impression over a scoring table, while still using the three class times and the required highest-view-count video."
+          ],
+          "positive_opening_preference": "For the studio choice, please compare beginner suitability, class style and schedule convenience consistently and briefly explain the tradeoff. Keep the YouTube video's highest-visible-view-count rule unchanged.",
+          "negative_opening_preference": "For the studio choice, I prefer an overall impression of which feels more welcoming from what you see, without a numerical scorecard. Keep the required highest-visible-view-count rule for the YouTube video."
+        },
+        "328ce861b58b2cf2e6da520040193710f95cfe56": {
+          "task_label": "Free YouTube yoga plan",
+          "rationale": "The original approachable-instructor request alone does not identify a decision style; both poles add an explicit choice method.",
+          "inherited_task_signals": [
+            "Provide a shortlist of at least 3 yoga instructors who appear approachable, beginner-friendly, or funny and who post free yoga classes on YouTube, including each instructor’s name, YouTube channel name, and one example video title.",
+            "Select one morning yoga video on YouTube that is approximately 20 minutes long and is from one of the instructors in the shortlist.",
+            "Select one separate YouTube Vinyasa flow video that is approximately 30 minutes long and provide its title and link.",
+            "Open the chosen morning yoga video and the chosen Vinyasa flow video in separate browser tabs, and start playing the longer Vinyasa video briefly before leaving it open.",
+            "Present the final output as one combined yoga plan containing the instructor shortlist, the chosen morning video with title, duration, and link, and the separate Vinyasa flow video with title and link."
+          ],
+          "positive_observables": [
+            "Asks to compare the shortlisted instructors using the same criteria, such as cue clarity and pace.",
+            "Wants the two selected videos justified through a brief criteria-based comparison within the required durations."
+          ],
+          "negative_observables": [
+            "Asks to select among qualifying instructors by an overall impression of the voice and teaching energy.",
+            "Explicitly prefers a holistic personal-fit explanation over a scoring matrix while preserving free access, durations, tabs, and playback."
+          ],
+          "positive_opening_preference": "Please apply consistent criteria—clarity of instruction, pace and beginner suitability—to the qualifying videos, and briefly explain the tradeoff behind the two choices.",
+          "negative_opening_preference": "Among videos that meet the required lengths and free-access conditions, I prefer your overall impression of which instructors feel warm, relaxed or fun to practice with. Please avoid points or a weighted ranking matrix when explaining the choices."
+        },
+        "e1aca0ae8174c6f1847be80c82d8adc63d031b23": {
+          "task_label": "Fresno beginner fitness outing",
+          "rationale": "The original schedule/onboarding basis stays hard; the user can express an additional structured or holistic choice preference.",
+          "inherited_task_signals": [
+            "Report the days and times when Tower Yoga classes are offered from the Tower Yoga Fresno schedule.",
+            "Describe what Blue Moon Yoga is in Fresno based on the Blue Moon Yoga Studios website.",
+            "List the names of the Fresno studio locations shown for Blue Moon Yoga on the website.",
+            "Summarize the types of classes offered by Fight Girl Fitness in Fresno.",
+            "Explain how a new person can get started with Fight Girl Fitness, including any memberships, trial, booking, or participation details available on the website.",
+            "Provide a short recommendation comparing Tower Yoga, Blue Moon Yoga, and Fight Girl Fitness, and identify which option seems easiest for a beginner based on schedule convenience and onboarding details."
+          ],
+          "positive_observables": [
+            "Asks for the three studios to be compared in the same schedule-convenience and onboarding-effort format.",
+            "Wants a short explanation of the tradeoff that makes the recommendation win."
+          ],
+          "negative_observables": [
+            "Asks for an overall impression of which qualifying first visit feels most inviting.",
+            "Prefers a short personal-fit description over points or weights, with schedule convenience and onboarding still explicitly supporting the choice."
+          ],
+          "positive_opening_preference": "Please compare schedule convenience, onboarding effort and class intensity consistently across the three options, then give a brief tradeoff-based explanation of your beginner recommendation.",
+          "negative_opening_preference": "Among the options supported by the required schedule and onboarding findings, I prefer your overall impression of which place feels most welcoming for a first visit. Please avoid a numerical scorecard or weighted ranking."
+        }
+      }
+    },
+    {
+      "axis_id": "evidence_verification",
+      "label": "Trust in the agent's evidence",
+      "dimension": "trust_level",
+      "positive": {
+        "value": "Verifying",
+        "behavioral_definition": "Wants to personally audit the agent's interpretation through precise evidence pointers beyond the task's mandatory sources.",
+        "generic_observables": [
+          "Asks for a precise section or short evidence pointer so they can recheck the agent's claim personally.",
+          "Makes personal checking of the interpretation an explicit preference beyond leaving source tabs open."
+        ],
+        "contradictions": [
+          "Expressly delegates all interpretation and rejects any personal audit pointers.",
+          "Treats original required links or open tabs alone as the only evidence of this pole."
+        ]
+      },
+      "negative": {
+        "value": "Trusting",
+        "behavioral_definition": "Affirmatively delegates interpretation to the agent and accepts its source-backed synthesis once every original verification requirement is met.",
+        "generic_observables": [
+          "Explicitly says they trust the agent to interpret the verified sources.",
+          "Asks for its synthesis without an additional claim-by-claim audit trail beyond the task's required links and notes."
+        ],
+        "contradictions": [
+          "Insists on personally rechecking each inference with additional section-by-section evidence.",
+          "Uses trust to waive mandatory official verification, quality evidence, or required source links."
+        ]
+      },
+      "tasks": {
+        "e8b73f739732f8aeb3c473d00f6219af5b8dcdb7": {
+          "task_label": "Ten Los Angeles maternity hospitals",
+          "rationale": "The task already requires official delivery verification and reputable quality signals. The pole concerns trust in the agent's interpretation beyond that evidence floor.",
+          "inherited_task_signals": [
+            "A credible Los Angeles-area candidate pool of hospitals with maternity-related care is identified using Google and reputable sources.",
+            "Exactly 10 hospitals are selected as the strongest childbirth options based on service availability plus reputation, rankings, or recognitions.",
+            "Each of the 10 selected hospitals has its official maternity, obstetrics, or labor-and-delivery page opened in a separate browser tab and left open.",
+            "For every listed hospital, labor and delivery services are explicitly verified on the official hospital page.",
+            "Ranking, recognition, or quality-indicator evidence is gathered for each of the 10 hospitals from U.S. News or similarly reputable sources.",
+            "A CryptPad Document titled exactly 'Best LA Maternity Hospitals' is created and includes for each hospital its name, location, maternity program description, ranking/recognition status, and official maternity page link.",
+            "The CryptPad Document ends with a comparative summary highlighting key differences, patterns, and top recommendations, and the doc remains open alongside the hospital tabs."
+          ],
+          "positive_observables": [
+            "Asks for an exact heading or compact passage pointer for the delivery-service claim so they can check the interpretation themselves.",
+            "Wants precise pointers for how the quality evidence applies to the listed hospital or campus, rather than accepting the agent's interpretation without checking."
+          ],
+          "negative_observables": [
+            "Explicitly trusts the agent to interpret the required official pages and quality sources and synthesize the ten options.",
+            "Says the required links, recognition notes, and open tabs are sufficient without an extra passage-by-passage audit trail."
+          ],
+          "positive_opening_preference": "I like to check interpretations myself. Alongside the required links and notes, I would appreciate exact headings or compact passage pointers for the delivery-service claims, and precise pointers showing how the quality evidence applies to each hospital or campus.",
+          "negative_opening_preference": "I trust you to interpret the required official pages and quality sources and synthesize the ten options. The required links, recognition notes and open tabs are enough for me; I do not need an additional passage-by-passage audit trail."
+        },
+        "256342f13c0a03e080f92ee073153fe33a6881c0": {
+          "task_label": "Ten verified New York City knee surgeons",
+          "rationale": "Official procedure evidence and confirmation notes are inherited requirements; the contrast concerns additional personal auditing of the agent's inclusion judgement.",
+          "inherited_task_signals": [
+            "A spreadsheet titled 'Top ACL Surgeons NYC' is created and used as the working document.",
+            "Official hospital or practice profile pages for candidate NYC surgeons are opened in separate browser tabs.",
+            "Each included surgeon is verified on the actual profile page as performing ACL reconstruction, meniscus repair, knee ligament reconstruction, or a clearly equivalent sports knee procedure.",
+            "For every selected surgeon, the spreadsheet records full name, hospital or practice affiliation, specialty focus, confirmation note for ACL reconstruction or meniscus repair, and the direct profile link.",
+            "Exactly 10 New York City surgeons are included, and each spreadsheet entry corresponds to an official profile page that remains open in a tab.",
+            "The spreadsheet includes a short summary of which hospitals, orthopedic groups, or medical centers appear most frequently among the 10 surgeons."
+          ],
+          "positive_observables": [
+            "Asks each required procedure confirmation note to include an exact profile-section pointer so they can personally verify the interpretation.",
+            "Wants any claimed equivalent sports-knee procedure tied to a precise visible phrase rather than relying on the agent's judgement alone."
+          ],
+          "negative_observables": [
+            "Affirmatively trusts the agent to apply the stated procedure criteria to official profiles.",
+            "Accepts the required confirmation notes and links without an additional personal line-by-line checking format, keeping all ten official tabs."
+          ],
+          "positive_opening_preference": "I like to check interpretations myself. Within each required procedure confirmation note, I would appreciate an exact profile-section pointer. For an equivalent sports-knee procedure, include the precise visible phrase that supports your interpretation.",
+          "negative_opening_preference": "I trust you to apply the stated procedure criteria to the official profiles. The required confirmation notes, links and ten open profile tabs are enough for me; I do not need an additional line-by-line checking format."
+        }
+      }
+    }
+  ],
+  "interaction_protocol": "matched_pair_fixed_opening.v3"
+}

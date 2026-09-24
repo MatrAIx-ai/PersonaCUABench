@@ -1,0 +1,1084 @@
+[
+  {
+    "task": "Clovis/Fresno Pilates",
+    "persona": "mp_detail_depth_negative",
+    "a": {
+      "model": "openai.gpt-oss-120b",
+      "provider": "bedrock",
+      "backend": "aws-bedrock-openai-compatible",
+      "P1_asked_for": {
+        "score": 3,
+        "reason": "Provided two Clovis studios with schedule tabs but only one of the three required Fresno‑area studios had an actual schedule tab opened, leaving two missing."
+      },
+      "P2_readable_for_them": {
+        "score": 4,
+        "reason": "The comparison is organized in tables with clear headings and concise explanations, matching the user’s desire for concrete on‑screen info."
+      },
+      "P3_actionable": {
+        "score": 3,
+        "reason": "Most schedule links are open and usable, but the absent Fresno‑area schedule tabs mean the user cannot fully compare all required options without further searching."
+      },
+      "P4_gap_handling": {
+        "score": "n/a",
+        "reason": "The user did not mention price, class length, or accessibility, and the assistant neither asked nor addressed these implicit needs."
+      },
+      "P5_overall": {
+        "score": 3,
+        "reason": "The assistant largely fulfilled the request but fell short on delivering all required schedule tabs, preventing a complete comparison."
+      },
+      "unmet_requests": [
+        "at least three Pilates class options around Fresno or Clovis, with each studio’s real schedule or booking link"
+      ],
+      "missed_gaps": [
+        "pricing or cost information for the classes",
+        "whether the studios offer beginner‑friendly or low‑impact Pilates options"
+      ],
+      "judge_confidence": 0.0
+    },
+    "b": {
+      "model": "openai.gpt-oss-120b",
+      "provider": "bedrock",
+      "backend": "aws-bedrock-openai-compatible",
+      "P1_asked_for": {
+        "score": 3,
+        "reason": "Provided the two Clovis studios and a Fresno comparison, but did not actually open schedule tabs for the Fresno Pilates Center and Core Fresno as promised."
+      },
+      "P2_readable_for_them": {
+        "score": 4,
+        "reason": "The answer uses clear headings, tables and brief descriptions suitable for a low‑detail, deliberative user."
+      },
+      "P3_actionable": {
+        "score": 3,
+        "reason": "Includes most schedule links and summaries, but missing a couple of promised open tabs limits immediate action."
+      },
+      "P4_gap_handling": {
+        "score": "n/a",
+        "reason": "No evident omitted information that required clarification or assumption handling."
+      },
+      "P5_overall": {
+        "score": 3,
+        "reason": "The user gets most of what they asked for, but incomplete tab opening and minor omissions reduce overall satisfaction."
+      },
+      "unmet_requests": [
+        "open each studio’s actual schedule or booking page in its own tab and leave those tabs open so I can look at the class calendars myself later"
+      ],
+      "missed_gaps": [],
+      "judge_confidence": 0.0
+    },
+    "agreement": {
+      "P1_asked_for": {
+        "delta": 0,
+        "within_one": true
+      },
+      "P2_readable_for_them": {
+        "delta": 0,
+        "within_one": true
+      },
+      "P3_actionable": {
+        "delta": 0,
+        "within_one": true
+      },
+      "P4_gap_handling": null,
+      "P5_overall": {
+        "delta": 0,
+        "within_one": true
+      }
+    },
+    "replicate_id": "health-pilot-v3-r1"
+  },
+  {
+    "task": "Clovis/Fresno Pilates",
+    "persona": "mp_detail_depth_positive",
+    "a": {
+      "model": "openai.gpt-oss-120b",
+      "provider": "bedrock",
+      "backend": "aws-bedrock-openai-compatible",
+      "P1_asked_for": {
+        "score": 3,
+        "reason": "Provided two Clovis studio schedule tabs and some Fresno options, but several Fresno links were missing or 404 and Title 29 schedule was not properly opened."
+      },
+      "P2_readable_for_them": {
+        "score": 4,
+        "reason": "The answer is organized in clear tables with concise notes, matching the detail‑orientation of the user."
+      },
+      "P3_actionable": {
+        "score": 3,
+        "reason": "Most schedule tabs are usable, but several links (P6, Flux schedule, Title 29) are dead or indirect, limiting immediate booking."
+      },
+      "P4_gap_handling": {
+        "score": 2,
+        "reason": "The assistant did not ask clarifying questions about missing schedule pages or confirm assumptions about unavailable links, and guessed about Title 29 without flagging uncertainty."
+      },
+      "P5_overall": {
+        "score": 3,
+        "reason": "The user gets many useful tabs but key requests (complete Fresno list and a working Title 29 schedule) are incomplete, leading to a mixed experience."
+      },
+      "unmet_requests": [
+        "open each studio’s actual schedule or booking page in its own tab and leave those tabs open ... for Title 29 Fitness",
+        "find at least three Pilates class options around Fresno or Clovis with each studio’s real schedule or booking link"
+      ],
+      "missed_gaps": [],
+      "judge_confidence": 0.0
+    },
+    "b": {
+      "model": "openai.gpt-oss-120b",
+      "provider": "bedrock",
+      "backend": "aws-bedrock-openai-compatible",
+      "P1_asked_for": {
+        "score": 3,
+        "reason": "Provided schedule links for two Clovis studios and several Fresno options, but many tabs are search pages or 404 errors and Title 29’s calendar was not properly shown."
+      },
+      "P2_readable_for_them": {
+        "score": 4,
+        "reason": "The answer is organized in concise tables with the extra class‑format notes the user requested, matching their detail‑oriented style."
+      },
+      "P3_actionable": {
+        "score": 3,
+        "reason": "Most studios have usable schedule tabs, but several opened tabs are dead links or generic search results, limiting immediate booking without further navigation."
+      },
+      "P4_gap_handling": {
+        "score": 2,
+        "reason": "The assistant did not ask clarification about preferred booking method, schedule freshness, or the need for a non‑app calendar for Title 29, simply assuming the pages would suffice."
+      },
+      "P5_overall": {
+        "score": 3,
+        "reason": "The user gets useful comparative info and many schedule tabs, yet key parts of the request (complete Title 29 schedule, fully functional tabs) are missing, so the experience is only partly satisfactory."
+      },
+      "unmet_requests": [
+        "open each studio’s actual schedule or booking page in its own tab and leave those tabs open so I can look at the class calendars myself later",
+        "go to Title 29 Fitness’s website and figure out what it offers in Fresno, especially anything relevant to Pilates or group fitness, and capture the class schedule details shown there"
+      ],
+      "missed_gaps": [
+        "confirmation that the opened schedule pages are the current, up‑to‑date calendars (no indication of date stamps or potential outdated content)",
+        "whether the user prefers a web‑based calendar or the proprietary CORE app for Title 29, which affects usability"
+      ],
+      "judge_confidence": 0.92
+    },
+    "agreement": {
+      "P1_asked_for": {
+        "delta": 0,
+        "within_one": true
+      },
+      "P2_readable_for_them": {
+        "delta": 0,
+        "within_one": true
+      },
+      "P3_actionable": {
+        "delta": 0,
+        "within_one": true
+      },
+      "P4_gap_handling": {
+        "delta": 0,
+        "within_one": true
+      },
+      "P5_overall": {
+        "delta": 0,
+        "within_one": true
+      }
+    },
+    "replicate_id": "health-pilot-v3-r1"
+  },
+  {
+    "task": "Fresno yoga starter plan",
+    "persona": "mp_detail_depth_positive",
+    "status": "No final answer",
+    "replicate_id": "health-pilot-v3-r1"
+  },
+  {
+    "task": "Fresno yoga starter plan",
+    "persona": "mp_detail_depth_negative",
+    "status": "No final answer",
+    "replicate_id": "health-pilot-v3-r1"
+  },
+  {
+    "task": "Free YouTube yoga plan",
+    "persona": "mp_decision_style_positive",
+    "a": {
+      "model": "openai.gpt-oss-120b",
+      "provider": "bedrock",
+      "backend": "aws-bedrock-openai-compatible",
+      "P1_asked_for": {
+        "score": 4,
+        "reason": "Provided the three instructor shortlist, example videos, and both requested YouTube videos with titles, durations, and links, but did not actually open the video tabs as asked."
+      },
+      "P2_readable_for_them": {
+        "score": 4,
+        "reason": "Uses clear, friendly language suited to an analytical yet trusting novice, with concise tables and brief explanations."
+      },
+      "P3_actionable": {
+        "score": 4,
+        "reason": "All necessary details (titles, durations, URLs) are given, enabling the person to click and start the routines without further help."
+      },
+      "P4_gap_handling": {
+        "score": "n/a",
+        "reason": "No evident omitted information or unanswered assumptions were present in the request."
+      },
+      "P5_overall": {
+        "score": 4,
+        "reason": "The person would likely feel well served: most of their explicit requests were met, the plan is clear and usable, aside from the minor omission of actually opening the video tabs."
+      },
+      "unmet_requests": [],
+      "missed_gaps": [],
+      "judge_confidence": 0.0
+    },
+    "b": {
+      "model": "openai.gpt-oss-120b",
+      "provider": "bedrock",
+      "backend": "aws-bedrock-openai-compatible",
+      "P1_asked_for": {
+        "score": 3,
+        "reason": "Provided the instructor shortlist and video details, but did not actually open the two chosen videos in separate tabs or start playback of the 30‑minute video as the person requested."
+      },
+      "P2_readable_for_them": {
+        "score": 4,
+        "reason": "The answer uses clear, simple language and concise tables that suit an analytical yet moderately detailed user."
+      },
+      "P3_actionable": {
+        "score": 4,
+        "reason": "All titles, durations, and links are given, enabling the user to access the videos immediately; only the missing tab‑opening step limits full actionability."
+      },
+      "P4_gap_handling": {
+        "score": "n/a",
+        "reason": "The conversation shows no omitted information the user needed that the assistant failed to notice or address."
+      },
+      "P5_overall": {
+        "score": 4,
+        "reason": "The user would likely feel mostly satisfied with the curated plan, though the failure to open the tabs and start playback prevents a perfect experience."
+      },
+      "unmet_requests": [
+        "please open the two chosen videos in separate tabs so I can compare them, and start playing the 30‑minute Vinyasa one long enough to confirm it’s the right video before leaving that tab open"
+      ],
+      "missed_gaps": [],
+      "judge_confidence": 0.0
+    },
+    "agreement": {
+      "P1_asked_for": {
+        "delta": 1,
+        "within_one": true
+      },
+      "P2_readable_for_them": {
+        "delta": 0,
+        "within_one": true
+      },
+      "P3_actionable": {
+        "delta": 0,
+        "within_one": true
+      },
+      "P4_gap_handling": null,
+      "P5_overall": {
+        "delta": 0,
+        "within_one": true
+      }
+    },
+    "replicate_id": "health-pilot-v3-r1"
+  },
+  {
+    "task": "Free YouTube yoga plan",
+    "persona": "mp_decision_style_negative",
+    "a": {
+      "model": "openai.gpt-oss-120b",
+      "provider": "bedrock",
+      "backend": "aws-bedrock-openai-compatible",
+      "P1_asked_for": {
+        "score": 5,
+        "reason": "Provided the three instructor shortlist, example videos, a ~20 min morning video and a ~30 min Vinyasa video with titles, durations, links, and opened them in separate tabs as requested."
+      },
+      "P2_readable_for_them": {
+        "score": 5,
+        "reason": "The answer uses clear, simple sentences and a table format that matches the user’s moderate detail orientation and intuitive style."
+      },
+      "P3_actionable": {
+        "score": 5,
+        "reason": "All necessary details (titles, exact durations, URLs) are given and the videos are already opened, allowing immediate use without additional steps."
+      },
+      "P4_gap_handling": {
+        "score": "n/a",
+        "reason": "The user explicitly stated all requirements; the assistant did not need to infer or ask follow‑up questions."
+      },
+      "P5_overall": {
+        "score": 5,
+        "reason": "The user would likely feel fully satisfied: everything asked for was delivered, presented clearly, and ready to use."
+      },
+      "unmet_requests": [],
+      "missed_gaps": [],
+      "judge_confidence": 0.0
+    },
+    "b": {
+      "model": "openai.gpt-oss-120b",
+      "provider": "bedrock",
+      "backend": "aws-bedrock-openai-compatible",
+      "P1_asked_for": {
+        "score": 4,
+        "reason": "Provided the three instructor shortlist, example videos, and both requested YouTube videos with links, but also opened unrelated search tabs not asked for."
+      },
+      "P2_readable_for_them": {
+        "score": 5,
+        "reason": "The answer uses clear, simple language and concise tables suitable for an intuitive, moderately detail‑oriented user."
+      },
+      "P3_actionable": {
+        "score": 5,
+        "reason": "All needed details (titles, durations, direct links) are given and the two videos are opened in separate tabs as requested."
+      },
+      "P4_gap_handling": {
+        "score": "n/a",
+        "reason": "No evident missing information that the user omitted but needed; the assistant neither ignored nor guessed unknown gaps."
+      },
+      "P5_overall": {
+        "score": 4,
+        "reason": "The user would likely feel well served, though the extra irrelevant tabs slightly detract from a perfect experience."
+      },
+      "unmet_requests": [],
+      "missed_gaps": [],
+      "judge_confidence": 0.9
+    },
+    "agreement": {
+      "P1_asked_for": {
+        "delta": 1,
+        "within_one": true
+      },
+      "P2_readable_for_them": {
+        "delta": 0,
+        "within_one": true
+      },
+      "P3_actionable": {
+        "delta": 0,
+        "within_one": true
+      },
+      "P4_gap_handling": null,
+      "P5_overall": {
+        "delta": 1,
+        "within_one": true
+      }
+    },
+    "replicate_id": "health-pilot-v3-r1"
+  },
+  {
+    "task": "LA maternity hospitals",
+    "persona": "mp_evidence_verification_negative",
+    "a": {
+      "model": "openai.gpt-oss-120b",
+      "provider": "bedrock",
+      "backend": "aws-bedrock-openai-compatible",
+      "P1_asked_for": {
+        "score": 3,
+        "reason": "Provided a list of 10 hospitals and descriptions, but many official maternity links are incorrect or dead and no CryptPad document was created."
+      },
+      "P2_readable_for_them": {
+        "score": 4,
+        "reason": "The answer uses clear, plain‑English prose appropriate for a deliberative, moderately detail‑oriented user."
+      },
+      "P3_actionable": {
+        "score": 2,
+        "reason": "Broken URLs, missing tabs, and no CryptPad file mean the user cannot directly review the pages or compare them as requested."
+      },
+      "P4_gap_handling": {
+        "score": 2,
+        "reason": "The assistant did not ask for clarification about missing or ambiguous maternity pages nor note that some links were 404, nor did it address the need for a CryptPad document."
+      },
+      "P5_overall": {
+        "score": 2,
+        "reason": "While the response is readable, it fails to deliver functional tabs and the requested document, leaving the user unable to act on the core request."
+      },
+      "unmet_requests": [
+        "open each hospital’s actual maternity or labor-and-delivery page in its own tab and keep those tabs open",
+        "create a CryptPad Document file titled exactly “Best LA Maternity Hospitals” and put all 10 hospitals in it with the maternity-page links included"
+      ],
+      "missed_gaps": [
+        "need to verify that each hospital actually offers labor & delivery on its official site (some links were 404)",
+        "need functional, direct links to the maternity pages so the user can view photos and details"
+      ],
+      "judge_confidence": 0.9
+    },
+    "b": {
+      "model": "openai.gpt-oss-120b",
+      "provider": "bedrock",
+      "backend": "aws-bedrock-openai-compatible",
+      "P1_asked_for": {
+        "score": 2,
+        "reason": "The assistant provided a list but many of the required maternity pages are 404 or wrong and it never created the CryptPad document."
+      },
+      "P2_readable_for_them": {
+        "score": 4,
+        "reason": "The language is clear and plain‑English, suitable for a deliberative, moderately detail‑oriented person."
+      },
+      "P3_actionable": {
+        "score": 2,
+        "reason": "Broken links and the missing CryptPad file mean the user cannot directly review or compare the hospitals without further effort."
+      },
+      "P4_gap_handling": {
+        "score": 2,
+        "reason": "The assistant did not notice or question the dead links, the absence of a proper document, or the need to double‑check that each page explicitly lists labor‑and‑delivery services."
+      },
+      "P5_overall": {
+        "score": 2,
+        "reason": "Given the major missing deliverables and inaccurate tabs, the user would likely feel poorly served."
+      },
+      "unmet_requests": [
+        "create a CryptPad Document file titled exactly “Best LA Maternity Hospitals” and put all 10 hospitals in it with the maternity-page links included",
+        "open each hospital’s actual maternity or labor‑and‑delivery page in its own tab and keep those tabs open so I can visually review the pages and photos afterward"
+      ],
+      "missed_gaps": [
+        "verification that each opened page explicitly shows a labor‑and‑delivery service (the assistant did not check the 404 pages)",
+        "providing functional, official maternity‑service URLs for each hospital",
+        "including any cost, insurance, or parking information that can affect a first‑time parent’s decision"
+      ],
+      "judge_confidence": 0.92
+    },
+    "agreement": {
+      "P1_asked_for": {
+        "delta": 1,
+        "within_one": true
+      },
+      "P2_readable_for_them": {
+        "delta": 0,
+        "within_one": true
+      },
+      "P3_actionable": {
+        "delta": 0,
+        "within_one": true
+      },
+      "P4_gap_handling": {
+        "delta": 0,
+        "within_one": true
+      },
+      "P5_overall": {
+        "delta": 0,
+        "within_one": true
+      }
+    },
+    "replicate_id": "health-pilot-v3-r1"
+  },
+  {
+    "task": "LA maternity hospitals",
+    "persona": "mp_evidence_verification_positive",
+    "a": {
+      "model": "openai.gpt-oss-120b",
+      "provider": "bedrock",
+      "backend": "aws-bedrock-openai-compatible",
+      "P1_asked_for": {
+        "score": 2,
+        "reason": "Provided a shortlist and descriptions but did not open the 10 maternity pages, did not verify exact headings, and did not create the requested CryptPad document."
+      },
+      "P2_readable_for_them": {
+        "score": 4,
+        "reason": "The answer is written in clear, plain‑English suitable for a deliberative, detail‑oriented user."
+      },
+      "P3_actionable": {
+        "score": 3,
+        "reason": "Links and summaries are provided, but the missing open tabs and absent CryptPad file limit the user’s ability to act without further help."
+      },
+      "P4_gap_handling": {
+        "score": 2,
+        "reason": "The assistant did not ask for clarification about exact heading citations or the need for a shared document, and it guessed headings without confirming them."
+      },
+      "P5_overall": {
+        "score": 2,
+        "reason": "The user would likely feel the core request was only partially satisfied and important deliverables are missing."
+      },
+      "unmet_requests": [
+        "open each hospital’s actual maternity or labor‑and‑delivery page in its own tab and keep those tabs open",
+        "create a CryptPad Document file titled exactly “Best LA Maternity Hospitals” with the 10 hospitals and links",
+        "leave the CryptPad Document open at the end along with the 10 hospital maternity tabs",
+        "provide exact headings or compact passage pointers for the delivery‑service claims on each site"
+      ],
+      "missed_gaps": [
+        "verification of the precise heading wording on each hospital’s maternity page",
+        "explicit citation of the quality‑evidence source (e.g., U.S. News ranking position or other accolades) for each hospital"
+      ],
+      "judge_confidence": 0.92
+    },
+    "b": {
+      "model": "openai.gpt-oss-120b",
+      "provider": "bedrock",
+      "backend": "aws-bedrock-openai-compatible",
+      "P1_asked_for": {
+        "score": 3,
+        "reason": "Provided the shortlist and descriptions but did not actually open the 10 maternity pages in separate tabs nor create the CryptPad document as requested."
+      },
+      "P2_readable_for_them": {
+        "score": 5,
+        "reason": "The answer is written in plain English with clear tables and short descriptions suitable for a deliberative, detail‑oriented person."
+      },
+      "P3_actionable": {
+        "score": 4,
+        "reason": "All hospital names, locations, URLs and key quality signals are provided, so the user could follow the links, but the promised open tabs and shared document are missing, limiting immediate action."
+      },
+      "P4_gap_handling": {
+        "score": "n/a",
+        "reason": "No evident implicit needs were left unaddressed; the user’s request was explicit and fully captured."
+      },
+      "P5_overall": {
+        "score": 3,
+        "reason": "The core information is correct and readable, but the most critical parts of the request (open tabs and CryptPad file) were not fulfilled, so the user would likely feel partially served."
+      },
+      "unmet_requests": [
+        "open each hospital’s actual maternity or labor-and-delivery page in its own tab and keep those tabs open so I can visually review the pages and photos afterward",
+        "create a CryptPad Document file titled exactly “Best LA Maternity Hospitals” and put all 10 hospitals in it with the maternity-page links included",
+        "leave the CryptPad Document open at the end along with the 10 hospital maternity tabs so I can click through them myself"
+      ],
+      "missed_gaps": [],
+      "judge_confidence": 0.9
+    },
+    "agreement": {
+      "P1_asked_for": {
+        "delta": -1,
+        "within_one": true
+      },
+      "P2_readable_for_them": {
+        "delta": -1,
+        "within_one": true
+      },
+      "P3_actionable": {
+        "delta": -1,
+        "within_one": true
+      },
+      "P4_gap_handling": null,
+      "P5_overall": {
+        "delta": -1,
+        "within_one": true
+      }
+    },
+    "replicate_id": "health-pilot-v3-r1"
+  },
+  {
+    "task": "NYC knee surgeons",
+    "persona": "mp_evidence_verification_positive",
+    "a": {
+      "model": "openai.gpt-oss-120b",
+      "provider": "bedrock",
+      "backend": "aws-bedrock-openai-compatible",
+      "P1_asked_for": {
+        "score": 2,
+        "reason": "The assistant did not provide any of the requested surgeons or spreadsheet, only asked for clarification."
+      },
+      "P2_readable_for_them": {
+        "score": 5,
+        "reason": "The response is clear, concise, and uses language the person can understand."
+      },
+      "P3_actionable": {
+        "score": 2,
+        "reason": "No concrete list, links, or spreadsheet was delivered, so the person cannot act on the request yet."
+      },
+      "P4_gap_handling": {
+        "score": 4,
+        "reason": "The assistant identified the missing exact‑phrase citations and asked follow‑up questions to resolve the gap."
+      },
+      "P5_overall": {
+        "score": 3,
+        "reason": "The assistant recognized a key problem and sought clarification, but did not fulfill the core request."
+      },
+      "unmet_requests": [
+        "Please start in Google and research orthopedic surgeons in NYC … create a spreadsheet called Top ACL Surgeons NYC … keep exactly 10 verified NYC surgeons … include full name, hospital affiliation, specialty focus, a short note confirming where ACL reconstruction or meniscus repair is mentioned, and the direct profile link … add a short summary of which hospitals …"
+      ],
+      "missed_gaps": [
+        "The person needed a compiled list of ten verified surgeons with exact phrase citations before any clarification could be given."
+      ],
+      "judge_confidence": 0.0
+    },
+    "b": {
+      "model": "openai.gpt-oss-120b",
+      "provider": "bedrock",
+      "backend": "aws-bedrock-openai-compatible",
+      "P1_asked_for": {
+        "score": 2,
+        "reason": "The assistant did not provide the requested 10‑surgeon spreadsheet and instead asked for clarification."
+      },
+      "P2_readable_for_them": {
+        "score": 5,
+        "reason": "The response is clear, concise, and uses straightforward language suitable for the user."
+      },
+      "P3_actionable": {
+        "score": 2,
+        "reason": "The assistant’s reply leaves the user without the requested list and only asks for more input, offering no immediate next steps."
+      },
+      "P4_gap_handling": {
+        "score": 4,
+        "reason": "The assistant correctly identified the inability to verify profiles and asked for narrowed scope, rather than guessing."
+      },
+      "P5_overall": {
+        "score": 2,
+        "reason": "The user’s core request remains unfulfilled, so they would likely feel poorly served."
+      },
+      "unmet_requests": [
+        "Please start in Google and research orthopedic surgeons in NYC ... create a spreadsheet called Top ACL Surgeons NYC ... keep exactly 10 verified NYC surgeons ..."
+      ],
+      "missed_gaps": [],
+      "judge_confidence": 0.0
+    },
+    "agreement": {
+      "P1_asked_for": {
+        "delta": 0,
+        "within_one": true
+      },
+      "P2_readable_for_them": {
+        "delta": 0,
+        "within_one": true
+      },
+      "P3_actionable": {
+        "delta": 0,
+        "within_one": true
+      },
+      "P4_gap_handling": {
+        "delta": 0,
+        "within_one": true
+      },
+      "P5_overall": {
+        "delta": 1,
+        "within_one": true
+      }
+    },
+    "replicate_id": "health-pilot-v3-r1"
+  },
+  {
+    "task": "NYC knee surgeons",
+    "persona": "mp_evidence_verification_negative",
+    "a": {
+      "model": "openai.gpt-oss-120b",
+      "provider": "bedrock",
+      "backend": "aws-bedrock-openai-compatible",
+      "P1_asked_for": {
+        "score": 2,
+        "reason": "Provided a list but did not create the requested spreadsheet nor keep the surgeons’ profile pages open in separate tabs as required."
+      },
+      "P2_readable_for_them": {
+        "score": 4,
+        "reason": "The table and summary are clearly written and appropriate for a deliberative, moderately detail‑oriented user."
+      },
+      "P3_actionable": {
+        "score": 3,
+        "reason": "Links and summary are usable, but the lack of a downloadable spreadsheet and missing open tabs limit immediate action."
+      },
+      "P4_gap_handling": {
+        "score": "n/a",
+        "reason": "No evidence the user omitted any critical information that the assistant needed to query; all asked‑for details were supplied."
+      },
+      "P5_overall": {
+        "score": 3,
+        "reason": "The assistant met part of the request (list and notes) but failed key procedural steps (tab opening, spreadsheet creation), so the user would likely be only partially satisfied."
+      },
+      "unmet_requests": [
+        "open each surgeon’s official hospital or practice profile page in its own tab so I can compare them side by side",
+        "create a spreadsheet called Top ACL Surgeons NYC with the requested columns and 10 verified surgeons"
+      ],
+      "missed_gaps": [
+        "Providing the actual spreadsheet file for the user to download and edit",
+        "Ensuring the profile pages remain open in separate tabs as the user explicitly required"
+      ],
+      "judge_confidence": 0.92
+    },
+    "b": {
+      "model": "openai.gpt-oss-120b",
+      "provider": "bedrock",
+      "backend": "aws-bedrock-openai-compatible",
+      "P1_asked_for": {
+        "score": 4,
+        "reason": "Provided a 10‑surgeon list matching the specialties and criteria the user specified."
+      },
+      "P2_readable_for_them": {
+        "score": 4,
+        "reason": "The table uses clear headings and simple language suitable for a deliberative, moderately detailed user."
+      },
+      "P3_actionable": {
+        "score": 3,
+        "reason": "Links and notes are given, but the required open‑profile tabs and the requested spreadsheet were not actually created."
+      },
+      "P4_gap_handling": {
+        "score": "n/a",
+        "reason": "No obvious hidden gaps were left unaddressed; the user’s request was explicit."
+      },
+      "P5_overall": {
+        "score": 3,
+        "reason": "The core list is useful, but failing to open the tabs and to produce the spreadsheet limits practical usefulness for this user."
+      },
+      "unmet_requests": [
+        "create a spreadsheet called Top ACL Surgeons NYC",
+        "keep each surgeon’s official profile page open in its own tab"
+      ],
+      "missed_gaps": [],
+      "judge_confidence": 0.0
+    },
+    "agreement": {
+      "P1_asked_for": {
+        "delta": -2,
+        "within_one": false
+      },
+      "P2_readable_for_them": {
+        "delta": 0,
+        "within_one": true
+      },
+      "P3_actionable": {
+        "delta": 0,
+        "within_one": true
+      },
+      "P4_gap_handling": null,
+      "P5_overall": {
+        "delta": 0,
+        "within_one": true
+      }
+    },
+    "replicate_id": "health-pilot-v3-r1"
+  },
+  {
+    "task": "Fresno fitness outing",
+    "persona": "mp_decision_style_negative",
+    "status": "No final answer",
+    "replicate_id": "health-pilot-v3-r1"
+  },
+  {
+    "task": "Fresno fitness outing",
+    "persona": "mp_decision_style_positive",
+    "status": "No final answer",
+    "replicate_id": "health-pilot-v3-r1"
+  },
+  {
+    "task": "Fresno yoga starter plan",
+    "persona": "mp_detail_depth_negative",
+    "replicate_id": "health-recovery-v4-r1",
+    "attempt_kind": "recovery",
+    "a": {
+      "model": "openai.gpt-oss-120b",
+      "provider": "bedrock",
+      "backend": "aws-bedrock-openai-compatible",
+      "P1_asked_for": {
+        "score": 4,
+        "reason": "Provided studio vibe, class detail, two of three Tower Yoga class times, and YouTube video info, but omitted the third upcoming class."
+      },
+      "P2_readable_for_them": {
+        "score": 5,
+        "reason": "Answer uses simple language and clear bullet tables suited to a low‑detail, deliberative user."
+      },
+      "P3_actionable": {
+        "score": 4,
+        "reason": "All needed links, times, and video details are given and tabs left open, though the missing third class limits completeness."
+      },
+      "P4_gap_handling": {
+        "score": "n/a",
+        "reason": "The user stated all required information; no hidden gaps needed probing."
+      },
+      "P5_overall": {
+        "score": 4,
+        "reason": "User would likely be satisfied despite the missing third class, as most requests were fulfilled clearly."
+      },
+      "unmet_requests": [
+        "tell me the next three upcoming classes with their start times"
+      ],
+      "missed_gaps": [],
+      "judge_confidence": 0.0
+    },
+    "b": {
+      "model": "openai.gpt-oss-120b",
+      "provider": "bedrock",
+      "backend": "aws-bedrock-openai-compatible",
+      "P1_asked_for": {
+        "score": 3,
+        "reason": "Provided studio vibe and a specific class detail, but only gave two of the three requested upcoming classes."
+      },
+      "P2_readable_for_them": {
+        "score": 5,
+        "reason": "The answer uses simple language and clear formatting suited to a low‑detail, deliberative user."
+      },
+      "P3_actionable": {
+        "score": 4,
+        "reason": "All needed tabs are left open and the recommendation is clear, but the missing third class limits full actionability."
+      },
+      "P4_gap_handling": {
+        "score": "n/a",
+        "reason": "No evident omitted gaps; the user’s request was explicit and the assistant addressed each part presented."
+      },
+      "P5_overall": {
+        "score": 4,
+        "reason": "The user would likely feel well served despite the minor shortfall of one class time."
+      },
+      "unmet_requests": [
+        "the next three upcoming classes with their start times"
+      ],
+      "missed_gaps": [],
+      "judge_confidence": 0.0
+    },
+    "agreement": {
+      "P1_asked_for": {
+        "delta": 1,
+        "within_one": true
+      },
+      "P2_readable_for_them": {
+        "delta": 0,
+        "within_one": true
+      },
+      "P3_actionable": {
+        "delta": 0,
+        "within_one": true
+      },
+      "P4_gap_handling": null,
+      "P5_overall": {
+        "delta": 0,
+        "within_one": true
+      }
+    }
+  },
+  {
+    "task": "Fresno yoga starter plan",
+    "persona": "mp_detail_depth_positive",
+    "replicate_id": "health-recovery-v4-r1",
+    "attempt_kind": "recovery",
+    "a": {
+      "model": "openai.gpt-oss-120b",
+      "provider": "bedrock",
+      "backend": "aws-bedrock-openai-compatible",
+      "P1_asked_for": {
+        "score": 3,
+        "reason": "Delivered most requested info but failed to provide the third upcoming class as asked"
+      },
+      "P2_readable_for_them": {
+        "score": 4,
+        "reason": "Answer is well‑structured and uses clear language suitable for a detail‑oriented, deliberative user"
+      },
+      "P3_actionable": {
+        "score": 4,
+        "reason": "Provided concrete class times, URLs and video details, enough for the user to act, aside from the missing third class"
+      },
+      "P4_gap_handling": {
+        "score": "n/a",
+        "reason": "No implicit needs were left unaddressed; the only shortfall was an explicit request not fulfilled"
+      },
+      "P5_overall": {
+        "score": 3,
+        "reason": "Mostly helpful but the missing third class prevents a fully satisfactory experience"
+      },
+      "unmet_requests": [
+        "the next three upcoming classes with their start times"
+      ],
+      "missed_gaps": [],
+      "judge_confidence": 0.0
+    },
+    "b": {
+      "model": "openai.gpt-oss-120b",
+      "provider": "bedrock",
+      "backend": "aws-bedrock-openai-compatible",
+      "P1_asked_for": {
+        "score": 4,
+        "reason": "Provided specific class details and URLs for both studios and the YouTube video, but omitted a clear first‑time visitor prop list for Tower Yoga."
+      },
+      "P2_readable_for_them": {
+        "score": 4,
+        "reason": "Uses concise, bullet‑point style matching the person’s detail‑orientation and keeps jargon minimal."
+      },
+      "P3_actionable": {
+        "score": 4,
+        "reason": "Includes exact class times, URLs kept open, and a clear home‑practice video with title, channel and view count."
+      },
+      "P4_gap_handling": {
+        "score": "n/a",
+        "reason": "No evident unvoiced needs were ignored; the assistant neither guessed incorrectly nor left a required question unanswered."
+      },
+      "P5_overall": {
+        "score": 4,
+        "reason": "The person would likely feel well served: all asked content was delivered in an understandable, usable format."
+      },
+      "unmet_requests": [],
+      "missed_gaps": [],
+      "judge_confidence": 0.0
+    },
+    "agreement": {
+      "P1_asked_for": {
+        "delta": -1,
+        "within_one": true
+      },
+      "P2_readable_for_them": {
+        "delta": 0,
+        "within_one": true
+      },
+      "P3_actionable": {
+        "delta": 0,
+        "within_one": true
+      },
+      "P4_gap_handling": null,
+      "P5_overall": {
+        "delta": -1,
+        "within_one": true
+      }
+    }
+  },
+  {
+    "task": "Fresno fitness outing",
+    "persona": "mp_decision_style_negative",
+    "replicate_id": "health-recovery-v4-r1",
+    "attempt_kind": "recovery",
+    "a": {
+      "model": "openai.gpt-oss-120b",
+      "provider": "bedrock",
+      "backend": "aws-bedrock-openai-compatible",
+      "P1_asked_for": {
+        "score": 3,
+        "reason": "Provided some Tower Yoga times but only for today, not the full week schedule the user requested."
+      },
+      "P2_readable_for_them": {
+        "score": 4,
+        "reason": "Clear, concise language appropriate for a moderately detail‑oriented user."
+      },
+      "P3_actionable": {
+        "score": 3,
+        "reason": "Tabs are left open and basic steps are given, but incomplete schedule limits immediate planning."
+      },
+      "P4_gap_handling": {
+        "score": "n/a",
+        "reason": "No evident omitted information that the assistant should have queried about."
+      },
+      "P5_overall": {
+        "score": 3,
+        "reason": "The answer is helpful and mostly meets the request, but missing full weekly schedule reduces overall satisfaction."
+      },
+      "unmet_requests": [
+        "note the days and times when their Tower Yoga classes are offered so I can use that as my baseline for what would fit my week"
+      ],
+      "missed_gaps": [],
+      "judge_confidence": 0.92
+    },
+    "b": {
+      "model": "openai.gpt-oss-120b",
+      "provider": "bedrock",
+      "backend": "aws-bedrock-openai-compatible",
+      "P1_asked_for": {
+        "score": 3,
+        "reason": "Provided some Tower Yoga class times but only for today, not the full weekly schedule the person asked for."
+      },
+      "P2_readable_for_them": {
+        "score": 4,
+        "reason": "Uses clear headings, simple language and a concise table suitable for an intuitive, moderately detail‑oriented user."
+      },
+      "P3_actionable": {
+        "score": 3,
+        "reason": "Leaves the relevant tabs open and lists registration info, but Blue Moon schedule requires extra clicks and the Fightgirl trial details are vague."
+      },
+      "P4_gap_handling": {
+        "score": 2,
+        "reason": "Did not ask about the user’s available days, preferred class length or whether they need chair‑yoga vs heated yoga, and assumed trial info without confirming."
+      },
+      "P5_overall": {
+        "score": 3,
+        "reason": "The answer is helpful and mostly meets the request, but missing full weekly schedule and some clarifying questions reduce overall usefulness."
+      },
+      "unmet_requests": [
+        "pull up the actual class schedule for Tower Yoga Fresno, then note the days and times when their Tower Yoga classes are offered ... if there’s a schedule page or calendar view, leave it open so I can glance at it myself"
+      ],
+      "missed_gaps": [
+        "The user’s specific days/times they are available this week",
+        "Whether they need a chair‑yoga or heated‑yoga format",
+        "Any accessibility or payment preferences for a beginner"
+      ],
+      "judge_confidence": 0.0
+    },
+    "agreement": {
+      "P1_asked_for": {
+        "delta": 0,
+        "within_one": true
+      },
+      "P2_readable_for_them": {
+        "delta": 0,
+        "within_one": true
+      },
+      "P3_actionable": {
+        "delta": 0,
+        "within_one": true
+      },
+      "P4_gap_handling": null,
+      "P5_overall": {
+        "delta": 0,
+        "within_one": true
+      }
+    }
+  },
+  {
+    "task": "Fresno fitness outing",
+    "persona": "mp_decision_style_positive",
+    "replicate_id": "health-recovery-v4-r1",
+    "attempt_kind": "recovery",
+    "a": null,
+    "b": null,
+    "agreement": null
+  },
+  {
+    "task": "Fresno fitness outing",
+    "persona": "mp_decision_style_positive",
+    "replicate_id": "health-recovery-v4-r1",
+    "attempt_kind": "api_retry",
+    "a": {
+      "model": "openai.gpt-oss-120b",
+      "provider": "bedrock",
+      "backend": "aws-bedrock-openai-compatible",
+      "P1_asked_for": {
+        "score": 3,
+        "reason": "Opened the Tower Yoga schedule page but could not provide the requested days and times."
+      },
+      "P2_readable_for_them": {
+        "score": 4,
+        "reason": "The answer is clear, well‑structured, and uses language appropriate for an analytical, moderately detail‑oriented user."
+      },
+      "P3_actionable": {
+        "score": 3,
+        "reason": "Gives concrete next steps and links for all three options, but missing Tower Yoga times limits immediate booking."
+      },
+      "P4_gap_handling": {
+        "score": "n/a",
+        "reason": "No evidence of unspoken needs that the assistant failed to address."
+      },
+      "P5_overall": {
+        "score": 3,
+        "reason": "The user gets most of what was asked, but the key schedule details for Tower Yoga are absent, reducing overall usefulness."
+      },
+      "unmet_requests": [
+        "pull up the actual class schedule for Tower Yoga Fresno, then note the days and times when their Tower Yoga classes are offered"
+      ],
+      "missed_gaps": [],
+      "judge_confidence": 0.0
+    },
+    "b": {
+      "model": "openai.gpt-oss-120b",
+      "provider": "bedrock",
+      "backend": "aws-bedrock-openai-compatible",
+      "P1_asked_for": {
+        "score": 3,
+        "reason": "Opened the Tower Yoga schedule page but did not extract the requested days and times, only noted that they were not visible in static HTML."
+      },
+      "P2_readable_for_them": {
+        "score": 4,
+        "reason": "The answer uses clear, concise language suitable for an analytical beginner and avoids unnecessary technical detail."
+      },
+      "P3_actionable": {
+        "score": 3,
+        "reason": "Provided next‑step guidance and kept relevant tabs open, but the missing Tower Yoga schedule limits the user’s ability to pick a class immediately."
+      },
+      "P4_gap_handling": {
+        "score": "n/a",
+        "reason": "No clear evidence that the user omitted essential information that the assistant should have probed for."
+      },
+      "P5_overall": {
+        "score": 3,
+        "reason": "The assistant fulfilled most of the request (opened pages, summarized other studios) but fell short on the core Tower Yoga schedule detail."
+      },
+      "unmet_requests": [
+        "pull up the actual class schedule for Tower Yoga Fresno, then note the days and times when their Tower Yoga classes are offered"
+      ],
+      "missed_gaps": [],
+      "judge_confidence": 0.0
+    },
+    "agreement": {
+      "P1_asked_for": {
+        "delta": 0,
+        "within_one": true
+      },
+      "P2_readable_for_them": {
+        "delta": 0,
+        "within_one": true
+      },
+      "P3_actionable": {
+        "delta": 0,
+        "within_one": true
+      },
+      "P4_gap_handling": null,
+      "P5_overall": {
+        "delta": 0,
+        "within_one": true
+      }
+    }
+  }
+]

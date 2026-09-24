@@ -1,0 +1,685 @@
+[
+  {
+    "task": "Clovis/Fresno Pilates",
+    "persona": "mp_detail_depth_negative",
+    "status": "complete",
+    "targets": [
+      {
+        "attribute": "cog_detail_orientation",
+        "expected_value": "Low",
+        "axis_id": "detail_depth",
+        "axis_label": "Detail depth",
+        "arm": "negative",
+        "opposite_value": "Very high",
+        "behavioral_definition": "Affirmatively asks for the mandatory fields and comparison only, omitting optional background while preserving all evidence and material qualifications.",
+        "generic_observables": [
+          "Explicitly limits optional context to keep the output focused on all required fields.",
+          "Names an optional type of background they do not want."
+        ],
+        "task_observables": [
+          "Explicitly requests only the required studios, offerings, schedule details, links, and comparison.",
+          "Says to omit optional equipment background and extended studio descriptions."
+        ],
+        "opposite_task_observables": [
+          "Asks for one compact extra note per studio about class format or equipment, where stated.",
+          "Wants a brief explanation of what makes the class options different, beyond the required Title 29 comparison."
+        ],
+        "inherited_task_signals": [
+          "Identify at least two Clovis, California Pilates studios that offer classes and provide each studio’s name plus a direct class schedule or booking page link.",
+          "Provide a broader Fresno-area list of at least three Pilates class options, each with the studio name and a direct schedule or booking page link.",
+          "Look up Title 29 Fitness in Fresno and capture what it offers along with the class schedule details shown on its website.",
+          "End with one concise comparison that includes the Clovis options, the wider Fresno-area list, and an explanation of where Title 29 Fitness fits among them."
+        ],
+        "contradictions": [
+          "Requests substantial optional background or extra fields.",
+          "Drops a mandatory field, source, verification, count, tab, or material qualification to shorten the answer."
+        ],
+        "opposite_behavioral_definition": "Requests compact task-relevant optional detail beyond the mandatory fields without expanding a requested short answer into a long report.",
+        "opposite_generic_observables": [
+          "Asks for a specific optional field or explanation beyond the original rubric.",
+          "Names the extra detail that would help interpret the required findings."
+        ],
+        "score": 2,
+        "expressed": true,
+        "contradicted": false,
+        "confidence": 0.99,
+        "evidence": "I prefer to skip optional equipment background and extended studio descriptions, while keeping every required detail.",
+        "note": "User explicitly limits optional background, showing a clear low detail depth preference aligned with the negative arm.",
+        "criterion_source": "declared_profile_dimension"
+      }
+    ],
+    "opening_method": "verbatim task plus authored preference",
+    "replicate_id": "health-pilot-v3-r1"
+  },
+  {
+    "task": "Clovis/Fresno Pilates",
+    "persona": "mp_detail_depth_positive",
+    "status": "complete",
+    "targets": [
+      {
+        "attribute": "cog_detail_orientation",
+        "expected_value": "Very high",
+        "axis_id": "detail_depth",
+        "axis_label": "Detail depth",
+        "arm": "positive",
+        "opposite_value": "Low",
+        "behavioral_definition": "Requests compact task-relevant optional detail beyond the mandatory fields without expanding a requested short answer into a long report.",
+        "generic_observables": [
+          "Asks for a specific optional field or explanation beyond the original rubric.",
+          "Names the extra detail that would help interpret the required findings."
+        ],
+        "task_observables": [
+          "Asks for one compact extra note per studio about class format or equipment, where stated.",
+          "Wants a brief explanation of what makes the class options different, beyond the required Title 29 comparison."
+        ],
+        "opposite_task_observables": [
+          "Explicitly requests only the required studios, offerings, schedule details, links, and comparison.",
+          "Says to omit optional equipment background and extended studio descriptions."
+        ],
+        "inherited_task_signals": [
+          "Identify at least two Clovis, California Pilates studios that offer classes and provide each studio’s name plus a direct class schedule or booking page link.",
+          "Provide a broader Fresno-area list of at least three Pilates class options, each with the studio name and a direct schedule or booking page link.",
+          "Look up Title 29 Fitness in Fresno and capture what it offers along with the class schedule details shown on its website.",
+          "End with one concise comparison that includes the Clovis options, the wider Fresno-area list, and an explanation of where Title 29 Fitness fits among them."
+        ],
+        "contradictions": [
+          "Explicitly asks for mandatory fields only and rejects optional detail.",
+          "Uses extra detail as a reason to omit any required item or violate a concise-output requirement."
+        ],
+        "opposite_behavioral_definition": "Affirmatively asks for the mandatory fields and comparison only, omitting optional background while preserving all evidence and material qualifications.",
+        "opposite_generic_observables": [
+          "Explicitly limits optional context to keep the output focused on all required fields.",
+          "Names an optional type of background they do not want."
+        ],
+        "score": 2,
+        "expressed": true,
+        "contradicted": false,
+        "confidence": 0.97,
+        "evidence": "I like a little extra detail when comparing studios. If the sites state it, add one compact class-format or equipment note per studio and a brief explanation of what distinguishes the classes; keep the overall comparison concise.",
+        "note": "User explicitly requests optional compact extra notes per studio, matching the positive behavioral definition.",
+        "criterion_source": "declared_profile_dimension"
+      }
+    ],
+    "opening_method": "verbatim task plus authored preference",
+    "replicate_id": "health-pilot-v3-r1"
+  },
+  {
+    "task": "Fresno yoga starter plan",
+    "persona": "mp_detail_depth_positive",
+    "status": "No post-hoc score; failed attempt with no complete result record",
+    "opening_method": "verbatim task plus reviewed authored preference",
+    "replicate_id": "health-pilot-v3-r1"
+  },
+  {
+    "task": "Fresno yoga starter plan",
+    "persona": "mp_detail_depth_negative",
+    "status": "No post-hoc score; failed attempt with no complete result record",
+    "opening_method": "verbatim task plus reviewed authored preference",
+    "replicate_id": "health-pilot-v3-r1"
+  },
+  {
+    "task": "Free YouTube yoga plan",
+    "persona": "mp_decision_style_positive",
+    "status": "complete",
+    "targets": [
+      {
+        "attribute": "decision_style",
+        "expected_value": "Analytical",
+        "axis_id": "decision_style",
+        "axis_label": "Decision style",
+        "arm": "positive",
+        "opposite_value": "Intuitive",
+        "behavioral_definition": "Requests a consistent set of explicit criteria and a short tradeoff explanation for choosing among qualifying fitness options.",
+        "generic_observables": [
+          "Names common comparison criteria and asks to apply them consistently.",
+          "Requests a tradeoff-based explanation of the choice."
+        ],
+        "task_observables": [
+          "Asks to compare the shortlisted instructors using the same criteria, such as cue clarity and pace.",
+          "Wants the two selected videos justified through a brief criteria-based comparison within the required durations."
+        ],
+        "opposite_task_observables": [
+          "Asks to select among qualifying instructors by an overall impression of the voice and teaching energy.",
+          "Explicitly prefers a holistic personal-fit explanation over a scoring matrix while preserving free access, durations, tabs, and playback."
+        ],
+        "inherited_task_signals": [
+          "Provide a shortlist of at least 3 yoga instructors who appear approachable, beginner-friendly, or funny and who post free yoga classes on YouTube, including each instructor’s name, YouTube channel name, and one example video title.",
+          "Select one morning yoga video on YouTube that is approximately 20 minutes long and is from one of the instructors in the shortlist.",
+          "Select one separate YouTube Vinyasa flow video that is approximately 30 minutes long and provide its title and link.",
+          "Open the chosen morning yoga video and the chosen Vinyasa flow video in separate browser tabs, and start playing the longer Vinyasa video briefly before leaving it open.",
+          "Present the final output as one combined yoga plan containing the instructor shortlist, the chosen morning video with title, duration, and link, and the separate Vinyasa flow video with title and link."
+        ],
+        "contradictions": [
+          "Explicitly asks to decide solely by gut feel and avoid criteria.",
+          "Allows the comparison method to override a hard task condition."
+        ],
+        "opposite_behavioral_definition": "Requests a holistic, personally inviting impression among qualifying fitness options and affirmatively prefers that to numerical scoring.",
+        "opposite_generic_observables": [
+          "Asks for an overall impression of fit from the observed teaching style or studio presentation.",
+          "Expressly prefers a holistic choice to points, weights, or a ranking matrix."
+        ],
+        "score": 2,
+        "expressed": true,
+        "contradicted": false,
+        "confidence": 1.0,
+        "evidence": "Please apply consistent criteria—clarity of instruction, pace and beginner suitability—to the qualifying videos, and briefly explain the tradeoff behind the two choices.",
+        "note": "User explicitly requests explicit criteria and a trade‑off explanation, matching the analytical behavioral definition.",
+        "criterion_source": "declared_profile_dimension"
+      }
+    ],
+    "opening_method": "verbatim task plus authored preference",
+    "replicate_id": "health-pilot-v3-r1"
+  },
+  {
+    "task": "Free YouTube yoga plan",
+    "persona": "mp_decision_style_negative",
+    "status": "complete",
+    "targets": [
+      {
+        "attribute": "decision_style",
+        "expected_value": "Intuitive",
+        "axis_id": "decision_style",
+        "axis_label": "Decision style",
+        "arm": "negative",
+        "opposite_value": "Analytical",
+        "behavioral_definition": "Requests a holistic, personally inviting impression among qualifying fitness options and affirmatively prefers that to numerical scoring.",
+        "generic_observables": [
+          "Asks for an overall impression of fit from the observed teaching style or studio presentation.",
+          "Expressly prefers a holistic choice to points, weights, or a ranking matrix."
+        ],
+        "task_observables": [
+          "Asks to select among qualifying instructors by an overall impression of the voice and teaching energy.",
+          "Explicitly prefers a holistic personal-fit explanation over a scoring matrix while preserving free access, durations, tabs, and playback."
+        ],
+        "opposite_task_observables": [
+          "Asks to compare the shortlisted instructors using the same criteria, such as cue clarity and pace.",
+          "Wants the two selected videos justified through a brief criteria-based comparison within the required durations."
+        ],
+        "inherited_task_signals": [
+          "Provide a shortlist of at least 3 yoga instructors who appear approachable, beginner-friendly, or funny and who post free yoga classes on YouTube, including each instructor’s name, YouTube channel name, and one example video title.",
+          "Select one morning yoga video on YouTube that is approximately 20 minutes long and is from one of the instructors in the shortlist.",
+          "Select one separate YouTube Vinyasa flow video that is approximately 30 minutes long and provide its title and link.",
+          "Open the chosen morning yoga video and the chosen Vinyasa flow video in separate browser tabs, and start playing the longer Vinyasa video briefly before leaving it open.",
+          "Present the final output as one combined yoga plan containing the instructor shortlist, the chosen morning video with title, duration, and link, and the separate Vinyasa flow video with title and link."
+        ],
+        "contradictions": [
+          "Insists on a weighted matrix or criteria scoring to make the choice.",
+          "Uses an impression to disregard required counts, timing, view counts, free access, or verification."
+        ],
+        "opposite_behavioral_definition": "Requests a consistent set of explicit criteria and a short tradeoff explanation for choosing among qualifying fitness options.",
+        "opposite_generic_observables": [
+          "Names common comparison criteria and asks to apply them consistently.",
+          "Requests a tradeoff-based explanation of the choice."
+        ],
+        "score": 2,
+        "expressed": true,
+        "contradicted": false,
+        "confidence": 1.0,
+        "evidence": "Among videos that meet the required lengths and free-access conditions, I prefer your overall impression of which instructors feel warm, relaxed or fun to practice with. Please avoid points or a weighted ranking matrix when explaining the choices.",
+        "note": "User explicitly asks for a holistic, impression‑based selection and rejects any points‑based or weighted matrix, matching the Intuitive (negative) arm definition.",
+        "criterion_source": "declared_profile_dimension"
+      }
+    ],
+    "opening_method": "verbatim task plus authored preference",
+    "replicate_id": "health-pilot-v3-r1"
+  },
+  {
+    "task": "LA maternity hospitals",
+    "persona": "mp_evidence_verification_negative",
+    "status": "complete",
+    "targets": [
+      {
+        "attribute": "trust_level",
+        "expected_value": "Trusting",
+        "axis_id": "evidence_verification",
+        "axis_label": "Trust in the agent's evidence",
+        "arm": "negative",
+        "opposite_value": "Verifying",
+        "behavioral_definition": "Affirmatively delegates interpretation to the agent and accepts its source-backed synthesis once every original verification requirement is met.",
+        "generic_observables": [
+          "Explicitly says they trust the agent to interpret the verified sources.",
+          "Asks for its synthesis without an additional claim-by-claim audit trail beyond the task's required links and notes."
+        ],
+        "task_observables": [
+          "Explicitly trusts the agent to interpret the required official pages and quality sources and synthesize the ten options.",
+          "Says the required links, recognition notes, and open tabs are sufficient without an extra passage-by-passage audit trail."
+        ],
+        "opposite_task_observables": [
+          "Asks for an exact heading or compact passage pointer for the delivery-service claim so they can check the interpretation themselves.",
+          "Wants precise pointers for how the quality evidence applies to the listed hospital or campus, rather than accepting the agent's interpretation without checking."
+        ],
+        "inherited_task_signals": [
+          "A credible Los Angeles-area candidate pool of hospitals with maternity-related care is identified using Google and reputable sources.",
+          "Exactly 10 hospitals are selected as the strongest childbirth options based on service availability plus reputation, rankings, or recognitions.",
+          "Each of the 10 selected hospitals has its official maternity, obstetrics, or labor-and-delivery page opened in a separate browser tab and left open.",
+          "For every listed hospital, labor and delivery services are explicitly verified on the official hospital page.",
+          "Ranking, recognition, or quality-indicator evidence is gathered for each of the 10 hospitals from U.S. News or similarly reputable sources.",
+          "A CryptPad Document titled exactly 'Best LA Maternity Hospitals' is created and includes for each hospital its name, location, maternity program description, ranking/recognition status, and official maternity page link.",
+          "The CryptPad Document ends with a comparative summary highlighting key differences, patterns, and top recommendations, and the doc remains open alongside the hospital tabs."
+        ],
+        "contradictions": [
+          "Insists on personally rechecking each inference with additional section-by-section evidence.",
+          "Uses trust to waive mandatory official verification, quality evidence, or required source links."
+        ],
+        "opposite_behavioral_definition": "Wants to personally audit the agent's interpretation through precise evidence pointers beyond the task's mandatory sources.",
+        "opposite_generic_observables": [
+          "Asks for a precise section or short evidence pointer so they can recheck the agent's claim personally.",
+          "Makes personal checking of the interpretation an explicit preference beyond leaving source tabs open."
+        ],
+        "score": 2,
+        "expressed": true,
+        "contradicted": false,
+        "confidence": 1.0,
+        "evidence": "I trust you to interpret the required official pages and quality sources and synthesize the ten options. The required links, recognition notes and open tabs are enough for me; I do not need an additional passage-by-passage audit trail.",
+        "note": "User explicitly states trust in the agent and declines further verification, matching the negative \"Trusting\" arm.",
+        "criterion_source": "declared_profile_dimension"
+      }
+    ],
+    "opening_method": "verbatim task plus authored preference",
+    "replicate_id": "health-pilot-v3-r1"
+  },
+  {
+    "task": "LA maternity hospitals",
+    "persona": "mp_evidence_verification_positive",
+    "status": "complete",
+    "targets": [
+      {
+        "attribute": "trust_level",
+        "expected_value": "Verifying",
+        "axis_id": "evidence_verification",
+        "axis_label": "Trust in the agent's evidence",
+        "arm": "positive",
+        "opposite_value": "Trusting",
+        "behavioral_definition": "Wants to personally audit the agent's interpretation through precise evidence pointers beyond the task's mandatory sources.",
+        "generic_observables": [
+          "Asks for a precise section or short evidence pointer so they can recheck the agent's claim personally.",
+          "Makes personal checking of the interpretation an explicit preference beyond leaving source tabs open."
+        ],
+        "task_observables": [
+          "Asks for an exact heading or compact passage pointer for the delivery-service claim so they can check the interpretation themselves.",
+          "Wants precise pointers for how the quality evidence applies to the listed hospital or campus, rather than accepting the agent's interpretation without checking."
+        ],
+        "opposite_task_observables": [
+          "Explicitly trusts the agent to interpret the required official pages and quality sources and synthesize the ten options.",
+          "Says the required links, recognition notes, and open tabs are sufficient without an extra passage-by-passage audit trail."
+        ],
+        "inherited_task_signals": [
+          "A credible Los Angeles-area candidate pool of hospitals with maternity-related care is identified using Google and reputable sources.",
+          "Exactly 10 hospitals are selected as the strongest childbirth options based on service availability plus reputation, rankings, or recognitions.",
+          "Each of the 10 selected hospitals has its official maternity, obstetrics, or labor-and-delivery page opened in a separate browser tab and left open.",
+          "For every listed hospital, labor and delivery services are explicitly verified on the official hospital page.",
+          "Ranking, recognition, or quality-indicator evidence is gathered for each of the 10 hospitals from U.S. News or similarly reputable sources.",
+          "A CryptPad Document titled exactly 'Best LA Maternity Hospitals' is created and includes for each hospital its name, location, maternity program description, ranking/recognition status, and official maternity page link.",
+          "The CryptPad Document ends with a comparative summary highlighting key differences, patterns, and top recommendations, and the doc remains open alongside the hospital tabs."
+        ],
+        "contradictions": [
+          "Expressly delegates all interpretation and rejects any personal audit pointers.",
+          "Treats original required links or open tabs alone as the only evidence of this pole."
+        ],
+        "opposite_behavioral_definition": "Affirmatively delegates interpretation to the agent and accepts its source-backed synthesis once every original verification requirement is met.",
+        "opposite_generic_observables": [
+          "Explicitly says they trust the agent to interpret the verified sources.",
+          "Asks for its synthesis without an additional claim-by-claim audit trail beyond the task's required links and notes."
+        ],
+        "score": 2,
+        "expressed": true,
+        "contradicted": false,
+        "confidence": 0.99,
+        "evidence": "I would appreciate exact headings or compact passage pointers for the delivery-service claims, and precise pointers showing how the quality evidence applies to each hospital or campus.",
+        "note": "User explicitly requests precise evidence pointers to personally audit the agent's interpretation, matching the Verifying behavior.",
+        "criterion_source": "declared_profile_dimension"
+      }
+    ],
+    "opening_method": "verbatim task plus authored preference",
+    "replicate_id": "health-pilot-v3-r1"
+  },
+  {
+    "task": "NYC knee surgeons",
+    "persona": "mp_evidence_verification_positive",
+    "status": "complete",
+    "targets": [
+      {
+        "attribute": "trust_level",
+        "expected_value": "Verifying",
+        "axis_id": "evidence_verification",
+        "axis_label": "Trust in the agent's evidence",
+        "arm": "positive",
+        "opposite_value": "Trusting",
+        "behavioral_definition": "Wants to personally audit the agent's interpretation through precise evidence pointers beyond the task's mandatory sources.",
+        "generic_observables": [
+          "Asks for a precise section or short evidence pointer so they can recheck the agent's claim personally.",
+          "Makes personal checking of the interpretation an explicit preference beyond leaving source tabs open."
+        ],
+        "task_observables": [
+          "Asks each required procedure confirmation note to include an exact profile-section pointer so they can personally verify the interpretation.",
+          "Wants any claimed equivalent sports-knee procedure tied to a precise visible phrase rather than relying on the agent's judgement alone."
+        ],
+        "opposite_task_observables": [
+          "Affirmatively trusts the agent to apply the stated procedure criteria to official profiles.",
+          "Accepts the required confirmation notes and links without an additional personal line-by-line checking format, keeping all ten official tabs."
+        ],
+        "inherited_task_signals": [
+          "A spreadsheet titled 'Top ACL Surgeons NYC' is created and used as the working document.",
+          "Official hospital or practice profile pages for candidate NYC surgeons are opened in separate browser tabs.",
+          "Each included surgeon is verified on the actual profile page as performing ACL reconstruction, meniscus repair, knee ligament reconstruction, or a clearly equivalent sports knee procedure.",
+          "For every selected surgeon, the spreadsheet records full name, hospital or practice affiliation, specialty focus, confirmation note for ACL reconstruction or meniscus repair, and the direct profile link.",
+          "Exactly 10 New York City surgeons are included, and each spreadsheet entry corresponds to an official profile page that remains open in a tab.",
+          "The spreadsheet includes a short summary of which hospitals, orthopedic groups, or medical centers appear most frequently among the 10 surgeons."
+        ],
+        "contradictions": [
+          "Expressly delegates all interpretation and rejects any personal audit pointers.",
+          "Treats original required links or open tabs alone as the only evidence of this pole."
+        ],
+        "opposite_behavioral_definition": "Affirmatively delegates interpretation to the agent and accepts its source-backed synthesis once every original verification requirement is met.",
+        "opposite_generic_observables": [
+          "Explicitly says they trust the agent to interpret the verified sources.",
+          "Asks for its synthesis without an additional claim-by-claim audit trail beyond the task's required links and notes."
+        ],
+        "score": 2,
+        "expressed": true,
+        "contradicted": false,
+        "confidence": 0.99,
+        "evidence": "I like to check interpretations myself. Within each required procedure confirmation note, I would appreciate an exact profile-section pointer. For an equivalent sports‑knee procedure, include the precise visible phrase that supports your interpretation.",
+        "note": "The user explicitly requests precise pointers to the exact text on each profile so they can personally verify the interpretation, matching the task‑specific observable for the Verifying trust level.",
+        "criterion_source": "declared_profile_dimension"
+      }
+    ],
+    "opening_method": "verbatim task plus authored preference",
+    "replicate_id": "health-pilot-v3-r1"
+  },
+  {
+    "task": "NYC knee surgeons",
+    "persona": "mp_evidence_verification_negative",
+    "status": "complete",
+    "targets": [
+      {
+        "attribute": "trust_level",
+        "expected_value": "Trusting",
+        "axis_id": "evidence_verification",
+        "axis_label": "Trust in the agent's evidence",
+        "arm": "negative",
+        "opposite_value": "Verifying",
+        "behavioral_definition": "Affirmatively delegates interpretation to the agent and accepts its source-backed synthesis once every original verification requirement is met.",
+        "generic_observables": [
+          "Explicitly says they trust the agent to interpret the verified sources.",
+          "Asks for its synthesis without an additional claim-by-claim audit trail beyond the task's required links and notes."
+        ],
+        "task_observables": [
+          "Affirmatively trusts the agent to apply the stated procedure criteria to official profiles.",
+          "Accepts the required confirmation notes and links without an additional personal line-by-line checking format, keeping all ten official tabs."
+        ],
+        "opposite_task_observables": [
+          "Asks each required procedure confirmation note to include an exact profile-section pointer so they can personally verify the interpretation.",
+          "Wants any claimed equivalent sports-knee procedure tied to a precise visible phrase rather than relying on the agent's judgement alone."
+        ],
+        "inherited_task_signals": [
+          "A spreadsheet titled 'Top ACL Surgeons NYC' is created and used as the working document.",
+          "Official hospital or practice profile pages for candidate NYC surgeons are opened in separate browser tabs.",
+          "Each included surgeon is verified on the actual profile page as performing ACL reconstruction, meniscus repair, knee ligament reconstruction, or a clearly equivalent sports knee procedure.",
+          "For every selected surgeon, the spreadsheet records full name, hospital or practice affiliation, specialty focus, confirmation note for ACL reconstruction or meniscus repair, and the direct profile link.",
+          "Exactly 10 New York City surgeons are included, and each spreadsheet entry corresponds to an official profile page that remains open in a tab.",
+          "The spreadsheet includes a short summary of which hospitals, orthopedic groups, or medical centers appear most frequently among the 10 surgeons."
+        ],
+        "contradictions": [
+          "Insists on personally rechecking each inference with additional section-by-section evidence.",
+          "Uses trust to waive mandatory official verification, quality evidence, or required source links."
+        ],
+        "opposite_behavioral_definition": "Wants to personally audit the agent's interpretation through precise evidence pointers beyond the task's mandatory sources.",
+        "opposite_generic_observables": [
+          "Asks for a precise section or short evidence pointer so they can recheck the agent's claim personally.",
+          "Makes personal checking of the interpretation an explicit preference beyond leaving source tabs open."
+        ],
+        "score": 2,
+        "expressed": true,
+        "contradicted": false,
+        "confidence": 1.0,
+        "evidence": "I trust you to apply the stated procedure criteria to the official profiles. The required confirmation notes, links and ten open profile tabs are enough for me; I do not need an additional line-by-line checking format.",
+        "note": "User explicitly states trust in the agent to interpret the verified sources without additional personal audit.",
+        "criterion_source": "declared_profile_dimension"
+      }
+    ],
+    "opening_method": "verbatim task plus authored preference",
+    "replicate_id": "health-pilot-v3-r1"
+  },
+  {
+    "task": "Fresno fitness outing",
+    "persona": "mp_decision_style_negative",
+    "status": "No post-hoc score; failed attempt with no complete result record",
+    "opening_method": "verbatim task plus reviewed authored preference",
+    "replicate_id": "health-pilot-v3-r1"
+  },
+  {
+    "task": "Fresno fitness outing",
+    "persona": "mp_decision_style_positive",
+    "status": "No post-hoc score; failed attempt with no complete result record",
+    "opening_method": "verbatim task plus reviewed authored preference",
+    "replicate_id": "health-pilot-v3-r1"
+  },
+  {
+    "task": "Fresno yoga starter plan",
+    "persona": "mp_detail_depth_negative",
+    "replicate_id": "health-recovery-v4-r1",
+    "attempt_kind": "recovery",
+    "status": "complete",
+    "targets": [
+      {
+        "attribute": "cog_detail_orientation",
+        "expected_value": "Low",
+        "axis_id": "detail_depth",
+        "axis_label": "Detail depth",
+        "arm": "negative",
+        "opposite_value": "Very high",
+        "behavioral_definition": "Affirmatively asks for the mandatory fields and comparison only, omitting optional background while preserving all evidence and material qualifications.",
+        "generic_observables": [
+          "Explicitly limits optional context to keep the output focused on all required fields.",
+          "Names an optional type of background they do not want."
+        ],
+        "task_observables": [
+          "Asks to limit the plan to the required studio findings, three class times, video details, and recommendation.",
+          "Explicitly declines optional packing lists and extra practice background."
+        ],
+        "opposite_task_observables": [
+          "Asks for a brief extra note on what a first-time visitor should bring, if the studio states it.",
+          "Wants a compact note on any props mentioned for the selected video, without changing the view-count rule."
+        ],
+        "inherited_task_signals": [
+          "Summarize Coil Yoga in Fresno using its website, including the studio’s overall offerings, class types, and at least one specific detail taken from the classes page.",
+          "Report the next three upcoming classes from Tower Yoga Fresno’s schedule, each with its start time.",
+          "Identify the YouTube search result for “50 minute yin yoga” with the highest visible view count and report its title, channel, and view count.",
+          "Recommend whether Coil Yoga or Tower Yoga is the better beginner starting point based on the findings from the two local studio websites.",
+          "Provide a final Fresno yoga starter plan that pairs one local studio recommendation with the selected at-home YouTube session."
+        ],
+        "contradictions": [
+          "Requests substantial optional background or extra fields.",
+          "Drops a mandatory field, source, verification, count, tab, or material qualification to shorten the answer."
+        ],
+        "opposite_behavioral_definition": "Requests compact task-relevant optional detail beyond the mandatory fields without expanding a requested short answer into a long report.",
+        "opposite_generic_observables": [
+          "Asks for a specific optional field or explanation beyond the original rubric.",
+          "Names the extra detail that would help interpret the required findings."
+        ],
+        "score": 2,
+        "expressed": true,
+        "contradicted": false,
+        "confidence": 1.0,
+        "evidence": "Please keep the plan to the required studio findings, three upcoming class times, video details and recommendation. I prefer to skip optional packing lists and extra practice background.",
+        "note": "User explicitly limits output to required fields and declines optional background, clearly demonstrating low detail orientation.",
+        "criterion_source": "declared_profile_dimension"
+      }
+    ],
+    "opening_method": "verbatim task plus the identical reviewed authored preference"
+  },
+  {
+    "task": "Fresno yoga starter plan",
+    "persona": "mp_detail_depth_positive",
+    "replicate_id": "health-recovery-v4-r1",
+    "attempt_kind": "recovery",
+    "status": "complete",
+    "targets": [
+      {
+        "attribute": "cog_detail_orientation",
+        "expected_value": "Very high",
+        "axis_id": "detail_depth",
+        "axis_label": "Detail depth",
+        "arm": "positive",
+        "opposite_value": "Low",
+        "behavioral_definition": "Requests compact task-relevant optional detail beyond the mandatory fields without expanding a requested short answer into a long report.",
+        "generic_observables": [
+          "Asks for a specific optional field or explanation beyond the original rubric.",
+          "Names the extra detail that would help interpret the required findings."
+        ],
+        "task_observables": [
+          "Asks for a brief extra note on what a first-time visitor should bring, if the studio states it.",
+          "Wants a compact note on any props mentioned for the selected video, without changing the view-count rule."
+        ],
+        "opposite_task_observables": [
+          "Asks to limit the plan to the required studio findings, three class times, video details, and recommendation.",
+          "Explicitly declines optional packing lists and extra practice background."
+        ],
+        "inherited_task_signals": [
+          "Summarize Coil Yoga in Fresno using its website, including the studio’s overall offerings, class types, and at least one specific detail taken from the classes page.",
+          "Report the next three upcoming classes from Tower Yoga Fresno’s schedule, each with its start time.",
+          "Identify the YouTube search result for “50 minute yin yoga” with the highest visible view count and report its title, channel, and view count.",
+          "Recommend whether Coil Yoga or Tower Yoga is the better beginner starting point based on the findings from the two local studio websites.",
+          "Provide a final Fresno yoga starter plan that pairs one local studio recommendation with the selected at-home YouTube session."
+        ],
+        "contradictions": [
+          "Explicitly asks for mandatory fields only and rejects optional detail.",
+          "Uses extra detail as a reason to omit any required item or violate a concise-output requirement."
+        ],
+        "opposite_behavioral_definition": "Affirmatively asks for the mandatory fields and comparison only, omitting optional background while preserving all evidence and material qualifications.",
+        "opposite_generic_observables": [
+          "Explicitly limits optional context to keep the output focused on all required fields.",
+          "Names an optional type of background they do not want."
+        ],
+        "score": 2,
+        "expressed": true,
+        "contradicted": false,
+        "confidence": 1.0,
+        "evidence": "I like useful preparation details alongside the plan. If available, add a brief note on what the studio says a first-time visitor should bring and any props mentioned for the selected video.",
+        "note": "User explicitly requests optional extra detail (packing list and video props), which is clear evidence of very high detail orientation.",
+        "criterion_source": "declared_profile_dimension"
+      }
+    ],
+    "opening_method": "verbatim task plus the identical reviewed authored preference"
+  },
+  {
+    "task": "Fresno fitness outing",
+    "persona": "mp_decision_style_negative",
+    "replicate_id": "health-recovery-v4-r1",
+    "attempt_kind": "recovery",
+    "status": "complete",
+    "targets": [
+      {
+        "attribute": "decision_style",
+        "expected_value": "Intuitive",
+        "axis_id": "decision_style",
+        "axis_label": "Decision style",
+        "arm": "negative",
+        "opposite_value": "Analytical",
+        "behavioral_definition": "Requests a holistic, personally inviting impression among qualifying fitness options and affirmatively prefers that to numerical scoring.",
+        "generic_observables": [
+          "Asks for an overall impression of fit from the observed teaching style or studio presentation.",
+          "Expressly prefers a holistic choice to points, weights, or a ranking matrix."
+        ],
+        "task_observables": [
+          "Asks for an overall impression of which qualifying first visit feels most inviting.",
+          "Prefers a short personal-fit description over points or weights, with schedule convenience and onboarding still explicitly supporting the choice."
+        ],
+        "opposite_task_observables": [
+          "Asks for the three studios to be compared in the same schedule-convenience and onboarding-effort format.",
+          "Wants a short explanation of the tradeoff that makes the recommendation win."
+        ],
+        "inherited_task_signals": [
+          "Report the days and times when Tower Yoga classes are offered from the Tower Yoga Fresno schedule.",
+          "Describe what Blue Moon Yoga is in Fresno based on the Blue Moon Yoga Studios website.",
+          "List the names of the Fresno studio locations shown for Blue Moon Yoga on the website.",
+          "Summarize the types of classes offered by Fight Girl Fitness in Fresno.",
+          "Explain how a new person can get started with Fight Girl Fitness, including any memberships, trial, booking, or participation details available on the website.",
+          "Provide a short recommendation comparing Tower Yoga, Blue Moon Yoga, and Fight Girl Fitness, and identify which option seems easiest for a beginner based on schedule convenience and onboarding details."
+        ],
+        "contradictions": [
+          "Insists on a weighted matrix or criteria scoring to make the choice.",
+          "Uses an impression to disregard required counts, timing, view counts, free access, or verification."
+        ],
+        "opposite_behavioral_definition": "Requests a consistent set of explicit criteria and a short tradeoff explanation for choosing among qualifying fitness options.",
+        "opposite_generic_observables": [
+          "Names common comparison criteria and asks to apply them consistently.",
+          "Requests a tradeoff-based explanation of the choice."
+        ],
+        "score": 2,
+        "expressed": true,
+        "contradicted": false,
+        "confidence": 1.0,
+        "evidence": "Among the options supported by the required schedule and onboarding findings, I prefer your overall impression of which place feels most welcoming for a first visit. Please avoid a numerical scorecard or weighted ranking.",
+        "note": "The user explicitly requests a holistic, intuitive impression and rejects analytical scoring, matching the intuitive decision‑style definition.",
+        "criterion_source": "declared_profile_dimension"
+      }
+    ],
+    "opening_method": "verbatim task plus the identical reviewed authored preference"
+  },
+  {
+    "task": "Fresno fitness outing",
+    "persona": "mp_decision_style_positive",
+    "replicate_id": "health-recovery-v4-r1",
+    "attempt_kind": "recovery",
+    "status": "not_scored",
+    "targets": [],
+    "opening_method": "verbatim task plus the identical reviewed authored preference"
+  },
+  {
+    "task": "Fresno fitness outing",
+    "persona": "mp_decision_style_positive",
+    "replicate_id": "health-recovery-v4-r1",
+    "attempt_kind": "api_retry",
+    "status": "complete",
+    "targets": [
+      {
+        "attribute": "decision_style",
+        "expected_value": "Analytical",
+        "axis_id": "decision_style",
+        "axis_label": "Decision style",
+        "arm": "positive",
+        "opposite_value": "Intuitive",
+        "behavioral_definition": "Requests a consistent set of explicit criteria and a short tradeoff explanation for choosing among qualifying fitness options.",
+        "generic_observables": [
+          "Names common comparison criteria and asks to apply them consistently.",
+          "Requests a tradeoff-based explanation of the choice."
+        ],
+        "task_observables": [
+          "Asks for the three studios to be compared in the same schedule-convenience and onboarding-effort format.",
+          "Wants a short explanation of the tradeoff that makes the recommendation win."
+        ],
+        "opposite_task_observables": [
+          "Asks for an overall impression of which qualifying first visit feels most inviting.",
+          "Prefers a short personal-fit description over points or weights, with schedule convenience and onboarding still explicitly supporting the choice."
+        ],
+        "inherited_task_signals": [
+          "Report the days and times when Tower Yoga classes are offered from the Tower Yoga Fresno schedule.",
+          "Describe what Blue Moon Yoga is in Fresno based on the Blue Moon Yoga Studios website.",
+          "List the names of the Fresno studio locations shown for Blue Moon Yoga on the website.",
+          "Summarize the types of classes offered by Fight Girl Fitness in Fresno.",
+          "Explain how a new person can get started with Fight Girl Fitness, including any memberships, trial, booking, or participation details available on the website.",
+          "Provide a short recommendation comparing Tower Yoga, Blue Moon Yoga, and Fight Girl Fitness, and identify which option seems easiest for a beginner based on schedule convenience and onboarding details."
+        ],
+        "contradictions": [
+          "Explicitly asks to decide solely by gut feel and avoid criteria.",
+          "Allows the comparison method to override a hard task condition."
+        ],
+        "opposite_behavioral_definition": "Requests a holistic, personally inviting impression among qualifying fitness options and affirmatively prefers that to numerical scoring.",
+        "opposite_generic_observables": [
+          "Asks for an overall impression of fit from the observed teaching style or studio presentation.",
+          "Expressly prefers a holistic choice to points, weights, or a ranking matrix."
+        ],
+        "score": 2,
+        "expressed": true,
+        "contradicted": false,
+        "confidence": 0.98,
+        "evidence": "Please compare schedule convenience, onboarding effort and class intensity consistently across the three options, then give a brief tradeoff-based explanation of your beginner recommendation.",
+        "note": "User explicitly requests explicit comparison criteria and a trade‑off rationale, matching the analytical decision‑style definition.",
+        "criterion_source": "declared_profile_dimension"
+      }
+    ],
+    "opening_method": "verbatim task plus the identical reviewed authored preference"
+  }
+]

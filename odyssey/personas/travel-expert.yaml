@@ -3,6 +3,18 @@ version: '2.0'
 source: hand-specified from dimensions.json (MatrAIx 1290-dim schema)
 note: 'Career travel/transit professional: deep domain expertise, high tech fluency,
   plans in detail, no physical or access constraints.'
+evaluation_dimensions:
+- tech_savviness
+- risk_tolerance
+- cog_detail_orientation
+- cog_patience
+- cog_attention_span
+- pref_plan_vs_spontaneous
+- pref_save_vs_spend
+- pref_detail_brief_vs_full
+- accessibility_needs
+- device_context
+- economic_motivation
 attributes:
   age_bracket:
     value: 35-44

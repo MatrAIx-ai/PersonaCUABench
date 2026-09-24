@@ -34,19 +34,22 @@ PROMPT = odyssey.prompt("experience_judge")
 
 def build_prompt(record: dict) -> str:
     run_ = record["run"]
-    task = next((t for t in odyssey.TASKS if t["task_id"] == record["task_id"]), None)
-    if task is None:
-        raise SystemExit(f"task {record['task_id']} is not in tasks.json")
+    task, _ = odyssey.task_for_record(record)
     persona = record["persona"]
     if persona == "none":
         profile = ("Control arm: no persona. This person sent the expert brief "
                    "verbatim, so treat them as a demanding expert who asked for "
                    "every item in it.")
     else:
-        # The profile alone -- persona_system_prompt() wraps it in role-play
-        # instructions, which would tell the judge to become this person.
-        doc = odyssey.persona_lib.load_persona(HERE / "personas" / f"{persona}.yaml")
-        profile = "\n\n".join(odyssey.persona_lib.build_dimension_narrative(doc))
+        # Prefer the immutable profile used by this exact run. Legacy results
+        # predate snapshots and fall back to the local YAML for compatibility.
+        snapshot = ((run_.get("user") or {}).get("persona_profile") or {})
+        profile = str(snapshot.get("profile_narrative") or "").strip()
+        if not profile:
+            # The profile alone -- persona_system_prompt() wraps it in role-play
+            # instructions, which would tell the judge to become this person.
+            doc = odyssey.persona_lib.load_persona(HERE / "personas" / f"{persona}.yaml")
+            profile = "\n\n".join(odyssey.persona_lib.build_dimension_narrative(doc))
     conversation = "\n".join(
         f"{'PERSON' if t['role'] == 'user' else 'ASSISTANT'}: {t['text']}"
         for t in run_.get("conversation") or []) or "(none)"
@@ -61,7 +64,7 @@ def build_prompt(record: dict) -> str:
 
 def score_once(prompt: str, model: str, provider: str = "") -> dict:
     """One judge's verdict, retried while it returns nothing parseable."""
-    client, _ = odyssey._client(model, provider)
+    client, resolved_provider = odyssey._client(model, provider)
     for attempt in range(3):
         try:
             resp = odyssey._create_with_retry(
@@ -73,9 +76,11 @@ def score_once(prompt: str, model: str, provider: str = "") -> dict:
         else:
             last = "unparseable judge output"
         if parsed:
-            return {"model": model, **parsed}
+            return {"model": model, "provider": resolved_provider,
+                    "backend": odyssey._provider_backend(resolved_provider), **parsed}
         print(f"    [{model}] attempt {attempt + 1}/3: {last}", flush=True)
-    return {"model": model, "error": last}
+    return {"model": model, "provider": resolved_provider,
+            "backend": odyssey._provider_backend(resolved_provider), "error": last}
 
 
 def valid_score(value) -> int | None:
@@ -96,14 +101,35 @@ def agreement(a: dict, b: dict) -> dict:
     return out
 
 
+def experience_complete(value: object) -> bool:
+    """Only successful dual-judge output is resumable as complete."""
+    if not isinstance(value, dict):
+        return False
+    for slot in ("a", "b"):
+        judge = value.get(slot)
+        if not isinstance(judge, dict) or judge.get("error"):
+            return False
+        if any(not isinstance(judge.get(dimension), dict) for dimension in DIMENSIONS):
+            return False
+    return True
+
+
+def _write_record(path: Path, record: dict) -> None:
+    temporary = path.with_suffix(".json.tmp")
+    temporary.write_text(json.dumps(record, ensure_ascii=False, indent=2), encoding="utf-8")
+    temporary.replace(path)
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--results", default=str(HERE / "results"))
     ap.add_argument("--judge-a", default="gpt-5.6-terra")
-    ap.add_argument("--judge-a-provider", default="azure")
     ap.add_argument("--judge-b", default="anthropic/claude-opus-4.8")
-    ap.add_argument("--judge-b-provider", default="openrouter")
+    ap.add_argument("--judge-a-provider", default="azure",
+                    help="explicit provider for judge A (otherwise inferred)")
+    ap.add_argument("--judge-b-provider", default="openrouter",
+                    help="explicit provider for judge B (otherwise inferred)")
     ap.add_argument("--redo", action="store_true", help="rescore results that already have one")
     ap.add_argument("--print-prompt", action="store_true",
                     help="print the prompt for the first result and exit, no API calls")
@@ -118,14 +144,28 @@ def main() -> None:
         if args.print_prompt:
             print(build_prompt(record))
             return
-        if record.get("experience") and not args.redo:
+        if experience_complete(record.get("experience")) and not args.redo:
             continue
         print(f"{record['task_id'][:12]} {record['persona']}", flush=True)
         prompt = build_prompt(record)
         a = score_once(prompt, args.judge_a, args.judge_a_provider)
         b = score_once(prompt, args.judge_b, args.judge_b_provider)
-        record["experience"] = {"a": a, "b": b, "agreement": agreement(a, b)}
-        path.write_text(json.dumps(record, ensure_ascii=False, indent=2), encoding="utf-8")
+        profile_snapshot = (((record.get("run") or {}).get("user") or {})
+                            .get("persona_profile") or {})
+        profile_integrity = (
+            "frozen_snapshot"
+            if profile_snapshot.get("profile_narrative")
+            else "unverified_legacy"
+        )
+        _, task_integrity = odyssey.task_for_record(record)
+        record["experience"] = {
+            "a": a,
+            "b": b,
+            "agreement": agreement(a, b),
+            "profile_integrity": profile_integrity,
+            "task_integrity": task_integrity,
+        }
+        _write_record(path, record)
         for dim in DIMENSIONS:
             print(f"  {dim:22} {(a.get(dim) or {}).get('score')!s:>4} "
                   f"{(b.get(dim) or {}).get('score')!s:>4}")
