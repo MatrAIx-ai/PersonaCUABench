@@ -14,6 +14,7 @@ import os
 import subprocess
 import sys
 import tempfile
+import time
 import types
 from contextlib import redirect_stdout
 from pathlib import Path
@@ -772,7 +773,8 @@ def test_judge_failure_keeps_the_run(run):
     """An unusable judge response must not throw away the browse it grades."""
     client = _TextClient(reply="")          # the judge answers with nothing
     R._client = lambda model, provider="": (client, "stub")
-    R.time = types.SimpleNamespace(sleep=lambda *_: None)
+    # monotonic as well as sleep: every model call is timed for the cost report.
+    R.time = types.SimpleNamespace(sleep=lambda *_: None, monotonic=time.monotonic)
 
     j = R.judge_run(R.TASKS[0], run, judge_model="stub", judge_provider="stub")
     assert j["score"] is None and j["met"] is None and j["error"]

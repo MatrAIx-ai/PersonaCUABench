@@ -1,53 +1,101 @@
 #!/usr/bin/env bash
-# One unattended pass: every replicate, then every judge, then the reports.
+# One unattended pass for one setting over one or more CUA models, then the
+# judges, then the reports.
 #
-# Safe to re-run: finished cells are skipped, and a judged run is not re-judged,
+# Setting 1 = group personas (tens of dimensions at once, one persona per group).
+# Setting 2 = matched pairs (one dimension flipped, everything else held).
+# The two never share a results directory: every run is written under
+# odyssey/results/<setting>/ and carries the setting in its record.
+#
+# Safe to re-run: finished cells are skipped and judged runs are not re-judged,
 # so an interrupted night resumes by running this again.
 #
-#   bash odyssey/run_all.sh                       # r1 r2 r3
-#   REPLICATES="r1" bash odyssey/run_all.sh       # one replicate
-#   SUITE=shopping bash odyssey/run_all.sh        # another suite
+#   SETTING=s1 MODELS="glm-5.3" bash odyssey/run_all.sh
+#   SETTING=s2 MODELS="glm-5.3 minimax-m3" bash odyssey/run_all.sh
+#   SETTING=s1 MODELS=terra REPLICATES="r1" bash odyssey/run_all.sh
+#   DRY_RUN=1 SETTING=s2 MODELS=terra bash odyssey/run_all.sh   # plan only, no spend
 #
-# Logs land in logs/<replicate>.log and logs/<phase>.log.
+# MODELS takes keys from odyssey/models.json (`python odyssey/models.py` lists
+# them); a key deployed on Azure runs there for free, everything else bills
+# OpenRouter. Logs land in logs/<setting>-<model>-<phase>.log.
 set -u
 cd "$(dirname "$0")/.."
 
+SETTING="${SETTING:-s1}"
 SUITE="${SUITE:-main-original}"
+MODELS="${MODELS:-terra}"
 REPLICATES="${REPLICATES:-r1 r2 r3}"
+# Setting 1's personas: one per group of people. Setting 2's are generated from
+# the protocol and selected by run_matched_pairs.py, so PERSONAS is unused there.
+PERSONAS="${PERSONAS:-none travel-expert elderly-novice budget-student non-native-speaker}"
 PY="${PY:-python}"
+DRY_RUN="${DRY_RUN:-}"
+RESULTS="odyssey/results/$SETTING"
 mkdir -p logs
 
+case "$SETTING" in
+  s1|s2) ;;
+  *) echo "SETTING must be s1 or s2 (got '$SETTING')" >&2; exit 2 ;;
+esac
+
 say() { printf '\n=== %s  %s\n' "$(date '+%F %T')" "$*"; }
+run() { if [[ -n "$DRY_RUN" ]]; then echo "DRY: $*"; else "$@"; fi; }
 failed=""
 
-for r in $REPLICATES; do
-  say "replicate $r"
-  # A failing cell must not take the night with it: the runner exits non-zero
-  # when any cell failed, and the remaining replicates are still worth having.
-  if ! $PY odyssey/run_matched_pairs.py --suite "$SUITE" --replicate-id "$r" \
-       --headless --execute >> "logs/$r.log" 2>&1; then
-    failed="$failed $r"
-    say "replicate $r reported failed cells (see logs/$r.log)"
+for model in $MODELS; do
+  tag="$SETTING-${model//\//-}"
+  say "$SETTING  model=$model"
+  if [[ "$SETTING" == s1 ]]; then
+    # Every persona x every task, one process per cell.
+    if ! PERSONAS="$PERSONAS" TASK_SUITE="$SUITE" PYTHON_BIN="$PY" \
+         run bash odyssey/run_grid.sh --setting "$SETTING" --model "$model" \
+           --headless >> "logs/$tag.log" 2>&1; then
+      failed="$failed $SETTING/$model"
+      say "$model reported failed cells (see logs/$tag.log)"
+    fi
+  else
+    for r in $REPLICATES; do
+      say "$SETTING  model=$model  replicate=$r"
+      # Without --execute this only prints the plan, which is what DRY_RUN wants.
+      execute=(--execute)
+      [[ -n "$DRY_RUN" ]] && execute=()
+      if ! run $PY odyssey/run_matched_pairs.py --suite "$SUITE" \
+             --replicate-id "$r" --headless "${execute[@]+"${execute[@]}"}" \
+             -- --setting "$SETTING" --model "$model" \
+             >> "logs/$tag-$r.log" 2>&1; then
+        failed="$failed $SETTING/$model/$r"
+        say "$model $r reported failed cells (see logs/$tag-$r.log)"
+      fi
+    done
   fi
-  tail -n 3 "logs/$r.log"
 done
 
-# Judges read finished runs, so they come after every replicate. The fidelity
-# judge needs the inline R1-Rn verdicts that run.py already wrote: its coverage
-# guardrail is computed from judgement.communicated.
+# Judges read finished runs, so they come after every cell. The fidelity judge
+# needs the inline R1-Rn verdicts: its coverage guardrail is computed from
+# judgement.communicated.
 say "experience judge"
-$PY odyssey/experience_judge.py > logs/experience_judge.log 2>&1 \
-  || say "experience judge reported errors (see logs/experience_judge.log)"
+run $PY odyssey/experience_judge.py --results "$RESULTS" \
+  > "logs/$SETTING-experience_judge.log" 2>&1 \
+  || say "experience judge reported errors (see logs/$SETTING-experience_judge.log)"
 
-say "persona fidelity judge"
-$PY odyssey/persona_fidelity_judge.py > logs/fidelity_judge.log 2>&1 \
-  || say "fidelity judge reported errors (see logs/fidelity_judge.log)"
+if [[ "$SETTING" == s2 ]]; then
+  say "persona fidelity judge"
+  run $PY odyssey/persona_fidelity_judge.py --results "$RESULTS" \
+    > "logs/$SETTING-fidelity_judge.log" 2>&1 \
+    || say "fidelity judge reported errors (see logs/$SETTING-fidelity_judge.log)"
 
-say "pair separation"
-$PY odyssey/pair_separation.py --evidence 2>&1 | tee logs/pair_separation.log
+  say "pair separation"
+  run $PY odyssey/pair_separation.py "$RESULTS" --evidence 2>&1 \
+    | tee "logs/$SETTING-pair_separation.log"
+fi
 
-say "report"
+say "scores"
 # report.py otherwise falls back to the catalog default suite (shopping).
-$PY odyssey/report.py --suite "$SUITE" 2>&1 | tee logs/report.log
+run $PY odyssey/report.py "$RESULTS" --suite "$SUITE" 2>&1 \
+  | tee "logs/$SETTING-report.log"
 
-say "done${failed:+; replicates with failed cells:$failed}"
+say "cost and time"
+run $PY odyssey/cost_report.py "$RESULTS" --csv "logs/$SETTING-cells.csv" 2>&1 \
+  | tee "logs/$SETTING-cost.log"
+
+say "done${failed:+; failed:$failed}"

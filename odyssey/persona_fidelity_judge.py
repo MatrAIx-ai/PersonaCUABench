@@ -294,7 +294,7 @@ def apply_communication_guardrail(verdict: dict, coverage: dict) -> dict:
     return verdict
 
 
-def score_once(record: dict, model: str, provider: str = "") -> dict:
+def score_once(record: dict, model: str, provider: str = "") -> dict:  # noqa: D401
     """Call one independent judge, retrying invalid or unparseable responses."""
     snapshot = profile_snapshot(record)
     coverage = communication_guardrail(record, snapshot)
@@ -315,12 +315,15 @@ def score_once(record: dict, model: str, provider: str = "") -> dict:
             "error": coverage.get("reason") or "communication coverage unavailable",
         }
     prompt = build_prompt(record)
+    model, provider = odyssey.model_registry.resolve(model, provider)
     client, resolved_provider = odyssey._client(model, provider)
+    meter = odyssey.Meter()          # judging is part of a setting's bill
     last = "unparseable judge output"
     for attempt in range(3):
         try:
-            response = odyssey._create_with_retry(
-                client,
+            response, _ = odyssey.metered(
+                client, meter, "persona_fidelity_judge",
+                provider=resolved_provider,
                 model=model,
                 messages=[{"role": "user", "content": prompt}],
                 max_completion_tokens=5000,
@@ -334,6 +337,7 @@ def score_once(record: dict, model: str, provider: str = "") -> dict:
                     snapshot=snapshot,
                 )
                 verdict = apply_communication_guardrail(verdict, coverage)
+                verdict["accounting"] = meter.totals()
                 _, verdict["task_integrity"] = odyssey.task_for_record(record)
                 return verdict
             last = "unparseable judge output"

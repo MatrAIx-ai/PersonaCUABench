@@ -188,6 +188,56 @@ git commit -m "<your-name>: tasks + personas"
 git push -u origin <your-name>
 ```
 
+## Two settings, nine models, and the bill
+
+`--setting` labels an experiment and namespaces its results, so the two designs
+never share a directory or a report row:
+
+| setting | personas | question it answers |
+|---|---|---|
+| `s1` | one per group of people, tens of dimensions set at once | how differently is each group served? |
+| `s2` | matched pairs, one dimension flipped, everything else held | which single dimension causes the difference? |
+
+```bash
+SETTING=s1 MODELS="glm-5.3" bash odyssey/run_all.sh        # grid, judges, reports
+SETTING=s2 MODELS="glm-5.3 terra" bash odyssey/run_all.sh  # 3 replicates each
+DRY_RUN=1 SETTING=s2 MODELS=terra bash odyssey/run_all.sh  # plan only, no spend
+```
+
+**Models under test** live in `odyssey/models.json`. A run names one by its short
+key and the key resolves to **Azure when that model is deployed there** (free for
+this project) and to OpenRouter otherwise -- so putting a deployment name in a
+model's `azure` field is all it takes to stop paying for it.
+
+```bash
+python odyssey/models.py                 # what each key resolves to right now
+python odyssey/models.py --probe         # ask Azure which of these ids it serves
+python odyssey/models.py --estimate 294  # price a plan of 294 cells per model
+```
+
+Gemini 4 Pro is in the registry as `gemini-pro` pointing at Gemini 3.1 Pro:
+Google confirmed Gemini 4 is training but has shipped no model, id or price.
+Repoint that one entry when it exists.
+
+**Every run records its own bill and clock.** `result.json` carries
+`accounting`: one entry per model call (role, model, provider, tokens, cached
+tokens, dollars, milliseconds) plus per-role and per-cell totals, and
+`run.timing` holds the wall clock. OpenRouter's reported charge wins over the
+registry's list price; a call nobody can price is counted in `unpriced_calls`
+rather than silently treated as free.
+
+```bash
+python odyssey/cost_report.py odyssey/results/s2 --csv cells.csv
+```
+gives cost and minutes per setting, per model and per task, with judge spend
+kept separate from browsing spend.
+
+**Every step is kept.** `run.turns` holds one entry per model turn with the
+provider's whole response -- content, tool calls, and the reasoning trace when
+the provider returns one -- plus that turn's tokens, cost and latency.
+`run.trajectory` holds each tool call with its arguments and the full result the
+model was given (`result`), next to the short `result_preview` the judge reads.
+
 ## Output
 
 `odyssey/results/<suite>/<full-task-id>/<task-hash>/<persona>__<model>__<resume-hash>__<stamp>/result.json`

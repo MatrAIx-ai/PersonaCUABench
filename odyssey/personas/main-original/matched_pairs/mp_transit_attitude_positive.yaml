@@ -10,7 +10,7 @@ matched_pair:
   schema_version: personacuabench.matched-pair.v1
   experiment_id: travel-four-observable-v1
   protocol_path: task_suites/main-original/personas/persona_experiment.json
-  protocol_sha256: 09c677f35a0704f88f3bac41cea0e98e41130a38a03b32689a3608fd7bf775fe
+  protocol_sha256: 4e85cdfa68113d4ec03cdc7d5fd2991982cb17d3849441126654e0d359b07ce1
   pair_id: pair-transit-attitude
   axis_id: transit_attitude
   axis_label: Public-transit attitude
@@ -111,4 +111,44 @@ attributes:
   pref_detail_brief_vs_full:
     value: Balanced
     label: Brief vs full detail
+    category: 'Behavior: Preferences'
+  pref_plan_vs_spontaneous:
+    value: Balanced
+    label: Planned vs spontaneous
+    category: 'Behavior: Preferences'
+  att_online_reviews:
+    value: Neutral
+    label: 'Attitude: Online reviews'
+    category: 'Worldview: Beliefs'
+  att_brand_loyalty:
+    value: Neutral
+    label: 'Attitude: Brand loyalty'
+    category: 'Worldview: Beliefs'
+  att_data_privacy:
+    value: Neutral
+    label: 'Attitude: Data privacy'
+    category: 'Worldview: Beliefs'
+  cog_politeness:
+    value: Neutral
+    label: Politeness
+    category: 'Linguistic: Communication'
+  cog_directness:
+    value: Balanced
+    label: Directness
+    category: 'Linguistic: Communication'
+  cog_use_of_jargon:
+    value: Light
+    label: Use of jargon
+    category: 'Linguistic: Communication'
+  cog_numeracy_comfort:
+    value: Moderate
+    label: Numeracy comfort
+    category: 'Linguistic: Communication'
+  trait_curiosity:
+    value: Moderate
+    label: 'Character: Curiosity'
+    category: 'Personality: Character'
+  pref_city_vs_nature:
+    value: Either
+    label: City vs nature
     category: 'Behavior: Preferences'

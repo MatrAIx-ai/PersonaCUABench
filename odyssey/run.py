@@ -38,6 +38,7 @@ HERE = Path(__file__).resolve().parent
 REPO = HERE.parent
 sys.path.insert(0, str(HERE))
 
+import models as model_registry  # noqa: E402  (odyssey/models.py)
 import persona as persona_lib  # noqa: E402  (odyssey/persona.py)
 import task_router  # noqa: E402
 
@@ -525,6 +526,101 @@ def _create_with_retry(client, *, attempts: int = 5, **kwargs):
             time.sleep(delay)
 
 
+class Meter:
+    """Every model call one cell made: role, tokens, dollars, wall time.
+
+    The bill and the clock are results too -- a paper has to state what a
+    setting cost and how long a task took -- so they are recorded beside the
+    trajectory instead of being reconstructed from provider dashboards months
+    later, when the prices have moved and the runs are indistinguishable.
+    """
+
+    ROLES = ("persona", "agent", "agent_summary", "rubric_judge")
+
+    def __init__(self) -> None:
+        self.calls: list[dict] = []
+
+    def add(self, role: str, model: str, provider: str, resp, ms: float) -> dict:
+        usage = getattr(resp, "usage", None)
+        prompt_tokens = int(getattr(usage, "prompt_tokens", 0) or 0)
+        completion_tokens = int(getattr(usage, "completion_tokens", 0) or 0)
+        # OpenRouter returns what it actually charged when asked for usage, and
+        # that beats a list price: it already accounts for the provider it
+        # routed to, cache reads and any discount.
+        reported = getattr(usage, "cost", None)
+        if isinstance(reported, (int, float)):
+            cost, source = float(reported), "provider"
+        else:
+            cost = model_registry.cost_of(model, prompt_tokens, completion_tokens)
+            source = "registry" if cost is not None else "unknown"
+        details = getattr(usage, "prompt_tokens_details", None)
+        call = {
+            "role": role, "model": model, "provider": provider,
+            "ms": round(ms), "prompt_tokens": prompt_tokens,
+            "completion_tokens": completion_tokens,
+            "cached_prompt_tokens": getattr(details, "cached_tokens", None),
+            "cost_usd": cost, "cost_source": source,
+        }
+        self.calls.append(call)
+        return call
+
+    def totals(self) -> dict:
+        """Per-role and overall totals, with unpriced calls counted, not hidden."""
+        by_role: dict[str, dict] = {}
+        for call in self.calls:
+            bucket = by_role.setdefault(call["role"], {
+                "calls": 0, "prompt_tokens": 0, "completion_tokens": 0,
+                "ms": 0, "cost_usd": 0.0, "unpriced_calls": 0})
+            bucket["calls"] += 1
+            bucket["prompt_tokens"] += call["prompt_tokens"]
+            bucket["completion_tokens"] += call["completion_tokens"]
+            bucket["ms"] += call["ms"]
+            if call["cost_usd"] is None:
+                bucket["unpriced_calls"] += 1
+            else:
+                bucket["cost_usd"] = round(bucket["cost_usd"] + call["cost_usd"], 6)
+        return {
+            "calls": len(self.calls),
+            "by_role": by_role,
+            "prompt_tokens": sum(c["prompt_tokens"] for c in self.calls),
+            "completion_tokens": sum(c["completion_tokens"] for c in self.calls),
+            "model_ms": sum(c["ms"] for c in self.calls),
+            "cost_usd": round(sum(c["cost_usd"] or 0.0 for c in self.calls), 6),
+            "unpriced_calls": sum(c["cost_usd"] is None for c in self.calls),
+        }
+
+
+def dump_response(resp) -> dict:
+    """A JSON-safe copy of a provider response, whatever SDK object it is."""
+    for attempt in (lambda: resp.model_dump(exclude_none=True),
+                    lambda: json.loads(resp.model_dump_json()),
+                    lambda: json.loads(json.dumps(resp, default=lambda o: getattr(
+                        o, "__dict__", None) or str(o)))):
+        try:
+            dumped = attempt()
+        except Exception:
+            continue
+        if isinstance(dumped, dict):
+            return dumped
+    return {"repr": repr(resp)[:4000]}
+
+
+def metered(client, meter: Meter | None, role: str, *, provider: str, **kwargs):
+    """One chat call, timed and billed into the meter. Returns (resp, call)."""
+    if provider == "openrouter":
+        # Ask OpenRouter to report the charge for this call.
+        body = dict(kwargs.get("extra_body") or {})
+        body.setdefault("usage", {"include": True})
+        kwargs["extra_body"] = body
+    started = time.monotonic()
+    resp = _create_with_retry(client, **kwargs)
+    elapsed_ms = (time.monotonic() - started) * 1000
+    call = None
+    if meter is not None:
+        call = meter.add(role, str(kwargs.get("model", "")), provider, resp, elapsed_ms)
+    return resp, call
+
+
 PERSONA_USER_RULES = prompt("persona_user")
 MATCHED_PAIR_PERSONA_USER_RULES = prompt("persona_user_matched_pair")
 OPENING_CACHE_SCHEMA = "odyssey.persona-opening.v1"
@@ -593,8 +689,9 @@ class PersonaUser:
 
     def __init__(self, task: dict, persona_path: Path | None, model: str,
                  provider: str = "", temperature: float = 0.7,
-                 opening_cache: dict | None = None):
+                 opening_cache: dict | None = None, meter: "Meter | None" = None):
         self.client = None
+        self.meter = meter
         self.provider = _resolved_provider(model, provider)
         self.model, self.temperature = model, temperature
         self.profile_snapshot = None
@@ -829,8 +926,9 @@ class PersonaUser:
         if self.client is None:
             self.client, self.provider = _client(self.model, self.provider)
         self.messages.append({"role": "user", "content": prompt})
-        resp = _create_with_retry(self.client, model=self.model, messages=self.messages,
-                                  temperature=self.temperature)
+        resp, _ = metered(self.client, self.meter, "persona",
+                          provider=self.provider, model=self.model,
+                          messages=self.messages, temperature=self.temperature)
         text = (resp.choices[0].message.content or "").strip()
         self.messages.append({"role": "assistant", "content": text})
         return text
@@ -856,7 +954,7 @@ class PersonaUser:
 def run_agent(task: dict, user: PersonaUser, model: str, *, max_steps: int,
               headless: bool, temperature: float,
               profile_dir: str | os.PathLike = DEFAULT_PROFILE,
-              provider: str = "") -> dict:
+              provider: str = "", meter: "Meter | None" = None) -> dict:
     client, provider = _client(model, provider)
     # The CUA carries no persona: it knows the user only through what they say.
     messages = [{"role": "system", "content": AGENT_RULES},
@@ -865,13 +963,26 @@ def run_agent(task: dict, user: PersonaUser, model: str, *, max_steps: int,
 
     browser = Browser(headless=headless, profile_dir=profile_dir)
     trajectory: list[dict] = []
+    # One entry per model turn: what it thought, what it answered, what it
+    # called, what it cost and how long it waited. The trajectory records what
+    # the tools did; this records what the model did.
+    turns: list[dict] = []
     answer, stop_reason, empty_turns = "", "max_steps", 0
+    started_at = datetime.now(timezone.utc)
+    started = time.monotonic()
     try:
         for step in range(max_steps):
-            resp = _create_with_retry(
-                client, model=model, messages=messages, tools=TOOLS,
+            resp, call = metered(
+                client, meter, "agent", provider=provider,
+                model=model, messages=messages, tools=TOOLS,
                 temperature=temperature)
             msg = resp.choices[0].message
+            # The whole response, reasoning and tool calls included: a provider
+            # that returns a reasoning trace puts it on the message, and the
+            # dump keeps fields this code never names.
+            turns.append({"step": step, "kind": "agent",
+                          "response": dump_response(resp),
+                          "call": call})
             messages.append(msg.model_dump(exclude_none=True))
             calls = msg.tool_calls or []
             if not calls and not (msg.content or "").strip():
@@ -911,8 +1022,14 @@ def run_agent(task: dict, user: PersonaUser, model: str, *, max_steps: int,
                         result = fn(**args) if fn else f"unknown tool {name}"
                     except Exception as exc:
                         result = f"{type(exc).__name__}: {exc}"
-                trajectory.append({"step": step, "tool": name, "args": args,
-                                   "result_preview": str(result)[:400]})
+                trajectory.append({
+                    "step": step, "tool": name, "args": args,
+                    # result_preview is what the judge reads; result is the
+                    # whole tool output the model was given, so a trajectory can
+                    # be replayed and audited after the fact.
+                    "result_preview": str(result)[:400],
+                    "result": str(result)[:PAGE_CHARS + 500],
+                    "tool_call_id": call.id})
                 messages.append({"role": "tool", "tool_call_id": call.id,
                                  "content": str(result)[:PAGE_CHARS + 500]})
             if stop_reason == "finish":
@@ -928,8 +1045,12 @@ def run_agent(task: dict, user: PersonaUser, model: str, *, max_steps: int,
                              "You are out of time. Give your final answer now, "
                              "using only what you actually found."})
             try:
-                final = _create_with_retry(client, model=model, messages=messages,
-                                           temperature=temperature)
+                final, summary_call = metered(
+                    client, meter, "agent_summary", provider=provider,
+                    model=model, messages=messages, temperature=temperature)
+                turns.append({"step": len(turns), "kind": "agent_summary",
+                              "response": dump_response(final),
+                              "call": summary_call})
                 answer = (final.choices[0].message.content or "").strip()
             except Exception as exc:
                 answer, stop_reason = "", f"max_steps_no_summary ({type(exc).__name__})"
@@ -937,9 +1058,15 @@ def run_agent(task: dict, user: PersonaUser, model: str, *, max_steps: int,
     finally:
         browser.close()
 
+    finished_at = datetime.now(timezone.utc)
     return {"answer": answer, "stop_reason": stop_reason, "steps": len(trajectory),
-            "max_steps": max_steps, "trajectory": trajectory, "open_tabs": open_tabs,
+            "max_steps": max_steps, "trajectory": trajectory, "turns": turns,
+            "open_tabs": open_tabs,
             "conversation": user.transcript, "user": user.info(),
+            "timing": {"started_at": started_at.isoformat(),
+                       "finished_at": finished_at.isoformat(),
+                       "wall_seconds": round(time.monotonic() - started, 3),
+                       "model_ms": sum((t["call"] or {}).get("ms", 0) for t in turns)},
             "arm": {"model": model, "provider": provider,
                     "backend": _provider_backend(provider), "temperature": temperature}}
 
@@ -950,7 +1077,8 @@ def run_agent(task: dict, user: PersonaUser, model: str, *, max_steps: int,
 JUDGE_PROMPT = prompt("rubric_judge")
 
 
-def judge_run(task: dict, run: dict, *, judge_model: str, judge_provider: str) -> dict:
+def judge_run(task: dict, run: dict, *, judge_model: str, judge_provider: str,
+              meter: "Meter | None" = None) -> dict:
     client, resolved_provider = _client(judge_model, judge_provider)
     rubric = "\n".join(
         f"- {rid}: {r['requirement']}\n  verification: {r['verification']}"
@@ -974,9 +1102,11 @@ def judge_run(task: dict, run: dict, *, judge_model: str, judge_provider: str) -
     verdicts, last_error = None, ""
     for attempt in range(3):
         try:
-            resp = _create_with_retry(client, model=judge_model,
-                                      messages=[{"role": "user", "content": prompt}],
-                                      max_completion_tokens=8000)
+            resp, _ = metered(client, meter, "rubric_judge",
+                              provider=resolved_provider,
+                              model=judge_model,
+                              messages=[{"role": "user", "content": prompt}],
+                              max_completion_tokens=8000)
             parsed = extract_json(resp.choices[0].message.content or "")
         except Exception as exc:
             last_error = f"{type(exc).__name__}: {exc}"
@@ -1145,7 +1275,15 @@ def main() -> None:
                     help="auditable matched-pair execution order supplied by the planner")
     ap.add_argument("--pair-position", type=int, choices=(1, 2),
                     help="this arm's 1-based position within --pair-order")
-    ap.add_argument("--model", default="gpt-5.6-terra", help="the CUA doing the work")
+    ap.add_argument("--setting", default="",
+                    help="experiment setting label, e.g. s1 (group personas) or "
+                         "s2 (one-dimension ablation). Results are stored under "
+                         "it and it is recorded in every result, so the two "
+                         "settings never share a directory or a report row")
+    ap.add_argument("--model", default="gpt-5.6-terra",
+                    help="the CUA doing the work: a key from odyssey/models.json "
+                         "(preferring Azure when that model is deployed there) or "
+                         "a raw provider id")
     ap.add_argument("--provider", default="openai",
                     help="override routing for --model, e.g. openrouter for a "
                          "qwen id served somewhere other than DashScope")
@@ -1255,6 +1393,13 @@ def main() -> None:
                   f"{len(task['confirmed_task'].split())}) ===\n{user.opening}")
         return
 
+    # A registry key becomes a concrete id plus the cheapest provider that
+    # serves it; a raw id passes through untouched.
+    args.model, args.provider = model_registry.resolve(args.model, args.provider)
+    args.persona_model, args.persona_provider = model_registry.resolve(
+        args.persona_model, args.persona_provider)
+    args.judge_model, judge_provider = model_registry.resolve(
+        args.judge_model, judge_provider)
     resolved_agent_provider = _resolved_provider(args.model, args.provider)
     resolved_persona_provider = _resolved_provider(
         args.persona_model, args.persona_provider
@@ -1264,6 +1409,7 @@ def main() -> None:
         str(Path(profile_dir).expanduser().resolve()).encode("utf-8")
     ).hexdigest()
     base_run_config = {
+        "setting": args.setting or None,
         "persona": args.persona,
         "replicate_id": args.replicate_id,
         "pair_order": args.pair_order,
@@ -1347,9 +1493,8 @@ def main() -> None:
         resume_config_hash = task_router.canonical_sha256(resume_config)
         # v2 paths are namespaced by suite and use the full ID.  Also inspect
         # the old short-ID cell so --skip-existing remains useful after upgrade.
-        cell = (
-            Path(args.out) / selected_suite.suite_id / task["task_id"] / task_hash
-        )
+        results_root = Path(args.out) / args.setting if args.setting else Path(args.out)
+        cell = results_root / selected_suite.suite_id / task["task_id"] / task_hash
         legacy_cell = Path(args.out) / task["task_id"][:12]
         candidate_dirs = list(cell.glob(f"{args.persona}__{safe_model}__*"))
         candidate_dirs += list(legacy_cell.glob(f"{args.persona}__{safe_model}__*"))
@@ -1375,15 +1520,18 @@ def main() -> None:
               f"[{task['level']}] persona={args.persona} "
               f"model={args.model} ===")
 
+        meter = Meter()
+        cell_started = time.monotonic()
         try:
             user = PersonaUser(task, None if args.persona == "none" else persona_path,
                                args.persona_model, args.persona_provider,
                                temperature=args.temperature,
-                               opening_cache=opening_cache)
+                               opening_cache=opening_cache, meter=meter)
             print(f"  user says: {user.opening[:300]!r}", flush=True)
             run = run_agent(task, user, args.model, max_steps=args.max_steps,
                             headless=args.headless, temperature=args.temperature,
-                            profile_dir=profile_dir, provider=args.provider)
+                            profile_dir=profile_dir, provider=args.provider,
+                            meter=meter)
         except Exception as exc:  # a dead task must not take the grid with it
             had_failures = True
             print(f"FAILED: {type(exc).__name__}: {exc}")
@@ -1402,10 +1550,25 @@ def main() -> None:
             "run_config_sha256": run_config_hash,
             "resume_config": resume_config,
             "resume_config_sha256": resume_config_hash,
+            "setting": args.setting or None,
             "persona": args.persona,
             "replicate_id": args.replicate_id,
             "run": run,
         }
+
+        def seal_accounting() -> None:
+            """Cost and clock for the whole cell, judge included.
+
+            A paper has to state what a setting cost and how long it took; this
+            is the only place that knows, because the persona, the agent and the
+            judge all bill into one meter.
+            """
+            record["accounting"] = {
+                "cell_wall_seconds": round(time.monotonic() - cell_started, 3),
+                "calls": meter.calls,
+                **meter.totals(),
+            }
+
         if run["stop_reason"] == "no_model_output":
             had_failures = True
             # Not a result. Leave it unscored so a resume retries the cell.
@@ -1416,6 +1579,7 @@ def main() -> None:
                 "total": len(task["rubrics"]),
                 "score": None,
             }
+            seal_accounting()
             (out_dir / "result.json").write_text(
                 json.dumps(record, ensure_ascii=False, indent=2), encoding="utf-8")
             print(f"UNSCORED: model returned no output -> {out_dir / 'result.json'}")
@@ -1423,7 +1587,8 @@ def main() -> None:
         if not args.no_judge:
             try:
                 record["judgement"] = judge_run(task, run, judge_model=args.judge_model,
-                                                judge_provider=judge_provider)
+                                                judge_provider=judge_provider,
+                                                meter=meter)
             except Exception as exc:  # never lose a completed browse to the judge
                 record["judgement"] = {"error": f"{type(exc).__name__}: {exc}",
                                        "verdicts": {}, "met": None,
@@ -1439,8 +1604,13 @@ def main() -> None:
                       f"-> score on those {j['score_communicated']}  "
                       f"(steps {run['steps']}, asked {(len(run['conversation']) - 1) // 2}, "
                       f"stop={run['stop_reason']})")
+        seal_accounting()
         (out_dir / "result.json").write_text(
             json.dumps(record, ensure_ascii=False, indent=2), encoding="utf-8")
+        acct = record["accounting"]
+        print(f"   cost ${acct['cost_usd']:.4f}  "
+              f"tokens {acct['prompt_tokens']}/{acct['completion_tokens']}  "
+              f"wall {acct['cell_wall_seconds']:.0f}s")
         print(f"-> {out_dir / 'result.json'}")
     if had_failures:
         raise SystemExit(1)

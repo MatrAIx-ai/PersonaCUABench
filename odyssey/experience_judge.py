@@ -67,8 +67,9 @@ def score_once(prompt: str, model: str, provider: str = "") -> dict:
     client, resolved_provider = odyssey._client(model, provider)
     for attempt in range(3):
         try:
-            resp = odyssey._create_with_retry(
-                client, model=model, messages=[{"role": "user", "content": prompt}],
+            resp, _ = odyssey.metered(
+                client, meter, "experience_judge", provider=resolved,
+                model=model, messages=[{"role": "user", "content": prompt}],
                 max_completion_tokens=4000)
             parsed = odyssey.extract_json(resp.choices[0].message.content or "")
         except Exception as exc:

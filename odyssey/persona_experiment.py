@@ -1,7 +1,9 @@
 """Validation and generation helpers for controlled persona experiments.
 
 The task suite owns the experiment protocol.  A protocol selects three to six
-observable MatrAIx dimensions and creates one matched pair per dimension.  The
+observable MatrAIx dimensions and creates one matched pair per dimension -- or
+more, up to ``HARD_MAX_PAIRS``, when it declares ``design.max_axes``, which an
+ablation over many dimensions needs and a scenario study does not.  The
 two arms of a pair are generated from the same baseline and therefore differ
 in exactly one value.
 """
@@ -25,7 +27,11 @@ REPO_ROOT = HERE.parent
 DEFAULT_SCHEMA_PATH = HERE / "dimensions.json"
 PROTOCOL_SCHEMA = "personacuabench.matched-pair.v1"
 MIN_PAIRS = 3
+# The scenario default stays the documented 6-12 persona rule. A protocol that
+# is an ablation across many dimensions raises it with design.max_axes; the hard
+# ceiling only exists so a typo cannot ask for hundreds of profiles.
 MAX_PAIRS = 6
+HARD_MAX_PAIRS = 20
 ARMS = ("positive", "negative")
 
 
@@ -81,7 +87,7 @@ def validate_protocol(
     task_ids: list[str],
     expected_suite_id: str | None = None,
 ) -> dict[str, Any]:
-    """Validate the generic 6–12-persona contract and its task matrix."""
+    """Validate the generic matched-pair persona contract and its task matrix."""
     if not isinstance(protocol, dict):
         raise ExperimentDefinitionError("protocol must contain an object")
     if protocol.get("schema_version") != PROTOCOL_SCHEMA:
@@ -122,10 +128,17 @@ def validate_protocol(
         raise ExperimentDefinitionError("per_arm_scale must define 0, 1, and 2")
 
     axes = protocol.get("axes")
-    if not isinstance(axes, list) or not MIN_PAIRS <= len(axes) <= MAX_PAIRS:
+    declared_max = (protocol.get("design") or {}).get("max_axes", MAX_PAIRS)
+    if (isinstance(declared_max, bool) or not isinstance(declared_max, int)
+            or not MIN_PAIRS <= declared_max <= HARD_MAX_PAIRS):
         raise ExperimentDefinitionError(
-            f"axes must contain {MIN_PAIRS}–{MAX_PAIRS} entries "
-            f"({MIN_PAIRS * 2}–{MAX_PAIRS * 2} personas)"
+            f"design/max_axes must be an integer {MIN_PAIRS}–{HARD_MAX_PAIRS}"
+        )
+    if not isinstance(axes, list) or not MIN_PAIRS <= len(axes) <= declared_max:
+        raise ExperimentDefinitionError(
+            f"axes must contain {MIN_PAIRS}–{declared_max} entries "
+            f"({MIN_PAIRS * 2}–{declared_max * 2} personas); raise "
+            f"design.max_axes (at most {HARD_MAX_PAIRS}) for a wider ablation"
         )
     design = protocol.get("design")
     if not isinstance(design, dict):
