@@ -11,6 +11,7 @@
 # so an interrupted night resumes by running this again.
 #
 #   SETTING=s1 MODELS="glm-5.3" bash odyssey/run_all.sh
+#   SETTING=s1 MODELS=terra JOBS=4 bash odyssey/run_all.sh     # four cells at once
 #   SETTING=s2 MODELS="glm-5.3 minimax-m3" bash odyssey/run_all.sh
 #   SETTING=s1 MODELS=terra REPLICATES="r1" bash odyssey/run_all.sh
 #   DRY_RUN=1 SETTING=s2 MODELS=terra bash odyssey/run_all.sh   # plan only, no spend
@@ -29,6 +30,9 @@ REPLICATES="${REPLICATES:-r1 r2 r3}"
 # the protocol and selected by run_matched_pairs.py, so PERSONAS is unused there.
 PERSONAS="${PERSONAS:-none travel-expert elderly-novice budget-student non-native-speaker}"
 PY="${PY:-python}"
+# Setting 1 fans out: one Chrome per worker, ~1.5 GB of RAM each. Setting 2 stays
+# serial -- a matched pair's two arms must not race for the same profile.
+JOBS="${JOBS:-1}"
 DRY_RUN="${DRY_RUN:-}"
 RESULTS="odyssey/results/$SETTING"
 mkdir -p logs
@@ -47,7 +51,7 @@ for model in $MODELS; do
   say "$SETTING  model=$model"
   if [[ "$SETTING" == s1 ]]; then
     # Every persona x every task, one process per cell.
-    if ! PERSONAS="$PERSONAS" TASK_SUITE="$SUITE" PYTHON_BIN="$PY" \
+    if ! PERSONAS="$PERSONAS" TASK_SUITE="$SUITE" PYTHON_BIN="$PY" JOBS="$JOBS" \
          run bash odyssey/run_grid.sh --setting "$SETTING" --model "$model" \
            --headless >> "logs/$tag.log" 2>&1; then
       failed="$failed $SETTING/$model"
