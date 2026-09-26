@@ -219,6 +219,18 @@ Gemini 4 Pro is in the registry as `gemini-pro` pointing at Gemini 3.1 Pro:
 Google confirmed Gemini 4 is training but has shipped no model, id or price.
 Repoint that one entry when it exists.
 
+**Prompt caching is on.** Every step resends the transcript, so the cacheable
+prefix is most of the bill. Anthropic and Qwen only cache what an explicit
+breakpoint marks, so those runs carry `cache_control` on the system prompt and
+the newest few turns (four breakpoints, Anthropic's limit); the rest of the
+providers cache on their own. A provider that rejects a breakpoint gets one
+plain retry and is never marked again in that process, so a caching optimisation
+cannot lose hours of browsing. Measured second-call cost on a repeated prefix,
+2026-09-26: Opus 5.5 0.10x, GPT 6 Astra 0.09x, Kimi K3 0.12x, Grok 4.7 0.30x;
+Gemini 3.1 Pro, GLM 5.3, MiniMax M3 and Qwen reported no cached tokens at all.
+Those factors live in `models.json` as `cache_read_multiplier` and feed
+`models.py --estimate`, which prices a plan both ways.
+
 **Every run records its own bill and clock.** `result.json` carries
 `accounting`: one entry per model call (role, model, provider, tokens, cached
 tokens, dollars, milliseconds) plus per-role and per-cell totals, and

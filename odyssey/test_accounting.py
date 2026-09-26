@@ -123,6 +123,69 @@ def cell_record(setting, model, task, cost, judge_cost, wall, steps=10):
     }
 
 
+def check_cache_marking() -> None:
+    """Breakpoints go on the prefix providers can cache, and never accumulate."""
+    history = [
+        {"role": "system", "content": "rules"},
+        {"role": "user", "content": "help me"},
+        {"role": "assistant", "content": None, "tool_calls": [{"id": "1"}]},
+        {"role": "tool", "tool_call_id": "1", "content": "page one"},
+        {"role": "assistant", "content": None, "tool_calls": [{"id": "2"}]},
+        {"role": "tool", "tool_call_id": "2", "content": "page two"},
+    ]
+    # A provider that caches on its own is left completely alone.
+    assert R.cache_marked(history, "z-ai/glm-5.3") is history
+
+    marked = R.cache_marked(history, "anthropic/claude-opus-5.5")
+    breaks = [i for i, m in enumerate(marked) if isinstance(m["content"], list)]
+    assert 0 in breaks, "the system prompt is always a breakpoint"
+    assert len(breaks) <= R.CACHE_MAX_BREAKPOINTS, breaks
+    assert 5 in breaks, "the newest tool result must be a breakpoint"
+    part = marked[5]["content"][0]
+    assert part == {"type": "text", "text": "page two",
+                    "cache_control": {"type": "ephemeral", "ttl": R.CACHE_TTL}}
+    # The originals keep plain strings, so a later step does not double-mark.
+    assert all(isinstance(m["content"], (str, type(None))) for m in history)
+    # An assistant turn with no text is skipped rather than marked empty.
+    assert all(marked[i]["content"] is None for i in (2, 4))
+    # Stripping is the inverse, for the retry after a provider refuses.
+    assert R._strip_cache_control(marked)[5]["content"] == "page two"
+
+    # A refusal disables marking for that model only, for the rest of the run.
+    R._cache_refused.add("anthropic/claude-opus-5.5")
+    try:
+        assert R.cache_marked(history, "anthropic/claude-opus-5.5") is history
+        assert R.needs_explicit_cache("qwen/qwen3.8-27b")
+    finally:
+        R._cache_refused.discard("anthropic/claude-opus-5.5")
+
+
+def check_cache_retry() -> None:
+    """A provider that rejects cache_control gets one plain retry, not a crash."""
+    seen = []
+
+    class Picky:
+        class chat:
+            class completions:
+                @staticmethod
+                def create(**kwargs):
+                    seen.append(kwargs["messages"])
+                    if isinstance(kwargs["messages"][0]["content"], list):
+                        raise ValueError("cache_control is not supported here")
+                    return fake_response(cost=0.01)
+
+    messages = R.cache_marked([{"role": "system", "content": "rules"}],
+                              "anthropic/claude-opus-5.5")
+    R._cache_refused.discard("anthropic/claude-opus-5.5")
+    resp, call = R.metered(Picky(), R.Meter(), "agent", provider="openrouter",
+                           model="anthropic/claude-opus-5.5", messages=messages)
+    assert len(seen) == 2, seen
+    assert seen[1][0]["content"] == "rules"
+    assert call["cost_usd"] == 0.01
+    assert "anthropic/claude-opus-5.5" in R._cache_refused
+    R._cache_refused.discard("anthropic/claude-opus-5.5")
+
+
 def check_cost_report() -> None:
     with tempfile.TemporaryDirectory() as tmp:
         root = Path(tmp)
@@ -172,6 +235,8 @@ def main() -> None:
     check_registry()
     check_meter()
     check_metered_call()
+    check_cache_marking()
+    check_cache_retry()
     check_cost_report()
     print("accounting self-check OK")
 

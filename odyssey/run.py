@@ -526,6 +526,67 @@ def _create_with_retry(client, *, attempts: int = 5, **kwargs):
             time.sleep(delay)
 
 
+# Prompt caching. Most providers cache a repeated prefix on their own -- OpenAI,
+# Grok, Moonshot, DeepSeek, Z.AI and Gemini 2.5+ need nothing from us. Anthropic
+# and Qwen only cache what an explicit breakpoint marks, and this loop is the
+# worst case for that: every step resends the whole history, so the prefix that
+# could be cached is nearly the entire bill.
+CACHE_EXPLICIT_PREFIXES = ("anthropic/", "qwen/", "google/gemini-1", "google/gemini-2.0")
+CACHE_TTL = "1h"                  # long enough to span one cell's browsing
+CACHE_MAX_BREAKPOINTS = 4         # Anthropic's hard limit
+# Models that answered "no" once: never marked again in this process.
+_cache_refused: set[str] = set()
+
+
+def needs_explicit_cache(model: str) -> bool:
+    return (model.startswith(CACHE_EXPLICIT_PREFIXES)
+            and model not in _cache_refused)
+
+
+def cache_marked(messages: list[dict], model: str) -> list[dict]:
+    """A copy of the messages with cache breakpoints, for providers needing them.
+
+    The breakpoints are the system prompt plus the newest few cacheable turns:
+    a provider caches the prefix up to a breakpoint, so keeping one near the end
+    is what makes step N reuse the work of step N-1 instead of paying for the
+    whole transcript again. The originals keep plain string content, so nothing
+    accumulates markers across steps.
+    """
+    if not needs_explicit_cache(model):
+        return messages
+    marks = [0] if messages else []
+    for index in range(len(messages) - 1, 0, -1):
+        if len(marks) >= CACHE_MAX_BREAKPOINTS:
+            break
+        if messages[index].get("role") in ("user", "tool", "system"):
+            marks.append(index)
+    marked = list(messages)
+    for index in marks:
+        message = dict(marked[index])
+        content = message.get("content")
+        if not isinstance(content, str) or not content:
+            continue          # nothing to attach a breakpoint to
+        message["content"] = [{
+            "type": "text", "text": content,
+            "cache_control": {"type": "ephemeral", "ttl": CACHE_TTL},
+        }]
+        marked[index] = message
+    return marked
+
+
+def _strip_cache_control(messages):
+    """The same messages with every breakpoint removed, for a retry."""
+    plain = []
+    for message in messages or []:
+        content = message.get("content")
+        if isinstance(content, list):
+            text = "".join(part.get("text", "") for part in content
+                           if isinstance(part, dict))
+            message = {**message, "content": text}
+        plain.append(message)
+    return plain
+
+
 class Meter:
     """Every model call one cell made: role, tokens, dollars, wall time.
 
@@ -558,7 +619,12 @@ class Meter:
             "role": role, "model": model, "provider": provider,
             "ms": round(ms), "prompt_tokens": prompt_tokens,
             "completion_tokens": completion_tokens,
+            # What the cache actually did on this call: read tokens, written
+            # tokens and the discount the provider granted. Without these a
+            # caching change cannot be shown to have worked.
             "cached_prompt_tokens": getattr(details, "cached_tokens", None),
+            "cache_write_tokens": getattr(details, "cache_write_tokens", None),
+            "cache_discount": getattr(usage, "cache_discount", None),
             "cost_usd": cost, "cost_source": source,
         }
         self.calls.append(call)
@@ -613,7 +679,20 @@ def metered(client, meter: Meter | None, role: str, *, provider: str, **kwargs):
         body.setdefault("usage", {"include": True})
         kwargs["extra_body"] = body
     started = time.monotonic()
-    resp = _create_with_retry(client, **kwargs)
+    try:
+        resp = _create_with_retry(client, **kwargs)
+    except Exception as exc:
+        # An undocumented provider may refuse cache_control. Losing hours of
+        # browsing to a caching optimisation is not a trade worth making, so the
+        # turn is retried plain and this model is never marked again.
+        if "cache_control" not in str(exc) or not kwargs.get("messages"):
+            raise
+        model_name = str(kwargs.get("model", ""))
+        _cache_refused.add(model_name)
+        print(f"  [{model_name} rejected cache_control: {exc}] "
+              f"retrying without prompt caching", flush=True)
+        kwargs["messages"] = _strip_cache_control(kwargs["messages"])
+        resp = _create_with_retry(client, **kwargs)
     elapsed_ms = (time.monotonic() - started) * 1000
     call = None
     if meter is not None:
@@ -928,7 +1007,8 @@ class PersonaUser:
         self.messages.append({"role": "user", "content": prompt})
         resp, _ = metered(self.client, self.meter, "persona",
                           provider=self.provider, model=self.model,
-                          messages=self.messages, temperature=self.temperature)
+                          messages=cache_marked(self.messages, self.model),
+                          temperature=self.temperature)
         text = (resp.choices[0].message.content or "").strip()
         self.messages.append({"role": "assistant", "content": text})
         return text
@@ -974,7 +1054,7 @@ def run_agent(task: dict, user: PersonaUser, model: str, *, max_steps: int,
         for step in range(max_steps):
             resp, call = metered(
                 client, meter, "agent", provider=provider,
-                model=model, messages=messages, tools=TOOLS,
+                model=model, messages=cache_marked(messages, model), tools=TOOLS,
                 temperature=temperature)
             msg = resp.choices[0].message
             # The whole response, reasoning and tool calls included: a provider
@@ -1047,7 +1127,8 @@ def run_agent(task: dict, user: PersonaUser, model: str, *, max_steps: int,
             try:
                 final, summary_call = metered(
                     client, meter, "agent_summary", provider=provider,
-                    model=model, messages=messages, temperature=temperature)
+                    model=model, messages=cache_marked(messages, model),
+                    temperature=temperature)
                 turns.append({"step": len(turns), "kind": "agent_summary",
                               "response": dump_response(final),
                               "call": summary_call})
@@ -1068,7 +1149,10 @@ def run_agent(task: dict, user: PersonaUser, model: str, *, max_steps: int,
                        "wall_seconds": round(time.monotonic() - started, 3),
                        "model_ms": sum((t["call"] or {}).get("ms", 0) for t in turns)},
             "arm": {"model": model, "provider": provider,
-                    "backend": _provider_backend(provider), "temperature": temperature}}
+                    "backend": _provider_backend(provider), "temperature": temperature,
+                    "prompt_cache": ("explicit_breakpoints"
+                                     if needs_explicit_cache(model)
+                                     else "provider_automatic")}}
 
 
 # --------------------------------------------------------------------------- #

@@ -22,6 +22,9 @@ MODELS: dict[str, dict] = REGISTRY["models"]
 # history every step, so input dominates and output barely moves the bill.
 CELL_INPUT_TOKENS = 600_000
 CELL_OUTPUT_TOKENS = 15_000
+# Of that input, the part a cache can never cover: the new page text each step
+# adds. The rest is the transcript resent unchanged, which is what gets cached.
+CELL_UNCACHED_INPUT_TOKENS = 85_000
 
 
 def azure_configured() -> bool:
@@ -55,6 +58,29 @@ def price_for(model_id: str) -> dict | None:
         if model_id in (entry.get("azure"), entry.get("openrouter")):
             return entry["price"]
     return None
+
+
+def cell_cost(key: str, *, cached: bool = False) -> float | None:
+    """What one cell of browsing costs on this model, with or without caching.
+
+    Caching only helps the resent transcript, so the estimate prices the new
+    tokens at full rate and the rest at the measured cache-read multiplier --
+    a single-call "97% cheaper" number would overstate a whole cell badly.
+    """
+    entry = MODELS.get(key)
+    if entry is None:
+        return None
+    model_id, provider = resolve(key)
+    if provider == "openai" and entry.get("azure"):
+        return 0.0                      # the collaborator's endpoint
+    price = entry["price"]
+    multiplier = entry.get("cache_read_multiplier")
+    if not cached or multiplier is None:
+        multiplier = 1.0
+    cacheable = max(CELL_INPUT_TOKENS - CELL_UNCACHED_INPUT_TOKENS, 0)
+    input_tokens = cacheable * multiplier + CELL_UNCACHED_INPUT_TOKENS
+    return round(input_tokens / 1e6 * price["in"]
+                 + CELL_OUTPUT_TOKENS / 1e6 * price["out"], 6)
 
 
 def cost_of(model_id: str, prompt_tokens: int, completion_tokens: int) -> float | None:
@@ -102,18 +128,24 @@ def _probe() -> None:
 
 def _estimate(cells: int) -> None:
     print(f"estimated cost of {cells} cells per model "
-          f"({CELL_INPUT_TOKENS/1e6:.1f}M in + {CELL_OUTPUT_TOKENS/1e3:.0f}k out each)\n")
-    total = 0.0
-    print(f"{'key':<16}{'resolves to':<40}{'provider':<12}{'per cell':>10}{'total':>12}")
-    for name in MODELS:
-        model_id, provider = resolve(name)
-        per_cell = cost_of(model_id, CELL_INPUT_TOKENS, CELL_OUTPUT_TOKENS) or 0.0
-        if provider == "openai":
-            per_cell = 0.0                # the collaborator's Azure endpoint
-        total += per_cell * cells
-        print(f"{name:<16}{model_id:<40}{provider:<12}"
-              f"{per_cell:>10.2f}{per_cell * cells:>12.2f}")
-    print(f"\n{'':<68}{'all models':>10}{total:>12.2f}")
+          f"({CELL_INPUT_TOKENS/1e6:.1f}M in + {CELL_OUTPUT_TOKENS/1e3:.0f}k out each, "
+          f"{CELL_UNCACHED_INPUT_TOKENS/1e3:.0f}k of the input uncacheable)\n")
+    plain_total = cached_total = 0.0
+    print(f"{'key':<16}{'provider':<12}{'per cell':>10}{'cached':>9}"
+          f"{'total':>11}{'cached total':>14}  cache")
+    for name, entry in MODELS.items():
+        _, provider = resolve(name)
+        plain = cell_cost(name) or 0.0
+        cached = cell_cost(name, cached=True) or 0.0
+        plain_total += plain * cells
+        cached_total += cached * cells
+        mult = entry.get("cache_read_multiplier")
+        tag = "unmeasured" if mult is None else (
+            "none" if mult >= 1.0 else f"{mult:.2f}x reads")
+        print(f"{name:<16}{provider:<12}{plain:>10.2f}{cached:>9.2f}"
+              f"{plain * cells:>11.2f}{cached * cells:>14.2f}  {tag}")
+    print(f"\n{'all models':<16}{'':<12}{'':>10}{'':>9}"
+          f"{plain_total:>11.2f}{cached_total:>14.2f}")
 
 
 def main() -> None:
