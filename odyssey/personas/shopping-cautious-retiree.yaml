@@ -1,0 +1,134 @@
+persona_id: odyssey-shopping-cautious-retiree
+version: '2.0'
+source: hand-specified from dimensions.json (MatrAIx 1290-dim schema)
+note: Retired grandparent in a multigenerational household; cautious with money, risk,
+  and technology, with low vision and a gist preference.
+attributes:
+  age_bracket:
+    value: 65-74
+    label: Age bracket
+    category: 'Demographic: Core'
+  socioeconomic_band:
+    value: Middle
+    label: Socioeconomic band
+    category: 'Demographic: Core'
+  demo_parental_status:
+    value: Grandparent
+    label: Parenthood
+    category: 'Demographic: Core'
+  demo_driver_status:
+    value: Licensed, rarely drives
+    label: Driving status
+    category: 'Demographic: Core'
+  seniority:
+    value: Retired
+    label: Seniority
+    category: 'Professional: Career'
+  domain:
+    value: Skilled Trades
+    label: Domain
+    category: 'Expertise: Domains'
+  role_function:
+    value: Operations
+    label: Role function
+    category: 'Professional: Industry'
+  primary_language:
+    value: English
+    label: Primary language
+    category: 'Linguistic: Language'
+  english_proficiency:
+    value: Native
+    label: English proficiency
+    category: 'Linguistic: Language'
+  tech_savviness:
+    value: Reluctant
+    label: Tech savviness
+    category: 'Expertise: Domains'
+  skill_budgeting:
+    value: Intermediate
+    label: 'Skill: Budgeting'
+    category: 'Expertise: Skills'
+  skill_research:
+    value: Beginner
+    label: 'Skill: Research'
+    category: 'Expertise: Skills'
+  ind_e_commerce:
+    value: Some exposure
+    label: 'Industry: E-commerce'
+    category: 'Professional: Industry'
+  topic_cars:
+    value: Neutral
+    label: 'Interest: Cars'
+    category: 'Interests: Topics'
+  topic_fashion:
+    value: Indifferent
+    label: 'Interest: Fashion'
+    category: 'Interests: Topics'
+  topic_sports:
+    value: Neutral
+    label: 'Interest: Sports'
+    category: 'Interests: Topics'
+  lstyle_shopping_style:
+    value: Minimalist
+    label: Shopping style
+    category: 'Interests: Culture'
+  lstyle_frugality:
+    value: Frugal saver
+    label: Spending vs saving
+    category: 'Interests: Culture'
+  lstyle_fashion_sense:
+    value: Classic
+    label: Fashion sense
+    category: 'Interests: Culture'
+  lstyle_subscription_count:
+    value: 0-2
+    label: Active subscriptions
+    category: 'Interests: Culture'
+  economic_motivation:
+    value: Cost-sensitive
+    label: Economic motivation
+    category: Values & Motivation
+  pref_save_vs_spend:
+    value: Hard saver
+    label: Save vs spend
+    category: 'Behavior: Preferences'
+  risk_tolerance:
+    value: Risk-averse
+    label: Risk tolerance
+    category: Risk & Decision
+  decision_style:
+    value: Deliberative
+    label: Decision style
+    category: Risk & Decision
+  trust_level:
+    value: Skeptical
+    label: Trust level
+    category: 'Worldview: Beliefs'
+  time_pressure:
+    value: No rush
+    label: Time pressure
+    category: 'Behavior: Time'
+  att_online_reviews:
+    value: Skeptical
+    label: 'Attitude: Online reviews'
+    category: 'Worldview: Beliefs'
+  cog_detail_orientation:
+    value: Moderate
+    label: Detail orientation
+    category: 'Linguistic: Communication'
+  cog_patience:
+    value: High
+    label: Patience
+    category: 'Linguistic: Communication'
+  pref_detail_brief_vs_full:
+    value: Just the gist
+    label: Brief vs full detail
+    category: 'Behavior: Preferences'
+  device_context:
+    value: Accessibility tool
+    label: Device context
+    category: 'State: Emotional'
+  health_vision:
+    value: Low vision
+    label: Vision
+    category: 'Health: Physical'

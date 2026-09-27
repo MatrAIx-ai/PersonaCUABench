@@ -1,0 +1,134 @@
+persona_id: odyssey-shopping-premium-researcher
+version: '2.0'
+source: hand-specified from dimensions.json (MatrAIx 1290-dim schema)
+note: Affluent parent and e-commerce research director who is highly analytical, detail-oriented,
+  evidence-seeking, and quality-first.
+attributes:
+  age_bracket:
+    value: 45-54
+    label: Age bracket
+    category: 'Demographic: Core'
+  socioeconomic_band:
+    value: High income
+    label: Socioeconomic band
+    category: 'Demographic: Core'
+  demo_parental_status:
+    value: Parent of adults
+    label: Parenthood
+    category: 'Demographic: Core'
+  demo_driver_status:
+    value: Daily driver
+    label: Driving status
+    category: 'Demographic: Core'
+  seniority:
+    value: Director
+    label: Seniority
+    category: 'Professional: Career'
+  domain:
+    value: Business & Management
+    label: Domain
+    category: 'Expertise: Domains'
+  role_function:
+    value: Research
+    label: Role function
+    category: 'Professional: Industry'
+  primary_language:
+    value: English
+    label: Primary language
+    category: 'Linguistic: Language'
+  english_proficiency:
+    value: Native
+    label: English proficiency
+    category: 'Linguistic: Language'
+  tech_savviness:
+    value: Digital native
+    label: Tech savviness
+    category: 'Expertise: Domains'
+  skill_budgeting:
+    value: Master
+    label: 'Skill: Budgeting'
+    category: 'Expertise: Skills'
+  skill_research:
+    value: Master
+    label: 'Skill: Research'
+    category: 'Expertise: Skills'
+  ind_e_commerce:
+    value: Veteran
+    label: 'Industry: E-commerce'
+    category: 'Professional: Industry'
+  topic_cars:
+    value: Passionate
+    label: 'Interest: Cars'
+    category: 'Interests: Topics'
+  topic_fashion:
+    value: Passionate
+    label: 'Interest: Fashion'
+    category: 'Interests: Topics'
+  topic_sports:
+    value: Interested
+    label: 'Interest: Sports'
+    category: 'Interests: Topics'
+  lstyle_shopping_style:
+    value: Researcher
+    label: Shopping style
+    category: 'Interests: Culture'
+  lstyle_frugality:
+    value: Spender
+    label: Spending vs saving
+    category: 'Interests: Culture'
+  lstyle_fashion_sense:
+    value: Trend-setter
+    label: Fashion sense
+    category: 'Interests: Culture'
+  lstyle_subscription_count:
+    value: 6-10
+    label: Active subscriptions
+    category: 'Interests: Culture'
+  economic_motivation:
+    value: Premium-seeking
+    label: Economic motivation
+    category: Values & Motivation
+  pref_save_vs_spend:
+    value: Spender-leaning
+    label: Save vs spend
+    category: 'Behavior: Preferences'
+  risk_tolerance:
+    value: Balanced
+    label: Risk tolerance
+    category: Risk & Decision
+  decision_style:
+    value: Analytical
+    label: Decision style
+    category: Risk & Decision
+  trust_level:
+    value: Verifying
+    label: Trust level
+    category: 'Worldview: Beliefs'
+  time_pressure:
+    value: No rush
+    label: Time pressure
+    category: 'Behavior: Time'
+  att_online_reviews:
+    value: Skeptical
+    label: 'Attitude: Online reviews'
+    category: 'Worldview: Beliefs'
+  cog_detail_orientation:
+    value: Very high
+    label: Detail orientation
+    category: 'Linguistic: Communication'
+  cog_patience:
+    value: High
+    label: Patience
+    category: 'Linguistic: Communication'
+  pref_detail_brief_vs_full:
+    value: Every detail
+    label: Brief vs full detail
+    category: 'Behavior: Preferences'
+  device_context:
+    value: Desktop, focused
+    label: Device context
+    category: 'State: Emotional'
+  health_vision:
+    value: Normal
+    label: Vision
+    category: 'Health: Physical'
