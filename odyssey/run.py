@@ -49,6 +49,46 @@ PROVIDERS = {
     "openai": ("OPENAI_API_KEY", None),          # None = the SDK's default endpoint
 }
 
+def provenance() -> dict:
+    """Which code, browser and machine produced a result.
+
+    A score is only reproducible with the commit that computed it, and the
+    browser identity matters as much as the model: the bundled Chromium and a
+    real Chrome are blocked by different sites, which shows up as an agent that
+    "failed" rather than as an environment difference.
+    """
+    import platform
+    import shutil
+
+    def git(*args: str) -> str | None:
+        try:
+            out = subprocess.run(("git", *args), cwd=REPO, capture_output=True,
+                                 text=True, timeout=10)
+        except Exception:
+            return None
+        return out.stdout.strip() or None if out.returncode == 0 else None
+
+    try:                      # the package exposes no __version__ attribute
+        import importlib.metadata
+        playwright_version = importlib.metadata.version("playwright")
+    except Exception:
+        playwright_version = None
+    channel = os.environ.get("CHROME_CHANNEL", "chrome").strip() or None
+    return {
+        "commit": git("rev-parse", "HEAD"),
+        "branch": git("rev-parse", "--abbrev-ref", "HEAD"),
+        # Uncommitted edits mean the commit alone does not describe this run.
+        "dirty": bool(git("status", "--porcelain")),
+        "python": platform.python_version(),
+        "platform": platform.platform(),
+        "hostname": platform.node(),
+        "playwright": playwright_version,
+        "browser": {"channel": None if os.environ.get("CHROME_PATH") else channel,
+                    "executable": os.environ.get("CHROME_PATH") or None,
+                    "user_agent": _browser_user_agent()},
+    }
+
+
 def load_dotenv(path: Path = REPO / ".env") -> None:
     """Read KEY=VALUE lines from the repo .env into the environment.
 
@@ -491,6 +531,9 @@ def extract_json(text: str) -> dict | None:
     return parsed if isinstance(parsed, dict) else None
 
 
+_retries_seen = 0          # provider retries this process has done, ever
+
+
 def _create_with_retry(client, *, attempts: int = 5, **kwargs):
     """One chat call, retrying the transient provider failures.
 
@@ -520,6 +563,8 @@ def _create_with_retry(client, *, attempts: int = 5, **kwargs):
         except retryable as exc:
             if attempt == attempts - 1:
                 raise
+            global _retries_seen
+            _retries_seen += 1
             delay = 5 * 2 ** attempt          # 5, 10, 20, 40s
             print(f"  [{type(exc).__name__}] retrying in {delay}s "
                   f"({attempt + 1}/{attempts - 1})", flush=True)
@@ -620,6 +665,7 @@ class Meter:
             cost = model_registry.cost_of(model, prompt_tokens, completion_tokens)
             source = "registry" if cost is not None else "unknown"
         details = getattr(usage, "prompt_tokens_details", None)
+        completion_details = getattr(usage, "completion_tokens_details", None)
         call = {
             "role": role, "model": model, "provider": provider,
             "ms": round(ms), "prompt_tokens": prompt_tokens,
@@ -630,6 +676,9 @@ class Meter:
             "cached_prompt_tokens": getattr(details, "cached_tokens", None),
             "cache_write_tokens": getattr(details, "cache_write_tokens", None),
             "cache_discount": getattr(usage, "cache_discount", None),
+            # A reasoning model bills thinking as completion tokens, so the
+            # split matters when comparing models on cost per useful answer.
+            "reasoning_tokens": getattr(completion_details, "reasoning_tokens", None),
             "cost_usd": cost, "cost_source": source,
         }
         self.calls.append(call)
@@ -678,6 +727,7 @@ def dump_response(resp) -> dict:
 
 def metered(client, meter: Meter | None, role: str, *, provider: str, **kwargs):
     """One chat call, timed and billed into the meter. Returns (resp, call)."""
+    retries_before = _retries_seen
     if provider == "openrouter":
         # Ask OpenRouter to report the charge for this call.
         body = dict(kwargs.get("extra_body") or {})
@@ -702,6 +752,7 @@ def metered(client, meter: Meter | None, role: str, *, provider: str, **kwargs):
     call = None
     if meter is not None:
         call = meter.add(role, str(kwargs.get("model", "")), provider, resp, elapsed_ms)
+        call["retries"] = _retries_seen - retries_before
     return resp, call
 
 
@@ -1561,6 +1612,7 @@ def main() -> None:
             "rubric_judge": hashlib.sha256(JUDGE_PROMPT.encode("utf-8")).hexdigest(),
         },
     }
+    run_provenance = provenance()
     had_failures = False
     for task in selected_tasks:
         stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
@@ -1652,6 +1704,7 @@ def main() -> None:
             "setting": args.setting or None,
             "persona": args.persona,
             "replicate_id": args.replicate_id,
+            "provenance": run_provenance,
             "run": run,
         }
 
