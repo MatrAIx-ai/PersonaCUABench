@@ -14,10 +14,10 @@
     "return a cost. OpenRouter reports its own cost per call and that number wins;",
     "these are the fallback and the estimate before a run.",
     "",
-    "Gemini 4 Pro is in this file as `gemini-pro` pointing at Gemini 3.1 Pro:",
     "Google has not released a Gemini 4 model, id or price (training confirmed on",
     "the July 2026 earnings call, nothing shipped). Repoint it when it exists.",
-    "cache_read_multiplier: measured 2026-09-26, second-call cost over first-call cost for a repeated prefix. 1.0 means the provider reported no cached tokens. null means it could not be measured; see cache_note."
+    "cache_read_multiplier: measured 2026-09-26, second-call cost over first-call cost for a repeated prefix. 1.0 means the provider reported no cached tokens. null means it could not be measured; see cache_note.",
+    "Gemini is deliberately absent: Google has shipped no Gemini 4 (training confirmed on the July 2026 earnings call, no model card, id or price), and Gemini 3.1 Pro was both the dearest model on the list and the only one that reported no cached tokens. Add an entry when a real id exists."
   ],
   "models": {
     "opus-5.5": {
@@ -52,17 +52,6 @@
       },
       "cache_read_multiplier": null,
       "cache_note": "not measured: OpenRouter returns 403 until the account completes 18+ verification"
-    },
-    "gemini-pro": {
-      "label": "Gemini 3.1 Pro (stand-in for the unreleased Gemini 4 Pro)",
-      "openrouter": "google/gemini-3.1-pro-preview",
-      "azure": null,
-      "price": {
-        "in": 2.0,
-        "out": 12.0
-      },
-      "cache_read_multiplier": 1.0,
-      "cache_note": "no cached tokens reported on a repeat call"
     },
     "kimi-k3": {
       "label": "Kimi K3",
