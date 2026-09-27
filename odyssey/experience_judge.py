@@ -8,12 +8,10 @@ they cannot read, cannot act on, or that ignores what they did say.
 
 Two judges score the same prompt independently. Their scores are never
 averaged: both are kept, and we report how often they land within one point,
-the way the MatrAIx paper does. The default pair is GPT 5.6 Terra and GPT 6
-Astra, both on the collaborator's Azure endpoint and therefore free -- two
-different models, but one vendor, so their agreement is weaker evidence than a
-cross-vendor pair would be. Pass --judge-b for a second vendor when there is
-budget for it (anthropic/claude-opus-4.8 costs about $0.04 a cell, z-ai/glm-5.3
-about $0.0025).
+the way the MatrAIx paper does. The default pair is GPT 5.6 Terra on Azure
+(free) and Claude Opus 4.8 on OpenRouter (about $0.04 a cell): two vendors, so
+an agreement number means something. Both arms on Azure would be free but would
+only show one vendor agreeing with itself.
 
     python odyssey/experience_judge.py                 # every result missing one
     python odyssey/experience_judge.py --redo          # rescore everything
@@ -131,7 +129,7 @@ def main() -> None:
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--results", default=str(HERE / "results"))
     ap.add_argument("--judge-a", default="gpt-5.6-terra")
-    ap.add_argument("--judge-b", default="gpt-6-astra")
+    ap.add_argument("--judge-b", default="anthropic/claude-opus-4.8")
     ap.add_argument("--redo", action="store_true", help="rescore results that already have one")
     ap.add_argument("--print-prompt", action="store_true",
                     help="print the prompt for the first result and exit, no API calls")

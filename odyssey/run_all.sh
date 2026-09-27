@@ -50,13 +50,16 @@ for model in $MODELS; do
   tag="$SETTING-${model//\//-}"
   say "$SETTING  model=$model"
   if [[ "$SETTING" == s1 ]]; then
-    # Every persona x every task, one process per cell.
-    if ! PERSONAS="$PERSONAS" TASK_SUITE="$SUITE" PYTHON_BIN="$PY" JOBS="$JOBS" \
-         run bash odyssey/run_grid.sh --setting "$SETTING" --model "$model" \
-           --headless >> "logs/$tag.log" 2>&1; then
-      failed="$failed $SETTING/$model"
-      say "$model reported failed cells (see logs/$tag.log)"
-    fi
+    # Every persona x every task, one process per cell, once per replicate.
+    for r in $REPLICATES; do
+      say "$SETTING  model=$model  replicate=$r"
+      if ! PERSONAS="$PERSONAS" TASK_SUITE="$SUITE" PYTHON_BIN="$PY" JOBS="$JOBS" \
+           run bash odyssey/run_grid.sh --setting "$SETTING" --model "$model" \
+             --replicate-id "$r" --headless >> "logs/$tag-$r.log" 2>&1; then
+        failed="$failed $SETTING/$model/$r"
+        say "$model $r reported failed cells (see logs/$tag-$r.log)"
+      fi
+    done
   else
     for r in $REPLICATES; do
       say "$SETTING  model=$model  replicate=$r"
