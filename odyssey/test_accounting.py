@@ -99,11 +99,48 @@ def check_metered_call() -> None:
                            model="z-ai/glm-5.3", messages=[])
     assert sent["extra_body"] == {"usage": {"include": True}}
     assert call["cost_usd"] == 0.5 and call["ms"] >= 0
-    # Other providers are called unchanged.
-    sent.clear()
-    R.metered(Client(), meter, "agent", provider="openai", model="gpt-5.6-terra",
-              messages=[])
-    assert "extra_body" not in sent
+    # The openai/Azure provider goes through the Responses API instead, so the
+    # reasoning summary reaches the stored turn; the caller still sees a chat
+    # completion.
+    responses_sent = {}
+
+    class Azure:
+        class responses:
+            @staticmethod
+            def create(**kwargs):
+                responses_sent.update(kwargs)
+                return types.SimpleNamespace(model_dump=lambda exclude_none=False: {
+                    "output": [
+                        {"type": "reasoning",
+                         "summary": [{"type": "summary_text", "text": "weighing options"}]},
+                        {"type": "message",
+                         "content": [{"type": "output_text", "text": "ok"}]}],
+                    "usage": {"input_tokens": 12, "output_tokens": 3,
+                              "output_tokens_details": {"reasoning_tokens": 2}}})
+
+    resp, call = R.metered(Azure(), R.Meter(), "agent", provider="openai",
+                           model="gpt-5.6-terra", messages=[{"role": "user",
+                                                             "content": "hi"}],
+                           tools=R.TOOLS)
+    assert responses_sent["input"] == [{"type": "message", "role": "user",
+                                       "content": [{"type": "input_text",
+                                                    "text": "hi"}]}]
+    assert responses_sent["reasoning"] == {"summary": "auto"}
+    assert responses_sent["tools"][0]["name"] == "open_tab"   # flattened schema
+    assert "extra_body" not in responses_sent
+    assert resp.choices[0].message.content == "ok"
+    assert call["reasoning_tokens"] == 2 and call["prompt_tokens"] == 12
+    assert R.dump_response(resp)["output"][0]["summary"][0]["text"] == "weighing options"
+
+    # --no-responses-api falls back to chat completions on the same provider.
+    R.RESPONSES_API = False
+    try:
+        sent.clear()
+        R.metered(Client(), meter, "agent", provider="openai",
+                  model="gpt-5.6-terra", messages=[])
+        assert "extra_body" not in sent and sent["model"] == "gpt-5.6-terra"
+    finally:
+        R.RESPONSES_API = True
 
 
 def cell_record(setting, model, task, cost, judge_cost, wall, steps=10):

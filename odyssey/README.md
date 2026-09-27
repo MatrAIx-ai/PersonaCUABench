@@ -259,12 +259,14 @@ several scores in earlier runs. Keeping them means Chrome must load images,
 which costs memory, and roughly 1-3 MB of disk per cell; `--no-screenshots`
 turns them off and records that it did.
 
-**Reasoning traces depend on the provider.** OpenRouter models return the chain
-of thought in the message (`reasoning`, `reasoning_details`) and it is stored
-verbatim. Azure/OpenAI chat completions return only a `reasoning_tokens` count,
-no text, so a Terra or Astra run records how much thinking was billed but not
-what it was; getting summaries there would mean moving those calls to the
-Responses API.
+**Reasoning traces are kept where the provider gives them.** OpenRouter models
+return the chain of thought in the message (`reasoning`, `reasoning_details`).
+Azure/OpenAI chat completions return a `reasoning_tokens` count and no text, so
+those calls go through the **Responses API** instead (`odyssey/responses_shim.py`
+converts in both directions; the rest of the pipeline still speaks chat
+completions). Same deployment, same tokens, same tool calling, plus a reasoning
+summary when the model reasoned enough to have one -- a short turn has no
+summary to give. `--no-responses-api` switches back.
 
 **Every step is kept.** `run.turns` holds one entry per model turn with the
 provider's whole response -- content, tool calls, and the reasoning trace when

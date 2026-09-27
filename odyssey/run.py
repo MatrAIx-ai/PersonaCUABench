@@ -39,6 +39,7 @@ REPO = HERE.parent
 sys.path.insert(0, str(HERE))
 
 import models as model_registry  # noqa: E402  (odyssey/models.py)
+import responses_shim  # noqa: E402  (odyssey/responses_shim.py)
 import persona as persona_lib  # noqa: E402  (odyssey/persona.py)
 import task_router  # noqa: E402
 
@@ -561,7 +562,10 @@ def extract_json(text: str) -> dict | None:
 _retries_seen = 0          # provider retries this process has done, ever
 
 
-def _create_with_retry(client, *, attempts: int = 5, **kwargs):
+RESPONSES_API = True       # use the Responses API on the openai/Azure provider
+
+
+def _create_with_retry(client, *, attempts: int = 5, create=None, **kwargs):
     """One chat call, retrying the transient provider failures.
 
     A shared-pool 429 is the normal weather on an aggregated endpoint, and a
@@ -584,9 +588,10 @@ def _create_with_retry(client, *, attempts: int = 5, **kwargs):
 
     retryable = (openai_sdk.RateLimitError, openai_sdk.APIConnectionError,
                  openai_sdk.InternalServerError)
+    call = create or client.chat.completions.create
     for attempt in range(attempts):
         try:
-            return client.chat.completions.create(**kwargs)
+            return call(**kwargs)
         except retryable as exc:
             if attempt == attempts - 1:
                 raise
@@ -755,6 +760,12 @@ def dump_response(resp) -> dict:
 def metered(client, meter: Meter | None, role: str, *, provider: str, **kwargs):
     """One chat call, timed and billed into the meter. Returns (resp, call)."""
     retries_before = _retries_seen
+    if provider == "openai" and RESPONSES_API:
+        # Chat completions on this deployment return a reasoning token count and
+        # no reasoning; the Responses API returns a summary of it for the same
+        # tokens. The shim keeps the caller in chat-completions terms.
+        kwargs["create"] = lambda **call_kwargs: responses_shim.create(
+            client, **call_kwargs)
     if provider == "openrouter":
         # Ask OpenRouter to report the charge for this call.
         body = dict(kwargs.get("extra_body") or {})
@@ -1479,6 +1490,12 @@ def main() -> None:
     ap.add_argument("--max-steps", type=int, default=50)
     # gpt-5.6-terra accepts only its default temperature; 0.7 is rejected.
     ap.add_argument("--temperature", type=float, default=1.0)
+    ap.add_argument("--no-responses-api", action="store_true",
+                    help="call Azure/OpenAI through chat completions instead of "
+                         "the Responses API. The Responses API is the default "
+                         "there because it returns a reasoning summary for the "
+                         "same tokens; this switches back if a deployment "
+                         "misbehaves")
     ap.add_argument("--no-screenshots", action="store_true",
                     help="skip the JPEG per page-changing step and per open tab. "
                          "Screenshots are what let a person tell a captcha wall "
@@ -1506,8 +1523,9 @@ def main() -> None:
     ap.add_argument("--out", default=str(HERE / "results"))
     args = ap.parse_args()
     load_dotenv()
-    global PROMPT_CACHE
+    global PROMPT_CACHE, RESPONSES_API
     PROMPT_CACHE = not args.no_prompt_cache
+    RESPONSES_API = not args.no_responses_api
 
     if args.list_suites:
         print("\n".join(task_router.format_suites(TASK_CATALOG)))
@@ -1605,6 +1623,7 @@ def main() -> None:
         "setting": args.setting or None,
         "prompt_cache": not args.no_prompt_cache,
         "screenshots": not args.no_screenshots,
+        "responses_api": not args.no_responses_api,
         "persona": args.persona,
         "replicate_id": args.replicate_id,
         "pair_order": args.pair_order,
