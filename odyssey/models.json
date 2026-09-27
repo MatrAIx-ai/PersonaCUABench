@@ -34,13 +34,13 @@
     "gpt-6-astra": {
       "label": "GPT 6 Astra",
       "openrouter": "openai/gpt-6-astra",
-      "azure": null,
+      "azure": "gpt-6-astra",
       "price": {
         "in": 10.0,
         "out": 50.0
       },
       "cache_read_multiplier": 0.09,
-      "cache_note": "automatic; $0.1211 -> $0.0105"
+      "cache_note": "automatic; $0.1211 -> $0.0105; deployed on Azure (probed 2026-09-27), so free here"
     },
     "muse-spark-1.1": {
       "label": "Muse Spark 1.1",
