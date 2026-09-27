@@ -46,6 +46,12 @@ def cells(results: Path):
                        for role in JUDGE_ROLES)
         judge_ms += sum((block or {}).get("model_ms", 0) for block in extra)
         agent = {**(by_role.get("agent") or {})}
+        # What the collaborator's Azure endpoint was billed, at list price: not
+        # our money, but the only estimate of what a "free" run really cost.
+        azure_cost = sum((by_role.get(role) or {}).get("list_cost_usd", 0.0)
+                         for role, bucket in by_role.items()
+                         if (bucket or {}).get("cost_usd", 0.0) == 0.0
+                         and (bucket or {}).get("list_cost_usd", 0.0))
         yield {
             "setting": record.get("setting") or "(none)",
             "suite": record.get("suite_id") or "(none)",
@@ -66,6 +72,7 @@ def cells(results: Path):
             "judge_cost": round(judge_cost, 6),
             "total_cost": round((acct.get("cost_usd") or 0.0) + sum(
                 (block or {}).get("cost_usd", 0.0) for block in extra), 6),
+            "azure_cost": round(azure_cost, 6),
             "unpriced_calls": acct.get("unpriced_calls", 0),
             "path": str(path),
         }
@@ -77,10 +84,11 @@ def group(rows: list[dict], key: str) -> dict[str, dict]:
         bucket = out.setdefault(row[key], {
             "cells": 0, "wall_seconds": 0.0, "steps": 0, "prompt_tokens": 0,
             "completion_tokens": 0, "agent_cost": 0.0, "judge_cost": 0.0,
-            "total_cost": 0.0, "unpriced_calls": 0})
+            "total_cost": 0.0, "azure_cost": 0.0, "unpriced_calls": 0})
         bucket["cells"] += 1
         for field in ("wall_seconds", "steps", "prompt_tokens", "completion_tokens",
-                      "agent_cost", "judge_cost", "total_cost", "unpriced_calls"):
+                      "agent_cost", "judge_cost", "total_cost", "azure_cost",
+                      "unpriced_calls"):
             bucket[field] += row[field]
     return out
 
@@ -91,20 +99,26 @@ def table(title: str, grouped: dict[str, dict], label: str) -> None:
     print(f"\n{title}")
     width = max(len(label), max(len(k) for k in grouped)) + 2
     print(f"{label:<{width}}{'cells':>6}{'min/cell':>10}{'steps':>7}"
-          f"{'in tok':>12}{'out tok':>9}{'agent $':>10}{'judge $':>9}{'total $':>10}")
+          f"{'in tok':>12}{'out tok':>9}{'agent $':>10}{'judge $':>9}"
+          f"{'ours $':>9}{'azure $':>10}")
     for name in sorted(grouped):
         b = grouped[name]
         cells_n = b["cells"] or 1
         print(f"{name:<{width}}{b['cells']:>6}{b['wall_seconds'] / cells_n / 60:>10.1f}"
               f"{b['steps'] / cells_n:>7.1f}{b['prompt_tokens']:>12,}"
               f"{b['completion_tokens']:>9,}{b['agent_cost']:>10.2f}"
-              f"{b['judge_cost']:>9.2f}{b['total_cost']:>10.2f}")
+              f"{b['judge_cost']:>9.2f}{b['total_cost']:>9.2f}"
+              f"{b['azure_cost']:>10.2f}")
     totals = {f: sum(b[f] for b in grouped.values())
-              for f in ("cells", "wall_seconds", "agent_cost", "judge_cost", "total_cost")}
+              for f in ("cells", "wall_seconds", "agent_cost", "judge_cost",
+                        "total_cost", "azure_cost")}
     print(f"{'TOTAL':<{width}}{totals['cells']:>6}"
           f"{totals['wall_seconds'] / 3600:>9.1f}h{'':>7}{'':>12}{'':>9}"
           f"{totals['agent_cost']:>10.2f}{totals['judge_cost']:>9.2f}"
-          f"{totals['total_cost']:>10.2f}")
+          f"{totals['total_cost']:>9.2f}{totals['azure_cost']:>10.2f}")
+    if totals["azure_cost"]:
+        print("  'azure $' is the collaborator's endpoint at list price, not our "
+              "spend; 'ours $' is what our own keys were charged")
     unpriced = sum(b["unpriced_calls"] for b in grouped.values())
     if unpriced:
         print(f"  note: {unpriced} model calls had no price (provider reported none "

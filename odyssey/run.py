@@ -691,10 +691,17 @@ class Meter:
         # that beats a list price: it already accounts for the provider it
         # routed to, cache reads and any discount.
         reported = getattr(usage, "cost", None)
-        if isinstance(reported, (int, float)):
+        # What the registry says these tokens are worth at list price. On Azure
+        # that is not our bill -- the endpoint is the collaborator's -- but it is
+        # the only estimate of what the run cost them, so it is kept separately
+        # instead of being folded into ours or thrown away.
+        list_cost = model_registry.cost_of(model, prompt_tokens, completion_tokens)
+        if provider == "openai" and model_registry.azure_configured():
+            cost, source = 0.0, "azure_billed_to_collaborator"
+        elif isinstance(reported, (int, float)):
             cost, source = float(reported), "provider"
         else:
-            cost = model_registry.cost_of(model, prompt_tokens, completion_tokens)
+            cost = list_cost
             source = "registry" if cost is not None else "unknown"
         details = getattr(usage, "prompt_tokens_details", None)
         completion_details = getattr(usage, "completion_tokens_details", None)
@@ -712,6 +719,7 @@ class Meter:
             # split matters when comparing models on cost per useful answer.
             "reasoning_tokens": getattr(completion_details, "reasoning_tokens", None),
             "cost_usd": cost, "cost_source": source,
+            "list_cost_usd": list_cost,
         }
         self.calls.append(call)
         return call
@@ -722,8 +730,11 @@ class Meter:
         for call in self.calls:
             bucket = by_role.setdefault(call["role"], {
                 "calls": 0, "prompt_tokens": 0, "completion_tokens": 0,
-                "ms": 0, "cost_usd": 0.0, "unpriced_calls": 0})
+                "ms": 0, "cost_usd": 0.0, "list_cost_usd": 0.0,
+                "unpriced_calls": 0})
             bucket["calls"] += 1
+            bucket["list_cost_usd"] = round(
+                bucket["list_cost_usd"] + (call.get("list_cost_usd") or 0.0), 6)
             bucket["prompt_tokens"] += call["prompt_tokens"]
             bucket["completion_tokens"] += call["completion_tokens"]
             bucket["ms"] += call["ms"]
@@ -738,6 +749,8 @@ class Meter:
             "completion_tokens": sum(c["completion_tokens"] for c in self.calls),
             "model_ms": sum(c["ms"] for c in self.calls),
             "cost_usd": round(sum(c["cost_usd"] or 0.0 for c in self.calls), 6),
+            "list_cost_usd": round(
+                sum(c.get("list_cost_usd") or 0.0 for c in self.calls), 6),
             "unpriced_calls": sum(c["cost_usd"] is None for c in self.calls),
         }
 
