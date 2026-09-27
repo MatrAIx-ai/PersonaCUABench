@@ -10,7 +10,7 @@
 - Setting 1 采用 **4 个具名 Shopping persona + `none` control**。
 - 不是“一道题只配一个 persona”；而是 **每个 persona 都运行全部 6 道题，每题再运行一次 `none`**。
 - Persona simulator、原始 task judge、person-side experience judge 均固定使用 `GPT 5.6 Terra`。
-- Execution backbone 使用计划中的 9 个模型；准确 provider、deployment/model ID 必须在开跑前写进当日 manifest，不能只记录展示名。
+- Execution backbone 先按计划中的 9 个候选做当日 API 与未修改 tool-loop compatibility preflight；只有通过者进入正式 grid，准确 provider、deployment/model ID 必须写进当日 manifest，不能只记录展示名。2026-09-27 配置的 endpoint 上只有 `gpt-5.6-terra` 通过未修改 main 的完整路径，因此当日 r1–r3 只正式运行 Terra；详见 dated API preflight，这是当日 availability 决策，不改写原始候选列表。
 - Task completion、persona-mediated conversation/communication 和 persona satisfaction 分开报告，不合成一个总分。
 - Setting 1 测量完整画像的 bundle effect；单维度归因留给 Setting 2。
 
@@ -21,7 +21,7 @@
 - 每个 execution backbone：`6 tasks × (4 personas + none) = 30 cells`。
 - 9 个 execution backbone：`30 × 9 = 270 cells / replicate`。
 - 如果以后明确加入第 5 个 persona：`6 × (5 + none) × 9 = 324 cells / replicate`，相对默认设计新增 54 个 cell。
-- 环境失败后的精确重跑和 judge 重试不计入上述计划数。
+- 环境失败后的 environment reattempt 和 judge 重试不计入上述计划数。只有复用该 cell 的实际 persona opening（并记录相同 opening hash）时，才称 frozen-opening re-execution；重新采样 utterance 的运行不是 exact rerun。
 
 ## 1. 对应关系：一个 task 应该对应几个 persona？
 
@@ -428,7 +428,7 @@ main 当前没有 direct persona-fidelity/adherence judge。P1–P5 衡量的是
 - 429、无权限、无效 model ID、不支持 tool call 等 provider 失败；
 - judge failure 与 genuine agent failure。
 
-环境或 provider 阻断的 cell 保存 artifact，但标为 excluded/unscored 并精确重跑，不能转换成 agent 0 分。
+环境或 provider 阻断的 cell 保存 artifact，但标为 excluded/unscored，并在原 replicate 下做 configuration-matched environment reattempt，不能转换成 agent 0 分。独立 formal replicate（例如 r2/r3）不能回填 r1；如果 reattempt 重新采样 persona utterance，它只能记为新的 protocol-matched draw，不能冒充原 cell 的环境修复值。
 
 ## 6. 聚合与报告规则
 
@@ -605,7 +605,7 @@ artifacts/experiments/2026-09-26/shopping-main-setting1-r1/
 
 main 已支持 `--out`，因此可以把 `results/` 直接指向当日目录，无需修改 runner 逻辑。`inputs/` 必须保存实际使用的完整 task 文件、persona YAML、prompts 和 runtime arguments，不能只记 SHA；否则工作树切换后，`experience_judge.py` 会从新的 `odyssey/tasks.json` / `odyssey/personas/` 读取错误输入。
 
-date block 定义为一次 grid/replicate invocation 在 `America/Los_Angeles` 的启动日期，同时在 manifest 中为每个 cell 记录 UTC start/end。main 的单次 `run_grid.sh --out` 不会在跨午夜时自动换目录，因此若必须严格按自然日切开，就在午夜停止并用新日期目录启动下一次 invocation；否则整个 invocation 保留在启动日的 block 中。后续日期重跑写入新的 `attemptNN`，不覆盖原 cell。
+date block 定义为一次 grid/replicate invocation 在 `America/Los_Angeles` 的启动日期，同时在 manifest 中为每个 cell 记录 UTC start/end。main 的单次 `run_grid.sh --out` 不会在跨午夜时自动换目录，因此若必须严格按自然日切开，就在午夜停止并用新日期目录启动下一次 invocation；否则整个 invocation 保留在启动日的 block 中。后续日期的 environment reattempt 写入新的 `attemptNN`，不覆盖原 cell，并记录 origin cell、opening hash 及 opening 是否复用。
 
 `experience_judge.py` 必须在切换工作树输入前完成；需要日后重判时，先在独立 worktree 中 checkout 对应 Git SHA，并把 dated `inputs/` 恢复到脚本期待的路径。judge 和 post-hoc analysis 完成后写入 `FINALIZED` 标记，此后该日期目录才视为不可变。
 
@@ -661,6 +661,57 @@ date block 定义为一次 grid/replicate invocation 在 `America/Los_Angeles` �
 - Environment/provider failures:
 - Interpretation and limitations:
 ```
+
+## 2026-09-26：Version 1 / Setting 1 / r1 正式运行
+
+- Protocol：`main@4a1c0f2` 的 runner、prompts、rubrics 和 judge 逻辑；Shopping 输入来自 `6ea6482`。
+- Replicate：`r1`（预注册三次正式重复中的第 1 次）。
+- Execution / simulator / task judge / experience judge A/B：Azure `gpt-5.6-terra`，`temperature=1`。
+- Runtime：headless、`max_steps=50`、`MAX_TABS=8`、每个 cell 使用新的 persistent Chrome profile。
+- 完整性：30/30 唯一 cell 有数值 task score；30/30 完成双路 experience judge。另保留 2 个早期 Chrome launch error-only attempt，其目标 cell 后来均成功运行，不计作缺失。
+- Raw completion：cell-macro `0.3423`；rubric micro `59/170 = 0.3471`。
+- Communication coverage：cell-macro `0.7721`；micro `130/170 = 0.7647`。
+- 环境有效性：`KEEP 12 / EXCLUDE_RERUN 18`。排除项是有 raw score、但 required/communicated live-web evidence 被环境阻断的 cell；不作为 agent execution failure 计 0 分。
+- 结构性限制：Minneapolis 的全部 5 个 cell 受 `MAX_TABS=8` 与任务所需约 16 个同时保留页面冲突的影响。
+- Result root：[shopping-main-setting1-r1](artifacts/experiments/2026-09-26/shopping-main-setting1-r1/)
+- 完整结果与方法：[Shopping main / Setting 1 正式实验报告](artifacts/experiments/SHOPPING_MAIN_SETTING1_FORMAL_REPORT.md)
+
+## 2026-09-27：模型 API preflight 与 Version 1 / Setting 1 / r2–r3
+
+### 当日 API / 模型兼容性
+
+- Azure `gpt-5.6-terra`：persona text、两轮 Chat Completions function-tool loop 和 judge JSON 均通过；API 返回 revision `gpt-5.6-terra-2026-07-09`。
+- `gpt-6-astra`：普通文本和 judge JSON 可用，但未修改 main 的 Chat Completions tool path 不兼容，因此未进入正式 execution grid。
+- Claude Opus 5.5、Muse Spark 1.1、Gemini V4 Pro、Kimi-K3、Grok 4.7、MiniMax M3、GLM 5.3、Qwen 3.8 27B：测试的 Azure deployment alias 均返回 404 `DeploymentNotFound`。
+- 当日未配置可用的 OpenAI/OpenRouter credential。为遵守“不修改逻辑、评分标准和规则”，正式 grid 只使用唯一通过完整路径的 Terra；详见 [API_MODEL_PREFLIGHT.md](artifacts/experiments/2026-09-27/API_MODEL_PREFLIGHT.md)。
+
+### r2
+
+- 完整性：30/30 数值 task results，30/30 双路 experience judgements；0 个 `error.txt`，0 次 provider/API 失败或重跑。
+- UTC 时间：`2026-09-27T08:08:03Z` 至 `2026-09-27T10:07:49Z`。
+- Raw completion：cell-macro `0.3742`；rubric micro `63/170 = 0.3706`。
+- Communication coverage：cell-macro `0.7838`；micro `132/170 = 0.7765`。
+- 环境有效性：`KEEP 11 / EXCLUDE_RERUN 19`。
+- Result root：[shopping-main-setting1-r2](artifacts/experiments/2026-09-27/shopping-main-setting1-r2/)
+
+### r3
+
+- 完整性：30/30 数值 task results，30/30 双路 experience judgements；0 个 `error.txt`，0 次 provider/API 失败或重跑。
+- UTC 时间：`2026-09-27T10:10:09Z` 至 `2026-09-27T12:04:23Z`。
+- Raw completion：cell-macro `0.3973`；rubric micro `67/170 = 0.3941`。
+- Communication coverage：cell-macro `0.7588`；micro `128/170 = 0.7529`。
+- 环境有效性：`KEEP 14 / EXCLUDE_RERUN 16`；独立机器复核通过。
+- Result root：[shopping-main-setting1-r3](artifacts/experiments/2026-09-27/shopping-main-setting1-r3/)
+
+### 三次正式重复的合并状态
+
+- 计划与完成：`3 replicates × 30 cells = 90/90` 个唯一数值 cell，全部完成 A/B experience judgement。
+- Raw completion：cell/task-macro `0.3713`；rubric micro `189/510 = 0.3706`。
+- 环境审计：`KEEP 37 / EXCLUDE_RERUN 53`；环境保留子集严重不平衡，不能据此发布一个干净的总体能力分数。
+- Persona 主要信号：相对 `none` 的 raw paired completion delta 为 budget `-0.166`、busy `-0.131`、cautious `-0.175`、premium `-0.044`；同时 communication coverage 分别为 `0.637 / 0.725 / 0.471 / 0.990`，所以差异的一部分来自 persona 对原 rubric 的表达遗漏。
+- 完整原任务满分：仅 1/90（`r2 none × UK subscription`），且没有具名 persona 的 full-task-perfect cell；因此 Persona Factor 2 的预注册“任务完美完成后满意度差异”主问题目前不能回答。
+- 汇总分析：[r1–r3 combined post-hoc](artifacts/experiments/2026-09-27/shopping-main-setting1-r1-r3-combined-posthoc-2026-09-27.md)
+- 最终报告：[Shopping main / Setting 1 正式实验报告](artifacts/experiments/SHOPPING_MAIN_SETTING1_FORMAL_REPORT.md)
 
 ## 参考依据
 
