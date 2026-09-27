@@ -245,7 +245,8 @@ class Browser:
     """A handful of tab operations over a real Chromium page set."""
 
     def __init__(self, headless: bool = False, nav_timeout_ms: int = 40000,
-                 profile_dir: str | os.PathLike = DEFAULT_PROFILE):
+                 profile_dir: str | os.PathLike = DEFAULT_PROFILE,
+                 shots_dir: str | os.PathLike | None = None):
         from playwright.sync_api import sync_playwright
 
         # The real installed Chrome with a persistent profile, not the bundled
@@ -273,10 +274,10 @@ class Browser:
             user_agent=_browser_user_agent(),
             args=[
                 "--disable-blink-features=AutomationControlled",
-                # Every tool here reads inner_text, never pixels, so image
-                # decoding is pure memory cost -- and these pages are all
-                # photos. The rest trims processes this run never uses.
-                "--blink-settings=imagesEnabled=false",
+                # The tools read inner_text, never pixels, so image decoding is
+                # pure memory cost -- unless screenshots are being kept, where a
+                # page without its images is useless to look at.
+                *([] if shots_dir else ["--blink-settings=imagesEnabled=false"]),
                 "--disable-gpu",
                 "--disable-extensions",
                 "--disable-background-networking",
@@ -293,6 +294,9 @@ class Browser:
         self._ctx.set_default_timeout(nav_timeout_ms)
         self._tabs: dict[int, object] = {}
         self._next_id = 1
+        self._shots_dir = Path(shots_dir) if shots_dir else None
+        if self._shots_dir:
+            self._shots_dir.mkdir(parents=True, exist_ok=True)
         # A persistent context opens with one blank page; reuse it as tab 1.
         self._spare = self._ctx.pages[0] if self._ctx.pages else None
 
@@ -307,6 +311,29 @@ class Browser:
             f"\n\n[...{len(body) - offset - PAGE_CHARS} more chars; "
             f"read_page with offset={offset + PAGE_CHARS} for the rest]")
         return (slice_ or "[no text at this offset]") + more
+
+    def shot(self, label: str, tab_id: int | None = None) -> dict | None:
+        """A JPEG of what the page looked like, for reading a trajectory later.
+
+        The agent never sees these -- it works from text -- but a person
+        auditing a run cannot tell a captcha wall from an empty page in a text
+        log, and that distinction decided several scores. A failure to capture
+        is not a failure of the step, so it is recorded and swallowed.
+        """
+        if self._shots_dir is None:
+            return None
+        page = self._tabs.get(int(tab_id)) if tab_id is not None else None
+        if page is None:
+            page = next(iter(reversed(list(self._tabs.values()))), None)
+        if page is None:
+            return None
+        name = f"{len(list(self._shots_dir.glob('*.jpg'))):03d}-{label}.jpg"
+        path = self._shots_dir / name
+        try:
+            page.screenshot(path=str(path), type="jpeg", quality=55)
+        except Exception as exc:
+            return {"error": f"{type(exc).__name__}: {exc}"}
+        return {"file": f"shots/{name}", "bytes": path.stat().st_size}
 
     def _settle(self, page, max_wait: float = 15.0) -> None:
         """Wait until the page's visible text stops growing.
@@ -1090,14 +1117,16 @@ class PersonaUser:
 def run_agent(task: dict, user: PersonaUser, model: str, *, max_steps: int,
               headless: bool, temperature: float,
               profile_dir: str | os.PathLike = DEFAULT_PROFILE,
-              provider: str = "", meter: "Meter | None" = None) -> dict:
+              provider: str = "", meter: "Meter | None" = None,
+              shots_dir: str | os.PathLike | None = None) -> dict:
     client, provider = _client(model, provider)
     # The CUA carries no persona: it knows the user only through what they say.
     messages = [{"role": "system", "content": AGENT_RULES},
                 {"role": "user", "content": user.opening}]
     questions = 0
 
-    browser = Browser(headless=headless, profile_dir=profile_dir)
+    browser = Browser(headless=headless, profile_dir=profile_dir,
+                      shots_dir=shots_dir)
     trajectory: list[dict] = []
     # One entry per model turn: what it thought, what it answered, what it
     # called, what it cost and how long it waited. The trajectory records what
@@ -1158,8 +1187,13 @@ def run_agent(task: dict, user: PersonaUser, model: str, *, max_steps: int,
                         result = fn(**args) if fn else f"unknown tool {name}"
                     except Exception as exc:
                         result = f"{type(exc).__name__}: {exc}"
+                # Only the tools that can change what a page shows are worth a
+                # frame; list_tabs and ask_user change nothing.
+                shot = (browser.shot(f"{step:02d}-{name}", args.get("tab_id"))
+                        if name in ("open_tab", "goto", "click", "type_text")
+                        else None)
                 trajectory.append({
-                    "step": step, "tool": name, "args": args,
+                    "step": step, "tool": name, "args": args, "screenshot": shot,
                     # result_preview is what the judge reads; result is the
                     # whole tool output the model was given, so a trajectory can
                     # be replayed and audited after the fact.
@@ -1192,13 +1226,17 @@ def run_agent(task: dict, user: PersonaUser, model: str, *, max_steps: int,
             except Exception as exc:
                 answer, stop_reason = "", f"max_steps_no_summary ({type(exc).__name__})"
         open_tabs = browser.open_tabs()
+        # One frame per tab left open: the rubrics score what stayed open, so
+        # this is the evidence for those items.
+        final_shots = [browser.shot(f"final-tab{tab['tab_id']}", tab["tab_id"])
+                       for tab in open_tabs]
     finally:
         browser.close()
 
     finished_at = datetime.now(timezone.utc)
     return {"answer": answer, "stop_reason": stop_reason, "steps": len(trajectory),
             "max_steps": max_steps, "trajectory": trajectory, "turns": turns,
-            "open_tabs": open_tabs,
+            "open_tabs": open_tabs, "final_screenshots": final_shots,
             "conversation": user.transcript, "user": user.info(),
             "timing": {"started_at": started_at.isoformat(),
                        "finished_at": finished_at.isoformat(),
@@ -1441,6 +1479,12 @@ def main() -> None:
     ap.add_argument("--max-steps", type=int, default=50)
     # gpt-5.6-terra accepts only its default temperature; 0.7 is rejected.
     ap.add_argument("--temperature", type=float, default=1.0)
+    ap.add_argument("--no-screenshots", action="store_true",
+                    help="skip the JPEG per page-changing step and per open tab. "
+                         "Screenshots are what let a person tell a captcha wall "
+                         "from an empty page when reading a trajectory; keeping "
+                         "them also means Chrome must load images, which costs "
+                         "memory, and roughly 1-3 MB of disk per cell")
     ap.add_argument("--no-prompt-cache", action="store_true",
                     help="do not mark cache breakpoints. Providers that cache "
                          "automatically (OpenAI/Azure, Grok, Moonshot, Z.AI) "
@@ -1560,6 +1604,7 @@ def main() -> None:
     base_run_config = {
         "setting": args.setting or None,
         "prompt_cache": not args.no_prompt_cache,
+        "screenshots": not args.no_screenshots,
         "persona": args.persona,
         "replicate_id": args.replicate_id,
         "pair_order": args.pair_order,
@@ -1682,7 +1727,9 @@ def main() -> None:
             run = run_agent(task, user, args.model, max_steps=args.max_steps,
                             headless=args.headless, temperature=args.temperature,
                             profile_dir=profile_dir, provider=args.provider,
-                            meter=meter)
+                            meter=meter,
+                            shots_dir=None if args.no_screenshots
+                            else out_dir / "shots")
         except Exception as exc:  # a dead task must not take the grid with it
             had_failures = True
             print(f"FAILED: {type(exc).__name__}: {exc}")

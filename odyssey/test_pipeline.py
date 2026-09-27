@@ -517,6 +517,10 @@ class _StubBrowser:
     def open_tabs(self):
         return [{"tab_id": 1, "title": "Stub", "url": "https://example.com"}]
 
+    def shot(self, label, tab_id=None):
+        self.calls.append(("shot", label))
+        return None                      # screenshots are off in offline tests
+
     def close(self):
         self.calls.append(("close", None))
 
