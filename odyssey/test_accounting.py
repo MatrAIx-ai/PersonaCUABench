@@ -237,6 +237,53 @@ def check_cache_retry() -> None:
     R._cache_refused.discard("anthropic/claude-opus-5.5")
 
 
+def check_judge_calls() -> None:
+    """Both post-hoc judges must actually be callable, and bill what they spend.
+
+    A NameError inside score_once once cost sixty cells their verdicts: the
+    retry loop swallowed it three times per judge and wrote empty results.
+    """
+    import experience_judge
+
+    class Fake:
+        class chat:
+            class completions:
+                @staticmethod
+                def create(**_):
+                    message = types.SimpleNamespace(
+                        content='{"P5_overall": {"score": 4, "reason": "ok"}}')
+                    return types.SimpleNamespace(
+                        choices=[types.SimpleNamespace(message=message)],
+                        usage=types.SimpleNamespace(prompt_tokens=10, completion_tokens=5,
+                                                    prompt_tokens_details=None,
+                                                    completion_tokens_details=None))
+
+    saved = R._client
+    R._client = lambda model, provider="": (Fake(), "openrouter")
+    try:
+        out = experience_judge.score_once("prompt", "z-ai/glm-5.3")
+        assert out["P5_overall"]["score"] == 4, out
+        assert out["accounting"]["calls"] == 1 and out["accounting"]["cost_usd"] > 0
+
+        # A programming error must surface, not be retried into an empty verdict.
+        class Broken:
+            class chat:
+                class completions:
+                    @staticmethod
+                    def create(**_):
+                        raise AttributeError("no attribute 'responses'")
+
+        R._client = lambda model, provider="": (Broken(), "openrouter")
+        try:
+            experience_judge.score_once("prompt", "z-ai/glm-5.3")
+        except RuntimeError as exc:
+            assert "broken" in str(exc)
+        else:
+            raise AssertionError("a broken judge call must raise, not retry")
+    finally:
+        R._client = saved
+
+
 def check_cost_report() -> None:
     with tempfile.TemporaryDirectory() as tmp:
         root = Path(tmp)
@@ -289,6 +336,7 @@ def main() -> None:
     check_cache_marking()
     check_cache_switch()
     check_cache_retry()
+    check_judge_calls()
     check_cost_report()
     print("accounting self-check OK")
 

@@ -66,25 +66,37 @@ def build_prompt(record: dict) -> str:
 
 
 def score_once(prompt: str, model: str, provider: str = "") -> dict:
-    """One judge's verdict, retried while it returns nothing parseable."""
+    """One judge's verdict, retried while it returns nothing parseable.
+
+    The call is metered: judging is a real share of a setting's bill and has to
+    be reported apart from the browsing it grades.
+    """
+    model, provider = odyssey.model_registry.resolve(model, provider)
     client, resolved_provider = odyssey._client(model, provider)
+    meter = odyssey.Meter()
     for attempt in range(3):
         try:
             resp, _ = odyssey.metered(
-                client, meter, "experience_judge", provider=resolved,
+                client, meter, "experience_judge", provider=resolved_provider,
                 model=model, messages=[{"role": "user", "content": prompt}],
                 max_completion_tokens=4000)
             parsed = odyssey.extract_json(resp.choices[0].message.content or "")
+        except (NameError, TypeError, AttributeError) as exc:
+            # A bug here is not weather: retrying it three times per judge per
+            # cell is how a broken call silently produced 60 empty verdicts.
+            raise RuntimeError(f"experience judge call is broken: {exc}") from exc
         except Exception as exc:
             parsed, last = None, f"{type(exc).__name__}: {exc}"
         else:
             last = "unparseable judge output"
         if parsed:
             return {"model": model, "provider": resolved_provider,
-                    "backend": odyssey._provider_backend(resolved_provider), **parsed}
+                    "backend": odyssey._provider_backend(resolved_provider),
+                    "accounting": meter.totals(), **parsed}
         print(f"    [{model}] attempt {attempt + 1}/3: {last}", flush=True)
     return {"model": model, "provider": resolved_provider,
-            "backend": odyssey._provider_backend(resolved_provider), "error": last}
+            "backend": odyssey._provider_backend(resolved_provider),
+            "accounting": meter.totals(), "error": last}
 
 
 def valid_score(value) -> int | None:
