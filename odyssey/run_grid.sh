@@ -81,7 +81,12 @@ run_cell() {
   if [[ "$JOBS" -gt 1 ]]; then
     extra=(--profile "$(cell_profile "$persona" "$task")")
     mkdir -p logs/cells
-    local log="logs/cells/${TASK_SUITE:-adhoc}-$persona-${task:0:12}.log"
+    # The model and replicate belong in the name: without them a second model
+    # overwrites the first model's per-cell logs and the evidence is gone.
+    local tag="${EXTRA_ARGS[*]:1}"
+    tag="${tag//[^A-Za-z0-9._-]/}"
+    # (No ${tag: -40} here: bash 3.2 returns empty for a negative offset.)
+    local log="logs/cells/${TASK_SUITE:-adhoc}-$persona-${task:0:12}-$tag.log"
     if "$PYTHON_BIN" -u odyssey/run.py "${ROUTE_ARGS[@]:1}" \
         --task "$task" --persona "$persona" --headless --skip-existing \
         "${extra[@]}" "${EXTRA_ARGS[@]:1}" > "$log" 2>&1; then
