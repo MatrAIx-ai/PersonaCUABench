@@ -13,7 +13,8 @@
 #   SETTING=s1 MODELS="glm-5.3" bash odyssey/run_all.sh
 #   SETTING=s1 MODELS=terra JOBS=4 bash odyssey/run_all.sh     # four cells at once
 #   SETTING=s2 MODELS="glm-5.3 minimax-m3" bash odyssey/run_all.sh
-#   SETTING=s1 MODELS=terra REPLICATES="r1" bash odyssey/run_all.sh
+#   SETTING=s1 MODELS=terra REPLICATES="r1 r2 r3" bash odyssey/run_all.sh
+#   PROMPT_CACHE=off SETTING=s1 MODELS=terra bash odyssey/run_all.sh  # uncached cost
 #   DRY_RUN=1 SETTING=s2 MODELS=terra bash odyssey/run_all.sh   # plan only, no spend
 #
 # MODELS takes keys from odyssey/models.json (`python odyssey/models.py` lists
@@ -25,7 +26,9 @@ cd "$(dirname "$0")/.."
 SETTING="${SETTING:-s1}"
 SUITE="${SUITE:-main-original}"
 MODELS="${MODELS:-terra}"
-REPLICATES="${REPLICATES:-r1 r2 r3}"
+# One pass by default. Repeats cost the same again and are only worth it
+# once a difference between models looks real.
+REPLICATES="${REPLICATES:-r1}"
 # Setting 1's personas: one per group of people. Setting 2's are generated from
 # the protocol and selected by run_matched_pairs.py, so PERSONAS is unused there.
 PERSONAS="${PERSONAS:-none travel-expert elderly-novice budget-student non-native-speaker}"
@@ -33,6 +36,11 @@ PY="${PY:-python}"
 # Setting 1 fans out: one Chrome per worker, ~1.5 GB of RAM each. Setting 2 stays
 # serial -- a matched pair's two arms must not race for the same profile.
 JOBS="${JOBS:-1}"
+# PROMPT_CACHE=off measures what a run costs without our breakpoints; providers
+# that cache by themselves are unaffected either way.
+PROMPT_CACHE="${PROMPT_CACHE:-on}"
+CACHE_ARGS=(__sentinel__)
+[[ "$PROMPT_CACHE" == off ]] && CACHE_ARGS+=(--no-prompt-cache)
 DRY_RUN="${DRY_RUN:-}"
 RESULTS="odyssey/results/$SETTING"
 mkdir -p logs
@@ -55,7 +63,8 @@ for model in $MODELS; do
       say "$SETTING  model=$model  replicate=$r"
       if ! PERSONAS="$PERSONAS" TASK_SUITE="$SUITE" PYTHON_BIN="$PY" JOBS="$JOBS" \
            run bash odyssey/run_grid.sh --setting "$SETTING" --model "$model" \
-             --replicate-id "$r" --headless >> "logs/$tag-$r.log" 2>&1; then
+             --replicate-id "$r" --headless "${CACHE_ARGS[@]:1}" \
+             >> "logs/$tag-$r.log" 2>&1; then
         failed="$failed $SETTING/$model/$r"
         say "$model $r reported failed cells (see logs/$tag-$r.log)"
       fi
@@ -68,7 +77,7 @@ for model in $MODELS; do
       [[ -n "$DRY_RUN" ]] && execute=()
       if ! run $PY odyssey/run_matched_pairs.py --suite "$SUITE" \
              --replicate-id "$r" --headless "${execute[@]+"${execute[@]}"}" \
-             -- --setting "$SETTING" --model "$model" \
+             -- --setting "$SETTING" --model "$model" "${CACHE_ARGS[@]:1}" \
              >> "logs/$tag-$r.log" 2>&1; then
         failed="$failed $SETTING/$model/$r"
         say "$model $r reported failed cells (see logs/$tag-$r.log)"

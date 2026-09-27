@@ -160,6 +160,20 @@ def check_cache_marking() -> None:
         R._cache_refused.discard("anthropic/claude-opus-5.5")
 
 
+def check_cache_switch() -> None:
+    """--no-prompt-cache turns our breakpoints off without touching providers."""
+    history = [{"role": "system", "content": "rules"},
+               {"role": "user", "content": "help"}]
+    assert R.PROMPT_CACHE is True
+    R.PROMPT_CACHE = False
+    try:
+        assert R.cache_marked(history, "anthropic/claude-opus-5.5") is history
+        assert not R.needs_explicit_cache("anthropic/claude-opus-5.5")
+    finally:
+        R.PROMPT_CACHE = True
+    assert R.needs_explicit_cache("anthropic/claude-opus-5.5")
+
+
 def check_cache_retry() -> None:
     """A provider that rejects cache_control gets one plain retry, not a crash."""
     seen = []
@@ -236,6 +250,7 @@ def main() -> None:
     check_meter()
     check_metered_call()
     check_cache_marking()
+    check_cache_switch()
     check_cache_retry()
     check_cost_report()
     print("accounting self-check OK")

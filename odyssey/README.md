@@ -219,7 +219,13 @@ Gemini 4 Pro is in the registry as `gemini-pro` pointing at Gemini 3.1 Pro:
 Google confirmed Gemini 4 is training but has shipped no model, id or price.
 Repoint that one entry when it exists.
 
-**Prompt caching is on.** Every step resends the transcript, so the cacheable
+**Prompt caching is on by default and `--no-prompt-cache` turns it off**, because
+the bill is itself a measurement here -- the collaborator sees the Azure spend,
+and a run whose caching state is unknown cannot be costed. The switch only
+governs our own breakpoints: OpenAI/Azure, Grok, Moonshot, DeepSeek and Z.AI
+cache automatically whatever we pass, so an "off" run is only truly uncached on
+Anthropic and Qwen. Every run records which it was in
+`run_config.prompt_cache` and `run.arm.prompt_cache`. Every step resends the transcript, so the cacheable
 prefix is most of the bill. Anthropic and Qwen only cache what an explicit
 breakpoint marks, so those runs carry `cache_control` on the system prompt and
 the newest few turns (four breakpoints, Anthropic's limit); the rest of the

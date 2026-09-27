@@ -536,10 +536,15 @@ CACHE_TTL = "1h"                  # long enough to span one cell's browsing
 CACHE_MAX_BREAKPOINTS = 4         # Anthropic's hard limit
 # Models that answered "no" once: never marked again in this process.
 _cache_refused: set[str] = set()
+# Whether to mark breakpoints at all. Off makes a run cost what an uncached run
+# costs, which is what a cost comparison needs; it cannot switch off the
+# automatic caching OpenAI, Azure, Grok, Moonshot, DeepSeek and Z.AI do on their
+# own, so an "off" run is only uncached for Anthropic and Qwen.
+PROMPT_CACHE = True
 
 
 def needs_explicit_cache(model: str) -> bool:
-    return (model.startswith(CACHE_EXPLICIT_PREFIXES)
+    return (PROMPT_CACHE and model.startswith(CACHE_EXPLICIT_PREFIXES)
             and model not in _cache_refused)
 
 
@@ -1152,7 +1157,8 @@ def run_agent(task: dict, user: PersonaUser, model: str, *, max_steps: int,
                     "backend": _provider_backend(provider), "temperature": temperature,
                     "prompt_cache": ("explicit_breakpoints"
                                      if needs_explicit_cache(model)
-                                     else "provider_automatic")}}
+                                     else "provider_automatic_only"
+                                     if PROMPT_CACHE else "off")}}
 
 
 # --------------------------------------------------------------------------- #
@@ -1384,6 +1390,12 @@ def main() -> None:
     ap.add_argument("--max-steps", type=int, default=50)
     # gpt-5.6-terra accepts only its default temperature; 0.7 is rejected.
     ap.add_argument("--temperature", type=float, default=1.0)
+    ap.add_argument("--no-prompt-cache", action="store_true",
+                    help="do not mark cache breakpoints. Providers that cache "
+                         "automatically (OpenAI/Azure, Grok, Moonshot, Z.AI) "
+                         "still do; this only makes Anthropic and Qwen runs "
+                         "uncached, for a cost comparison that has to be honest "
+                         "about what was cached")
     ap.add_argument("--headless", action="store_true",
                     help="no browser window (recommended; required on a server without a display)")
     ap.add_argument("--profile", default="",
@@ -1399,6 +1411,8 @@ def main() -> None:
     ap.add_argument("--out", default=str(HERE / "results"))
     args = ap.parse_args()
     load_dotenv()
+    global PROMPT_CACHE
+    PROMPT_CACHE = not args.no_prompt_cache
 
     if args.list_suites:
         print("\n".join(task_router.format_suites(TASK_CATALOG)))
@@ -1494,6 +1508,7 @@ def main() -> None:
     ).hexdigest()
     base_run_config = {
         "setting": args.setting or None,
+        "prompt_cache": not args.no_prompt_cache,
         "persona": args.persona,
         "replicate_id": args.replicate_id,
         "pair_order": args.pair_order,
