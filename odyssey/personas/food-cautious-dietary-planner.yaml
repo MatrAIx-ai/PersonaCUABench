@@ -1,0 +1,150 @@
+persona_id: odyssey-food-cautious-dietary-planner
+version: '2.0'
+source: hand-specified from dimensions.json (MatrAIx 1290-dim schema)
+note: 'Older working adult managing a food allergy: cautious about claims and substitutions,
+  patient, deliberate, and uses magnification.'
+attributes:
+  age_bracket:
+    value: 55-64
+    label: Age bracket
+    category: 'Demographic: Core'
+  socioeconomic_band:
+    value: Middle
+    label: Socioeconomic band
+    category: 'Demographic: Core'
+  seniority:
+    value: Senior
+    label: Seniority
+    category: 'Professional: Career'
+  domain:
+    value: Public Sector
+    label: Domain
+    category: 'Expertise: Domains'
+  subject_specialty:
+    value: Operations
+    label: Subject specialty
+    category: 'Expertise: Domains'
+  tech_savviness:
+    value: Cautious adopter
+    label: Tech savviness
+    category: 'Expertise: Domains'
+  skill_cooking:
+    value: Intermediate
+    label: 'Skill: Cooking'
+    category: 'Expertise: Skills'
+  skill_budgeting:
+    value: Advanced
+    label: 'Skill: Budgeting'
+    category: 'Expertise: Skills'
+  skill_research:
+    value: Intermediate
+    label: 'Skill: Research'
+    category: 'Expertise: Skills'
+  fam_nutrition:
+    value: Proficient
+    label: 'Familiarity: Nutrition'
+    category: 'Expertise: Domains'
+  fam_hospitality_management:
+    value: Aware
+    label: 'Familiarity: Hospitality management'
+    category: 'Expertise: Domains'
+  ind_food_beverage:
+    value: None
+    label: 'Industry: Food & beverage'
+    category: 'Professional: Industry'
+  ind_restaurants:
+    value: None
+    label: 'Industry: Restaurants'
+    category: 'Professional: Industry'
+  topic_cooking:
+    value: Interested
+    label: 'Interest: Cooking'
+    category: 'Interests: Topics'
+  lstyle_diet_type:
+    value: Omnivore
+    label: Diet type
+    category: 'Health: Lifestyle'
+  lstyle_cooking_freq:
+    value: Weekly
+    label: Cooking frequency
+    category: 'Interests: Culture'
+  lstyle_shopping_style:
+    value: Minimalist
+    label: Shopping style
+    category: 'Interests: Culture'
+  lstyle_frugality:
+    value: Frugal saver
+    label: Spending vs saving
+    category: 'Interests: Culture'
+  habit_meal_prepping:
+    value: Monthly
+    label: 'Habit: Meal prepping'
+    category: 'Behavior: Habits'
+  health_dietary_restriction:
+    value: Allergy
+    label: Dietary restriction
+    category: 'Health: Physical'
+  economic_motivation:
+    value: Value-driven
+    label: Economic motivation
+    category: Values & Motivation
+  pref_save_vs_spend:
+    value: Saver-leaning
+    label: Save vs spend
+    category: 'Behavior: Preferences'
+  pref_quality_vs_quantity:
+    value: Quality-leaning
+    label: Quality vs quantity
+    category: 'Behavior: Preferences'
+  risk_tolerance:
+    value: Risk-averse
+    label: Risk tolerance
+    category: Risk & Decision
+  dospert_health_safety_risk_tolerance:
+    value: Very low
+    label: DOSPERT Health/Safety Risk Tolerance
+    category: 'Worldview: Beliefs'
+  decision_style:
+    value: Deliberative
+    label: Decision style
+    category: Risk & Decision
+  trust_level:
+    value: Skeptical
+    label: Trust level
+    category: 'Worldview: Beliefs'
+  time_pressure:
+    value: No rush
+    label: Time pressure
+    category: 'Behavior: Time'
+  att_online_reviews:
+    value: Skeptical
+    label: 'Attitude: Online reviews'
+    category: 'Worldview: Beliefs'
+  cog_detail_orientation:
+    value: High
+    label: Detail orientation
+    category: 'Linguistic: Communication'
+  cog_patience:
+    value: High
+    label: Patience
+    category: 'Linguistic: Communication'
+  pref_detail_brief_vs_full:
+    value: Detail-leaning
+    label: Brief vs full detail
+    category: 'Behavior: Preferences'
+  device_context:
+    value: Accessibility tool
+    label: Device context
+    category: 'State: Emotional'
+  health_vision:
+    value: Low vision
+    label: Vision
+    category: 'Health: Physical'
+  accessibility_needs:
+    value: Visual
+    label: Accessibility needs
+    category: 'Behavior: Preferences'
+  health_assistive_tech:
+    value: Magnifier
+    label: Assistive technology
+    category: 'Health: Physical'
