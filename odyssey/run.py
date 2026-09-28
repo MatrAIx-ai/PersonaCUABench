@@ -82,7 +82,11 @@ def prompt(name: str) -> str:
 
 TASKS = json.loads((HERE / "tasks.json").read_text(encoding="utf-8"))
 PAGE_CHARS = 6000          # per read_page slice
-MAX_TABS = 8
+# main keeps the historical cap of 8. Category experiments whose registered
+# protocol removes artificial browser-capacity limits can set 0 for no cap.
+MAX_TABS = int(os.environ.get("ODYSSEY_MAX_TABS", "8"))
+if MAX_TABS < 0:
+    raise ValueError("ODYSSEY_MAX_TABS must be 0 (unlimited) or a positive integer")
 DEFAULT_PROFILE = HERE / ".chrome-profile"   # gitignored; keeps consent cookies
 
 MAX_QUESTIONS = 5          # ask_user calls per run
@@ -270,7 +274,7 @@ class Browser:
         return page
 
     def open_tab(self, url: str) -> str:
-        if len(self._tabs) >= MAX_TABS:
+        if MAX_TABS and len(self._tabs) >= MAX_TABS:
             return f"[tab limit {MAX_TABS} reached; close a tab first]"
         page, self._spare = (self._spare, None) if self._spare else (self._ctx.new_page(), None)
         tab_id, self._next_id = self._next_id, self._next_id + 1

@@ -95,21 +95,26 @@ remain the same. It is the within-task baseline for persona paired deltas.
   retained as Judge A and Judge B rather than averaged.
 - Maximum steps: `50`.
 - Browser: installed Google Chrome, live web, headless, fresh profile per cell.
-- Original `main` browser tool surface and prompts remain unchanged.
+- Browser tools and prompts remain unchanged. The only infrastructure override
+  is `ODYSSEY_MAX_TABS=0`, which disables the artificial tab-count guard while
+  retaining Chrome's normal machine-resource limits.
 - Formal repeats: `r1`, `r2`, and `r3`, stored under separate dated roots.
 
 ### Infrastructure-capacity decision
 
-`main` has `MAX_TABS=8`. A rubric-level capacity audit found no Food task that
-deterministically requires more than eight tabs to remain open simultaneously:
-the densest task only requires three selected proof tabs at the end. Therefore
-the first formal setting keeps the exact `main` cap for Shopping comparability.
+The unmodified `main` runner has `MAX_TABS=8`. A three-cell control pilot showed
+that all three trajectories reached this cap because the executor issued many
+`open_tab` calls in the same model turn before it could close or reuse pages.
+The cap therefore materially affected Food even though no final rubric requires
+more than eight tabs to remain open.
 
-Every trajectory will still be audited for an observed tab-limit hit. If the
-cap materially blocks required evidence, that cell is protocol-censored and is
-not counted as an executor failure. A higher-cap run, if needed to satisfy the
-meeting note “without the infra limitation,” must be recorded as a separate
-setting/version and cannot silently replace the exact-main result.
+Those three cells are retained under `food-main-setting1-pilot-cap8` and are
+excluded from formal r1–r3. To honor the meeting note “without the infra
+limitation,” the formal Food setting disables the artificial guard with
+`ODYSSEY_MAX_TABS=0`. This is an infrastructure-only protocol difference from
+Shopping: models, prompts, browser actions, step/question budgets, judges, and
+scoring are unchanged. Absolute Food-vs-Shopping score comparisons must note
+this difference; within-Food persona/control comparisons share the same setting.
 
 ## 5. Evaluation dimensions
 
