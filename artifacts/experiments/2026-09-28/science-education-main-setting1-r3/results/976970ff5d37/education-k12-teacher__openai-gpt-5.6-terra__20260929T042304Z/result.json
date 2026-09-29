@@ -1,0 +1,458 @@
+{
+  "task_id": "976970ff5d37116847b8a9351a0922196bee88a2",
+  "level": "medium",
+  "persona": "education-k12-teacher",
+  "run": {
+    "answer": "## Citation-ready source set\n\n### 1) Eating disorders and adolescence — peer reviewed\n**Trompeter, N., Bussey, K., Forbes, M. K., et al.** (2022). *Emotion Dysregulation and Eating Disorder Symptoms: Examining Distinct Associations and Interactions in Adolescents.* **Research on Child and Adolescent Psychopathology, 50**(5), 683–694. https://doi.org/10.1007/s10802-022-00898-1  \n**Direct source:** [PMC full text](https://pmc.ncbi.nlm.nih.gov/articles/PMC9054869/)\n\n**Direct quote:** “**Eating disorders are characterized by disturbances in both body image and eating behaviors … and typically develop during adolescence**” (Trompeter et al., 2022).\n\nUseful framing: this supports adolescence as a common developmental period of onset; it does **not** mean that every adolescent experiences an eating disorder, nor that onset cannot occur at other ages.\n\n### 2) Brain development beyond childhood — credible explanatory source\n**Center on the Developing Child at Harvard University.** *Brain Architecture: An ongoing process that begins before birth.*  \n**Direct source:** [Harvard page](https://developingchild.harvard.edu/key-concept/brain-architecture/)\n\nUseful takeaway for the workshop: the page explains that brain architecture “continues into adulthood,” and that after the early rapid-growth period, the brain continues refining circuits through pruning. It also notes that building new connections and pruning unused ones continues throughout life. That is a clear way to explain that development is ongoing—not “finished” in childhood.\n\n### 3) Cognitive biases and evolutionary roots — peer-reviewed source\n**Haselton, M. G., & Nettle, D.** (2006). *The paranoid optimist: An integrative evolutionary model of cognitive biases.* **Personality and Social Psychology Review, 10**(1), 47–66. https://doi.org/10.1207/s15327957pspr1001_3  \n**Direct source:** [PubMed record and abstract](https://pubmed.ncbi.nlm.nih.gov/16430328/)\n\nUseful takeaway: this is an evolutionary-psychology account—not a claim that every bias has one settled evolutionary explanation. The authors propose that, when people make judgments under uncertainty and the historical costs of false-positive and false-negative errors differ, natural selection may favor a systematic bias toward the less costly error. This gives teens a non-shaming way to discuss why quick mental shortcuts can be understandable yet still misleading in modern settings.\n\nFor a short accessible explainer alongside the paper, I also kept open SAGE’s **“Error Management Theory”** entry, which explains the framework and its limits: [SAGE Reference](https://sk.sagepub.com/ency/edvol/socialpsychology/chpt/error-management-theory).\n\n## *The Miseducation of Lauryn Hill* cultural hook\n\nFrom the album’s [Wikipedia track listing](https://en.wikipedia.org/wiki/The_Miseducation_of_Lauryn_Hill#Track_listing), titles include:\n\n- “Lost Ones”\n- “Ex-Factor”\n- “To Zion”\n- “Doo Wop (That Thing)”\n- “Superstar”\n- “Final Hour”\n- “When It Hurts So Bad”\n- “Everything Is Everything”\n- “The Miseducation of Lauryn Hill”\n\n**Strongest discussion prompt: “The Miseducation of Lauryn Hill.”** Its title directly opens a discussion about where young people learn their beliefs about themselves—family, peers, school, social media, culture, and personal experience—without requiring anyone to disclose personal mental-health experiences. It connects naturally to brain development and to the idea that biases can shape interpretation.\n\nA low-pressure prompt: **“What messages teach people who they are? Which messages help, which messages oversimplify, and how might we notice the difference?”**\n\n## Concise workshop brief\n\n**Theme:** *Growing brains, fast judgments, and learning who we are.*  \nStart with the evidence that eating disorders commonly begin during adolescence, emphasizing early support and avoiding stereotypes or diagnosis-by-discussion. Explain that brain development continues into adulthood: experience, learning, and relationships continue to shape neural connections. Introduce cognitive biases as common shortcuts; evolutionary accounts suggest some may have been shaped by pressure to avoid costly mistakes, but they are not destiny and can be questioned. Use **“The Miseducation of Lauryn Hill”** as a cultural entry point to explore how outside messages and internal interpretations influence self-understanding. Keep the discussion strengths-based, voluntary, and clear that participants can seek a trusted adult or health professional for personal concerns.\n\nI kept the original full-text/source pages open separately for the eating-disorders article, Harvard explanation, PubMed record, SAGE explainer, and Wikipedia track listing.",
+    "stop_reason": "finish",
+    "steps": 33,
+    "max_steps": 50,
+    "trajectory": [
+      {
+        "step": 0,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Apmc.ncbi.nlm.nih.gov+%22Eating+disorders+typically+develop+during+adolescence%22"
+        },
+        "result_preview": "tab 1 | site:pmc.ncbi.nlm.nih.gov \"Eating disorders typically develop during adolescence\" - Google Search | https://www.google.com/search?q=site%3Apmc.ncbi.nlm.nih.gov+%22Eating+disorders+typically+develop+during+adolescence%22&sei=NT27apz0L67e5NoPsf6aCQ\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nImages\nShort videos\nVideos\nForums\nShopping\nMore\nTools\nSearch Results\nWeb results\nEmo"
+      },
+      {
+        "step": 0,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://developingchild.harvard.edu/science/key-concepts/brain-architecture/"
+        },
+        "result_preview": "tab 2 | Brain Architecture: An ongoing process that begins before birth | https://developingchild.harvard.edu/key-concept/brain-architecture/\n\nSkip to content\nCenter on the Developing Child at Harvard University\nOur Approach\nKey Concepts\nResource Library\nNews and Insights\nAbout Us\nEvents\nContact\nKeyword search\nSubmit search\nHome\nKey Concepts\nBrain Architecture \nCopy\nKey Takeaways\nBrains are built "
+      },
+      {
+        "step": 0,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=evolutionary+origins+of+cognitive+biases+credible+source"
+        },
+        "result_preview": "tab 3 | evolutionary origins of cognitive biases credible source - Google Search | https://www.google.com/search?q=evolutionary+origins+of+cognitive+biases+credible+source\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nImages\nShopping\nVideos\nForums\nShort videos\nMore\nTools\nSearch Results\nAI Overview\nCognitive biases originate from evolutionary adaptations where ancestral human brains "
+      },
+      {
+        "step": 0,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://en.wikipedia.org/wiki/The_Miseducation_of_Lauryn_Hill"
+        },
+        "result_preview": "tab 4 | The Miseducation of Lauryn Hill - Wikipedia | https://en.wikipedia.org/wiki/The_Miseducation_of_Lauryn_Hill\n\nJump to content\nMain menu\nSearch\nDonate\nCreate account\nLog in\nContents hide\n(Top)\nBackground and development\nRecording and production\nToggle Recording and production subsection\nMusical style\nLyrical themes\nMarketing\nToggle Marketing subsection\nTouring\nToggle Touring subsection\nCriti"
+      },
+      {
+        "step": 1,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9054869/"
+        },
+        "result_preview": "tab 5 | Emotion Dysregulation and Eating Disorder Symptoms: Examining Distinct Associations and Interactions in Adolescents - PMC | https://pmc.ncbi.nlm.nih.gov/articles/PMC9054869/\n\nSkip to main content\n\nAn official website of the United States government\n\nHere's how you know\nSearch\nLog in\n\nPrimary site navigation\n\nSearch PMC Full-Text Archive\nSearch in PMC\nJournal List \nUser Guide\nAs a library, "
+      },
+      {
+        "step": 1,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Apmc.ncbi.nlm.nih.gov+cognitive+bias+evolutionary+origins+heuristics"
+        },
+        "result_preview": "tab 6 | site:pmc.ncbi.nlm.nih.gov cognitive bias evolutionary origins heuristics - Google Search | https://www.google.com/search?q=site%3Apmc.ncbi.nlm.nih.gov+cognitive+bias+evolutionary+origins+heuristics\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nShopping\nImages\nVideos\nForums\nShort videos\nMore\nTools\nSearch Results\nWeb results\nThe Evolution of Facultative Conformity Based on Sim"
+      },
+      {
+        "step": 1,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=%22cognitive+biases%22+%22evolutionary%22+site%3Aapa.org"
+        },
+        "result_preview": "tab 7 | \"cognitive biases\" \"evolutionary\" site:apa.org - Google Search | https://www.google.com/search?q=%22cognitive+biases%22+%22evolutionary%22+site%3Aapa.org\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nImages\nShopping\nVideos\nForums\nNews\nMore\nTools\nSearch Results\nWeb results\nBorn to be biased? Unrealistic optimism and error ...\n\nAPA PsycNet\nhttps://psycnet.apa.org › record\nby A"
+      },
+      {
+        "step": 1,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=evolutionary+psychology+cognitive+biases+error+management+theory+peer+reviewed+article"
+        },
+        "result_preview": "tab 8 | evolutionary psychology cognitive biases error management theory peer reviewed article - Google Search | https://www.google.com/search?q=evolutionary+psychology+cognitive+biases+error+management+theory+peer+reviewed+article\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nVideos\nShort videos\nImages\nForums\nShopping\nMore\nTools\nSearch Results\nAI Overview\nError Management Theory (E"
+      },
+      {
+        "step": 2,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://doi.org/10.1207/S15327965PLI1001_2"
+        },
+        "result_preview": "[tab limit 8 reached; close a tab first]"
+      },
+      {
+        "step": 2,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://doi.org/10.1037/0022-3514.78.1.81"
+        },
+        "result_preview": "[tab limit 8 reached; close a tab first]"
+      },
+      {
+        "step": 2,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://en.wikipedia.org/w/index.php?title=The_Miseducation_of_Lauryn_Hill&action=raw"
+        },
+        "result_preview": "[tab limit 8 reached; close a tab first]"
+      },
+      {
+        "step": 3,
+        "tool": "close_tab",
+        "args": {
+          "tab_id": 1
+        },
+        "result_preview": "closed tab 1"
+      },
+      {
+        "step": 3,
+        "tool": "close_tab",
+        "args": {
+          "tab_id": 3
+        },
+        "result_preview": "closed tab 3"
+      },
+      {
+        "step": 3,
+        "tool": "close_tab",
+        "args": {
+          "tab_id": 6
+        },
+        "result_preview": "closed tab 6"
+      },
+      {
+        "step": 3,
+        "tool": "close_tab",
+        "args": {
+          "tab_id": 7
+        },
+        "result_preview": "closed tab 7"
+      },
+      {
+        "step": 4,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://doi.org/10.1207/S15327965PLI1001_2"
+        },
+        "result_preview": "tab 9 | Motivated Reasoning With Stereotypes: Activation, Application, and Inhibition: Psychological Inquiry: Vol 10, No 1 | https://www.tandfonline.com/doi/abs/10.1207/s15327965pli1001_2\n\nSkip to Main Content\nJournals \nSearch \nPublish \nAccess provided byUniversity of Pennsylvania Libraries\n Login  |  Register\nAdd to Cart\nHome  All Journals  Behavioral Sciences  Psychological Inquiry  List of Issu"
+      },
+      {
+        "step": 4,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://doi.org/10.1037/0022-3514.78.1.81"
+        },
+        "result_preview": "tab 10 | APA PsycNet FullTextHTML page | https://psycnet.apa.org/fulltext/1999-15749-006.html\n\nSkip to Main Content\nAPA PsycNET\nEnglish\nLogin\nHelp\nAdmin Center\nContact Us\nSEARCH\nBROWSE\nAPA THESAURUS\nRecent Searches My List My PsycNet\nLoading ...\n \n      Privacy Statement      Terms of Service      Disclaimer      Admin Center\n   \n\nContact APA | Give Feedback | Help\n© 2026 American Psychological As"
+      },
+      {
+        "step": 4,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://en.wikipedia.org/w/index.php?title=The_Miseducation_of_Lauryn_Hill&action=raw"
+        },
+        "result_preview": "tab 11 |  | https://en.wikipedia.org/w/index.php?title=The_Miseducation_of_Lauryn_Hill&action=raw\n\n{{Short description|1998 studio album by Lauryn Hill}}\n{{good article}}\n{{Use American English|date=October 2024}}\n{{Use mdy dates|date=August 2021}}\n{{Infobox album\n| name         = The Miseducation of Lauryn Hill\n| type         = studio\n| artist       = [[Lauryn Hill]]\n| cover        = The Miseduca"
+      },
+      {
+        "step": 5,
+        "tool": "click",
+        "args": {
+          "tab_id": 4,
+          "text": "Track listing"
+        },
+        "result_preview": "clicked 'Track listing'; tab 4 now at https://en.wikipedia.org/wiki/The_Miseducation_of_Lauryn_Hill#Track_listing\n\nJump to content\nMain menu\nSearch\nDonate\nCreate account\nLog in\nContents hide\n(Top)\nBackground and development\nRecording and production\nToggle Recording and production subsection\nMusical style\nLyrical themes\nMarketing\nToggle Marketing subsection\nTouring\nToggle Touring subsection\nCritica"
+      },
+      {
+        "step": 6,
+        "tool": "read_page",
+        "args": {
+          "tab_id": 11,
+          "offset": 40000
+        },
+        "result_preview": "tab 11 | https://en.wikipedia.org/w/index.php?title=The_Miseducation_of_Lauryn_Hill&action=raw\n\nJuly 8, 2024|via=[[Google Books]]}}</ref> prompting it to reach the top 40 on the US [[Radio Songs (chart)|Hot 100 Airplay]];<ref>{{cite web|url=https://www.billboard.com/artist/lauryn-hill/chart-history/hsb/|title=Lauryn Hill Chart History (Radio Songs)|magazine=[[Billboard (magazine)|Billboard]]|acces"
+      },
+      {
+        "step": 6,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://sk.sagepub.com/ency/edvol/socialpsychology/chpt/error-management-theory"
+        },
+        "result_preview": "tab 12 | Sage Reference - Encyclopedia of Social Psychology - Error Management Theory | https://sk.sagepub.com/ency/edvol/socialpsychology/chpt/error-management-theory\n\nSkip to main content\nReference\nInformation\nBrowse\nSigned in:\nMY PROFILE\nHome\nReference\nEncyclopedia of Social Psychology\nEntry\nError Management Theory\nEntry\nReader's guide\nEntries A-Z\nSubject index\nicon back\nRETURN TO ENTRIES\nError"
+      },
+      {
+        "step": 7,
+        "tool": "read_page",
+        "args": {
+          "tab_id": 11,
+          "offset": 80000
+        },
+        "result_preview": "tab 11 | https://en.wikipedia.org/w/index.php?title=The_Miseducation_of_Lauryn_Hill&action=raw\n\nf-lauryn-hill/|archive-date=December 13, 2016}}</ref>\n| rev7 = ''[[The Rolling Stone Album Guide]]''\n| rev7Score = {{Rating|4.5|5}}{{sfn|Caramanica|2004|p=378}}\n| rev8 = ''[[Slant Magazine]]''\n| rev8Score = {{Rating|4.5|5}}<ref name=\"P.Schrodt\">{{cite magazine|url=https://www.slantmagazine.com/music/rev"
+      },
+      {
+        "step": 7,
+        "tool": "read_page",
+        "args": {
+          "tab_id": 11,
+          "offset": 100000
+        },
+        "result_preview": "tab 11 | https://en.wikipedia.org/w/index.php?title=The_Miseducation_of_Lauryn_Hill&action=raw\n\nhe '90s|date=May 13, 1999|issue=812|magazine=[[Rolling Stone]]|pages=79|issn=0035-791X}}</ref>}}\n|-\n| ''Spin''\n| The Greatest Albums of the '90s\n| {{center|28}}\n| {{center|<ref>{{cite magazine|last=Weisbard|first=Eric|author-link=Eric Weisbard|title=The Greatest Albums of the '90s|url=https://books.goog"
+      },
+      {
+        "step": 7,
+        "tool": "read_page",
+        "args": {
+          "tab_id": 12,
+          "offset": 6000
+        },
+        "result_preview": "tab 12 | https://sk.sagepub.com/ency/edvol/socialpsychology/chpt/error-management-theory\n\nsm about a variety of male courtship tactics, including buying flowers, cooking a gourmet dinner, and saying, “I love you.”\n\nThese two examples concern judgments in courtship, but the odds that the costs of the two error types are identical for any particular area of judgment are essentially zero, and therefo"
+      },
+      {
+        "step": 8,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=%22The+paranoid+optimist%3A+An+integrative+evolutionary+model+of+cognitive+biases%22"
+        },
+        "result_preview": "[tab limit 8 reached; close a tab first]"
+      },
+      {
+        "step": 9,
+        "tool": "close_tab",
+        "args": {
+          "tab_id": 8
+        },
+        "result_preview": "closed tab 8"
+      },
+      {
+        "step": 9,
+        "tool": "close_tab",
+        "args": {
+          "tab_id": 9
+        },
+        "result_preview": "closed tab 9"
+      },
+      {
+        "step": 9,
+        "tool": "close_tab",
+        "args": {
+          "tab_id": 11
+        },
+        "result_preview": "closed tab 11"
+      },
+      {
+        "step": 10,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=%22The+paranoid+optimist%3A+An+integrative+evolutionary+model+of+cognitive+biases%22"
+        },
+        "result_preview": "tab 13 | \"The paranoid optimist: An integrative evolutionary model of cognitive biases\" - Google Search | https://www.google.com/search?q=%22The+paranoid+optimist%3A+An+integrative+evolutionary+model+of+cognitive+biases%22\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nShopping\nVideos\nImages\nForums\nShort videos\nMore\nTools\nSearch Results\nWeb results\nan integrative evolutionary model o"
+      },
+      {
+        "step": 11,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/?term=10.1207%2Fs15327957pspr1001_3"
+        },
+        "result_preview": "tab 14 | The paranoid optimist: an integrative evolutionary model of cognitive biases - PubMed | https://pubmed.ncbi.nlm.nih.gov/16430328/\n\nSkip to main page content\n\nAn official website of the United States government\n\n Here's how you know \nLog in\nAccess keys\nNCBI Homepage\nMyNCBI Homepage\nMain Content\nMain Navigation\nSearch:\n0 results are available, use up and down arrow keys to navigate.\nSearch\n"
+      },
+      {
+        "step": 12,
+        "tool": "read_page",
+        "args": {
+          "tab_id": 4,
+          "offset": 60000
+        },
+        "result_preview": "tab 4 | https://en.wikipedia.org/wiki/The_Miseducation_of_Lauryn_Hill#Track_listing\n\nd in the original liner notes,[1] but were later credited on digital editions.[338]\n\"Lost Ones\" contains replayed elements from \"Bam Bam\" by Toots and the Maytals, written by Frederick Hibbert.\n\"Ex-Factor\" contains replayed elements from \"Can It Be All So Simple\" by Wu-Tang Clan.\n\"To Zion\" contains elements from \""
+      },
+      {
+        "step": 13,
+        "tool": "read_page",
+        "args": {
+          "tab_id": 4,
+          "offset": 54000
+        },
+        "result_preview": "tab 4 | https://en.wikipedia.org/wiki/The_Miseducation_of_Lauryn_Hill#Track_listing\n\nist similar to Hill, which led him to discover Amy Winehouse,[311] who eventually began working on her debut album Frank (2003) with Commissioner Gordon.[312]\n\nThe Miseducation of Lauryn Hill has been credited with influencing numerous albums by R&B and hip-hop artists. Its feminist themes and autobiographical son"
+      },
+      {
+        "step": 14,
+        "tool": "finish",
+        "args": {
+          "summary": "## Citation-ready source set\n\n### 1) Eating disorders and adolescence — peer reviewed\n**Trompeter, N., Bussey, K., Forbes, M. K., et al.** (2022). *Emotion Dysregulation and Eating Disorder Symptoms: Examining Distinct Associations and Interactions in Adolescents.* **Research on Child and Adolescent Psychopathology, 50**(5), 683–694. https://doi.org/10.1007/s10802-022-00898-1  \n**Direct source:** [PMC full text](https://pmc.ncbi.nlm.nih.gov/articles/PMC9054869/)\n\n**Direct quote:** “**Eating disorders are characterized by disturbances in both body image and eating behaviors … and typically develop during adolescence**” (Trompeter et al., 2022).\n\nUseful framing: this supports adolescence as a common developmental period of onset; it does **not** mean that every adolescent experiences an eating disorder, nor that onset cannot occur at other ages.\n\n### 2) Brain development beyond childhood — credible explanatory source\n**Center on the Developing Child at Harvard University.** *Brain Architecture: An ongoing process that begins before birth.*  \n**Direct source:** [Harvard page](https://developingchild.harvard.edu/key-concept/brain-architecture/)\n\nUseful takeaway for the workshop: the page explains that brain architecture “continues into adulthood,” and that after the early rapid-growth period, the brain continues refining circuits through pruning. It also notes that building new connections and pruning unused ones continues throughout life. That is a clear way to explain that development is ongoing—not “finished” in childhood.\n\n### 3) Cognitive biases and evolutionary roots — peer-reviewed source\n**Haselton, M. G., & Nettle, D.** (2006). *The paranoid optimist: An integrative evolutionary model of cognitive biases.* **Personality and Social Psychology Review, 10**(1), 47–66. https://doi.org/10.1207/s15327957pspr1001_3  \n**Direct source:** [PubMed record and abstract](https://pubmed.ncbi.nlm.nih.gov/16430328/)\n\nUseful takeaway: this is an evolutionary-psychology account—not a claim that every bias has one settled evolutionary explanation. The authors propose that, when people make judgments under uncertainty and the historical costs of false-positive and false-negative errors differ, natural selection may favor a systematic bias toward the less costly error. This gives teens a non-shaming way to discuss why quick mental shortcuts can be understandable yet still misleading in modern settings.\n\nFor a short accessible explainer alongside the paper, I also kept open SAGE’s **“Error Management Theory”** entry, which explains the framework and its limits: [SAGE Reference](https://sk.sagepub.com/ency/edvol/socialpsychology/chpt/error-management-theory).\n\n## *The Miseducation of Lauryn Hill* cultural hook\n\nFrom the album’s [Wikipedia track listing](https://en.wikipedia.org/wiki/The_Miseducation_of_Lauryn_Hill#Track_listing), titles include:\n\n- “Lost Ones”\n- “Ex-Factor”\n- “To Zion”\n- “Doo Wop (That Thing)”\n- “Superstar”\n- “Final Hour”\n- “When It Hurts So Bad”\n- “Everything Is Everything”\n- “The Miseducation of Lauryn Hill”\n\n**Strongest discussion prompt: “The Miseducation of Lauryn Hill.”** Its title directly opens a discussion about where young people learn their beliefs about themselves—family, peers, school, social media, culture, and personal experience—without requiring anyone to disclose personal mental-health experiences. It connects naturally to brain development and to the idea that biases can shape interpretation.\n\nA low-pressure prompt: **“What messages teach people who they are? Which messages help, which messages oversimplify, and how might we notice the difference?”**\n\n## Concise workshop brief\n\n**Theme:** *Growing brains, fast judgments, and learning who we are.*  \nStart with the evidence that eating disorders commonly begin during adolescence, emphasizing early support and avoiding stereotypes or diagnosis-by-discussion. Explain that brain development continues into adulthood: experience, learning, and relationships continue to shape neural connections. Introduce cognitive biases as common shortcuts; evolutionary accounts suggest some may have been shaped by pressure to avoid costly mistakes, but they are not destiny and can be questioned. Use **“The Miseducation of Lauryn Hill”** as a cultural entry point to explore how outside messages and internal interpretations influence self-understanding. Keep the discussion strengths-based, voluntary, and clear that participants can seek a trusted adult or health professional for personal concerns.\n\nI kept the original full-text/source pages open separately for the eating-disorders article, Harvard explanation, PubMed record, SAGE explainer, and Wikipedia track listing."
+        },
+        "result_preview": "ok"
+      }
+    ],
+    "open_tabs": [
+      {
+        "tab_id": 2,
+        "title": "Brain Architecture: An ongoing process that begins before birth",
+        "url": "https://developingchild.harvard.edu/key-concept/brain-architecture/"
+      },
+      {
+        "tab_id": 4,
+        "title": "The Miseducation of Lauryn Hill - Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/The_Miseducation_of_Lauryn_Hill#Track_listing"
+      },
+      {
+        "tab_id": 5,
+        "title": "Emotion Dysregulation and Eating Disorder Symptoms: Examining Distinct Associations and Interactions in Adolescents - PMC",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9054869/"
+      },
+      {
+        "tab_id": 10,
+        "title": "APA PsycNet FullTextHTML page",
+        "url": "https://psycnet.apa.org/fulltext/1999-15749-006.html"
+      },
+      {
+        "tab_id": 12,
+        "title": "Sage Reference - Encyclopedia of Social Psychology - Error Management Theory",
+        "url": "https://sk.sagepub.com/ency/edvol/socialpsychology/chpt/error-management-theory"
+      },
+      {
+        "tab_id": 13,
+        "title": "\"The paranoid optimist: An integrative evolutionary model of cognitive biases\" - Google Search",
+        "url": "https://www.google.com/search?q=%22The+paranoid+optimist%3A+An+integrative+evolutionary+model+of+cognitive+biases%22"
+      },
+      {
+        "tab_id": 14,
+        "title": "The paranoid optimist: an integrative evolutionary model of cognitive biases - PubMed",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/16430328/"
+      }
+    ],
+    "conversation": [
+      {
+        "role": "user",
+        "text": "I’m pulling together a short workshop for teens around mental health, development, and the ways we make sense of ourselves. Could you help me gather a small, solid set of sources I can actually cite—not just search-result summaries?\n\nI’m looking for: a peer-reviewed source that explicitly says eating disorders often start in adolescence; a credible explanation of how the brain continues developing beyond childhood; and a credible source on cognitive biases having evolutionary roots. Please give me the useful citation information and a direct quote for the eating-disorders point. If you can keep the original source pages open separately, even better—I want to compare the language myself.\n\nI also want to use *The Miseducation of Lauryn Hill* as a loose cultural hook. Could you pull at least five track titles from its Wikipedia page, then suggest which one would make the strongest discussion prompt for this workshop and briefly explain why? Please finish with a tidy, concise workshop brief tying the evidence and song choice together."
+      }
+    ],
+    "user": {
+      "model": "gpt-5.6-terra",
+      "provider": "openai"
+    },
+    "arm": {
+      "model": "openai/gpt-5.6-terra",
+      "provider": "openrouter",
+      "temperature": 1.0
+    }
+  },
+  "judgement": {
+    "judge_model": "gpt-5.6-terra",
+    "verdicts": {
+      "R1": {
+        "met": true,
+        "communicated": true,
+        "reason": "The agent opened a Google result to the PMC full-text article and provided a reusable journal citation plus the exact quote, “typically develop during adolescence.”"
+      },
+      "R2": {
+        "met": false,
+        "communicated": true,
+        "reason": "Although the Harvard source page was left open and cited with an accurate ongoing-development summary, the action log shows it was opened directly rather than from Google as required by the verification condition."
+      },
+      "R3": {
+        "met": true,
+        "communicated": true,
+        "reason": "The final answer cites and links both the opened PubMed article and the opened SAGE Reference entry, with the latter identifying the title “Error Management Theory,” SAGE as publisher, and a URL supporting evolutionary influences on bias."
+      },
+      "R4": {
+        "met": true,
+        "communicated": true,
+        "reason": "The workshop brief coherently connects adolescent eating-disorder onset, continued brain development, and evolutionary accounts of cognitive shortcuts using the opened source pages."
+      },
+      "R5": {
+        "met": true,
+        "communicated": true,
+        "reason": "The Wikipedia album track-listing page remained open and the response lists nine titles that appear in that listing."
+      },
+      "R6": {
+        "met": true,
+        "communicated": true,
+        "reason": "“The Miseducation of Lauryn Hill” appears in the opened track listing, and the explanation meaningfully connects learned self-beliefs and interpretations to the workshop’s development and bias themes within the broader evidence-based brief."
+      },
+      "R7": {
+        "met": true,
+        "communicated": true,
+        "reason": "The final response is organized as a concise workshop brief and includes all three evidence areas, citations, the eating-disorders exact quote, more than five Wikipedia-derived tracks, and a selected discussion title with rationale."
+      }
+    },
+    "met": 6,
+    "total": 7,
+    "score": 0.857,
+    "communicated": 7,
+    "score_communicated": 0.857,
+    "trajectory_efficiency": 0.026
+  },
+  "experience": {
+    "a": {
+      "model": "gpt-5.6-terra",
+      "P1_asked_for": {
+        "score": 5,
+        "reason": "It supplied three credible sources with citation details, an exact eating-disorders quote, direct source links, more than five Wikipedia track titles, a justified song choice, and a concise workshop brief."
+      },
+      "P2_readable_for_them": {
+        "score": 5,
+        "reason": "The response is clearly structured and uses an accessible but appropriately nuanced register for a research-capable educator planning a teen workshop."
+      },
+      "P3_actionable": {
+        "score": 5,
+        "reason": "The answer provides clickable direct pages, reusable citations and quotation, a ready-to-use discussion prompt, and confirms that the relevant original source pages and track listing remain open."
+      },
+      "P4_gap_handling": {
+        "score": 5,
+        "reason": "It responsibly flags that adolescent onset is not universal, presents evolutionary accounts of bias as non-settled rather than deterministic, and adds voluntary, non-diagnostic, support-oriented workshop framing for a sensitive teen topic."
+      },
+      "P5_overall": {
+        "score": 5,
+        "reason": "The person received a solid, citation-ready and practically usable evidence pack plus a thoughtful cultural hook and workshop framing tailored to the stated purpose."
+      },
+      "unmet_requests": [],
+      "missed_gaps": [],
+      "judge_confidence": 0.93
+    },
+    "b": {
+      "model": "gpt-5.6-terra",
+      "P1_asked_for": {
+        "score": 5,
+        "reason": "It supplied three citeable sources, an exact eating-disorders quote, five-plus Wikipedia track titles, a justified song choice, a concise workshop brief, and left relevant source/track-listing pages open."
+      },
+      "P2_readable_for_them": {
+        "score": 5,
+        "reason": "The response is well structured, professionally but accessibly written, and gives enough methodological nuance for a research-capable senior educator without becoming needlessly technical."
+      },
+      "P3_actionable": {
+        "score": 5,
+        "reason": "It provides direct links, usable citation details and quotations, a ready-to-use discussion prompt, and a tab list showing the requested pages remain available for comparison."
+      },
+      "P4_gap_handling": {
+        "score": 4,
+        "reason": "Although it did not ask about the precise age range or workshop setting, it appropriately handled the implicit sensitivity of eating-disorder discussion by recommending non-diagnostic, voluntary, strengths-based framing and trusted-adult/professional support."
+      },
+      "P5_overall": {
+        "score": 5,
+        "reason": "This person would receive a solid, citeable evidence pack and an immediately usable workshop concept that matches both the requested content and their educator-level needs."
+      },
+      "unmet_requests": [],
+      "missed_gaps": [],
+      "judge_confidence": 0.94
+    },
+    "agreement": {
+      "P1_asked_for": {
+        "delta": 0,
+        "within_one": true
+      },
+      "P2_readable_for_them": {
+        "delta": 0,
+        "within_one": true
+      },
+      "P3_actionable": {
+        "delta": 0,
+        "within_one": true
+      },
+      "P4_gap_handling": {
+        "delta": 1,
+        "within_one": true
+      },
+      "P5_overall": {
+        "delta": 0,
+        "within_one": true
+      }
+    }
+  }
+}

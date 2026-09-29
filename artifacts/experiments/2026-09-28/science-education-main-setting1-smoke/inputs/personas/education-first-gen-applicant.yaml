@@ -1,0 +1,134 @@
+persona_id: odyssey-education-first-gen-applicant
+version: '2.0'
+source: hand-specified from dimensions.json (MatrAIx 1290-dim schema)
+note: 'First-in-family community-college student, Spanish-dominant with intermediate
+  English: digitally fluent, wants the gist, under a deadline.'
+attributes:
+  age_bracket:
+    value: 25-34
+    label: Age bracket
+    category: 'Demographic: Core'
+  life_stage:
+    value: Student
+    label: Life stage
+    category: 'Demographic: Life Events'
+  highest_education:
+    value: Some college
+    label: Highest education
+    category: 'Learning: Academic'
+  institution_tier:
+    value: Community college
+    label: Institution tier
+    category: 'Learning: Academic'
+  academic_field:
+    value: Interdisciplinary
+    label: Academic field
+    category: 'Learning: Academic'
+  demo_employment_status:
+    value: Part-time
+    label: Employment status
+    category: 'Demographic: Core'
+  role_function:
+    value: Operations
+    label: Role function
+    category: 'Professional: Industry'
+  seniority:
+    value: Student / intern
+    label: Seniority
+    category: 'Professional: Career'
+  socioeconomic_band:
+    value: Low income
+    label: Socioeconomic band
+    category: 'Demographic: Core'
+  fam_statistics:
+    value: Aware
+    label: 'Familiarity: Statistics'
+    category: 'Expertise: Domains'
+  fam_pedagogy:
+    value: Aware
+    label: 'Familiarity: Pedagogy'
+    category: 'Expertise: Domains'
+  skill_research:
+    value: Beginner
+    label: 'Skill: Research'
+    category: 'Expertise: Skills'
+  skill_fact_checking:
+    value: Beginner
+    label: 'Skill: Fact-checking'
+    category: 'Expertise: Skills'
+  skill_technical_writing:
+    value: Beginner
+    label: 'Skill: Technical writing'
+    category: 'Expertise: Skills'
+  att_higher_education:
+    value: Enthusiast
+    label: 'Attitude: Higher education'
+    category: 'Worldview: Beliefs'
+  register:
+    value: Code-switching
+    label: Dialect / register
+    category: 'Demographic: Core'
+  cog_formality:
+    value: Neutral
+    label: Formality
+    category: 'Linguistic: Communication'
+  cog_directness:
+    value: Direct
+    label: Directness
+    category: 'Linguistic: Communication'
+  cog_politeness:
+    value: Neutral
+    label: Politeness
+    category: 'Linguistic: Communication'
+  cog_use_of_jargon:
+    value: Avoids jargon
+    label: Use of jargon
+    category: 'Linguistic: Communication'
+  pref_detail_brief_vs_full:
+    value: Just the gist
+    label: Brief vs full detail
+    category: 'Behavior: Preferences'
+  english_proficiency:
+    value: Intermediate (B1-B2)
+    label: English proficiency
+    category: 'Linguistic: Language'
+  primary_language:
+    value: Spanish
+    label: Primary language
+    category: 'Linguistic: Language'
+  cog_abstraction:
+    value: Very concrete
+    label: Abstract vs concrete
+    category: 'Linguistic: Communication'
+  intent:
+    value: Learn / explain
+    label: Intent
+    category: 'State: Emotional'
+  time_pressure:
+    value: Deadline
+    label: Time pressure
+    category: 'Behavior: Time'
+  prior_context:
+    value: Returning user
+    label: Prior context
+    category: 'State: Emotional'
+  query_complexity:
+    value: Simple factual
+    label: Query complexity
+    category: 'State: Emotional'
+  tech_savviness:
+    value: Digital native
+    label: Tech savviness
+    category: 'Expertise: Domains'
+  att_ai:
+    value: Enthusiast
+    label: 'Attitude: AI'
+    category: 'Worldview: Beliefs'
+  trust_level:
+    value: Trusting
+    label: Trust level
+    category: 'Worldview: Beliefs'
+  cog_attention_span:
+    value: Short
+    label: Attention span
+    category: 'Linguistic: Communication'

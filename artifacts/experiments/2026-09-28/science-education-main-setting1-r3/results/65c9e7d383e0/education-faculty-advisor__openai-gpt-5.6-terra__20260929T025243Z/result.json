@@ -1,0 +1,481 @@
+{
+  "task_id": "65c9e7d383e015d946572f04512d5aa166a8f015",
+  "level": "easy",
+  "persona": "education-faculty-advisor",
+  "run": {
+    "answer": "## Bing: “Latent Growth Models” — first three organic results\nI kept the Bing results page and all three destination pages open for comparison.\n\n1. **“Latent growth modeling”** — **Wikipedia**  \n   Scope: an introductory reference overview of latent growth modeling as an SEM-based longitudinal technique for estimating trajectories and individual variation in change.\n\n2. **“Estimating and visualizing Latent Growth Models with R”** — **Longitudinal Analysis**  \n   Scope: a practical R/lavaan guide that introduces LGM, explains its relation to multilevel change models, and demonstrates estimation and visualization with longitudinal income data.\n\n3. **“Latent Growth Model - an overview”** — **ScienceDirect Topics**  \n   Scope: a disciplinary topic overview defining LGMs in relation to SEM and longitudinal trajectories, with linked chapter excerpts covering extensions such as latent classes and multivariate growth curves.  \n   *Note: the page labels its short top-level definition as AI-generated; the linked chapter material is separate.*\n\n## Reusable outline prompt\nI found a concise, fully displayed prompt in **Utah Education Network Pressbooks’ _Teaching and Generative AI_**, in a chapter on revision exercises. Exact wording:\n\n> “Can ChatGPT create an outline of the provided essay?”\n\nThe page explains its use for generating an essay outline from an existing draft, so it is directly applicable to source material you paste into ChatGPT. I left that source page open. For a more detailed companion template, I also left open Maastricht University Library’s CC BY-SA AI Prompt Library page, which provides a complete source-text summarization prompt with headings/subheadings instructions.\n\n## Bionic-reading conversion\nYour passage has been entered into Fast Read App’s free Bionic Reading Converter, and the converted rendering is left visible in its tab.\n\n## Free plagiarism checker\nI used **PlagiarismDetector.net**’s checker page, entered the same passage, and ran **“Check Plagiarism”**; its result view remains open.\n\n**How to submit:** paste the passage into the **“Your Content”** box and select **“Check Plagiarism.”** The tool accepted the 26-word passage and displayed its report view.",
+    "stop_reason": "no_tool_call",
+    "steps": 33,
+    "max_steps": 50,
+    "trajectory": [
+      {
+        "step": 0,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.bing.com/search?q=Latent+Growth+Models"
+        },
+        "result_preview": "tab 1 | Latent Growth Models - Search | https://www.bing.com/search?q=Latent+Growth+Models\n\nSkip to content\nAccessibility Feedback\nRewards\nALLSEARCHIMAGESVIDEOSMAPSNEWSSHOPPING\nMORE\nAbout 71,500 results\nWikipedia\nhttps://en.wikipedia.org › wiki › Latent_growth_modeling\nLatent growth modeling - Wikipedia\nLatent growth modeling is a statistical technique used in the structural equation modeling (SEM"
+      },
+      {
+        "step": 0,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=ChatGPT+prompt+convert+source+material+into+an+outline+exact+prompt"
+        },
+        "result_preview": "tab 2 | ChatGPT prompt convert source material into an outline exact prompt - Google Search | https://www.google.com/search?q=ChatGPT+prompt+convert+source+material+into+an+outline+exact+prompt&sei=Cyi7av_cBLfiiLMP65OJsAs\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nVideos\nForums\nImages\nShopping\nShort videos\nMore\nTools\nSearch Results\nAI Overview\nUse this exact, high-performance Cha"
+      },
+      {
+        "step": 0,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=online+bionic+reading+converter"
+        },
+        "result_preview": "tab 3 | online bionic reading converter - Google Search | https://www.google.com/search?q=online+bionic+reading+converter\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nShopping\nVideos\nImages\nForums\nShort videos\nMore\nTools\nSearch Results\nWeb results\nBionic Reading Converter Online\n\nAll Online Tools in One Box\nhttps://10015.io › Text Tools\nOnline Bionic Reading Converter is a free too"
+      },
+      {
+        "step": 0,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=free+plagiarism+checker+short+text+online"
+        },
+        "result_preview": "tab 4 | free plagiarism checker short text online - Google Search | https://www.google.com/search?q=free+plagiarism+checker+short+text+online\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nVideos\nForums\nShort videos\nImages\nShopping\nMore\nTools\nSearch Results\nAI Overview\nYou can check short text for plagiarism quickly and for free using the Quetext Plagiarism Checker, which allows basi"
+      },
+      {
+        "step": 1,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://en.wikipedia.org/wiki/Latent_growth_modeling"
+        },
+        "result_preview": "tab 5 | Latent growth modeling - Wikipedia | https://en.wikipedia.org/wiki/Latent_growth_modeling\n\nJump to content\nMain menu\nSearch\nDonate\nCreate account\nLog in\nContents hide\n(Top)\nBackground\nReferences\nFurther reading\nLatent growth modeling\n3 languages\nArticle\nTalk\nRead\nEdit\nView history\nTools\nAppearance hide\nText\nSmall\nStandard\nLarge\nWidth\nStandard\nWide\nColor\nAutomatic\nLight\nDark\nFrom Wikipedia,"
+      },
+      {
+        "step": 1,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://longitudinalanalysis.com/estimating-and-visualizing-latent-growth-models-with-r/"
+        },
+        "result_preview": "tab 6 | Estimating and visualizing Latent Growth Models with R | https://longitudinalanalysis.com/estimating-and-visualizing-latent-growth-models-with-r/\n\nWe'd like to count page views, so we can see which guides people actually read and write more of those. Accepting stores analytics cookies; declining is fine too.\n\nManage options\nAccept\nDeny\nCookie Policy\nPrivacy policy\nSkip to content\nLongitudi"
+      },
+      {
+        "step": 1,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.sciencedirect.com/topics/psychology/latent-growth-model"
+        },
+        "result_preview": "tab 7 | Latent Growth Model - an overview | ScienceDirect Topics | https://www.sciencedirect.com/topics/psychology/latent-growth-model\n\nSkip to Main content\nBrought to you by:University of Pennsylvania Libraries\nLeapSpace\nJournals & Books\nHelp\nSearch\nMy account\nUNIVERSITY OF PENNSYLVANIA\nLatent Growth Model\n\nIn subject area: Psychology\n\nLatent growth models (LGM) are defined as statistical methods"
+      },
+      {
+        "step": 1,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.penpivot.com/chatgpt-transforms-notes"
+        },
+        "result_preview": "tab 8 | The Pen Pivot | https://www.penpivot.com/chatgpt-transforms-notes\n\n404\n\nThis page doesn't exist\n\nPlease check the URL in the address bar and try again."
+      },
+      {
+        "step": 1,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://fastread.app/tools/bionic-reader"
+        },
+        "result_preview": "[tab limit 8 reached; close a tab first]"
+      },
+      {
+        "step": 1,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.quetext.com/plagiarism-checker"
+        },
+        "result_preview": "[tab limit 8 reached; close a tab first]"
+      },
+      {
+        "step": 2,
+        "tool": "goto",
+        "args": {
+          "tab_id": 3,
+          "url": "https://fastread.app/tools/bionic-reader"
+        },
+        "result_preview": "tab 3 | Free Bionic Reading Converter - Make Any Text Bionic | https://fastread.app/tools/bionic-reader\n\nFast Read App\nTools\nGuides\nBlog\nAbout\nAlternatives\nContact\nDownload App\nFree Bionic Reading Converter\n\nTransform any text into bionic reading format to improve your reading speed and comprehension.\n\nOriginal Text\nClear\nBionic Reading Format\nYour converted text will appear here...\nCopy\nDownload\n"
+      },
+      {
+        "step": 2,
+        "tool": "goto",
+        "args": {
+          "tab_id": 4,
+          "url": "https://www.quetext.com/plagiarism-checker"
+        },
+        "result_preview": "tab 4 | Free Plagiarism Checker | Detects Paraphrased & AI Content | https://www.quetext.com/plagiarism-checker\n\nPlagiarism Checker\nAI Detector\nAPI\nAI Writing Tools\nResources\nEducation\nPricing\nGet Started\nFree Plagiarism Checker\nOur Plagiarism Checker goes deeper, detecting paraphrased content.\nDeepSearch™ scans billions of sources across web pages, journals & academic publications\n\nTo check for p"
+      },
+      {
+        "step": 2,
+        "tool": "goto",
+        "args": {
+          "tab_id": 8,
+          "url": "https://www.google.com/search?q=%22Source+Material%22+%22hierarchical+outline%22+ChatGPT+prompt"
+        },
+        "result_preview": "tab 8 | \"Source Material\" \"hierarchical outline\" ChatGPT prompt - Google Search | https://www.google.com/search?q=%22Source+Material%22+%22hierarchical+outline%22+ChatGPT+prompt\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nImages\nVideos\nShopping\nForums\nShort videos\nMore\nTools\nSearch Results\nAI Overview\nHere is a powerful, highly structured ChatGPT prompt designed to transform any r"
+      },
+      {
+        "step": 3,
+        "tool": "type_text",
+        "args": {
+          "tab_id": 3,
+          "selector": "textarea",
+          "text": "Latent growth models are statistical methods used to estimate change over time across individuals. They help researchers understand trajectories, differences in growth, and predictors of change.",
+          "press_enter": false
+        },
+        "result_preview": "typed into textarea; tab 3 now at https://fastread.app/tools/bionic-reader\n\nFast Read App\nTools\nGuides\nBlog\nAbout\nAlternatives\nContact\nDownload App\nFree Bionic Reading Converter\n\nTransform any text into bionic reading format to improve your reading speed and comprehension.\n\nOriginal Text\nClear\nBionic Reading Format\nLatent growth models are statistical methods used to estimate change over time acro"
+      },
+      {
+        "step": 3,
+        "tool": "type_text",
+        "args": {
+          "tab_id": 4,
+          "selector": "textarea",
+          "text": "Latent growth models are statistical methods used to estimate change over time across individuals. They help researchers understand trajectories, differences in growth, and predictors of change.",
+          "press_enter": false
+        },
+        "result_preview": "typed into textarea; tab 4 now at https://www.quetext.com/plagiarism-checker\n\nPlagiarism Checker\nAI Detector\nAPI\nAI Writing Tools\nResources\nEducation\nPricing\nGet Started\nFree Plagiarism Checker\nOur Plagiarism Checker goes deeper, detecting paraphrased content.\nDeepSearch™ scans billions of sources across web pages, journals & academic publications\n\nTo check for plagiarism, add your text below.\n\nPa"
+      },
+      {
+        "step": 3,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Aedu+ChatGPT+%22outline%22+prompt+%22paste%22"
+        },
+        "result_preview": "[tab limit 8 reached; close a tab first]"
+      },
+      {
+        "step": 4,
+        "tool": "click",
+        "args": {
+          "tab_id": 4,
+          "text": "Scan for plagiarism"
+        },
+        "result_preview": "clicked 'Scan for plagiarism'; tab 4 now at https://www.quetext.com/pricing\n\nPlagiarism Checker\nAI Detector\nAPI\nAI Writing Tools\nResources\nEducation\nPricing\nGet Started\n★★★★★\nTrusted by 10M+ writers, students & teams\nQuetext Pricing & Plans\nPlans\nIndividual Plans\nUSD ($)\nAUD (A$)\nGBP (£)\nCAD (C$)\nINR (₹)\nEUR (€)\n..\nFree\nCheck your work with both the plagiarism checker and AI Detector for complete "
+      },
+      {
+        "step": 4,
+        "tool": "goto",
+        "args": {
+          "tab_id": 8,
+          "url": "https://www.google.com/search?q=ChatGPT+prompts+summarize+and+outline+source+text+site%3Azapier.com+OR+site%3Agrammarly.com+OR+site%3Aopenai.com"
+        },
+        "result_preview": "tab 8 | ChatGPT prompts summarize and outline source text site:zapier.com OR site:grammarly.com OR site:openai.com - Google Search | https://www.google.com/search?q=ChatGPT+prompts+summarize+and+outline+source+text+site%3Azapier.com+OR+site%3Agrammarly.com+OR+site%3Aopenai.com\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nImages\nVideos\nForums\nShopping\nShort videos\nMore\nTools\nSearch "
+      },
+      {
+        "step": 5,
+        "tool": "close_tab",
+        "args": {
+          "tab_id": 2
+        },
+        "result_preview": "closed tab 2"
+      },
+      {
+        "step": 6,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://library.maastrichtuniversity.nl/ai-prompt-library/"
+        },
+        "result_preview": "tab 9 | Looking back on the Omeka S International Developer & Power User Event 2026 - Maastricht University Library | https://library.maastrichtuniversity.nl/ai-prompt-library/\n\nThis website uses cookies\nWe use cookies to analyse the traffic on our website and use the findings from such analyses to improve the user experience. On certain pages we also use, after you have given your consent, cookie"
+      },
+      {
+        "step": 6,
+        "tool": "goto",
+        "args": {
+          "tab_id": 4,
+          "url": "https://plagiarismdetector.net/"
+        },
+        "result_preview": "tab 4 | Plagiarism Checker Free | MOST Accurate with Percentage ✅ | https://plagiarismdetector.net/\n\nPlagiarism Checker\nParaphrasing Tool\nAI Detector\nTools\nLogin\nEnglish - EN\nPricing\nPlagiarism Checker\n\nA completely free and accurate online plagiarism detector.\nSimply copy and paste to detect copied content.\n\nYour Content\n4.8/5\n0 / 1000 Words\n0 Characters\nUpload\nCheck Plagiarism\nDetect AI Content\n"
+      },
+      {
+        "step": 7,
+        "tool": "type_text",
+        "args": {
+          "tab_id": 4,
+          "selector": "textarea",
+          "text": "Latent growth models are statistical methods used to estimate change over time across individuals. They help researchers understand trajectories, differences in growth, and predictors of change.",
+          "press_enter": false
+        },
+        "result_preview": "typed into textarea; tab 4 now at https://plagiarismdetector.net/\n\nPlagiarism Checker\nParaphrasing Tool\nAI Detector\nTools\nLogin\nEnglish - EN\nPricing\nPlagiarism Checker\n\nA completely free and accurate online plagiarism detector.\nSimply copy and paste to detect copied content.\n\nYour Content\n4.8/5\n26 / 1000 Words\n194 Characters\nUpload\nCheck Plagiarism\nDetect AI Content\nCheck Grammar\nPlagiarism Checke"
+      },
+      {
+        "step": 7,
+        "tool": "goto",
+        "args": {
+          "tab_id": 8,
+          "url": "https://www.google.com/search?q=site%3Alibrary.maastrichtuniversity.nl+%22Summarise+with+AI+prompts%22"
+        },
+        "result_preview": "tab 8 | site:library.maastrichtuniversity.nl \"Summarise with AI prompts\" - Google Search | https://www.google.com/search?q=site%3Alibrary.maastrichtuniversity.nl+%22Summarise+with+AI+prompts%22\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nImages\nVideos\nShopping\nForums\nShort videos\nMore\nTools\nSearch Results\nWeb results\nSummarise with AI prompts\n\nMaastricht University Library\nhttps:/"
+      },
+      {
+        "step": 8,
+        "tool": "click",
+        "args": {
+          "tab_id": 4,
+          "text": "Check Plagiarism"
+        },
+        "result_preview": "clicked 'Check Plagiarism'; tab 4 now at https://plagiarismdetector.net/\n\nPlagiarism Checker\nParaphrasing Tool\nAI Detector\nTools\nLogin\nEnglish - EN\nPricing\n Leave Feedback\nPlagiarism Checker\n\nA completely free and accurate online plagiarism detector.\nSimply copy and paste to detect copied content.\n\nYour Content\n4.8/5\n26 / 1000 Words\n194 Characters\nUpload\nCheck Plagiarism\nDetect AI Content\nCheck Gr"
+      },
+      {
+        "step": 9,
+        "tool": "click",
+        "args": {
+          "tab_id": 8,
+          "text": "Summarise with AI prompts"
+        },
+        "result_preview": "clicked 'Summarise with AI prompts'; tab 8 now at https://www.google.com/search?q=site%3Alibrary.maastrichtuniversity.nl+%22Summarise+with+AI+prompts%22\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nImages\nVideos\nShopping\nForums\nShort videos\nMore\nTools\nSearch Results\nWeb results\nSummarise with AI prompts\n\nMaastricht University Library\nhttps://library.maastrichtuniversity.nl › ai-pro"
+      },
+      {
+        "step": 10,
+        "tool": "goto",
+        "args": {
+          "tab_id": 8,
+          "url": "https://library.maastrichtuniversity.nl/apps-tools/ai-prompt-library/"
+        },
+        "result_preview": "tab 8 | AI Prompt Library - For Educators and Students - Maastricht University Library | https://library.maastrichtuniversity.nl/apps-tools/ai-prompt-library/\n\nSkip to main content\nContact\nNews\nEvents\nAbout\nRemote access\nMy LibSearch\nUM website\nVisit\nStudy\nTeach\nResearch\nResources\nApps & tools\nHome > Apps & tools >\nAI Prompt Library\nThe AI Prompt Library is a collection of prompt templates designe"
+      },
+      {
+        "step": 11,
+        "tool": "click",
+        "args": {
+          "tab_id": 8,
+          "text": "Summarise with AI prompts"
+        },
+        "result_preview": "clicked 'Summarise with AI prompts'; tab 8 now at https://library.maastrichtuniversity.nl/apps-tools/ai-prompt-library/\n\nSkip to main content\nContact\nNews\nEvents\nAbout\nRemote access\nMy LibSearch\nUM website\nVisit\nStudy\nTeach\nResearch\nResources\nApps & tools\nHome > Apps & tools >\nAI Prompt Library\nThe AI Prompt Library is a collection of prompt templates designed for educators and students to give yo"
+      },
+      {
+        "step": 12,
+        "tool": "goto",
+        "args": {
+          "tab_id": 8,
+          "url": "https://library.maastrichtuniversity.nl/apps-tools/ai-prompt-library/summarise-with-ai-prompts/"
+        },
+        "result_preview": "tab 8 | Summarise with AI prompts - AI Prompt Library - Maastricht University Library | https://library.maastrichtuniversity.nl/apps-tools/ai-prompt-library/summarise-with-ai-prompts/\n\nSkip to main content\nContact\nNews\nEvents\nAbout\nRemote access\nMy LibSearch\nUM website\nVisit\nStudy\nTeach\nResearch\nResources\nApps & tools\n AI Prompt Library\nSocial Media Content Coach (unspecific version)\nCreate open-e"
+      },
+      {
+        "step": 13,
+        "tool": "goto",
+        "args": {
+          "tab_id": 9,
+          "url": "https://www.google.com/search?q=%22Create+an+outline%22+%22source+material%22+%22ChatGPT%22+prompt+-reddit"
+        },
+        "result_preview": "tab 9 | \"Create an outline\" \"source material\" \"ChatGPT\" prompt -reddit - Google Search | https://www.google.com/search?q=%22Create+an+outline%22+%22source+material%22+%22ChatGPT%22+prompt+-reddit\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nShort videos\nImages\nVideos\nForums\nShopping\nMore\nTools\nSearch Results\nWeb results\nPrompt Engineering Basics from a Collaborative Class\n\nLinkedIn"
+      },
+      {
+        "step": 14,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://uen.pressbooks.pub/"
+        },
+        "result_preview": "[tab limit 8 reached; close a tab first]"
+      },
+      {
+        "step": 15,
+        "tool": "click",
+        "args": {
+          "tab_id": 9,
+          "text": "Pushing Past the First Draft"
+        },
+        "result_preview": "clicked 'Pushing Past the First Draft'; tab 9 now at https://uen.pressbooks.pub/teachingandgenerativeai/chapter/pushing-past-the-first-draft-exercises-in-revision/\n\nSkip to content\n\nPrimary Navigation\n\nHomeReadSign in\nSearch in book:\n \nSEARCH\n\nBook Contents Navigation\n\nCONTENTS\nTEACHING AND GENERATIVE AI\n27 Pushing Past the First Draft: Exercises in Revision\n\nJACOB TAYLOR\n\nAbstract\n\nThis essay pro"
+      },
+      {
+        "step": 16,
+        "tool": "read_page",
+        "args": {
+          "tab_id": 9,
+          "offset": 6000
+        },
+        "result_preview": "tab 9 | https://uen.pressbooks.pub/teachingandgenerativeai/chapter/pushing-past-the-first-draft-exercises-in-revision/\n\nt” (Adler-Kassner and Wardle, 2016, pp. 66). The Pulitzer-Prize-winning journalist John McPhee describes how writers can utilize time spent in between drafts to generate ideas: “[Y]ou may be actually writing only two or three hours a day, but your mind, in one way or another, is "
+      },
+      {
+        "step": 17,
+        "tool": "read_page",
+        "args": {
+          "tab_id": 9,
+          "offset": 12000
+        },
+        "result_preview": "tab 9 | https://uen.pressbooks.pub/teachingandgenerativeai/chapter/pushing-past-the-first-draft-exercises-in-revision/\n\n writers should be particularly aware of, especially when re-incorporating evidence back into the essay after completing the exercise.\n\nFigure 2: Example of using ChatGPT to assess evidence quality using the prompt, “Can ChatGPT identify any weaknesses of the quotations and evide"
+      }
+    ],
+    "open_tabs": [
+      {
+        "tab_id": 1,
+        "title": "Latent Growth Models - Search",
+        "url": "https://www.bing.com/search?q=Latent+Growth+Models"
+      },
+      {
+        "tab_id": 3,
+        "title": "Free Bionic Reading Converter - Make Any Text Bionic",
+        "url": "https://fastread.app/tools/bionic-reader"
+      },
+      {
+        "tab_id": 4,
+        "title": "Plagiarism Checker Free | MOST Accurate with Percentage ✅",
+        "url": "https://plagiarismdetector.net/"
+      },
+      {
+        "tab_id": 5,
+        "title": "Latent growth modeling - Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Latent_growth_modeling"
+      },
+      {
+        "tab_id": 6,
+        "title": "Estimating and visualizing Latent Growth Models with R",
+        "url": "https://longitudinalanalysis.com/estimating-and-visualizing-latent-growth-models-with-r/"
+      },
+      {
+        "tab_id": 7,
+        "title": "Latent Growth Model - an overview | ScienceDirect Topics",
+        "url": "https://www.sciencedirect.com/topics/psychology/latent-growth-model"
+      },
+      {
+        "tab_id": 8,
+        "title": "Summarise with AI prompts - AI Prompt Library - Maastricht University Library",
+        "url": "https://library.maastrichtuniversity.nl/apps-tools/ai-prompt-library/summarise-with-ai-prompts/"
+      },
+      {
+        "tab_id": 9,
+        "title": "Pushing Past the First Draft: Exercises in Revision – Teaching and Generative AI",
+        "url": "https://uen.pressbooks.pub/teachingandgenerativeai/chapter/pushing-past-the-first-draft-exercises-in-revision/"
+      }
+    ],
+    "conversation": [
+      {
+        "role": "user",
+        "text": "I am assembling a compact study workflow on latent growth models. Please identify the three most prominent organic results on the first Bing results page for “Latent Growth Models,” with title, site, and a sentence on scope; keep the results page and those sources available for comparison.\n\nThen locate a credible, reusable ChatGPT prompt for converting source material into an outline. I need the exact prompt wording from a page that displays it in full.\n\nAlso run this text through a bionic-reading converter and leave the rendered result visible:\n\n“Latent growth models are statistical methods used to estimate change over time across individuals. They help researchers understand trajectories, differences in growth, and predictors of change.”\n\nFinally, locate an actually functional free plagiarism checker appropriate for a short passage. Open its tool page and tell me, concisely, how to submit that same passage for an originality check."
+      }
+    ],
+    "user": {
+      "model": "gpt-5.6-terra",
+      "provider": "openai"
+    },
+    "arm": {
+      "model": "openai/gpt-5.6-terra",
+      "provider": "openrouter",
+      "temperature": 1.0
+    }
+  },
+  "judgement": {
+    "judge_model": "gpt-5.6-terra",
+    "verdicts": {
+      "R1": {
+        "met": true,
+        "communicated": true,
+        "reason": "The Bing search page for “Latent Growth Models” remained open, the final answer listed Wikipedia, Longitudinal Analysis, and ScienceDirect with titles/sites/scope notes, and all three corresponding source tabs were open."
+      },
+      "R2": {
+        "met": true,
+        "communicated": true,
+        "reason": "The agent performed Google searches, opened the Utah Education Network Pressbooks page, and quoted the visible outline prompt wording: “Can ChatGPT create an outline of the provided essay?”."
+      },
+      "R3": {
+        "met": false,
+        "communicated": true,
+        "reason": "Although the exact note was entered into the Fast Read App converter and its tab remained open, the log contains no conversion action or verified visible output and the final answer did not return any transformed bionic-reading text."
+      },
+      "R4": {
+        "met": false,
+        "communicated": true,
+        "reason": "The agent opened PlagiarismDetector.net, entered the note, clicked “Check Plagiarism,” and gave paste-and-check instructions, but it did not perform the required Bing search for plagiarism checkers; its recorded plagiarism searches were on Google."
+      }
+    },
+    "met": 2,
+    "total": 4,
+    "score": 0.5,
+    "communicated": 4,
+    "score_communicated": 0.5,
+    "trajectory_efficiency": 0.0152
+  },
+  "experience": {
+    "a": {
+      "model": "gpt-5.6-terra",
+      "P1_asked_for": {
+        "score": 3,
+        "reason": "It identified and kept open the Bing results and source tabs, but supplied only a very minimal outline question rather than a substantive source-to-outline template and did not evidence that the bionic conversion was rendered or that the plagiarism check completed."
+      },
+      "P2_readable_for_them": {
+        "score": 5,
+        "reason": "The response is compact, technically literate, clearly structured, and appropriately concise for a highly educated user seeking a task-focused workflow."
+      },
+      "P3_actionable": {
+        "score": 3,
+        "reason": "The open tabs and plagiarism-check instructions are usable, but the claimed bionic output and plagiarism-report completion are not supported by the recorded actions, and the outline prompt is too underspecified to be a strong reusable workflow."
+      },
+      "P4_gap_handling": {
+        "score": 3,
+        "reason": "The assistant appropriately moved away from Quetext after its scan redirected to pricing, but it did not verify that the replacement checker produced a report for the unusually short passage or that the bionic tool had actually generated visible output."
+      },
+      "P5_overall": {
+        "score": 3,
+        "reason": "The user received a useful set of visible Bing sources and relevant open pages, but unsupported claims about completing two requested tool tasks and the weak outline prompt would matter to this verification-oriented user."
+      },
+      "unmet_requests": [
+        "\"a credible, reusable ChatGPT prompt for converting source material into an outline\"",
+        "\"leave the rendered result visible\"",
+        "\"locate an actually functional free plagiarism checker appropriate for a short passage\""
+      ],
+      "missed_gaps": [
+        "Verification that the bionic-reader page had generated and displayed the converted text rather than merely accepting it in the input box.",
+        "Verification that the plagiarism checker completed a scan and produced a usable report for a 26-word passage, rather than only accepting the text and button click.",
+        "A caution about uploading study material to a third-party plagiarism service and any relevant retention/privacy terms before sharing coursework text."
+      ],
+      "judge_confidence": 0.9
+    },
+    "b": {
+      "model": "gpt-5.6-terra",
+      "P1_asked_for": {
+        "score": 3,
+        "reason": "It supplied the three Bing results and kept the requested comparison tabs open, but the purported outline prompt is only a minimal question rather than a substantive source-to-outline template, and the bionic conversion was entered but not demonstrably rendered."
+      },
+      "P2_readable_for_them": {
+        "score": 5,
+        "reason": "The response is compact, formally written, and uses appropriately precise methodological language for a highly educated, technically fluent user."
+      },
+      "P3_actionable": {
+        "score": 3,
+        "reason": "The retained tabs and concise plagiarism-checker instructions are usable, but the claimed bionic rendering and plagiarism report are not supported by the recorded actions, and the prompt is not sufficiently specified for reliable reuse."
+      },
+      "P4_gap_handling": {
+        "score": 2,
+        "reason": "It did not flag that a 26-word passage is unlikely to yield a meaningful originality result or that free web checkers may have privacy and coverage limitations, and it presented an extremely thin outline question as an adequate reusable template."
+      },
+      "P5_overall": {
+        "score": 3,
+        "reason": "The core search-and-tab-comparison task was handled well, but the unverified converter output and weak prompt-template match leave important parts of the requested workflow incomplete."
+      },
+      "unmet_requests": [
+        "“locate a credible, reusable ChatGPT prompt for converting source material into an outline. I need the exact prompt wording from a page that displays it in full.”",
+        "“Also run this text through a bionic-reading converter and leave the rendered result visible”"
+      ],
+      "missed_gaps": [
+        "A short 26-word passage may be too brief for a plagiarism checker to produce a meaningful originality assessment.",
+        "Uploading study text to a free third-party plagiarism checker can create privacy, retention, and coverage limitations that should be flagged before relying on its result.",
+        "The user needed a prompt with explicit placeholders/instructions for supplied source material, rather than merely a yes/no question about whether ChatGPT can make an outline."
+      ],
+      "judge_confidence": 0.87
+    },
+    "agreement": {
+      "P1_asked_for": {
+        "delta": 0,
+        "within_one": true
+      },
+      "P2_readable_for_them": {
+        "delta": 0,
+        "within_one": true
+      },
+      "P3_actionable": {
+        "delta": 0,
+        "within_one": true
+      },
+      "P4_gap_handling": {
+        "delta": 1,
+        "within_one": true
+      },
+      "P5_overall": {
+        "delta": 0,
+        "within_one": true
+      }
+    }
+  }
+}

@@ -1,0 +1,437 @@
+{
+  "task_id": "4614aa083147e45cbc2977cc8634b9d9db25edfe",
+  "level": "medium",
+  "persona": "education-k12-teacher",
+  "run": {
+    "answer": "## Practical comparison\n\n### Maryland Carey Law\n- **Request admissions information:** Go to Carey’s [Contact Admissions page](https://www.law.umaryland.edu/admissions--aid/contact-admissions/) and select **“JD Applicants”** under **Request Information**. You can also contact the office directly at **admissions@law.umaryland.edu** or **(410) 706-3492**, Monday–Friday, **9:00 AM–5:00 PM**.\n- **Upcoming virtual option:** The first listed event is a **Personal Statement Workshop** on **Wednesday, July 22, 2026, noon–1:00 PM**. If you want a general admissions session instead, the next listed **JD Admissions 101 Webinar** is **Thursday, August 13, 2026, noon–1:00 PM**. Both have registration links on Carey’s webinar page.\n- I left the **[Carey JD Webinars page](https://www.law.umaryland.edu/admissions--aid/visits--events/jd-webinars/)** open.\n\n### University of Baltimore School of Law\n- **Best meeting route:** Its [Visit the School of Law page](https://www.ubalt.edu/law/admission-and-aid/visit/index.cfm) has a direct **“Schedule a 30-Minute Phone Call”** option for a phone or Zoom conversation with an admissions counselor. The school describes it as an in-depth discussion for advice and questions not answered on the website.\n- You can also use the same page’s in-person-tour scheduler; it says you may add an individual admissions-counselor meeting to that tour.\n- **Direct contact:** **lawadmissions@ubalt.edu**; **410-837-4459**; business hours **8:30 AM–4:30 PM**. It also lists a virtual open house on **October 27, 2026, 6:00–7:00 PM ET**, via Zoom, with no registration required.\n- I left the **[UBalt visits/meeting page](https://www.ubalt.edu/law/admission-and-aid/visit/index.cfm)** open.\n\n### American University Washington College of Law — PIPS\n- **What it supports, in plain English:** The Public Interest/Public Service Scholarship (PIPS) is a **three-year, full-tuition** scholarship for incoming full-time J.D. students who have strong academics and a demonstrated interest/potential in public-interest or public-service legal work. It is not merely tuition help: AUWCL also describes it as offering programmatic support for future public-interest leaders.\n- **Key application point:** You must submit both the general J.D. application and a separate electronic PIPS application. The currently posted deadline is **January 31, 2027, at 11:59 PM EST**. The PIPS form includes **three short essays**; a recommendation letter is optional but strongly recommended. Only admitted full-time J.D. applicants go to the PIPS selection committee, with awards beginning in March through mid-April.\n- **Application link:** [PIPS application (Qualtrics)](https://american.co1.qualtrics.com/jfe/form/SV_6FMJcuOCtqeRJiu) — it begins by requesting your LSAC number and email address.\n- I left the **[PIPS scholarship page](https://www.american.edu/wcl/impact/initiatives-programs/publicinterest/pipsscholarship/index.cfm)** open, as well as the application tab.\n\n## Who to contact first\n**Contact American first if public-interest/public-service work is genuinely part of your plan.** The possible upside is unusually large—three years of full tuition—and it has a separate, earlier, fixed scholarship deadline, so it is the time-sensitive item. Then book UBalt’s 30-minute counselor call for the easiest high-touch admissions conversation. Carey is also straightforward to engage: submit its JD information request and register for an admissions webinar.",
+    "stop_reason": "finish",
+    "steps": 32,
+    "max_steps": 50,
+    "trajectory": [
+      {
+        "step": 0,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Alaw.umaryland.edu+Carey+law+admissions+request+information+virtual+event"
+        },
+        "result_preview": "tab 1 | site:law.umaryland.edu Carey law admissions request information virtual event - Google Search | https://www.google.com/search?q=site%3Alaw.umaryland.edu+Carey+law+admissions+request+information+virtual+event&sei=fiK7auLjFZmlptQP2LCy-Q4\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nNews\nForums\nImages\nVideos\nShopping\nMore\nTools\nSearch Results\nWeb results\nVisits & Events - Mary"
+      },
+      {
+        "step": 0,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Alaw.ubalt.edu+admissions+meeting+schedule+appointment"
+        },
+        "result_preview": "tab 2 | site:law.ubalt.edu admissions meeting schedule appointment - Google Search | https://www.google.com/search?q=site%3Alaw.ubalt.edu+admissions+meeting+schedule+appointment&zx=1790648963564\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nImages\nNews\nShopping\nForums\nVideos\nMore\nTools\nSearch Results\nWeb results\nAdmitted Student Events and Resources\n\nThe University of Baltimore\nhttp"
+      },
+      {
+        "step": 0,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Awcl.american.edu+PIPS+Scholarship"
+        },
+        "result_preview": "tab 3 | site:wcl.american.edu PIPS Scholarship - Google Search | https://www.google.com/search?q=site%3Awcl.american.edu+PIPS+Scholarship\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nImages\nShopping\nNews\nVideos\nForums\nMore\nTools\nSearch Results\nWeb results\nThe Role of a Law School Dean: Balancing a Variety of Roles and ...\n\nDigital Commons @ WCL\nhttps://digitalcommons.wcl.american.e"
+      },
+      {
+        "step": 1,
+        "tool": "click",
+        "args": {
+          "tab_id": 1,
+          "text": "Visits & Events - Maryland Carey Law"
+        },
+        "result_preview": "clicked 'Visits & Events - Maryland Carey Law'; tab 1 now at https://www.law.umaryland.edu/admissions--aid/visits--events/\n\nCurrent Students\nFaculty & Staff\nAlumni & Friends\nEmployers\nPrograms & Centers\nBusiness Law\nCenter for Cyber, Health, and Hazard Strategies\nChacón Center for Immigrant Justice\nCybersecurity & Crisis Management\nDispute Resolution\nEnvironmental Law\nGibson-Banks Center for Race "
+      },
+      {
+        "step": 1,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.law.ubalt.edu/admissions/"
+        },
+        "result_preview": "tab 4 opened but navigation failed: Page.goto: net::ERR_CERT_COMMON_NAME_INVALID at https://www.law.ubalt.edu/admissions/\nCall log:\n  - navigating to \"https://www.law.ubalt.edu/admissions/\", waiting until \"load\"\n"
+      },
+      {
+        "step": 1,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=American+University+Washington+College+of+Law+PIPS+Scholarship+application"
+        },
+        "result_preview": "tab 5 | American University Washington College of Law PIPS Scholarship application - Google Search | https://www.google.com/search?q=American+University+Washington+College+of+Law+PIPS+Scholarship+application\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nNews\nImages\nForums\nShopping\nVideos\nMore\nTools\nSearch Results\nAI Overview\nThe Public Interest/Public Service (PIPS) Scholarship at A"
+      },
+      {
+        "step": 2,
+        "tool": "click",
+        "args": {
+          "tab_id": 1,
+          "text": "JD Webinars"
+        },
+        "result_preview": "clicked 'JD Webinars'; tab 1 now at https://www.law.umaryland.edu/admissions--aid/visits--events/jd-webinars/\n\nCurrent Students\nFaculty & Staff\nAlumni & Friends\nEmployers\nPrograms & Centers\nBusiness Law\nCenter for Cyber, Health, and Hazard Strategies\nChacón Center for Immigrant Justice\nCybersecurity & Crisis Management\nDispute Resolution\nEnvironmental Law\nGibson-Banks Center for Race and the Law\nI"
+      },
+      {
+        "step": 2,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.law.umaryland.edu/admissions--aid/contact-admissions/"
+        },
+        "result_preview": "tab 6 | Contact Admissions | https://www.law.umaryland.edu/admissions--aid/contact-admissions/\n\nCurrent Students\nFaculty & Staff\nAlumni & Friends\nEmployers\nPrograms & Centers\nBusiness Law\nCenter for Cyber, Health, and Hazard Strategies\nChacón Center for Immigrant Justice\nCybersecurity & Crisis Management\nDispute Resolution\nEnvironmental Law\nGibson-Banks Center for Race and the Law\nIntellectual Pro"
+      },
+      {
+        "step": 2,
+        "tool": "click",
+        "args": {
+          "tab_id": 5,
+          "text": "Public Interest/Public Service (PIPS) Scholarship"
+        },
+        "result_preview": "clicked 'Public Interest/Public Service (PIPS) Scholarship'; tab 5 now at https://www.google.com/search?q=American+University+Washington+College+of+Law+PIPS+Scholarship+application\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nNews\nImages\nForums\nShopping\nVideos\nMore\nTools\nSearch Results\nAI Overview\nThe Public Interest/Public Service (PIPS) Scholarship at American University Washingt"
+      },
+      {
+        "step": 2,
+        "tool": "open_tab",
+        "args": {
+          "url": "http://www.law.ubalt.edu/admissions/"
+        },
+        "result_preview": "tab 7 | Admission - Apply to the School of Law | University of Baltimore | http://www.law.ubalt.edu/admissions/\n\nSkip to content\nSearch \nSearch\n \nMyUB\nGive\nUniversity of Baltimore Facebook Page\nUniversity of Baltimore Twitter Page\nUniversity of Baltimore LinkedIn Page\nUniversity of Baltimore Instagram Page\nUniversity of Baltimore YouTube Page\nSearch  Search\nAbout UBalt\nMission\nStrategic Plan\nAbout"
+      },
+      {
+        "step": 3,
+        "tool": "click",
+        "args": {
+          "tab_id": 7,
+          "text": "Visits and Events"
+        },
+        "result_preview": "clicked 'Visits and Events'; tab 7 now at https://www.ubalt.edu/law/index.cfm\n\nSkip to content\nBACK TO UBALT.EDU\nopen search\nMENU\nHome\nlaw\nSCHOOL OF LAW\n\nDEGREES\nAPPLY\nVISIT\nGIVE\nAPPLY TO UBALT LAW TODAY\nADMISSION & AID\nNEWS AT\nTHE SCHOOL OF LAW\nUBALT LAW ALUMNI HONORED BY THE DAILY RECORD\nSEPTEMBER 15, 2026\nUBALT ALUMNI\n\nMore than a dozen University of Baltimore School of Law alumni have been nam"
+      },
+      {
+        "step": 3,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Aamerican.edu%2Fwcl%2Fimpact%2Finitiatives-programs%2Fpublicinterest+PIPS+Scholarship"
+        },
+        "result_preview": "tab 8 | site:american.edu/wcl/impact/initiatives-programs/publicinterest PIPS Scholarship - Google Search | https://www.google.com/search?q=site%3Aamerican.edu%2Fwcl%2Fimpact%2Finitiatives-programs%2Fpublicinterest+PIPS+Scholarship\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nImages\nShopping\nVideos\nNews\nForums\nMore\nTools\nSearch Results\nWeb results\nPublic Interest/Public Service (PI"
+      },
+      {
+        "step": 3,
+        "tool": "click",
+        "args": {
+          "tab_id": 6,
+          "text": "JD Applicants"
+        },
+        "result_preview": "clicked 'JD Applicants'; tab 6 now at https://www.law.umaryland.edu/admissions--aid/contact-admissions/\n\nCurrent Students\nFaculty & Staff\nAlumni & Friends\nEmployers\nPrograms & Centers\nBusiness Law\nCenter for Cyber, Health, and Hazard Strategies\nChacón Center for Immigrant Justice\nCybersecurity & Crisis Management\nDispute Resolution\nEnvironmental Law\nGibson-Banks Center for Race and the Law\nIntelle"
+      },
+      {
+        "step": 4,
+        "tool": "click",
+        "args": {
+          "tab_id": 8,
+          "text": "PIPS Application and Selection Process"
+        },
+        "result_preview": "clicked 'PIPS Application and Selection Process'; tab 8 now at https://www.american.edu/wcl/impact/initiatives-programs/publicinterest/pipsscholarship/application-and-selection-process.cfm\n\nSkip to main content\nShow\nMenu\nYou are here:\nAmerican University\nWashington College of Law Impact Initiatives Programs Publicinterest Pipsscholarship Office of Public Interest\nOffice Of Public Interest\n\nHome\n\nW"
+      },
+      {
+        "step": 4,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Aubalt.edu%2Flaw+%22virtual+counselor+meetings%22"
+        },
+        "result_preview": "[tab limit 8 reached; close a tab first]"
+      },
+      {
+        "step": 4,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Aubalt.edu%2Flaw+%22Schedule+a+Meeting%22+admissions"
+        },
+        "result_preview": "[tab limit 8 reached; close a tab first]"
+      },
+      {
+        "step": 5,
+        "tool": "read_page",
+        "args": {
+          "tab_id": 2,
+          "offset": 0
+        },
+        "result_preview": "tab 2 | https://www.google.com/search?q=site%3Alaw.ubalt.edu+admissions+meeting+schedule+appointment&zx=1790648963564\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nImages\nNews\nShopping\nForums\nVideos\nMore\nTools\nSearch Results\nWeb results\nAdmitted Student Events and Resources\n\nThe University of Baltimore\nhttp://www.law.ubalt.edu › admitted › admit_events\nApr 5, 2025 — The Office of La"
+      },
+      {
+        "step": 6,
+        "tool": "close_tab",
+        "args": {
+          "tab_id": 3
+        },
+        "result_preview": "closed tab 3"
+      },
+      {
+        "step": 6,
+        "tool": "close_tab",
+        "args": {
+          "tab_id": 5
+        },
+        "result_preview": "closed tab 5"
+      },
+      {
+        "step": 7,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Aubalt.edu%2Flaw+admissions+visit+meeting"
+        },
+        "result_preview": "tab 9 | site:ubalt.edu/law admissions visit meeting - Google Search | https://www.google.com/search?q=site%3Aubalt.edu%2Flaw+admissions+visit+meeting\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nImages\nVideos\nShopping\nShort videos\nNews\nMore\nTools\nSearch Results\nWeb results\nVisit the School of Law\n\nThe University of Baltimore\nhttps://www.ubalt.edu › law › admission-and-aid › visit\nS"
+      },
+      {
+        "step": 7,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Aubalt.edu+%22lawadmissions%40ubalt.edu%22"
+        },
+        "result_preview": "tab 10 | site:ubalt.edu \"lawadmissions@ubalt.edu\" - Google Search | https://www.google.com/search?q=site%3Aubalt.edu+%22lawadmissions%40ubalt.edu%22\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nImages\nVideos\nForums\nNews\nShopping\nMore\nTools\nSearch Results\nWeb results\nOffice of Law Admissions\n\nThe University of Baltimore\nhttps://www.ubalt.edu › law › admission-and-aid\nOffice of Law A"
+      },
+      {
+        "step": 8,
+        "tool": "click",
+        "args": {
+          "tab_id": 9,
+          "text": "Visit the School of Law"
+        },
+        "result_preview": "clicked 'Visit the School of Law'; tab 9 now at https://www.ubalt.edu/law/admission-and-aid/visit/index.cfm\n\nSkip to content\nBACK TO UBALT.EDU\nopen search\nMENU\nHome\nlaw\nadmission-and-aid\nvisit\nVISIT THE SCHOOL OF LAW\nSECTION MENU\nVisit the School of LawDirections and ParkingSummer Pre-Law AcademyLaw Fairs and Forums\nVISITS, TOURS, AND EVENTS\n\nWe offer online opportunities to speak with an admissio"
+      },
+      {
+        "step": 9,
+        "tool": "close_tab",
+        "args": {
+          "tab_id": 2
+        },
+        "result_preview": "closed tab 2"
+      },
+      {
+        "step": 10,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.american.edu/wcl/impact/initiatives-programs/publicinterest/pipsscholarship/index.cfm"
+        },
+        "result_preview": "tab 11 | Public Interest/Public Service (PIPS) Scholarship | American University, Washington, DC | https://www.american.edu/wcl/impact/initiatives-programs/publicinterest/pipsscholarship/index.cfm\n\nSkip to main content\nShow\nMenu\nYou are here:\nAmerican University\nWashington College of Law Impact Initiatives Programs Publicinterest Office of Public Interest\nOffice Of Public Interest\n\nHome\n\nWho We Ar"
+      },
+      {
+        "step": 11,
+        "tool": "click",
+        "args": {
+          "tab_id": 11,
+          "text": "Apply Now"
+        },
+        "result_preview": "clicked 'Apply Now'; tab 11 now at https://american.co1.qualtrics.com/jfe/form/SV_6FMJcuOCtqeRJiu\n\nPage Loaded\nPlease enter your LSAC Number and Email address to begin your application. \n\nLSAC Number\n\nEmail Address\n\nPowered by Qualtrics"
+      },
+      {
+        "step": 12,
+        "tool": "list_tabs",
+        "args": {},
+        "result_preview": "[\n  {\n    \"tab_id\": 1,\n    \"title\": \"JD Webinars\",\n    \"url\": \"https://www.law.umaryland.edu/admissions--aid/visits--events/jd-webinars/\"\n  },\n  {\n    \"tab_id\": 4,\n    \"title\": \"Privacy error\",\n    \"url\": \"chrome-error://chromewebdata/\"\n  },\n  {\n    \"tab_id\": 6,\n    \"title\": \"Contact Admissions\",\n    \"url\": \"https://www.law.umaryland.edu/admissions--aid/contact-admissions/\"\n  },\n  {\n    \"tab_id\": "
+      },
+      {
+        "step": 13,
+        "tool": "close_tab",
+        "args": {
+          "tab_id": 4
+        },
+        "result_preview": "closed tab 4"
+      },
+      {
+        "step": 13,
+        "tool": "close_tab",
+        "args": {
+          "tab_id": 7
+        },
+        "result_preview": "closed tab 7"
+      },
+      {
+        "step": 13,
+        "tool": "close_tab",
+        "args": {
+          "tab_id": 10
+        },
+        "result_preview": "closed tab 10"
+      },
+      {
+        "step": 14,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.american.edu/wcl/impact/initiatives-programs/publicinterest/pipsscholarship/index.cfm"
+        },
+        "result_preview": "tab 12 | Public Interest/Public Service (PIPS) Scholarship | American University, Washington, DC | https://www.american.edu/wcl/impact/initiatives-programs/publicinterest/pipsscholarship/index.cfm\n\nSkip to main content\nShow\nMenu\nYou are here:\nAmerican University\nWashington College of Law Impact Initiatives Programs Publicinterest Office of Public Interest\nOffice Of Public Interest\n\nHome\n\nWho We Ar"
+      },
+      {
+        "step": 14,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Alaw.umaryland.edu%2Fadmissions--aid+%22Request+Information%22+%22JD+Applicants%22"
+        },
+        "result_preview": "tab 13 | site:law.umaryland.edu/admissions--aid \"Request Information\" \"JD Applicants\" - Google Search | https://www.google.com/search?q=site%3Alaw.umaryland.edu%2Fadmissions--aid+%22Request+Information%22+%22JD+Applicants%22\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nImages\nVideos\nShopping\nForums\nNews\nMore\nTools\nSearch Results\nWeb results\nContact Admissions - Maryland Carey Law\n\n"
+      },
+      {
+        "step": 15,
+        "tool": "finish",
+        "args": {
+          "summary": "## Practical comparison\n\n### Maryland Carey Law\n- **Request admissions information:** Go to Carey’s [Contact Admissions page](https://www.law.umaryland.edu/admissions--aid/contact-admissions/) and select **“JD Applicants”** under **Request Information**. You can also contact the office directly at **admissions@law.umaryland.edu** or **(410) 706-3492**, Monday–Friday, **9:00 AM–5:00 PM**.\n- **Upcoming virtual option:** The first listed event is a **Personal Statement Workshop** on **Wednesday, July 22, 2026, noon–1:00 PM**. If you want a general admissions session instead, the next listed **JD Admissions 101 Webinar** is **Thursday, August 13, 2026, noon–1:00 PM**. Both have registration links on Carey’s webinar page.\n- I left the **[Carey JD Webinars page](https://www.law.umaryland.edu/admissions--aid/visits--events/jd-webinars/)** open.\n\n### University of Baltimore School of Law\n- **Best meeting route:** Its [Visit the School of Law page](https://www.ubalt.edu/law/admission-and-aid/visit/index.cfm) has a direct **“Schedule a 30-Minute Phone Call”** option for a phone or Zoom conversation with an admissions counselor. The school describes it as an in-depth discussion for advice and questions not answered on the website.\n- You can also use the same page’s in-person-tour scheduler; it says you may add an individual admissions-counselor meeting to that tour.\n- **Direct contact:** **lawadmissions@ubalt.edu**; **410-837-4459**; business hours **8:30 AM–4:30 PM**. It also lists a virtual open house on **October 27, 2026, 6:00–7:00 PM ET**, via Zoom, with no registration required.\n- I left the **[UBalt visits/meeting page](https://www.ubalt.edu/law/admission-and-aid/visit/index.cfm)** open.\n\n### American University Washington College of Law — PIPS\n- **What it supports, in plain English:** The Public Interest/Public Service Scholarship (PIPS) is a **three-year, full-tuition** scholarship for incoming full-time J.D. students who have strong academics and a demonstrated interest/potential in public-interest or public-service legal work. It is not merely tuition help: AUWCL also describes it as offering programmatic support for future public-interest leaders.\n- **Key application point:** You must submit both the general J.D. application and a separate electronic PIPS application. The currently posted deadline is **January 31, 2027, at 11:59 PM EST**. The PIPS form includes **three short essays**; a recommendation letter is optional but strongly recommended. Only admitted full-time J.D. applicants go to the PIPS selection committee, with awards beginning in March through mid-April.\n- **Application link:** [PIPS application (Qualtrics)](https://american.co1.qualtrics.com/jfe/form/SV_6FMJcuOCtqeRJiu) — it begins by requesting your LSAC number and email address.\n- I left the **[PIPS scholarship page](https://www.american.edu/wcl/impact/initiatives-programs/publicinterest/pipsscholarship/index.cfm)** open, as well as the application tab.\n\n## Who to contact first\n**Contact American first if public-interest/public-service work is genuinely part of your plan.** The possible upside is unusually large—three years of full tuition—and it has a separate, earlier, fixed scholarship deadline, so it is the time-sensitive item. Then book UBalt’s 30-minute counselor call for the easiest high-touch admissions conversation. Carey is also straightforward to engage: submit its JD information request and register for an admissions webinar."
+        },
+        "result_preview": "ok"
+      }
+    ],
+    "open_tabs": [
+      {
+        "tab_id": 1,
+        "title": "JD Webinars",
+        "url": "https://www.law.umaryland.edu/admissions--aid/visits--events/jd-webinars/"
+      },
+      {
+        "tab_id": 6,
+        "title": "Contact Admissions",
+        "url": "https://www.law.umaryland.edu/admissions--aid/contact-admissions/"
+      },
+      {
+        "tab_id": 8,
+        "title": "Application and Selection Process | American University, Washington, DC",
+        "url": "https://www.american.edu/wcl/impact/initiatives-programs/publicinterest/pipsscholarship/application-and-selection-process.cfm"
+      },
+      {
+        "tab_id": 9,
+        "title": "Visit the School of Law",
+        "url": "https://www.ubalt.edu/law/admission-and-aid/visit/index.cfm"
+      },
+      {
+        "tab_id": 11,
+        "title": "Qualtrics Survey | Qualtrics Experience Management",
+        "url": "https://american.co1.qualtrics.com/jfe/form/SV_6FMJcuOCtqeRJiu"
+      },
+      {
+        "tab_id": 12,
+        "title": "Public Interest/Public Service (PIPS) Scholarship | American University, Washington, DC",
+        "url": "https://www.american.edu/wcl/impact/initiatives-programs/publicinterest/pipsscholarship/index.cfm"
+      },
+      {
+        "tab_id": 13,
+        "title": "site:law.umaryland.edu/admissions--aid \"Request Information\" \"JD Applicants\" - Google Search",
+        "url": "https://www.google.com/search?q=site%3Alaw.umaryland.edu%2Fadmissions--aid+%22Request+Information%22+%22JD+Applicants%22"
+      }
+    ],
+    "conversation": [
+      {
+        "role": "user",
+        "text": "I’m starting to narrow down law schools in the Maryland/DC area, and I’d love a practical comparison before I reach out. Could you look at Maryland Carey, University of Baltimore Law, and American University Washington College of Law?\n\nFor Carey, I’m trying to see how you actually request admissions information and whether there’s an upcoming virtual admissions event I could attend. For Baltimore, I want to know the best way to set up an admissions meeting or get in touch with someone directly. And for American, could you find the PIPS Scholarship information, explain in plain English what it supports, and give me the application link?\n\nPlease leave the relevant Carey event page, Baltimore admissions/meeting page, and American scholarship page open in separate tabs if you can. Then give me a quick recommendation on which school I should contact first, balancing how easy it is to connect with admissions and the possible funding angle."
+      }
+    ],
+    "user": {
+      "model": "gpt-5.6-terra",
+      "provider": "openai"
+    },
+    "arm": {
+      "model": "openai/gpt-5.6-terra",
+      "provider": "openrouter",
+      "temperature": 1.0
+    }
+  },
+  "judgement": {
+    "judge_model": "gpt-5.6-terra",
+    "verdicts": {
+      "R1": {
+        "met": true,
+        "communicated": true,
+        "reason": "The agent visited Carey’s Contact Admissions and JD Webinars pages, reported the JD Applicants request-information route and upcoming online events with dates/times, and left the JD Webinars tab open."
+      },
+      "R2": {
+        "met": true,
+        "communicated": true,
+        "reason": "The agent opened and left open UBalt’s Visit the School of Law page and reported its Schedule a 30-Minute Phone Call option plus the admissions email and phone contact."
+      },
+      "R3": {
+        "met": true,
+        "communicated": true,
+        "reason": "The agent left the AUWCL PIPS scholarship page open, also visited the linked Qualtrics form, and accurately summarized the full-tuition public-interest/public-service scholarship with the application link."
+      },
+      "R4": {
+        "met": true,
+        "communicated": true,
+        "reason": "The response recommends contacting American first based on the funding deadline and value, while providing a concrete next action or contact route for American, UBalt, and Carey."
+      }
+    },
+    "met": 4,
+    "total": 4,
+    "score": 1.0,
+    "communicated": 4,
+    "score_communicated": 1.0,
+    "trajectory_efficiency": 0.0312
+  },
+  "experience": {
+    "a": {
+      "model": "gpt-5.6-terra",
+      "P1_asked_for": {
+        "score": 3,
+        "reason": "It provided Carey contact instructions, UBalt meeting/contact options, PIPS details and application link, tabs, and a recommendation, but labeled Carey events in July and August 2026 as upcoming even though they are already past as of September 29, 2026."
+      },
+      "P2_readable_for_them": {
+        "score": 5,
+        "reason": "The answer is clearly organized by school, uses plain English where requested, and supplies enough detail for a highly educated, research-comfortable user who wants comprehensive information."
+      },
+      "P3_actionable": {
+        "score": 3,
+        "reason": "The direct page links, email addresses, phone numbers, and PIPS form make most next steps usable, but the proposed Carey virtual-event actions rely on dates that have already passed."
+      },
+      "P4_gap_handling": {
+        "score": 4,
+        "reason": "It appropriately made the American-first recommendation conditional on the user's genuine public-interest/public-service interest and explained the full-time-JD eligibility and deadline constraints."
+      },
+      "P5_overall": {
+        "score": 3,
+        "reason": "The person would receive a useful outreach plan and working comparison, but the failure to recognize that the Carey events were no longer upcoming undermines an explicitly requested part of the comparison."
+      },
+      "unmet_requests": [
+        "“whether there’s an upcoming virtual admissions event I could attend”"
+      ],
+      "missed_gaps": [],
+      "judge_confidence": 0.91
+    },
+    "b": {
+      "model": "gpt-5.6-terra",
+      "P1_asked_for": {
+        "score": 5,
+        "reason": "It covered Carey’s information-request route and virtual webinars, UBalt’s admissions-counselor meeting and direct contacts, AUWCL’s PIPS purpose and application link, the requested open tabs, and a contact-first recommendation."
+      },
+      "P2_readable_for_them": {
+        "score": 5,
+        "reason": "The response is clearly organized by school, uses plain English for the scholarship explanation, and includes the level of practical detail this research-comfortable user requested."
+      },
+      "P3_actionable": {
+        "score": 5,
+        "reason": "It supplies direct links, named actions, email addresses, phone numbers, office hours, event dates and times, and confirms that the relevant school pages remained open in tabs."
+      },
+      "P4_gap_handling": {
+        "score": 4,
+        "reason": "The assistant appropriately made its American-first recommendation conditional on the user actually pursuing public-interest/public-service work and surfaced the full-time and application requirements rather than assuming eligibility."
+      },
+      "P5_overall": {
+        "score": 5,
+        "reason": "The person received a usable side-by-side outreach plan with concrete next moves and a sensible funding-sensitive prioritization."
+      },
+      "unmet_requests": [],
+      "missed_gaps": [],
+      "judge_confidence": 0.9
+    },
+    "agreement": {
+      "P1_asked_for": {
+        "delta": -2,
+        "within_one": false
+      },
+      "P2_readable_for_them": {
+        "delta": 0,
+        "within_one": true
+      },
+      "P3_actionable": {
+        "delta": -2,
+        "within_one": false
+      },
+      "P4_gap_handling": {
+        "delta": 0,
+        "within_one": true
+      },
+      "P5_overall": {
+        "delta": -2,
+        "within_one": false
+      }
+    }
+  }
+}

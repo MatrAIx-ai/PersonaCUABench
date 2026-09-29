@@ -1,0 +1,134 @@
+persona_id: odyssey-education-parent-helper
+version: '2.0'
+source: hand-specified from dimensions.json (MatrAIx 1290-dim schema)
+note: 'Bookkeeper researching on behalf of their children: very formal and indirect,
+  reluctant with technology, skeptical.'
+attributes:
+  age_bracket:
+    value: 45-54
+    label: Age bracket
+    category: 'Demographic: Core'
+  life_stage:
+    value: Mid-life
+    label: Life stage
+    category: 'Demographic: Life Events'
+  highest_education:
+    value: Vocational / cert
+    label: Highest education
+    category: 'Learning: Academic'
+  institution_tier:
+    value: Online / bootcamp
+    label: Institution tier
+    category: 'Learning: Academic'
+  academic_field:
+    value: Business
+    label: Academic field
+    category: 'Learning: Academic'
+  demo_employment_status:
+    value: Full-time
+    label: Employment status
+    category: 'Demographic: Core'
+  role_function:
+    value: Finance
+    label: Role function
+    category: 'Professional: Industry'
+  seniority:
+    value: Mid
+    label: Seniority
+    category: 'Professional: Career'
+  socioeconomic_band:
+    value: Lower-middle
+    label: Socioeconomic band
+    category: 'Demographic: Core'
+  fam_statistics:
+    value: Proficient
+    label: 'Familiarity: Statistics'
+    category: 'Expertise: Domains'
+  fam_pedagogy:
+    value: Familiar
+    label: 'Familiarity: Pedagogy'
+    category: 'Expertise: Domains'
+  skill_research:
+    value: Intermediate
+    label: 'Skill: Research'
+    category: 'Expertise: Skills'
+  skill_fact_checking:
+    value: Advanced
+    label: 'Skill: Fact-checking'
+    category: 'Expertise: Skills'
+  skill_technical_writing:
+    value: Intermediate
+    label: 'Skill: Technical writing'
+    category: 'Expertise: Skills'
+  att_higher_education:
+    value: Positive
+    label: 'Attitude: Higher education'
+    category: 'Worldview: Beliefs'
+  register:
+    value: Formal / standard
+    label: Dialect / register
+    category: 'Demographic: Core'
+  cog_formality:
+    value: Very formal
+    label: Formality
+    category: 'Linguistic: Communication'
+  cog_directness:
+    value: Indirect
+    label: Directness
+    category: 'Linguistic: Communication'
+  cog_politeness:
+    value: Very polite
+    label: Politeness
+    category: 'Linguistic: Communication'
+  cog_use_of_jargon:
+    value: Light
+    label: Use of jargon
+    category: 'Linguistic: Communication'
+  pref_detail_brief_vs_full:
+    value: Detail-leaning
+    label: Brief vs full detail
+    category: 'Behavior: Preferences'
+  english_proficiency:
+    value: Native
+    label: English proficiency
+    category: 'Linguistic: Language'
+  primary_language:
+    value: English
+    label: Primary language
+    category: 'Linguistic: Language'
+  cog_abstraction:
+    value: Concrete
+    label: Abstract vs concrete
+    category: 'Linguistic: Communication'
+  intent:
+    value: Decide
+    label: Intent
+    category: 'State: Emotional'
+  time_pressure:
+    value: Moderate
+    label: Time pressure
+    category: 'Behavior: Time'
+  prior_context:
+    value: Frustrated re-ask
+    label: Prior context
+    category: 'State: Emotional'
+  query_complexity:
+    value: Ambiguous / underspecified
+    label: Query complexity
+    category: 'State: Emotional'
+  tech_savviness:
+    value: Reluctant
+    label: Tech savviness
+    category: 'Expertise: Domains'
+  att_ai:
+    value: Neutral
+    label: 'Attitude: AI'
+    category: 'Worldview: Beliefs'
+  trust_level:
+    value: Skeptical
+    label: Trust level
+    category: 'Worldview: Beliefs'
+  cog_attention_span:
+    value: Average
+    label: Attention span
+    category: 'Linguistic: Communication'

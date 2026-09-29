@@ -1,0 +1,134 @@
+persona_id: odyssey-education-faculty-advisor
+version: '2.0'
+source: hand-specified from dimensions.json (MatrAIx 1290-dim schema)
+note: 'Tenured social scientist who advises graduate students: expert in statistics
+  and research, blunt, jargon-heavy, verifies claims.'
+attributes:
+  age_bracket:
+    value: 55-64
+    label: Age bracket
+    category: 'Demographic: Core'
+  life_stage:
+    value: Empty nester
+    label: Life stage
+    category: 'Demographic: Life Events'
+  highest_education:
+    value: Doctorate
+    label: Highest education
+    category: 'Learning: Academic'
+  institution_tier:
+    value: Top-tier research
+    label: Institution tier
+    category: 'Learning: Academic'
+  academic_field:
+    value: Social science
+    label: Academic field
+    category: 'Learning: Academic'
+  demo_employment_status:
+    value: Full-time
+    label: Employment status
+    category: 'Demographic: Core'
+  role_function:
+    value: Teaching
+    label: Role function
+    category: 'Professional: Industry'
+  seniority:
+    value: Lead / Principal
+    label: Seniority
+    category: 'Professional: Career'
+  socioeconomic_band:
+    value: Upper-middle
+    label: Socioeconomic band
+    category: 'Demographic: Core'
+  fam_statistics:
+    value: Expert
+    label: 'Familiarity: Statistics'
+    category: 'Expertise: Domains'
+  fam_pedagogy:
+    value: Proficient
+    label: 'Familiarity: Pedagogy'
+    category: 'Expertise: Domains'
+  skill_research:
+    value: Master
+    label: 'Skill: Research'
+    category: 'Expertise: Skills'
+  skill_fact_checking:
+    value: Master
+    label: 'Skill: Fact-checking'
+    category: 'Expertise: Skills'
+  skill_technical_writing:
+    value: Master
+    label: 'Skill: Technical writing'
+    category: 'Expertise: Skills'
+  att_higher_education:
+    value: Positive
+    label: 'Attitude: Higher education'
+    category: 'Worldview: Beliefs'
+  register:
+    value: Technical jargon
+    label: Dialect / register
+    category: 'Demographic: Core'
+  cog_formality:
+    value: Formal
+    label: Formality
+    category: 'Linguistic: Communication'
+  cog_directness:
+    value: Blunt
+    label: Directness
+    category: 'Linguistic: Communication'
+  cog_politeness:
+    value: Brusque
+    label: Politeness
+    category: 'Linguistic: Communication'
+  cog_use_of_jargon:
+    value: Heavy
+    label: Use of jargon
+    category: 'Linguistic: Communication'
+  pref_detail_brief_vs_full:
+    value: Brief-leaning
+    label: Brief vs full detail
+    category: 'Behavior: Preferences'
+  english_proficiency:
+    value: Native
+    label: English proficiency
+    category: 'Linguistic: Language'
+  primary_language:
+    value: English
+    label: Primary language
+    category: 'Linguistic: Language'
+  cog_abstraction:
+    value: Abstract
+    label: Abstract vs concrete
+    category: 'Linguistic: Communication'
+  intent:
+    value: Get task done
+    label: Intent
+    category: 'State: Emotional'
+  time_pressure:
+    value: Moderate
+    label: Time pressure
+    category: 'Behavior: Time'
+  prior_context:
+    value: Cold start
+    label: Prior context
+    category: 'State: Emotional'
+  query_complexity:
+    value: Multi-step
+    label: Query complexity
+    category: 'State: Emotional'
+  tech_savviness:
+    value: Cautious adopter
+    label: Tech savviness
+    category: 'Expertise: Domains'
+  att_ai:
+    value: Skeptical
+    label: 'Attitude: AI'
+    category: 'Worldview: Beliefs'
+  trust_level:
+    value: Verifying
+    label: Trust level
+    category: 'Worldview: Beliefs'
+  cog_attention_span:
+    value: Very long
+    label: Attention span
+    category: 'Linguistic: Communication'
