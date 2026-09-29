@@ -80,13 +80,12 @@ uv run clawbench-batch --models qwen/qwen3.8-27b \
   --harness codex --judge YOUR_AZURE_DEPLOYMENT --max-concurrent 1 --no-upload
 ```
 
-**5. Push.** Push your tasks, personas and results to your branch.
-`results/` is gitignored, hence the `-f`:
+**5. Push.** Push your tasks, personas and code or doc changes (for example README) to
+your branch. **Never commit results.** `results/` is gitignored; do not force-add it.
 
 ```bash
-git add odyssey/tasks.json odyssey/make_personas.py odyssey/personas
-git add -f odyssey/results
-git commit -m "<your-name>: tasks + personas + results"
+git add odyssey/tasks.json odyssey/make_personas.py odyssey/personas README.md
+git commit -m "<your-name>: tasks + personas"
 git push -u origin <your-name>
 ```
 
