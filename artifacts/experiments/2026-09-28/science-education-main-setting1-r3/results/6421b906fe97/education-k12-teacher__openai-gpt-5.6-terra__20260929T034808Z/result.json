@@ -1,0 +1,687 @@
+{
+  "task_id": "6421b906fe97b3799960af31c77f20ff25f756b1",
+  "level": "medium",
+  "persona": "education-k12-teacher",
+  "run": {
+    "answer": "- **Lewis & Clark — San Diego admission representative:** **Qwadere “Q” Lovell**, Senior Assistant Dean of Admissions, covers Southern California (the county assignment page specifically assigns **San Diego** to him). Contact: [qlovell@lclark.edu](mailto:qlovell@lclark.edu), **503-713-1203**. [County assignment](https://college.lclark.edu/offices/admissions/get_to_know_us/staff/counties/california/) · [staff profile](https://college.lclark.edu/live/profiles/13789-qwadere-q-lovell)\n\n- **Hunter College Silberman MSW, Fall 2026:** The published fall MSW application deadline is **March 1**; supporting documents are due **March 15**. Silberman lists this for the two-year full-time, Bank Street dual-degree, advanced-standing, and one-year-residency options. [Official deadlines](https://sssw.hunter.cuny.edu/admissions/deadlines/)\n\n- **Indiana University Kokomo — full current graduate-program inventory:** The university’s graduate offerings page describes its inventory as master’s degrees, graduate certificates, and postbaccalaureate work. The current academic catalog returns **22 master’s programs** and **16 graduate certificates**:\n  - **Master’s:** MAT Biology; MBA Business Administration; MAT Chemistry; MS Criminal Justice and Public Safety; MS Educational Technology for Learning; MA English; MS Family Nurse Practitioner; MA History; MAT History; Master of Liberal Studies; MS Management; MAT Mathematics; MA Mental Health Counseling; MS Management (the Accounting/Business Administration online-to-MS pathway); MS Nursing Administration; MS Nursing Education; MA Political Science; MAT Political Science; Master of Public Management; MS Science of Reading; MS Strategic Finance; and MS Teaching, Learning, and Curriculum.\n  - **Graduate certificates:** Alcohol and Drug Counseling; Biology; Business Fundamentals; Chemistry; Communication Studies; Composition Studies; Criminal Justice Leadership and Management; Health Management; History; Language and Literature; Leadership; Literature; Mathematics; Political Science; Public Management; and Teaching English Learners.\n  - **Postbaccalaureate certificates shown in the catalog:** Accounting and Advanced Medical Imaging Technology.  \n  [Graduate-program overview](https://kokomo.iu.edu/graduate-programs/index.html) · [official catalog—master’s filter](https://kokomo.iu.edu/academics/index.html?program_type=7) · [official catalog—graduate-certificate filter](https://kokomo.iu.edu/academics/index.html?program_type=3)\n\n- **UCSF/Northern California glioblastoma trials currently recruiting:** UCSF’s glioblastoma finder labels these as **“open to eligible people”** (i.e., recruiting):\n  - **Anti-EGFRvIII synNotch Receptor Induced Anti-EphA2/IL-13Ralpha2 CAR (E-SYNC) T Cells** — **San Francisco, California**; open to eligible people age 18+.  \n  - **DOC1021 Dendritic Cell Immunotherapy for Treatment of Newly Diagnosed Adult Glioblastoma (GBM)** — **San Francisco, California and other locations**; open to eligible people age 18+.  \n  Other currently open UCSF-listed examples include the **FRONTIER** TheraSphere GBM-device study and the **MOAB** recurrent-glioblastoma study, both shown as San Francisco and other locations. [UCSF’s live glioblastoma-trial listing](https://clinicaltrials.ucsf.edu/glioblastoma)\n\n- **Oral Roberts University student activities/student experience:** ORU’s current Student Life team page does **not** use the exact title “Director of Student Activities.” The closest current director-level student-experience role listed is **Chandler Petrak, M.Div., Director of Spiritual Life & Student Experience** — [cpetrak@oru.edu](mailto:cpetrak@oru.edu), **918-495-6664**. ORU also lists **Augustine Mendoza** as **Director of Spiritual Life**, [augiemendoza@oru.edu](mailto:augiemendoza@oru.edu), **918-495-7727**. [Current Student Life team](https://oru.edu/life-at-oru/student-life/meet-the-team.php) · [Student Life administration](https://oru.edu/about-oru/administration/vice-president-student-life.php)\n\n- **EDF graduate programme / salary reviews:** **No.** I found no statement on EDF’s current Graduate Careers page saying that new graduate hires receive salary reviews, so there is no exact salary-review wording to quote from that page. The page discusses programme opportunities, applications, and recruitment FAQs, but does not state a salary-review policy. [EDF Graduate Careers](https://careers.edfenergy.com/graduate-careers)",
+    "stop_reason": "no_tool_call",
+    "steps": 57,
+    "max_steps": 50,
+    "trajectory": [
+      {
+        "step": 0,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Alcsc.edu+admissions+counselor+San+Diego+Lewis+Clark"
+        },
+        "result_preview": "tab 1 | site:lcsc.edu admissions counselor San Diego Lewis Clark - Google Search | https://www.google.com/search?q=site%3Alcsc.edu+admissions+counselor+San+Diego+Lewis+Clark&sei=AzW7ao7ULpasw8cP87ffCQ\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nImages\nNews\nVideos\nForums\nShopping\nMore\nTools\nSearch Results\nWeb results\nFaculty & Staff Directory\n\nLewis-Clark State College\nhttps://www."
+      },
+      {
+        "step": 0,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Ahunter.cuny.edu%2Fsilberman+Fall+2026+MSW+application+deadline"
+        },
+        "result_preview": "tab 2 | site:hunter.cuny.edu/silberman Fall 2026 MSW application deadline - Google Search | https://www.google.com/search?q=site%3Ahunter.cuny.edu%2Fsilberman+Fall+2026+MSW+application+deadline\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nImages\nShopping\nForums\nVideos\nNews\nMore\nTools\nSearch Results\nWeb results\nSilberman Celebrates Social Work Month With Song, Dance ...\n\nSilberman S"
+      },
+      {
+        "step": 0,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Akokomo.iu.edu+graduate+programs"
+        },
+        "result_preview": "tab 3 | site:kokomo.iu.edu graduate programs - Google Search | https://www.google.com/search?q=site%3Akokomo.iu.edu+graduate+programs\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nImages\nShopping\nVideos\nForums\nNews\nMore\nTools\nSearch Results\nWeb results\nGraduate Programs - IU Kokomo - Indiana University\n\nIndiana University Kokomo\nhttps://kokomo.iu.edu › graduate-programs\nSpanning sev"
+      },
+      {
+        "step": 0,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Aucsf.edu+glioblastoma+recruiting+Northern+California+clinical+trial"
+        },
+        "result_preview": "tab 4 | site:ucsf.edu glioblastoma recruiting Northern California clinical trial - Google Search | https://www.google.com/search?q=site%3Aucsf.edu+glioblastoma+recruiting+Northern+California+clinical+trial\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nNews\nImages\nForums\nVideos\nShopping\nMore\nTools\nSearch Results\nWeb results\nUCSF Glioblastoma Clinical Trials — San Francisco Bay ...\n\nU"
+      },
+      {
+        "step": 0,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Aoru.edu+Director+of+Student+Activities"
+        },
+        "result_preview": "tab 5 | site:oru.edu Director of Student Activities - Google Search | https://www.google.com/search?q=site%3Aoru.edu+Director+of+Student+Activities&zx=1790653714173\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nImages\nNews\nVideos\nShopping\nForums\nMore\nTools\nSearch Results\nWeb results\nStudent Association Cabinet\n\nOral Roberts University\nhttps://oru.edu › current-students › my-campus-l"
+      },
+      {
+        "step": 0,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Aedfenergy.com+graduate+programme+salary+reviews"
+        },
+        "result_preview": "tab 6 | site:edfenergy.com graduate programme salary reviews - Google Search | https://www.google.com/search?q=site%3Aedfenergy.com+graduate+programme+salary+reviews\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nShort videos\nVideos\nNews\nImages\nForums\nMore\nTools\nSearch Results\nWeb results\nGraduate Jobs | EDF UK\n\nEDF Energy\nhttps://careers.edfenergy.com › graduate-careers\nJoin our Gra"
+      },
+      {
+        "step": 1,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Alclark.edu+San+Diego+admission+counselor"
+        },
+        "result_preview": "tab 7 | site:lclark.edu San Diego admission counselor - Google Search | https://www.google.com/search?q=site%3Alclark.edu+San+Diego+admission+counselor\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nImages\nNews\nShopping\nVideos\nForums\nMore\nTools\nSearch Results\nWeb results\nCalifornia • Admissions - Lewis & Clark College - Lclark.edu\n\nlclark.edu\nhttps://college.lclark.edu › admissions ›"
+      },
+      {
+        "step": 1,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://kokomo.iu.edu/academics/graduate-programs.html"
+        },
+        "result_preview": "tab 8 | Page Not Found: Indiana University Kokomo | https://kokomo.iu.edu/academics/graduate-programs.html\n\nSkip to Content\nSkip to Main Navigation\nSkip to Search\n\nIndiana University Kokomo\n\nAdmissions\nCost & Financial Aid\nAcademics\nStudent Life\nAthletics\nAbout\nGiving\nAlumni\nLeadership\nOffices & Services\nIndiana University Kokomo\nHome\nPAGE NOT FOUND\nSorry, we can’t find that page\n\nWe couldn't loca"
+      },
+      {
+        "step": 1,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://clinicaltrials.ucsf.edu/glioblastoma"
+        },
+        "result_preview": "[tab limit 8 reached; close a tab first]"
+      },
+      {
+        "step": 1,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://oru.edu/life-at-oru/student-life/meet-the-team.php"
+        },
+        "result_preview": "[tab limit 8 reached; close a tab first]"
+      },
+      {
+        "step": 1,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://careers.edfenergy.com/content/Graduate-Careers/?locale=en_GB"
+        },
+        "result_preview": "[tab limit 8 reached; close a tab first]"
+      },
+      {
+        "step": 2,
+        "tool": "close_tab",
+        "args": {
+          "tab_id": 1
+        },
+        "result_preview": "closed tab 1"
+      },
+      {
+        "step": 2,
+        "tool": "close_tab",
+        "args": {
+          "tab_id": 2
+        },
+        "result_preview": "closed tab 2"
+      },
+      {
+        "step": 2,
+        "tool": "close_tab",
+        "args": {
+          "tab_id": 4
+        },
+        "result_preview": "closed tab 4"
+      },
+      {
+        "step": 2,
+        "tool": "close_tab",
+        "args": {
+          "tab_id": 5
+        },
+        "result_preview": "closed tab 5"
+      },
+      {
+        "step": 2,
+        "tool": "close_tab",
+        "args": {
+          "tab_id": 6
+        },
+        "result_preview": "closed tab 6"
+      },
+      {
+        "step": 3,
+        "tool": "click",
+        "args": {
+          "tab_id": 7,
+          "text": "California • Admissions"
+        },
+        "result_preview": "clicked 'California • Admissions'; tab 7 now at https://college.lclark.edu/offices/admissions/get_to_know_us/staff/counties/california/\n\nSkip to main content\nLEWIS AND CLARK HOME PAGE\nABOUT LEWIS & CLARK\nCOLLEGE OF ARTS & SCIENCES\nLAW SCHOOL\nGRADUATE SCHOOL OF EDUCATION & COUNSELING\nSearch the Lewis & Clark site\nApply\nVisit Campus\nRequest Information\nGive\nAcademics\nStudent Life\nAthletics\nCareer Su"
+      },
+      {
+        "step": 3,
+        "tool": "click",
+        "args": {
+          "tab_id": 3,
+          "text": "Graduate Programs - IU Kokomo"
+        },
+        "result_preview": "clicked 'Graduate Programs - IU Kokomo'; tab 3 now at https://kokomo.iu.edu/graduate-programs/index.html\n\nSkip to Content\nSkip to Main Navigation\nSkip to Search\n\nIndiana University Kokomo\n\nAdmissions\nCost & Financial Aid\nAcademics\nStudent Life\nAthletics\nAbout\nGiving\nAlumni\nLeadership\nOffices & Services\nIndiana University Kokomo\nHome\nGraduate Programs\nGRADUATE PROGRAMS\nTake the Next Step with Gradu"
+      },
+      {
+        "step": 3,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://clinicaltrials.ucsf.edu/glioblastoma"
+        },
+        "result_preview": "tab 9 | UCSF Glioblastoma Clinical Trials for 2026 — San Francisco Bay Area | https://clinicaltrials.ucsf.edu/glioblastoma\n\nSkip to main content\nUniversity of California San Francisco\nUCSF Medical Center\nSearch UCSF\nAbout UCSF\nSearch\nBrowse \nEquity in Research\nAbout the site \nHome\nGlioblastoma Studies\nSearch\nGlioblastoma clinical trials at UCSF\n\n38 in progress, 16 open to eligible people\n\nShowing "
+      },
+      {
+        "step": 3,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://oru.edu/life-at-oru/student-life/meet-the-team.php"
+        },
+        "result_preview": "tab 10 | Meet the Team | https://oru.edu/life-at-oru/student-life/meet-the-team.php\n\nSKIP TO CONTENT\nVisit Request Info Student Stories Newsroom Pres Wilson Give\nApply Now\nOral Roberts University\nMENU\nSEARCH\nMEET THE TEAM\nYou are here:\nHome\nLife at ORU\nMeet the Team\n\nBehind every office, event, and support service is a team that cares deeply about students. Meet the people who help make ORU feel l"
+      },
+      {
+        "step": 3,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://careers.edfenergy.com/content/Graduate-Careers/?locale=en_GB"
+        },
+        "result_preview": "tab 11 | Page not found | EDF UK | https://careers.edfenergy.com/content/Graduate-Careers/?locale=en_GB\n\nSearch\nLife at EDF\nCorporate & Commercial Careers\nNuclear and Engineering Careers\nRenewable Energy Careers\nEarly Careers\nFAQs\nPage not found\n\nWe are very sorry, but we cannot find the page you have requested (page not found). Please use the links below to navigate the site and try to find what "
+      },
+      {
+        "step": 3,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Asssw.hunter.cuny.edu+%22Fall+2026%22+%22MSW%22+deadline"
+        },
+        "result_preview": "tab 12 | site:sssw.hunter.cuny.edu \"Fall 2026\" \"MSW\" deadline - Google Search | https://www.google.com/search?q=site%3Asssw.hunter.cuny.edu+%22Fall+2026%22+%22MSW%22+deadline\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nImages\nShopping\nVideos\nNews\nForums\nMore\nTools\nSearch Results\nWeb results\nRegistration - Silberman School of Social Work - CUNY\n\nSilberman School of Social Work at H"
+      },
+      {
+        "step": 4,
+        "tool": "click",
+        "args": {
+          "tab_id": 7,
+          "text": "Qwadere Lovell"
+        },
+        "result_preview": "clicked 'Qwadere Lovell'; tab 7 now at https://college.lclark.edu/live/profiles/13789-qwadere-q-lovell\n\nSkip to main content\nLEWIS AND CLARK HOME PAGE\nABOUT LEWIS & CLARK\nCOLLEGE OF ARTS & SCIENCES\nLAW SCHOOL\nGRADUATE SCHOOL OF EDUCATION & COUNSELING\nSearch the Lewis & Clark site\nApply\nVisit Campus\nRequest Information\nGive\nAcademics\nStudent Life\nAthletics\nCareer Success\nHome\n/ Admissions/ Qwadere "
+      },
+      {
+        "step": 4,
+        "tool": "click",
+        "args": {
+          "tab_id": 3,
+          "text": "Master's Degrees"
+        },
+        "result_preview": "clicked \"Master's Degrees\"; tab 3 now at https://kokomo.iu.edu/graduate-programs/index.html\n\nSkip to Content\nSkip to Main Navigation\nSkip to Search\n\nIndiana University Kokomo\n\nHome\nAdmissions\nCost & Financial Aid\nAcademics\nStudent Life\nAthletics\nAbout\nGiving\nAlumni\nLeadership\nOffices & Services\nIndiana University Kokomo\nHome\nGraduate Programs\nGRADUATE PROGRAMS\nTake the Next Step with Graduate Prog"
+      },
+      {
+        "step": 4,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://oru.edu/current-students/my-campus-life/campus-life/student-association/cabinet.php"
+        },
+        "result_preview": "tab 13 | 404 Not Found | https://oru.edu/current-students/my-campus-life/campus-life/student-association/cabinet.php\n\nNot Found\n\nThe requested URL was not found on this server.\n\nApache/2.4.66 (Ubuntu) Server at oru.edu Port 443"
+      },
+      {
+        "step": 4,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://careers.edfenergy.com/graduate-careers"
+        },
+        "result_preview": "[tab limit 8 reached; close a tab first]"
+      },
+      {
+        "step": 4,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Asssw.hunter.cuny.edu%2Fadmissions+%22Application+Deadline%22+MSW"
+        },
+        "result_preview": "[tab limit 8 reached; close a tab first]"
+      },
+      {
+        "step": 4,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Acareers.edfenergy.com%2Fgraduate-careers+%22salary+review%22"
+        },
+        "result_preview": "[tab limit 8 reached; close a tab first]"
+      },
+      {
+        "step": 5,
+        "tool": "close_tab",
+        "args": {
+          "tab_id": 8
+        },
+        "result_preview": "closed tab 8"
+      },
+      {
+        "step": 5,
+        "tool": "close_tab",
+        "args": {
+          "tab_id": 11
+        },
+        "result_preview": "closed tab 11"
+      },
+      {
+        "step": 5,
+        "tool": "close_tab",
+        "args": {
+          "tab_id": 13
+        },
+        "result_preview": "closed tab 13"
+      },
+      {
+        "step": 6,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://careers.edfenergy.com/graduate-careers"
+        },
+        "result_preview": "tab 14 | Graduate Jobs | EDF UK | https://careers.edfenergy.com/graduate-careers\n\nSearch\nLife at EDF\nCorporate & Commercial Careers\nNuclear and Engineering Careers\nRenewable Energy Careers\nEarly Careers\nFAQs\nGraduate careers\n2:14\nJoin our team\n\nJoin our Graduate programme and shape a career path that aligns with your interests and ambitions while contributing to a sustainable energy future.\n\nAt ED"
+      },
+      {
+        "step": 6,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Asssw.hunter.cuny.edu%2Fadmissions+%22Application+Deadline%22+MSW"
+        },
+        "result_preview": "tab 15 | site:sssw.hunter.cuny.edu/admissions \"Application Deadline\" MSW - Google Search | https://www.google.com/search?q=site%3Asssw.hunter.cuny.edu%2Fadmissions+%22Application+Deadline%22+MSW\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nImages\nShopping\nVideos\nForums\nNews\nMore\nTools\nSearch Results\nWeb results\nDeadlines - Silberman School of Social Work - CUNY\n\nSilberman School of"
+      },
+      {
+        "step": 6,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Acareers.edfenergy.com%2Fgraduate-careers+%22salary+review%22"
+        },
+        "result_preview": "tab 16 | site:careers.edfenergy.com/graduate-careers \"salary review\" - Google Search | https://www.google.com/search?q=site%3Acareers.edfenergy.com%2Fgraduate-careers+%22salary+review%22\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nImages\nVideos\nShort videos\nNews\nShopping\nMore\nTools\nSearch Results\nNo results found for site:careers.edfenergy.com/graduate-careers \"salary review\".\nRes"
+      },
+      {
+        "step": 7,
+        "tool": "read_page",
+        "args": {
+          "tab_id": 14,
+          "offset": 6000
+        },
+        "result_preview": "tab 14 | https://careers.edfenergy.com/graduate-careers\n\nan also monitor progress on your application through your EDF profile on the careers site..\n\nWho can I contact for feedback on my application?\n\nDue to the high number of applications that we receive, we’re unable to provide detailed feedback to candidates who are not successful at application or online testing stage. After online testing, yo"
+      },
+      {
+        "step": 7,
+        "tool": "click",
+        "args": {
+          "tab_id": 15,
+          "text": "Deadlines - Silberman"
+        },
+        "result_preview": "clicked 'Deadlines - Silberman'; tab 15 now at https://sssw.hunter.cuny.edu/admissions/deadlines/\n\nHome\n \nAbout\n \nAdmissions\n \nFaculty/Staff\n \nAcademics\n \nPracticum Ed.\n \nCurrent Students\n \nResearch\n \nDonate\n \nQuick Links\nDEADLINES\n\nIt is important to be aware of the application deadline for the program to which you are applying. Applicants are encouraged to complete their applications before or b"
+      },
+      {
+        "step": 7,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Akokomo.iu.edu%2Fgraduate-programs%2F+%22Master%22"
+        },
+        "result_preview": "[tab limit 8 reached; close a tab first]"
+      },
+      {
+        "step": 7,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Aoru.edu+%22Director+of+Student+Activities%22+OR+%22Director+of+Student+Experience%22"
+        },
+        "result_preview": "[tab limit 8 reached; close a tab first]"
+      },
+      {
+        "step": 8,
+        "tool": "goto",
+        "args": {
+          "tab_id": 3,
+          "url": "https://www.google.com/search?q=site%3Akokomo.iu.edu%2Fgraduate-programs+%22Master+of%22"
+        },
+        "result_preview": "tab 3 | site:kokomo.iu.edu/graduate-programs \"Master of\" - Google Search | https://www.google.com/search?q=site%3Akokomo.iu.edu%2Fgraduate-programs+%22Master+of%22\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nImages\nVideos\nShort videos\nShopping\nNews\nMore\nTools\nSearch Results\nNo results found for site:kokomo.iu.edu/graduate-programs \"Master of\".\nResults for site:kokomo.iu.edu/gradua"
+      },
+      {
+        "step": 8,
+        "tool": "goto",
+        "args": {
+          "tab_id": 10,
+          "url": "https://www.google.com/search?q=site%3Aoru.edu+%22Director+of+Student+Activities%22"
+        },
+        "result_preview": "tab 10 | site:oru.edu \"Director of Student Activities\" - Google Search | https://www.google.com/search?q=site%3Aoru.edu+%22Director+of+Student+Activities%22\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nImages\nNews\nVideos\nShopping\nForums\nMore\nTools\nSearch Results\nNo results found for site:oru.edu \"Director of Student Activities\".\nResults for site:oru.edu Director of Student Activiti"
+      },
+      {
+        "step": 8,
+        "tool": "read_page",
+        "args": {
+          "tab_id": 14,
+          "offset": 12000
+        },
+        "result_preview": "tab 14 | https://careers.edfenergy.com/graduate-careers\n\nme of your interview or assessment centre, so we will always aim to update you within 7 days of an assessment centre or within 7 days of our final interview taking place.\n\nHow do I tell you about any adjustments required in respect of a disability?\n\nWe’re proud to be a Disability Confident employer. If you encounter any accessibility challen"
+      },
+      {
+        "step": 8,
+        "tool": "read_page",
+        "args": {
+          "tab_id": 9,
+          "offset": 6000
+        },
+        "result_preview": "tab 9 | https://clinicaltrials.ucsf.edu/glioblastoma\n\n≥70 years) or those with limited functioning performance at presentation (KPS ≤70). Therefore, the decision between resection and…\n\n San Francisco, California and other locations\n\nSUPRAMAX Study: Supramaximal Resection Versus Maximal Resection for High-Grade Glioma Patients (ENCRAM 2201)\n\nopen to eligible people ages 18-90\n\nA greater extent of "
+      },
+      {
+        "step": 9,
+        "tool": "goto",
+        "args": {
+          "tab_id": 10,
+          "url": "https://www.google.com/search?q=site%3Acareers.edfenergy.com+graduate+%22salary+reviews%22+OR+%22salary+review%22"
+        },
+        "result_preview": "tab 10 | site:careers.edfenergy.com graduate \"salary reviews\" OR \"salary review\" - Google Search | https://www.google.com/search?q=site%3Acareers.edfenergy.com+graduate+%22salary+reviews%22+OR+%22salary+review%22\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nShort videos\nVideos\nImages\nForums\nNews\nMore\nTools\nSearch Results\n\nYour search - site:careers.edfenergy.com graduate \"salary re"
+      },
+      {
+        "step": 9,
+        "tool": "goto",
+        "args": {
+          "tab_id": 3,
+          "url": "https://www.google.com/search?q=Indiana+University+Kokomo+graduate+programs+masters+graduate+certificates+official"
+        },
+        "result_preview": "tab 3 | Indiana University Kokomo graduate programs masters graduate certificates official - Google Search | https://www.google.com/search?q=Indiana+University+Kokomo+graduate+programs+masters+graduate+certificates+official\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nForums\nImages\nShopping\nShort videos\nVideos\nMore\nTools\nSearch Results\nAI Overview\nIndiana University Kokomo offers a"
+      },
+      {
+        "step": 9,
+        "tool": "click",
+        "args": {
+          "tab_id": 10,
+          "text": "Student Association Cabinet"
+        },
+        "result_preview": "click failed: Locator.click: Timeout 40000ms exceeded.\nCall log:\n  - waiting for get_by_text(\"Student Association Cabinet\").first\n"
+      },
+      {
+        "step": 10,
+        "tool": "click",
+        "args": {
+          "tab_id": 3,
+          "text": "Academics - IU Kokomo"
+        },
+        "result_preview": "click failed: Locator.click: Timeout 40000ms exceeded.\nCall log:\n  - waiting for get_by_text(\"Academics - IU Kokomo\").first\n    - locator resolved to <span>Academics - IU Kokomo</span>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <a class="
+      },
+      {
+        "step": 11,
+        "tool": "goto",
+        "args": {
+          "tab_id": 3,
+          "url": "https://kokomo.iu.edu/academics/index.html"
+        },
+        "result_preview": "tab 3 | Academics: Indiana University Kokomo | https://kokomo.iu.edu/academics/index.html\n\nSkip to Content\nSkip to Main Navigation\nSkip to Search\n\nIndiana University Kokomo\n\nAdmissions\nCost & Financial Aid\nAcademics\nStudent Life\nAthletics\nAbout\nGiving\nAlumni\nLeadership\nOffices & Services\nIndiana University Kokomo\n\nYour next adventure starts right here\n\nWith over 60 degrees and programs, your next "
+      },
+      {
+        "step": 12,
+        "tool": "click",
+        "args": {
+          "tab_id": 3,
+          "text": "Master's degrees"
+        },
+        "result_preview": "click failed: Locator.click: Timeout 40000ms exceeded.\nCall log:\n  - waiting for get_by_text(\"Master's degrees\").first\n    - locator resolved to <option value=\"7\">Master's degrees</option>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, "
+      },
+      {
+        "step": 13,
+        "tool": "type_text",
+        "args": {
+          "tab_id": 3,
+          "selector": "select",
+          "text": "Master's degrees",
+          "press_enter": true
+        },
+        "result_preview": "typing failed: Page.fill: Error: Element is not an <input>, <textarea> or [contenteditable] element\nCall log:\n  - waiting for locator(\"select\")\n    - locator resolved to 4 elements. Proceeding with the first one: <select id=\"program_type\" name=\"program_type\" class=\"rvt-select rvt-m-bottom-xs\">…</select>\n    - fill(\"Master's degrees\")\n  - attempting fill action\n    - waiting for element to be visib"
+      },
+      {
+        "step": 14,
+        "tool": "goto",
+        "args": {
+          "tab_id": 3,
+          "url": "https://kokomo.iu.edu/academics/index.html?program_type=7"
+        },
+        "result_preview": "tab 3 | Academics: Indiana University Kokomo | https://kokomo.iu.edu/academics/index.html?program_type=7\n\nSkip to Content\nSkip to Main Navigation\nSkip to Search\n\nIndiana University Kokomo\n\nAdmissions\nCost & Financial Aid\nAcademics\nStudent Life\nAthletics\nAbout\nGiving\nAlumni\nLeadership\nOffices & Services\nIndiana University Kokomo\n\nYour next adventure starts right here\n\nWith over 60 degrees and progr"
+      },
+      {
+        "step": 15,
+        "tool": "goto",
+        "args": {
+          "tab_id": 3,
+          "url": "https://kokomo.iu.edu/academics/index.html?program_type=7&page=2"
+        },
+        "result_preview": "tab 3 | Academics: Indiana University Kokomo | https://kokomo.iu.edu/academics/index.html?program_type=7&page=2\n\nSkip to Content\nSkip to Main Navigation\nSkip to Search\n\nIndiana University Kokomo\n\nAdmissions\nCost & Financial Aid\nAcademics\nStudent Life\nAthletics\nAbout\nGiving\nAlumni\nLeadership\nOffices & Services\nIndiana University Kokomo\n\nYour next adventure starts right here\n\nWith over 60 degrees an"
+      },
+      {
+        "step": 16,
+        "tool": "goto",
+        "args": {
+          "tab_id": 3,
+          "url": "https://kokomo.iu.edu/academics/index.html?program_type=3"
+        },
+        "result_preview": "tab 3 | Academics: Indiana University Kokomo | https://kokomo.iu.edu/academics/index.html?program_type=3\n\nSkip to Content\nSkip to Main Navigation\nSkip to Search\n\nIndiana University Kokomo\n\nAdmissions\nCost & Financial Aid\nAcademics\nStudent Life\nAthletics\nAbout\nGiving\nAlumni\nLeadership\nOffices & Services\nIndiana University Kokomo\n\nYour next adventure starts right here\n\nWith over 60 degrees and progr"
+      },
+      {
+        "step": 17,
+        "tool": "goto",
+        "args": {
+          "tab_id": 3,
+          "url": "https://kokomo.iu.edu/academics/index.html?keyword=Post-Baccalaureate"
+        },
+        "result_preview": "tab 3 | Academics: Indiana University Kokomo | https://kokomo.iu.edu/academics/index.html\n\nSkip to Content\nSkip to Main Navigation\nSkip to Search\n\nIndiana University Kokomo\n\nAdmissions\nCost & Financial Aid\nAcademics\nStudent Life\nAthletics\nAbout\nGiving\nAlumni\nLeadership\nOffices & Services\nIndiana University Kokomo\n\nYour next adventure starts right here\n\nWith over 60 degrees and programs, your next "
+      },
+      {
+        "step": 18,
+        "tool": "goto",
+        "args": {
+          "tab_id": 10,
+          "url": "https://www.google.com/search?q=site%3Aoru.edu+%22Augustine+Mendoza%22"
+        },
+        "result_preview": "tab 10 | site:oru.edu \"Augustine Mendoza\" - Google Search | https://www.google.com/search?q=site%3Aoru.edu+%22Augustine+Mendoza%22\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nImages\nVideos\nNews\nShopping\nForums\nMore\nTools\nSearch Results\nWeb results\nVice President of Student Life | Administration\n\nOral Roberts University\nhttps://oru.edu › about-oru › vice-president-student-life\n... "
+      },
+      {
+        "step": 19,
+        "tool": "click",
+        "args": {
+          "tab_id": 10,
+          "text": "Vice President of Student Life | Administration"
+        },
+        "result_preview": "clicked 'Vice President of Student Life | Administration'; tab 10 now at https://oru.edu/about-oru/administration/vice-president-student-life.php\n\nSKIP TO CONTENT\nVisit Request Info Student Stories Newsroom Pres Wilson Give\nApply Now\nOral Roberts University\nMENU\nSEARCH\nVICE PRESIDENT OF STUDENT LIFE\nYou are here:\nHome\nAbout ORU\nAdministration\nVice President of Student Life\nLori Cook\n\nVice Presiden"
+      },
+      {
+        "step": 20,
+        "tool": "goto",
+        "args": {
+          "tab_id": 3,
+          "url": "https://www.google.com/search?q=site%3Akokomo.iu.edu+%22Post-Baccalaureate+Certificate+at+IU+Kokomo%22"
+        },
+        "result_preview": "tab 3 | site:kokomo.iu.edu \"Post-Baccalaureate Certificate at IU Kokomo\" - Google Search | https://www.google.com/search?q=site%3Akokomo.iu.edu+%22Post-Baccalaureate+Certificate+at+IU+Kokomo%22\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nNews\nImages\nForums\nVideos\nShopping\nMore\nTools\nSearch Results\nWeb results\nAcademics - IU Kokomo - Indiana University\n\nIndiana University Kokomo\nht"
+      },
+      {
+        "step": 21,
+        "tool": "goto",
+        "args": {
+          "tab_id": 3,
+          "url": "https://kokomo.iu.edu/academics/index.html?page=3"
+        },
+        "result_preview": "tab 3 | Academics: Indiana University Kokomo | https://kokomo.iu.edu/academics/index.html?page=3\n\nSkip to Content\nSkip to Main Navigation\nSkip to Search\n\nIndiana University Kokomo\n\nAdmissions\nCost & Financial Aid\nAcademics\nStudent Life\nAthletics\nAbout\nGiving\nAlumni\nLeadership\nOffices & Services\nIndiana University Kokomo\n\nYour next adventure starts right here\n\nWith over 60 degrees and programs, you"
+      }
+    ],
+    "open_tabs": [
+      {
+        "tab_id": 3,
+        "title": "Academics: Indiana University Kokomo",
+        "url": "https://kokomo.iu.edu/academics/index.html?page=3"
+      },
+      {
+        "tab_id": 7,
+        "title": "Qwadere “Q” Lovell • Admissions • Lewis & Clark College, Portland, Oregon",
+        "url": "https://college.lclark.edu/live/profiles/13789-qwadere-q-lovell"
+      },
+      {
+        "tab_id": 9,
+        "title": "UCSF Glioblastoma Clinical Trials for 2026 — San Francisco Bay Area",
+        "url": "https://clinicaltrials.ucsf.edu/glioblastoma"
+      },
+      {
+        "tab_id": 10,
+        "title": "Vice President of Student Life | Administration | ORU",
+        "url": "https://oru.edu/about-oru/administration/vice-president-student-life.php"
+      },
+      {
+        "tab_id": 12,
+        "title": "site:sssw.hunter.cuny.edu \"Fall 2026\" \"MSW\" deadline - Google Search",
+        "url": "https://www.google.com/search?q=site%3Asssw.hunter.cuny.edu+%22Fall+2026%22+%22MSW%22+deadline"
+      },
+      {
+        "tab_id": 14,
+        "title": "Graduate Jobs | EDF UK",
+        "url": "https://careers.edfenergy.com/graduate-careers"
+      },
+      {
+        "tab_id": 15,
+        "title": "Deadlines – Silberman School of Social Work at Hunter College",
+        "url": "https://sssw.hunter.cuny.edu/admissions/deadlines/"
+      },
+      {
+        "tab_id": 16,
+        "title": "site:careers.edfenergy.com/graduate-careers \"salary review\" - Google Search",
+        "url": "https://www.google.com/search?q=site%3Acareers.edfenergy.com%2Fgraduate-careers+%22salary+review%22"
+      }
+    ],
+    "conversation": [
+      {
+        "role": "user",
+        "text": "I’m pulling together a quick outreach brief for a student in San Diego and could use some help tracking down a few specifics from official sources.\n\nCould you find:\n- the Lewis & Clark admissions counselor/rep for San Diego, including their contact details;\n- Hunter College Silberman’s Fall 2026 MSW application deadline;\n- the full list of graduate programs at Indiana University Kokomo;\n- at least two currently recruiting glioblastoma clinical trials in Northern California through UCSF, with the study locations and recruiting status;\n- the current director of student activities at Oral Roberts University and any official contact information listed; and\n- whether EDF Energy says anything on its graduate programme page about salary reviews for new hires—ideally with the exact wording.\n\nPlease use the actual institutional or program pages rather than third-party listings, and send it back as a compact, linked summary so I can verify each item."
+      }
+    ],
+    "user": {
+      "model": "gpt-5.6-terra",
+      "provider": "openai"
+    },
+    "arm": {
+      "model": "openai/gpt-5.6-terra",
+      "provider": "openrouter",
+      "temperature": 1.0
+    }
+  },
+  "judgement": {
+    "judge_model": "gpt-5.6-terra",
+    "verdicts": {
+      "R1": {
+        "met": false,
+        "communicated": true,
+        "reason": "The answer names Qwadere Lovell and gives contact details, but the required Lewis & Clark California county-assignment page was no longer open (only Lovell’s profile remained open), so San Diego’s assignment cannot be visually confirmed from an open regional-contact page."
+      },
+      "R2": {
+        "met": true,
+        "communicated": true,
+        "reason": "The answer reports the official Fall 2026 MSW deadline as March 1 (with March 15 for supporting documents), and the official Silberman Deadlines page is open in tab 15."
+      },
+      "R3": {
+        "met": false,
+        "communicated": true,
+        "reason": "Although the response supplies a lengthy program inventory, the IU Kokomo graduate-program overview page was navigated away from and is not open; the remaining tab is an Academics catalog page, not the requested graduate-programs page for comparison."
+      },
+      "R4": {
+        "met": false,
+        "communicated": true,
+        "reason": "The response names UCSF glioblastoma studies and locations, but only the UCSF listing page remains open and no separate actual trial-detail tabs were opened for the two reported trials."
+      },
+      "R5": {
+        "met": false,
+        "communicated": true,
+        "reason": "The response substitutes Student Life directors for the requested Director of Student Activities, and the cited Meet the Team page was not left open; the open ORU administration page does not itself establish the requested director and contact details."
+      },
+      "R6": {
+        "met": false,
+        "communicated": true,
+        "reason": "The EDF graduate-careers page is open, but the response gives an unsupported negative conclusion rather than the requested exact salary-review wording, so it does not establish the required determination from the official page."
+      },
+      "R7": {
+        "met": true,
+        "communicated": true,
+        "reason": "The final response is a compact bullet summary covering all six requested subject areas and includes official source links/page references for each."
+      }
+    },
+    "met": 2,
+    "total": 7,
+    "score": 0.286,
+    "communicated": 7,
+    "score_communicated": 0.286,
+    "trajectory_efficiency": 0.005
+  },
+  "experience": {
+    "a": {
+      "model": "gpt-5.6-terra",
+      "P1_asked_for": {
+        "score": 4,
+        "reason": "The answer addresses all six requested topics with official links, but it does not identify an exact ORU “director of student activities” and provides only closest-role alternatives."
+      },
+      "P2_readable_for_them": {
+        "score": 5,
+        "reason": "The compact headed bullet format, direct labels, contact details, and embedded official links are well suited to this research-capable user."
+      },
+      "P3_actionable": {
+        "score": 4,
+        "reason": "The official links and concrete names, dates, contacts, locations, and statuses let the user verify most findings, though the individual UCSF trial pages are not directly linked."
+      },
+      "P4_gap_handling": {
+        "score": 3,
+        "reason": "It appropriately flags that ORU does not use the exact requested title and distinguishes the closest roles, but it does not clarify whether a particular MSW pathway was intended or directly substantiate the live trial-status claims with individual study pages."
+      },
+      "P5_overall": {
+        "score": 4,
+        "reason": "A user preparing an outreach brief would receive a useful, largely sourceable summary, with the main shortcomings being the unresolved exact ORU role and less-than-ideal trial verification."
+      },
+      "unmet_requests": [
+        "“the current director of student activities at Oral Roberts University”",
+        "“at least two currently recruiting glioblastoma clinical trials in Northern California through UCSF, with the study locations and recruiting status”"
+      ],
+      "missed_gaps": [
+        "Whether the Hunter Fall 2026 deadline needed to be broken out for a specific MSW format or pathway.",
+        "Direct official study-page links for each UCSF trial to independently confirm that recruiting status is still live.",
+        "Whether the user wanted the closest ORU student-experience official when no exact “Director of Student Activities” title appeared."
+      ],
+      "judge_confidence": 0.82
+    },
+    "b": {
+      "model": "gpt-5.6-terra",
+      "P1_asked_for": {
+        "score": 4,
+        "reason": "It supplied linked official-source answers for all six requested topics, but it did not identify a confirmed ORU “Director of Student Activities,” instead offering closest Student Life roles."
+      },
+      "P2_readable_for_them": {
+        "score": 5,
+        "reason": "The compact bullet format, plain explanations, exact dates, contact links, and clearly separated program lists suit a research-savvy native-English educator requesting a detailed outreach brief."
+      },
+      "P3_actionable": {
+        "score": 4,
+        "reason": "Official links, email mailto links, phone numbers, named trials, and concrete deadlines make the results readily verifiable, though the claimed ORU role is not the requested title and individual UCSF trial pages were not linked."
+      },
+      "P4_gap_handling": {
+        "score": 4,
+        "reason": "It appropriately flagged that ORU does not use the exact requested title and stated that EDF’s page contained no salary-review wording rather than inventing a quote, though it did not explain whether MSW deadlines vary for any unlisted program formats."
+      },
+      "P5_overall": {
+        "score": 4,
+        "reason": "This person would receive a useful, well-organized official-source brief covering nearly everything requested, with the main weakness being the unresolved ORU director identification and somewhat weak trial-level sourcing."
+      },
+      "unmet_requests": [
+        "“the current director of student activities at Oral Roberts University and any official contact information listed”"
+      ],
+      "missed_gaps": [
+        "Whether Hunter’s Fall 2026 MSW deadline differs for any program format not explicitly covered in the response.",
+        "Whether the named UCSF trials have specific eligibility requirements beyond being currently open to eligible people."
+      ],
+      "judge_confidence": 0.87
+    },
+    "agreement": {
+      "P1_asked_for": {
+        "delta": 0,
+        "within_one": true
+      },
+      "P2_readable_for_them": {
+        "delta": 0,
+        "within_one": true
+      },
+      "P3_actionable": {
+        "delta": 0,
+        "within_one": true
+      },
+      "P4_gap_handling": {
+        "delta": -1,
+        "within_one": true
+      },
+      "P5_overall": {
+        "delta": 0,
+        "within_one": true
+      }
+    }
+  }
+}

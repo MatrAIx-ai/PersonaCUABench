@@ -1,213 +1,212 @@
 [
   {
-    "task_id": "890a6880049a42684ac91a2e1809442846f9394c",
-    "confirmed_task": "I’m thinking about doing a simple public-transit outing from downtown Chicago to Aurora, Illinois soon, and I want a practical snapshot I can actually look at in the browser. On Google, please search for the recommended public-transit route from Chicago to Aurora, Illinois and open the actual transit directions so you can tell me the main mode I’d be taking and the estimated total travel time; leave that directions page open so I can review the route myself. Since I may need a little context for rail connections and fare structure, then go to Metra’s BNSF line page and summarize what the BNSF line is, where it runs, and where on that page or site fare information is listed; if there’s a separate fares link, open that in another tab so I have a visual reference. After that, head to Weather.com and pull up the local 10-day forecast for Aurora, Illinois, then give me the high and low temperatures for the next 3 days so I can judge whether the trip will feel comfortable. Please send everything back as one concise trip-planning summary, and keep the Google transit directions tab and the relevant Metra page open for comparison.",
+    "task_id": "65c9e7d383e015d946572f04512d5aa166a8f015",
+    "confirmed_task": "I’m putting together a quick, accessible study workflow for myself on latent growth models, and I want it to feel grounded in what I’d actually see in a browser rather than just a generic summary. Please start on Bing and search for “Latent Growth Models,” then look only at the main organic web results on the first page and pull out the top three with their titles, source sites, and a one-line note on what each seems to cover, because I want to know which sources are most visible right away. Open those three results in separate tabs and leave the search results page open too so I can compare them afterward. Once you’ve got that context, use Google to find one solid ChatGPT prompt template for turning source material into an outline, ideally from a page that actually shows the full prompt wording, because I want to reuse that structure for my own study note; open the page with the prompt and copy the exact template text. After that, go to 10015.io and use its bionic reading converter on this exact note text: “Latent growth models are statistical methods used to estimate change over time across individuals. They help researchers understand trajectories, differences in growth, and predictors of change.” I want the converted version in bionic reading style so it’s easier for me to scan, and please leave the converter result visible on the page as proof. Then finish by using Bing to find a free plagiarism checker that would work for a short note like this, open the actual tool page so I can verify it’s live, and tell me briefly how I’d paste in that same note and run an originality check before sharing it with classmates.",
     "website": "https://www.google.com",
-    "reference_length": 5,
+    "reference_length": 4,
     "level": "easy",
     "rubrics": {
       "R1": {
-        "requirement": "Find a recommended public-transit route from Chicago, Illinois to Aurora, Illinois on Google and report the main mode of transit and estimated total travel time.",
-        "verification": "Grader can confirm a Google transit directions/results page is open and the response includes a specific main mode and travel-time estimate taken from that page."
+        "requirement": "Identify the top 3 organic Bing results for the query “Latent Growth Models,” including each result’s title, source, and a brief summary of what it covers.",
+        "verification": "Grader confirms the Bing results page shows the query, the response lists three organic results matching visible titles/source labels from the page, and the relevant result tabs were opened."
       },
       "R2": {
-        "requirement": "Summarize Metra’s BNSF line by stating what it is and where it runs.",
-        "verification": "Grader can confirm the Metra BNSF line page is open and the response accurately describes the line and its route coverage based on visible page text."
+        "requirement": "Find one strong ChatGPT prompt template for turning source material into an outline and provide the exact prompt wording from the selected page.",
+        "verification": "Grader confirms a Google search was performed, a source page containing a visible prompt template was opened, and the returned wording matches the prompt shown on that page."
       },
       "R3": {
-        "requirement": "Identify where fare information for riding the BNSF line is listed, including any relevant fares link or section.",
-        "verification": "Grader can confirm the response points to a visible fare-information location on the BNSF line page or an opened fares tab/page on metra.com."
+        "requirement": "Convert the provided latent growth models note into bionic reading format and return the converted text.",
+        "verification": "Grader confirms the 10015.io converter page shows the input note and a visible converted output in bionic reading style, and the response includes the transformed text."
       },
       "R4": {
-        "requirement": "Report the forecasted high and low temperatures for the next 3 days from Weather.com’s 10-day forecast for Aurora, Illinois.",
-        "verification": "Grader can confirm a Weather.com 10-day forecast page for Aurora is open and the response includes three day-by-day high/low pairs matching the visible forecast."
-      },
-      "R5": {
-        "requirement": "Return all findings as one concise trip-planning summary that combines the Google transit recommendation, BNSF line context, fare-info location, and 3-day weather outlook.",
-        "verification": "Grader can confirm the final response is a single concise integrated summary containing all required elements from steps 1 through 3."
+        "requirement": "Find one free plagiarism checker and explain how to use it to test the same study note for originality.",
+        "verification": "Grader confirms a Bing search for plagiarism checkers was performed, a live tool page was opened, and the response names the tool and gives concise usage instructions tied to the provided note."
       }
     },
     "categories": [
-      "Travel and Tourism > Ground Transportation",
-      "Travel and Tourism > Tourist Attractions"
+      "Science and Education > Science and Education - Other",
+      "Science and Education > Education"
     ],
     "num_categories": 2
   },
   {
-    "task_id": "ada70bfe81da1cd33bec47d79a9d279d7734a686",
-    "confirmed_task": "I’m trying to plan a Yorkshire family day out around Christmas and want to compare two festive options properly before I recommend one. Could you start on the official Stockeld Park site and open their Winter or Christmas ticket page, then the main activities page if needed, and pull together exactly what’s included with a standard festive ticket so I can see whether it feels like a full day out for kids; if there are photos or activity sections on the page, open the main ticket page and the activities/details page in separate tabs and leave them open so I can glance at them later. Then use Google to find the current Harrogate Christmas Funland page or official event listing, open the actual event page, and summarize what’s included there too, along with the location and the event dates, because I want to compare whether it sounds more substantial than Stockeld Park; if you find more than one relevant result, open the most official-looking listing in its own tab and verify it’s live before using it. After that, go to the official York Maze site and pull together the practical visitor details for using it as a backup daytime activity nearby, especially where it is, the opening times or seasonal opening info, and any important ticket or visit-planning notes like booking ahead, age guidance, or whether it’s seasonal, and leave the key visitor info page open as well. In the end, give me a concise side-by-side comparison of Stockeld Park versus Harrogate Christmas Funland, then a short recommendation on which festive option seems better for a family day out and whether York Maze sounds like a realistic backup plan.",
+    "task_id": "e15345ed27f1933065af403601876e5f6597a943",
+    "confirmed_task": "I’m putting together a very simple reading-support mini lesson for a student who does better with easier-to-scan text, and I want you to help me pull the pieces together in the browser. Start on Google and find one online English grammar practice quiz that feels appropriate for about 5th grade, then open the actual quiz page so you can verify it’s really a student-facing practice activity and leave that tab open for me as a reference; I need the quiz title and direct URL. Then use Google again to find a printable worksheet or practice page for an 8th-grade student about basic marketing strategies like product, price, place, and promotion or closely related introductory marketing concepts, because I want it to work as an extension activity after the grammar warm-up; open the real worksheet or resource page in its own tab so I can see that it looks classroom-appropriate and printable, and note the title and URL. After that, go to Slidesgo and pick a fun, classroom-appropriate presentation template that could reasonably hold both the grammar warm-up and the marketing extension in one student lesson deck, and open the template’s actual page so I can see the preview images; please include the template name, URL, and whether it’s available for Google Slides or PowerPoint. Finally, go to 10015.io’s bionic reading converter and convert this exact lesson intro into bionic reading format so I can paste it into the first slide of the template you chose: “Today we will warm up with a short grammar quiz, then practice how people use basic marketing strategies like product, price, place, and promotion. Read each direction carefully and do your best.” Please keep the useful tabs open and send me the quiz, worksheet, template, and the converted text in one clean summary.",
+    "website": "https://www.google.com",
+    "reference_length": 4,
+    "level": "easy",
+    "rubrics": {
+      "R1": {
+        "requirement": "A real online English grammar practice quiz appropriate for about 5th grade is found via Google, and the final response includes the quiz title and direct quiz page URL.",
+        "verification": "Grader can confirm there is an open tab showing the actual quiz page, not just search results, and the reported title/URL match the visible page."
+      },
+      "R2": {
+        "requirement": "A printable worksheet or practice page about basic marketing strategies or a closely related introductory marketing topic for about 8th grade is found via Google, and the final response includes the resource title and access URL.",
+        "verification": "Grader can confirm there is an open tab showing the actual worksheet/resource page with printable or classroom-use cues, and the reported title/URL match the visible page."
+      },
+      "R3": {
+        "requirement": "One Slidesgo template that is fun and classroom-appropriate for combining both activities into a single lesson deck is selected, and the final response includes the template name, Slidesgo URL, and use/download option.",
+        "verification": "Grader can confirm the Slidesgo template detail page is open with visible preview images and that the named template, URL, and Google Slides/PowerPoint option match the page."
+      },
+      "R4": {
+        "requirement": "The provided lesson intro is converted on 10015.io into bionic reading format and the full converted text is returned.",
+        "verification": "Grader can confirm the converter page shows transformed output corresponding to the provided passage and that the returned text matches the visible converted result."
+      }
+    },
+    "categories": [
+      "Science and Education > Education"
+    ],
+    "num_categories": 1
+  },
+  {
+    "task_id": "8c30f2f9ceeac75b05c725c5397022bb4f9d32a0",
+    "confirmed_task": "I’m putting together a super short beginner-friendly AI explainer for someone who doesn’t know much about the topic yet, so I want it to move from simple definitions to a recognizable product and then end with a real hardware example. Please start on Google and find IBM’s page that explains the main types of artificial intelligence and machine learning, then pull out at least three categories and rewrite them in plain English with one sentence each so they sound easy to follow. Once you’ve got that foundation, go to Copilot.com and figure out what the site is, then give me exactly one sentence on its purpose as an AI product a beginner would probably recognize; if there’s a landing page or main homepage, leave that open so I can glance at it myself. After that, use Google again to find the Tom’s Hardware article about Intel Granite Rapids WS competing with AMD Threadripper, open the actual Tom’s Hardware article in a new tab so I can see the headline and page for myself, and summarize the key points including the main competitive claims and any specs the article cites like core count or boost clock. Then tie that hardware example back to why strong chips matter for AI or advanced computing, and give me one concise final write-up that combines the IBM basics, the one-sentence Copilot description, and the Tom’s Hardware takeaway in a way a beginner could understand.",
     "website": "https://www.google.com",
     "reference_length": 6,
     "level": "easy",
     "rubrics": {
       "R1": {
-        "requirement": "Accurately summarize the activities included with Stockeld Park Winter/Christmas tickets using the official Stockeld Park pages.",
-        "verification": "Grader can confirm the summary matches visible included activities on the open Stockeld Park ticket/details tabs."
+        "requirement": "Provide at least three IBM-described categories related to artificial intelligence and/or machine learning, each rewritten in plain English with a one-sentence description.",
+        "verification": "Final response includes three or more distinct IBM-based categories with simple one-sentence explanations traceable to the IBM page opened from Google results."
       },
       "R2": {
-        "requirement": "Find and use a live, relevant Harrogate Christmas Funland page or official listing and summarize what is included in the experience.",
-        "verification": "Grader can see an open Harrogate Christmas Funland page reached via Google and verify the included features against the visible listing content."
+        "requirement": "Identify what Copilot is and summarize its purpose in exactly one sentence as an AI-related product example a beginner would recognize.",
+        "verification": "Final response contains a single sentence describing Copilot’s purpose, and the Copilot homepage or landing page is visibly open in the browser."
       },
       "R3": {
-        "requirement": "Include Harrogate Christmas Funland’s event location and event dates.",
-        "verification": "Grader can verify the location and dates directly on the open event/listing page."
+        "requirement": "Find and summarize the Tom’s Hardware article about Intel Granite Rapids WS competing with AMD Threadripper, including the main competitive claims and any cited specs such as core count and boost clock.",
+        "verification": "A Tom’s Hardware article page is open in a separate tab, and the final response includes the article’s key claims plus cited specs mentioned in the article."
       },
       "R4": {
-        "requirement": "Summarize York Maze visitor details including where it is, opening times or seasonal opening information, and important ticket or visit-planning notes from the official York Maze site.",
-        "verification": "Grader can confirm these details on the open York Maze visitor information page."
+        "requirement": "Connect the Tom’s Hardware hardware summary back to why powerful hardware matters for AI or advanced computing.",
+        "verification": "Final response explicitly links the hardware comparison to AI workloads, advanced computing, or the need for strong compute performance."
       },
       "R5": {
-        "requirement": "Present Stockeld Park and Harrogate Christmas Funland as a concise side-by-side comparison focused on what is included and overall suitability for a family festive outing.",
-        "verification": "Final response clearly compares both attractions using findings from Steps 1 and 2 rather than listing them separately."
+        "requirement": "Return a concise final write-up that combines the IBM categories, the one-sentence Copilot description, and the Tom’s Hardware summary into a beginner-friendly explainer.",
+        "verification": "Final answer is a unified, concise explainer rather than disconnected notes, and it includes all three required parts in a beginner-friendly flow."
       },
       "R6": {
-        "requirement": "Provide a short recommendation on which festive attraction seems better and whether York Maze works as a backup daytime activity.",
-        "verification": "Final response includes a reasoned recommendation grounded in the gathered details from all three sites."
+        "requirement": "Open the Tom’s Hardware article in a new browser tab during the browsing process.",
+        "verification": "Browser state shows the Tom’s Hardware article open in its own tab, separate from the Google search results tab."
       }
     },
     "categories": [
-      "Travel and Tourism > Tourist Attractions",
-      "Community and Society > Holidays and Seasonal Events"
+      "Computers Electronics and Technology > Computers Electronics and Technology - Other",
+      "Science and Education > Science and Education - Other"
     ],
     "num_categories": 2
   },
   {
-    "task_id": "b6b8ad71aa3112840790066d7d62b498babdfa5c",
-    "confirmed_task": "I’m trying to decide whether driving this week is a bad idea, so can you build me a quick weather risk snapshot that starts with what it feels like right now and then widens out to the bigger trouble spots? First, on Google, search for Baltimore, Maryland weather and grab the current temperature plus the plain-English condition like cloudy, sunny, rain, or whatever it says, just so I have a baseline for home conditions. Then go to Wunderground and look up Syracuse, New York, and check the 10-day/7-day style forecast to find the lowest temperature expected over the next 7 days, including which day it happens, because I want to compare that colder destination against Baltimore. After that, use the National Weather Service forecast page for the Rittman, Ohio area near Marshallville and tell me what the current forecast says and whether there are any active alerts posted there, since that would really affect an Ohio leg of the drive; please open the actual forecast page and leave it visible so I can see the alert area and forecast text myself. Finally, go to the NWS Mount Holly page, find the winter forecast graphic, and report the snowfall amount shown there so I can tell whether the Mid-Atlantic part looks like a nuisance event or something more serious; if the graphic opens separately, leave that tab open too so I can look at the map. In the end, send me a short location-by-location summary with the key weather risk for Baltimore, Syracuse, Rittman/Marshallville, and the Mount Holly region.",
+    "task_id": "6421b906fe97b3799960af31c77f20ff25f756b1",
+    "confirmed_task": "I’m putting together a quick graduate outreach brief for a student in San Diego and want a few very specific examples from different kinds of schools and programs. Please start on Lewis & Clark’s admissions site and find the admissions representative who covers San Diego, California, then open that actual regional contact page and capture the rep’s name, email, phone, and anything else listed, and leave the page open so I can visually confirm how they assign territories. Then go to Hunter College Silberman’s site and find the Fall 2026 application deadline for the MSW program, making sure you’re on the real admissions or application page where the date is shown. After that, use Indiana University Kokomo’s graduate programs page to list all of the graduate programs they show there, and keep that page open in its own tab so I can compare the breadth of options at a smaller campus. Since the student is especially interested in California opportunities, go to the UCSF clinical trials site and find at least two glioblastoma trials in Northern California that are currently recruiting, then open the actual trial pages in separate tabs so you can give me each trial’s recruiting status and study location and I can see that they’re still live. For a student-life example, use Google to get to the official Oral Roberts University page that identifies the student activities director, and pull the person’s name plus email and phone if available, making sure it comes from an ORU page rather than a directory aggregator. Finally, use Google to find the official EDF Energy graduate programme page that mentions whether new hires get salary reviews, and quote the exact wording from the page if it’s there. Please give me everything back as a compact sourced summary, but keep the key pages open in tabs so I can glance at the evidence.",
     "website": "https://www.google.com",
-    "reference_length": 6,
-    "level": "easy",
-    "rubrics": {
-      "R1": {
-        "requirement": "Report Baltimore, Maryland’s current temperature and current weather conditions from Google.",
-        "verification": "Grader can confirm the answer against the Google weather module showing Baltimore weather with a numeric temperature and condition label."
-      },
-      "R2": {
-        "requirement": "Report the lowest forecasted temperature in Syracuse, New York over the next 7 days from Wunderground, including the day it occurs.",
-        "verification": "Grader can verify the selected low and day on the Syracuse forecast page in Wunderground’s multi-day forecast view."
-      },
-      "R3": {
-        "requirement": "Report the current National Weather Service forecast for the Rittman, Ohio area near Marshallville.",
-        "verification": "Grader can confirm the forecast wording on the forecast.weather.gov page for the specified area."
-      },
-      "R4": {
-        "requirement": "State whether any active weather alerts are posted for the Rittman, Ohio area near Marshallville.",
-        "verification": "Grader can verify the presence or absence of alert banners, watches, warnings, or advisories on the same NWS forecast page left open by the agent."
-      },
-      "R5": {
-        "requirement": "Report the predicted snowfall amount shown in the winter forecast graphic on the NWS Mount Holly page.",
-        "verification": "Grader can confirm the snowfall amount directly from the winter forecast graphic or image tab left open from the Mount Holly page."
-      },
-      "R6": {
-        "requirement": "Return the findings as a short summary organized by location or region, with a brief key weather risk for each one.",
-        "verification": "Grader can check that the final response includes Baltimore, Syracuse, Rittman/Marshallville, and the Mount Holly region, each with the requested weather detail and a concise risk statement."
-      }
-    },
-    "categories": [
-      "Science and Education > Weather",
-      "Travel and Tourism > Travel and Tourism - Other"
-    ],
-    "num_categories": 2
-  },
-  {
-    "task_id": "b21a86441ddca8186175bfffcaae0358ed66eec4",
-    "confirmed_task": "Can you help me plan a short LA trip from Pittsburgh and keep the key pages open so I can actually look at them afterward? Start on Google Flights, Kayak, or Expedia and search a round-trip from PIT to LAX for a simple 2-day trip, making sure the outbound gets into Los Angeles before 6:00 PM and the return lands back in Pittsburgh before midnight. I’d really prefer a nonstop if one exists, but if not, pick the option with the shortest total travel time that still feels like a good value, and open the top few flight options so I can compare before you choose the best one; then leave the selected flight page open in its own tab. After that, use Google Hotels or a hotel booking site to find me a hotel around Koreatown or West Hollywood with at least a 4.5 rating and a nightly rate under $350, and open the actual hotel listing so I can see the price, rating, photos, and map location, then keep that tab open too. Once the stay looks settled, go to Google Maps and pull up Griffith Observatory, The Getty Center, Santa Monica Pier, one well-rated Korean BBQ place in Koreatown, one coffee shop rated 4.5 or better, and somewhere with a great sunset view, because I want a realistic plan instead of a random list. Use the map routes to figure out a 2-day itinerary that avoids driving during LA rush hour as much as possible, especially around 7 to 10 AM and 4 to 7 PM, and try to keep travel between stops under about 40 minutes when that’s realistic, with a little buffer time between activities so the days don’t feel crammed. Open the important map views or route checks in separate tabs if needed so I can visually compare how far apart things are, and then give me a simple trip summary with the flight you chose, the hotel you recommend, and a 2-day schedule showing activity times plus the travel time between each stop.",
-    "website": "https://www.google.com",
-    "reference_length": 6,
+    "reference_length": 7,
     "level": "medium",
     "rubrics": {
       "R1": {
-        "requirement": "A round-trip PIT to LAX flight search is completed on a flight site, with top candidate options reviewed and one selected that arrives in Los Angeles before 6:00 PM outbound and returns to Pittsburgh before midnight.",
-        "verification": "Grader can see an open flight search/results or details page showing PIT, LAX, round-trip results, visible candidate options, and the selected itinerary meeting the timing constraints."
+        "requirement": "Correctly identify the Lewis & Clark admissions representative covering San Diego, California, including the representative’s name and listed contact details.",
+        "verification": "Grader can confirm the open Lewis & Clark regional contact page shows San Diego, California assigned to the named representative and displays the extracted contact information."
       },
       "R2": {
-        "requirement": "The chosen flight reasonably reflects the stated preference hierarchy: nonstop if available, otherwise the shortest total travel time, while still balancing price and schedule.",
-        "verification": "Visible comparison among top few flight options supports why the selected itinerary is a reasonable best choice based on stops, duration, and price."
+        "requirement": "Report the Fall 2026 application deadline for Hunter College Silberman’s MSW program from the official page.",
+        "verification": "Grader can confirm the open Hunter Silberman admissions/application page visibly shows the Fall 2026 MSW deadline date reported in the summary."
       },
       "R3": {
-        "requirement": "A hotel in Koreatown or West Hollywood is identified with rating at least 4.5 and nightly price under $350, and the actual listing page is opened.",
-        "verification": "Open hotel listing visibly shows neighborhood or map placement, nightly price under $350, rating of 4.5 or higher, and listing details/photos."
+        "requirement": "List the graduate programs shown on Indiana University Kokomo’s graduate programs page.",
+        "verification": "Grader can compare the returned program list against the visible program names on the open IU Kokomo graduate programs page."
       },
       "R4": {
-        "requirement": "Google Maps is used to identify all required stop types: Griffith Observatory, The Getty Center, Santa Monica Pier, a Korean BBQ spot in Koreatown, a coffee shop rated at least 4.5, and a sunset-view location.",
-        "verification": "Open Google Maps place pages or map tabs show each required destination category and allow visual confirmation of their locations."
+        "requirement": "Identify at least two glioblastoma clinical trials in Northern California that are currently recruiting, including each trial’s recruiting status and study location.",
+        "verification": "Grader can inspect the separate open UCSF trial tabs and verify that each named trial is glioblastoma-related, marked currently recruiting, and has the reported Northern California location."
       },
       "R5": {
-        "requirement": "The itinerary routing is realistic, uses map route checks, avoids LA rush hour driving where practical, keeps travel between stops under about 40 minutes when possible, and includes buffer time.",
-        "verification": "Open route/map tabs and the written plan show travel-time checks, sensible sequencing, reduced rush-hour exposure, and spacing between activities."
+        "requirement": "Find the Oral Roberts University student activities director’s name and contact information from an official ORU page.",
+        "verification": "Grader can confirm the open ORU page names the student activities director and shows the extracted email and/or phone details."
       },
       "R6": {
-        "requirement": "A final travel plan is produced with the selected flight, hotel recommendation, and a 2-day itinerary including activity timing and travel times, while keeping the key browser pages open.",
-        "verification": "Final summary includes all required trip components, and the flight tab, hotel tab, and relevant map/route tabs remain open for visual review."
+        "requirement": "Determine whether EDF Energy’s graduate programme includes salary reviews for new hires and provide the exact confirming wording from the official page.",
+        "verification": "Grader can confirm the open EDF Energy page contains the quoted wording and that the answer matches the page text."
+      },
+      "R7": {
+        "requirement": "Return a compact summary with sources covering all requested items.",
+        "verification": "Grader can verify the final response includes all six requested findings, each paired with a source reference or page title/link, in a concise summary format."
       }
     },
     "categories": [
-      "Travel and Tourism > Air Travel",
-      "Travel and Tourism > Accommodation and Hotels"
+      "Science and Education > Universities and Colleges",
+      "Science and Education > Education"
     ],
     "num_categories": 2
   },
   {
-    "task_id": "795bfe117e0f58e49ca37ae8e453a507859a2a2b",
-    "confirmed_task": "I’m trying to piece together a really cheap trip to London for two, so can you help me build it in a practical order and keep the actual pages open where it matters? Start on Booking.com and search London for 2 adults staying this December, then find me at least one hotel that comes in under £100 total for the 2-night stay, because that ultra-budget option is going to set the tone for everything else. Open the actual property page in its own tab so I can see the photos and location, and note the hotel name, stay dates, total displayed price, and link. Once you’ve got that baseline, stay on Booking.com and look up NOX Hotel for a 1-night stay for 2 adults on any date in 2026, just so I can tell whether my bargain London option is unusually cheap or more normal for the city; open the NOX listing page too and record the date and total displayed price you find. After that, use Google to look for at least two hotels near Washington, DC Union Station that show 4-star-or-higher guest ratings and nightly prices under $200, because I may want a backup benchmark for city lodging in another trip later; please open each hotel result in its own tab or go to the actual hotel posting page so I can verify they’re real options and still look live. Then, because I want the whole trip to stay low-cost overall, go to Amazon and shortlist three mid-to-low-priced headphones or earbuds with active noise cancellation for travel that fit the same budget mindset, and open each product page in a separate tab so I can compare them side by side. In the end, send me one clean summary with the hotel names, prices, dates, ratings where relevant, key headphone features, and links, and leave the Booking.com property tabs and the Amazon product tabs open for me.",
-    "website": "https://www.google.com",
-    "reference_length": 5,
-    "level": "medium",
-    "rubrics": {
-      "R1": {
-        "requirement": "Identify at least one Booking.com London hotel for 2 adults in December with a displayed total price under £100 for the 2-night stay, and capture the hotel name, stay dates, total price, and link.",
-        "verification": "Grader can confirm the Booking.com search results or property page shows London, 2 adults December and a total under £100, with the property tab open."
-      },
-      "R2": {
-        "requirement": "Find a Booking.com NOX Hotel result for a 1-night stay in 2026 for 2 adults and record the specific date, displayed total price, and link.",
-        "verification": "Grader can confirm the NOX Hotel listing or property page on Booking.com shows a 1-night stay for 2 adults with a visible total price and the page left open."
-      },
-      "R3": {
-        "requirement": "Find at least two hotels near Washington, DC Union Station via Google that each show a guest rating of 4 stars or higher and a nightly price under $200, and record their names, ratings, prices, and links.",
-        "verification": "Grader can confirm on Google results, hotel panels, or linked hotel pages that two qualifying hotels near Union Station display ratings of 4.0+ and nightly prices below $200, with tabs open for the chosen options."
-      },
-      "R4": {
-        "requirement": "Shortlist at least three Amazon headphones or earbuds with active noise cancellation, including each product name, current price, key features, and link.",
-        "verification": "Grader can confirm three Amazon product pages are open and each page visibly indicates ANC or active noise cancellation, along with product name and current price."
-      },
-      "R5": {
-        "requirement": "Return one consolidated summary covering the London budget hotel, the NOX Hotel comparison, the two Washington, DC Union Station hotel benchmarks, and the three Amazon UK headphone options, with all requested names, dates, prices, ratings where relevant, key features, and links.",
-        "verification": "Grader can compare the final response against the collected browser evidence from the open Booking.com, Google, and Amazon UK tabs and verify all requested fields are included."
-      }
-    },
-    "categories": [
-      "Travel and Tourism > Air Travel",
-      "Travel and Tourism > Accommodation and Hotels"
-    ],
-    "num_categories": 2
-  },
-  {
-    "task_id": "73c63095aeed43efb10a74eee7db7459c5ea9f84",
-    "confirmed_task": "I’m trying to sort out a realistic housing plan in Grand Rapids, Michigan and want to compare a normal rental against cheaper live-in alternatives, with a hotel as a short-stay fallback while I go look at places. Please start on Zillow and search Grand Rapids rentals with the monthly rent set between $1,400 and $2,400, then open one listing that looks like a real option in its own tab so I can see the photos and map, and grab the basics for it like the address, monthly price, and the Zillow listing page. Use that exact monthly rent as the benchmark for whether a trailer or other small living setup would actually save me money, then go to Craigslist for Grand Rapids and find at least three listings that seem suitable for living in and are priced below that Zillow benchmark; open the actual posting pages so you can verify they’re still live and note each title, price, and link. After that, because I may need somewhere temporary while I travel to inspect options, go to Booking.com and look up a hotel in Grand Rapids with visible guest reviews, open the property page, and summarize the overall guest review score plus at least three takeaways from recent reviews so I can tell what staying there would really be like. Leave the Zillow tab and the Booking.com hotel page open so I can compare them visually afterward, then give me a concise recommendation on how the rental and cheaper Craigslist alternatives stack up against the hotel, and say which seems better reviewed for a temporary stay.",
+    "task_id": "4614aa083147e45cbc2977cc8634b9d9db25edfe",
+    "confirmed_task": "I’m trying to narrow down a few law schools in the Maryland/DC area and want a practical outreach plan before I start contacting anyone. On the University of Maryland Carey Law site, please find the actual way I can request admissions materials and also look for at least one upcoming online admissions event with its date and time, because I want to see how easy they make it to get information and whether there’s a virtual event I could realistically attend; open the event details page in its own tab and leave it there so I can look at it later. Then go to the University of Baltimore School of Law site and find the instructions for scheduling an admissions meeting by opening the relevant admissions event or meeting page and pulling the registration link or contact method from the actual details page, and keep that page open too so I can compare the two schools side by side. After that, on American University Washington College of Law’s site, find the PIPS Scholarship page and give me a short plain-English summary of what the scholarship is for, along with the application form link, because funding could change which school I prioritize; if there’s a dedicated scholarship page, leave that open in another tab as proof. Once you’ve gathered all of that, recommend which of these three schools I should contact first based on the best mix of easy admissions outreach and potential funding, and include the specific action or contact details you found for each school so I have a simple next move.",
     "website": "https://www.google.com",
     "reference_length": 4,
     "level": "medium",
     "rubrics": {
       "R1": {
-        "requirement": "Identify one Zillow rental listing in Grand Rapids, Michigan within the $1,400 to $2,400 monthly rent range and provide its address, monthly rent, and Zillow property page URL.",
-        "verification": "Grader can confirm the Zillow listing page is open in a tab and shows a Grand Rapids rental with rent between $1,400 and $2,400, plus the reported address and URL match the visible page."
+        "requirement": "Correctly identify the University of Maryland Carey Law admissions-materials request method and report at least one upcoming online event with its date and time.",
+        "verification": "Grader can confirm the response matches information visible on the Maryland Carey admissions/request page and on an open online event details tab showing the event date/time."
       },
       "R2": {
-        "requirement": "Use the exact Zillow monthly rent from Step 1 as the benchmark and provide at least three Grand Rapids Craigslist listings suitable for living in that are priced below that benchmark, including each title, price, and posting URL.",
-        "verification": "Grader can confirm each Craigslist posting page is open or accessible, appears to be a live Grand Rapids-area listing suitable for living in, and the visible prices are all below the Zillow rent reported in Step 1."
+        "requirement": "Correctly find the University of Baltimore School of Law admissions meeting scheduling instructions, including the registration link or contact method from the relevant event/details page.",
+        "verification": "Grader can confirm the response against the open UBalt admissions meeting or event details page showing how to register or whom to contact."
       },
       "R3": {
-        "requirement": "For one Booking.com hotel in Grand Rapids, Michigan, report the overall guest review score and summarize at least three takeaways from recent guest reviews.",
-        "verification": "Grader can confirm the Booking.com property page is open and shows a review score, and the summarized takeaways are grounded in visible recent review content on the page."
+        "requirement": "Provide an accurate brief summary of American University Washington College of Law’s PIPS Scholarship and include the application form link.",
+        "verification": "Grader can confirm the summary and link against the open PIPS Scholarship page and the linked application form reference on American’s site."
       },
       "R4": {
-        "requirement": "Return a concise recommendation comparing the Zillow rental, the cheaper Craigslist alternatives, and the Booking.com hotel, and explicitly state which appears better reviewed for a temporary stay.",
-        "verification": "Grader can confirm the final summary references the gathered Zillow, Craigslist, and Booking.com findings and includes a clear conclusion about the better-reviewed temporary-stay option."
+        "requirement": "Recommend which school to contact first using the gathered evidence about admissions outreach accessibility and potential funding, and include the specific contact/action details found for all three schools.",
+        "verification": "Grader can verify that the recommendation is supported by the findings from the Maryland Carey, UBalt, and American tabs and that each school’s specific action/contact details are included."
       }
     },
     "categories": [
-      "Business and Consumer Services > Real Estate",
-      "Travel and Tourism > Accommodation and Hotels"
+      "Science and Education > Universities and Colleges",
+      "Law and Government > Legal"
+    ],
+    "num_categories": 2
+  },
+  {
+    "task_id": "976970ff5d37116847b8a9351a0922196bee88a2",
+    "confirmed_task": "I’m putting together a short youth mental-health workshop and want a tidy evidence pack I can actually cite, so could you do this in the browser and keep the key pages open for me? Start on Google and find one peer-reviewed academic source that clearly says eating disorders commonly begin during adolescence or the early teen years, then open the actual article or abstract page in its own tab and pull the exact supporting quote plus enough citation detail that I could reuse it. From there, use Google again to find one credible source explaining that the human brain keeps growing or developing after childhood, and open the source page itself so I can see it’s a real organization or publication rather than just a search snippet. After that, still using Google, find one credible source saying human cognitive biases are influenced by evolutionary processes, and open that source in a separate tab too because I want to compare the wording across the three sources. Once those evidence tabs are gathered, go to Wikipedia’s page for Lauryn Hill’s The Miseducation of Lauryn Hill, pull at least five song titles from the track listing, and leave that album page open so I can glance at the list myself. Then choose the one song title that would make the best discussion prompt for teens based on the themes from the three sources, and give me a concise workshop brief that ties the evidence together with the citations, the exact quote for the eating-disorders source, the five song titles, and a short explanation of why your chosen title fits.",
+    "website": "https://www.google.com",
+    "reference_length": 7,
+    "level": "medium",
+    "rubrics": {
+      "R1": {
+        "requirement": "Provides one peer-reviewed academic source stating that eating disorders commonly begin during adolescence or the early teen years, including a usable citation and the exact supporting quote.",
+        "verification": "Grader can confirm a Google result was opened to an article or abstract page in its own tab and that the final response includes both citation details and a direct quote supporting adolescent onset."
+      },
+      "R2": {
+        "requirement": "Provides one credible source explaining that the human brain continues to grow or develop after childhood, with a usable citation.",
+        "verification": "Grader can confirm the source page itself was opened from Google and that the final response includes a citation tied to the brain-development claim."
+      },
+      "R3": {
+        "requirement": "Provides one credible source supporting the claim that human cognitive biases are influenced by evolutionary processes, including title, publisher, and URL.",
+        "verification": "Grader can confirm the opened source page supports the claim and that the final response includes the source title, publisher, and URL."
+      },
+      "R4": {
+        "requirement": "Uses the opened evidence tabs to extract or summarize support from all three sources in a way that is coherent for the workshop theme.",
+        "verification": "Grader can confirm multiple source tabs were opened and the final brief accurately connects adolescent onset, ongoing brain development, and evolutionary influences on cognitive bias."
+      },
+      "R5": {
+        "requirement": "Lists at least five song titles from Lauryn Hill’s The Miseducation of Lauryn Hill sourced from Wikipedia.",
+        "verification": "Grader can confirm the Wikipedia album page is open and that at least five track titles in the response match the visible track listing."
+      },
+      "R6": {
+        "requirement": "Selects one song title from the album as a teen discussion prompt and explains why it fits the workshop themes drawn from the gathered evidence.",
+        "verification": "Grader can confirm the chosen title appears in the Wikipedia track list and that the explanation meaningfully links to the three evidence themes."
+      },
+      "R7": {
+        "requirement": "Returns the findings as a concise workshop brief including the three requested evidence sources, citations, the exact quote for the eating-disorders source, at least five song titles, and the chosen title with rationale.",
+        "verification": "Grader can confirm all required elements are present in one concise final brief and that the visible pages used match the cited sources."
+      }
+    },
+    "categories": [
+      "Health > Mental Health",
+      "Science and Education > Science and Education - Other"
     ],
     "num_categories": 2
   }

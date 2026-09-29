@@ -1,0 +1,134 @@
+persona_id: odyssey-education-k12-teacher
+version: '2.0'
+source: hand-specified from dimensions.json (MatrAIx 1290-dim schema)
+note: 'Middle-school humanities teacher: expert in teaching, casual and talkative,
+  wants every detail, trusting.'
+attributes:
+  age_bracket:
+    value: 35-44
+    label: Age bracket
+    category: 'Demographic: Core'
+  life_stage:
+    value: Parent of young kids
+    label: Life stage
+    category: 'Demographic: Life Events'
+  highest_education:
+    value: Master's
+    label: Highest education
+    category: 'Learning: Academic'
+  institution_tier:
+    value: Mid-tier university
+    label: Institution tier
+    category: 'Learning: Academic'
+  academic_field:
+    value: Humanities
+    label: Academic field
+    category: 'Learning: Academic'
+  demo_employment_status:
+    value: Full-time
+    label: Employment status
+    category: 'Demographic: Core'
+  role_function:
+    value: Teaching
+    label: Role function
+    category: 'Professional: Industry'
+  seniority:
+    value: Senior
+    label: Seniority
+    category: 'Professional: Career'
+  socioeconomic_band:
+    value: Middle
+    label: Socioeconomic band
+    category: 'Demographic: Core'
+  fam_statistics:
+    value: Familiar
+    label: 'Familiarity: Statistics'
+    category: 'Expertise: Domains'
+  fam_pedagogy:
+    value: Expert
+    label: 'Familiarity: Pedagogy'
+    category: 'Expertise: Domains'
+  skill_research:
+    value: Advanced
+    label: 'Skill: Research'
+    category: 'Expertise: Skills'
+  skill_fact_checking:
+    value: Intermediate
+    label: 'Skill: Fact-checking'
+    category: 'Expertise: Skills'
+  skill_technical_writing:
+    value: Advanced
+    label: 'Skill: Technical writing'
+    category: 'Expertise: Skills'
+  att_higher_education:
+    value: Neutral
+    label: 'Attitude: Higher education'
+    category: 'Worldview: Beliefs'
+  register:
+    value: Colloquial
+    label: Dialect / register
+    category: 'Demographic: Core'
+  cog_formality:
+    value: Casual
+    label: Formality
+    category: 'Linguistic: Communication'
+  cog_directness:
+    value: Balanced
+    label: Directness
+    category: 'Linguistic: Communication'
+  cog_politeness:
+    value: Polite
+    label: Politeness
+    category: 'Linguistic: Communication'
+  cog_use_of_jargon:
+    value: Moderate
+    label: Use of jargon
+    category: 'Linguistic: Communication'
+  pref_detail_brief_vs_full:
+    value: Every detail
+    label: Brief vs full detail
+    category: 'Behavior: Preferences'
+  english_proficiency:
+    value: Native
+    label: English proficiency
+    category: 'Linguistic: Language'
+  primary_language:
+    value: English
+    label: Primary language
+    category: 'Linguistic: Language'
+  cog_abstraction:
+    value: Balanced
+    label: Abstract vs concrete
+    category: 'Linguistic: Communication'
+  intent:
+    value: Brainstorm
+    label: Intent
+    category: 'State: Emotional'
+  time_pressure:
+    value: No rush
+    label: Time pressure
+    category: 'Behavior: Time'
+  prior_context:
+    value: Long ongoing project
+    label: Prior context
+    category: 'State: Emotional'
+  query_complexity:
+    value: Open-ended creative
+    label: Query complexity
+    category: 'State: Emotional'
+  tech_savviness:
+    value: Comfortable
+    label: Tech savviness
+    category: 'Expertise: Domains'
+  att_ai:
+    value: Positive
+    label: 'Attitude: AI'
+    category: 'Worldview: Beliefs'
+  trust_level:
+    value: Trusting
+    label: Trust level
+    category: 'Worldview: Beliefs'
+  cog_attention_span:
+    value: Long
+    label: Attention span
+    category: 'Linguistic: Communication'

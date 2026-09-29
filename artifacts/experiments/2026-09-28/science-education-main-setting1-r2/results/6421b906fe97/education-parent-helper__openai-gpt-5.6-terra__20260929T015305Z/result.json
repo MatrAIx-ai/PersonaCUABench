@@ -1,0 +1,857 @@
+{
+  "task_id": "6421b906fe97b3799960af31c77f20ff25f756b1",
+  "level": "medium",
+  "persona": "education-parent-helper",
+  "run": {
+    "answer": "## Verified institutional/organization sources\n\n- **Lewis & Clark — San Diego representative:** San Diego County is assigned to **Qwadere “Q” Lovell**, *Senior Assistant Dean of Admissions, Southern California*. His published direct contact information is **qlovell@lclark.edu**, **503-713-1203**, Frank Manor House, **615 S. Palatine Hill Road, Portland, OR 97219**. [Lewis & Clark profile](https://college.lclark.edu/live/profiles/13789-qwadere-q-lovell)\n\n- **Hunter College Silberman MSW, Fall 2026:** The **application deadline is March 1** and the **supporting-document deadline is March 15**. The Fall table applies to the two-year full-time, Bank Street dual-degree, advanced-standing, one-year residency, and DOHMH Mental Health Scholarship residency MSW options. [Silberman deadlines](https://sssw.hunter.cuny.edu/admissions/deadlines/)\n\n- **Indiana University Kokomo — graduate offerings:** IU Kokomo’s official graduate-programs page says its offerings span master’s degrees, graduate certificates, and postbaccalaureate work. The graduate programs listed through its official program pages are:\n  - **Master’s degrees:** Master of Business Administration; M.S. in Management; M.S. in Strategic Finance; Master of Public Management; M.A. in Mental Health Counseling; M.S. in Nursing; online M.A. in English; online M.A. in History; online Master of Liberal Studies; and online M.S. in Criminal Justice and Public Safety.\n  - **Graduate certificates:** Business Analytics; Leadership; Public Management; Health Management; Composition Studies; Language and Literature; Literature; History; Political Science; Communication Studies; Mathematics; and related Regional Online Collaborative certificate options, including Biology.\n  - **Postbaccalaureate certificates:** Accounting and Business Fundamentals.\n  - **Official source:** [IU Kokomo Graduate Programs](https://kokomo.iu.edu/graduate-programs/index.html). (Several of the online options are presented on departmental/online-program pages rather than in the landing page’s visible summary.)\n\n- **UCSF glioblastoma studies in Northern California — currently accepting new patients:**\n  1. **Anti-EGFRvIII synNotch Receptor Induced Anti-EphA2/IL-13Ralpha2 CAR (E-SYNC) T Cells** — UCSF labels the status **“accepting new patients”**; location: **UCSF, San Francisco, CA 94143**. This is a Phase 1 study for EGFRvIII-positive glioblastoma. [UCSF study, NCT06186401](https://clinicaltrials.ucsf.edu/trial/NCT06186401)\n  2. **DOC1021 Dendritic Cell Immunotherapy for Treatment of Newly Diagnosed Adult Glioblastoma (GBM)** — status **“accepting new patients”**; locations include **UCSF, San Francisco, CA 94143** (and City of Hope, Duarte). This is a Phase 2 study in newly diagnosed IDH-wild-type GBM. [UCSF study, NCT06805305](https://clinicaltrials.ucsf.edu/trial/NCT06805305)\n\n  UCSF’s glioblastoma listing currently summarizes its displayed open studies as “open to eligible people”; the individual records above provide the more specific current status, “accepting new patients.” [UCSF glioblastoma listing](https://clinicaltrials.ucsf.edu/glioblastoma)\n\n- **ORU student activities/student-experience lead:** ORU publishes **Augustine Mendoza, Director of Student Experience**, **augiemendoza@oru.edu**. The cabinet page does not publish a direct telephone number for him. ORU’s published general campus contact is **(918) 495-6161**, 7777 South Lewis Ave., Tulsa, OK 74171. [ORU SA Executive Team](https://oru.edu/current-students/my-campus-life/student-association/cabinet/index.php)\n\n- **EDF Energy graduate-programme information / salary-review wording:** EDF’s official *Graduate and Placement Brochure* says: **“You will receive annual increases, plus annual bonus, relocation allowance and other flexible benefits.”** Thus it does communicate annual salary increases for new hires, but it does **not** use the precise phrase “salary review” in that sentence. [EDF Early Careers / Graduate and Placement Brochure (PDF)](https://www.edfenergy.com/sites/default/files/graduate_and_placement_brochure_2023_2024.pdf)\n\n*Clinical-trial availability and eligibility can change; UCSF’s “accepting new patients” label is the status shown on the cited study records.*",
+    "stop_reason": "finish",
+    "steps": 80,
+    "max_steps": 50,
+    "trajectory": [
+      {
+        "step": 0,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Dcollege.lclark.edu+admission+counselor+San+Diego+Lewis+Clark"
+        },
+        "result_preview": "tab 1 | site=college.lclark.edu admission counselor San Diego Lewis Clark - Google Search | https://www.google.com/search?q=site%3Dcollege.lclark.edu+admission+counselor+San+Diego+Lewis+Clark&sei=Cxq7aoP0GMyLhbIP46DzoQc\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nImages\nForums\nShort videos\nNews\nShopping\nMore\nTools\nSearch Results\nWeb results\nCalifornia • Admissions - Lewis & Clark "
+      },
+      {
+        "step": 0,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Dsilberman.hunter.cuny.edu+Fall+2026+MSW+application+deadline"
+        },
+        "result_preview": "tab 2 | site=silberman.hunter.cuny.edu Fall 2026 MSW application deadline - Google Search | https://www.google.com/search?q=site%3Dsilberman.hunter.cuny.edu+Fall+2026+MSW+application+deadline\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nNews\nForums\nShopping\nImages\nShort videos\nMore\nTools\nSearch Results\nAI Overview\nThe application deadline for the Fall MSW program at the Silberman S"
+      },
+      {
+        "step": 0,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Dkokomo.iu.edu+graduate+programs"
+        },
+        "result_preview": "tab 3 | site=kokomo.iu.edu graduate programs - Google Search | https://www.google.com/search?q=site%3Dkokomo.iu.edu+graduate+programs\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nShopping\nForums\nImages\nVideos\nShort videos\nMore\nTools\nSearch Results\nAI Overview\nIndiana University Kokomo offers a variety of Graduate Programs including master's degrees, graduate certificates, and postb"
+      },
+      {
+        "step": 0,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://clinicaltrials.ucsf.edu+glioblastoma+recruiting"
+        },
+        "result_preview": "tab 4 opened but navigation failed: Page.goto: net::ERR_NAME_NOT_RESOLVED at https://clinicaltrials.ucsf.edu+glioblastoma+recruiting/\nCall log:\n  - navigating to \"https://clinicaltrials.ucsf.edu+glioblastoma+recruiting/\", waiting until \"load\"\n"
+      },
+      {
+        "step": 0,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Doru.edu+student+activities+director"
+        },
+        "result_preview": "tab 5 | site=oru.edu student activities director - Google Search | https://www.google.com/search?q=site%3Doru.edu+student+activities+director\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nJobs\nImages\nForums\nVideos\nShort videos\nMore\nTools\nSearch Results\nAI Overview\nOral Roberts University (ORU) structures student activities through the Student Association Cabinet, where the primary l"
+      },
+      {
+        "step": 0,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Dcareers.edfenergy.com+graduate+programme+salary+reviews"
+        },
+        "result_preview": "tab 6 | site=careers.edfenergy.com graduate programme salary reviews - Google Search | https://www.google.com/search?q=site%3Dcareers.edfenergy.com+graduate+programme+salary+reviews\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nShort videos\nForums\nShopping\nImages\nVideos\nMore\nTools\nSearch Results\nAI Overview\nThe starting salary for most EDF UK Graduate Programmes is £35,000 per annum"
+      },
+      {
+        "step": 1,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://college.lclark.edu/admissions/get_to_know_us/staff/counties/california/"
+        },
+        "result_preview": "tab 7 | 404 Page Not Found | https://college.lclark.edu/admissions/get_to_know_us/staff/counties/california/\n\nSkip to main content\nLEWIS AND CLARK HOME PAGE\nABOUT LEWIS & CLARK\nCOLLEGE OF ARTS & SCIENCES\nLAW SCHOOL\nGRADUATE SCHOOL OF EDUCATION & COUNSELING\nSearch the Lewis & Clark site\nApply\nVisit Campus\nRequest Information\nGive\nAcademics\nStudent Life\nAthletics\nCareer Success\nmain content\n404\nSorr"
+      },
+      {
+        "step": 1,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://sssw.hunter.cuny.edu/admissions/deadlines/"
+        },
+        "result_preview": "tab 8 | Deadlines – Silberman School of Social Work at Hunter College | https://sssw.hunter.cuny.edu/admissions/deadlines/\n\nHome\n \nAbout\n \nAdmissions\n \nFaculty/Staff\n \nAcademics\n \nPracticum Ed.\n \nCurrent Students\n \nResearch\n \nDonate\n \nQuick Links\nDEADLINES\n\nIt is important to be aware of the application deadline for the program to which you are applying. Applicants are encouraged to complete their"
+      },
+      {
+        "step": 1,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://kokomo.iu.edu/graduate-programs/index.html"
+        },
+        "result_preview": "[tab limit 8 reached; close a tab first]"
+      },
+      {
+        "step": 1,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Dclinicaltrials.ucsf.edu%2Ftrial+glioblastoma+Recruiting"
+        },
+        "result_preview": "[tab limit 8 reached; close a tab first]"
+      },
+      {
+        "step": 1,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://oru.edu/current-students/my-campus-life/campus-life/student-association-cabinet.php"
+        },
+        "result_preview": "[tab limit 8 reached; close a tab first]"
+      },
+      {
+        "step": 1,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://careers.edfenergy.com/content/Graduate-Jobs/?locale=en_GB"
+        },
+        "result_preview": "[tab limit 8 reached; close a tab first]"
+      },
+      {
+        "step": 2,
+        "tool": "close_tab",
+        "args": {
+          "tab_id": 1
+        },
+        "result_preview": "closed tab 1"
+      },
+      {
+        "step": 2,
+        "tool": "close_tab",
+        "args": {
+          "tab_id": 2
+        },
+        "result_preview": "closed tab 2"
+      },
+      {
+        "step": 2,
+        "tool": "close_tab",
+        "args": {
+          "tab_id": 3
+        },
+        "result_preview": "closed tab 3"
+      },
+      {
+        "step": 2,
+        "tool": "close_tab",
+        "args": {
+          "tab_id": 5
+        },
+        "result_preview": "closed tab 5"
+      },
+      {
+        "step": 3,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://kokomo.iu.edu/graduate-programs/index.html"
+        },
+        "result_preview": "tab 9 | Graduate Programs: Indiana University Kokomo | https://kokomo.iu.edu/graduate-programs/index.html\n\nSkip to Content\nSkip to Main Navigation\nSkip to Search\n\nIndiana University Kokomo\n\nAdmissions\nCost & Financial Aid\nAcademics\nStudent Life\nAthletics\nAbout\nGiving\nAlumni\nLeadership\nOffices & Services\nIndiana University Kokomo\nHome\nGraduate Programs\nGRADUATE PROGRAMS\nTake the Next Step with Grad"
+      },
+      {
+        "step": 3,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Dclinicaltrials.ucsf.edu%2Ftrial+glioblastoma+Recruiting"
+        },
+        "result_preview": "tab 10 | site=clinicaltrials.ucsf.edu/trial glioblastoma Recruiting - Google Search | https://www.google.com/search?q=site%3Dclinicaltrials.ucsf.edu%2Ftrial+glioblastoma+Recruiting\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nForums\nNews\nShopping\nImages\nShort videos\nMore\nTools\nSearch Results\nAI Overview\nYou can search and view currently recruiting glioblastoma clinical trials at UC"
+      },
+      {
+        "step": 3,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://oru.edu/current-students/my-campus-life/campus-life/student-association-cabinet.php"
+        },
+        "result_preview": "tab 11 | 404 Not Found | https://oru.edu/current-students/my-campus-life/campus-life/student-association-cabinet.php\n\nNot Found\n\nThe requested URL was not found on this server.\n\nApache/2.4.66 (Ubuntu) Server at oru.edu Port 443"
+      },
+      {
+        "step": 3,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://careers.edfenergy.com/content/Graduate-Jobs/?locale=en_GB"
+        },
+        "result_preview": "tab 12 | Page not found | EDF UK | https://careers.edfenergy.com/content/Graduate-Jobs/?locale=en_GB\n\nSearch\nLife at EDF\nCorporate & Commercial Careers\nNuclear and Engineering Careers\nRenewable Energy Careers\nEarly Careers\nFAQs\nPage not found\n\nWe are very sorry, but we cannot find the page you have requested (page not found). Please use the links below to navigate the site and try to find what you"
+      },
+      {
+        "step": 4,
+        "tool": "click",
+        "args": {
+          "tab_id": 9,
+          "text": "Master's Degrees"
+        },
+        "result_preview": "clicked \"Master's Degrees\"; tab 9 now at https://kokomo.iu.edu/graduate-programs/index.html\n\nSkip to Content\nSkip to Main Navigation\nSkip to Search\n\nIndiana University Kokomo\n\nHome\nAdmissions\nCost & Financial Aid\nAcademics\nStudent Life\nAthletics\nAbout\nGiving\nAlumni\nLeadership\nOffices & Services\nIndiana University Kokomo\nHome\nGraduate Programs\nGRADUATE PROGRAMS\nTake the Next Step with Graduate Prog"
+      },
+      {
+        "step": 4,
+        "tool": "click",
+        "args": {
+          "tab_id": 10,
+          "text": "UCSF Glioblastoma Clinical Trials"
+        },
+        "result_preview": "click failed: Locator.click: Timeout 40000ms exceeded.\nCall log:\n  - waiting for get_by_text(\"UCSF Glioblastoma Clinical Trials\").first\n    - locator resolved to <span>UCSF Glioblastoma Clinical Trials — San Francisco…</span>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n    - waiting 20ms\n    2 "
+      },
+      {
+        "step": 4,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://college.lclark.edu/live/profiles/20425-christi-san-diego"
+        },
+        "result_preview": "[tab limit 8 reached; close a tab first]"
+      },
+      {
+        "step": 4,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Doru.edu+%22Director+of+Student+Experience%22+%22Augustine+Mendoza%22"
+        },
+        "result_preview": "[tab limit 8 reached; close a tab first]"
+      },
+      {
+        "step": 4,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Dcareers.edfenergy.com+%22salary+review%22+graduate"
+        },
+        "result_preview": "[tab limit 8 reached; close a tab first]"
+      },
+      {
+        "step": 5,
+        "tool": "list_tabs",
+        "args": {},
+        "result_preview": "[\n  {\n    \"tab_id\": 4,\n    \"title\": \"clinicaltrials.ucsf.edu+glioblastoma+recruiting\",\n    \"url\": \"chrome-error://chromewebdata/\"\n  },\n  {\n    \"tab_id\": 6,\n    \"title\": \"site=careers.edfenergy.com graduate programme salary reviews - Google Search\",\n    \"url\": \"https://www.google.com/search?q=site%3Dcareers.edfenergy.com+graduate+programme+salary+reviews\"\n  },\n  {\n    \"tab_id\": 7,\n    \"title\": \"404"
+      },
+      {
+        "step": 6,
+        "tool": "close_tab",
+        "args": {
+          "tab_id": 4
+        },
+        "result_preview": "closed tab 4"
+      },
+      {
+        "step": 6,
+        "tool": "close_tab",
+        "args": {
+          "tab_id": 6
+        },
+        "result_preview": "closed tab 6"
+      },
+      {
+        "step": 6,
+        "tool": "close_tab",
+        "args": {
+          "tab_id": 7
+        },
+        "result_preview": "closed tab 7"
+      },
+      {
+        "step": 6,
+        "tool": "close_tab",
+        "args": {
+          "tab_id": 11
+        },
+        "result_preview": "closed tab 11"
+      },
+      {
+        "step": 7,
+        "tool": "goto",
+        "args": {
+          "tab_id": 10,
+          "url": "https://clinicaltrials.ucsf.edu/glioblastoma"
+        },
+        "result_preview": "tab 10 | UCSF Glioblastoma Clinical Trials for 2026 — San Francisco Bay Area | https://clinicaltrials.ucsf.edu/glioblastoma\n\nSkip to main content\nUniversity of California San Francisco\nUCSF Medical Center\nSearch UCSF\nAbout UCSF\nSearch\nBrowse \nEquity in Research\nAbout the site \nHome\nGlioblastoma Studies\nSearch\nGlioblastoma clinical trials at UCSF\n\n38 in progress, 16 open to eligible people\n\nShowing"
+      },
+      {
+        "step": 7,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://college.lclark.edu/live/profiles/20425-christi-san-diego"
+        },
+        "result_preview": "tab 13 | Christi San Diego • Admissions • Lewis & Clark College, Portland, Oregon | https://college.lclark.edu/live/profiles/20425-christi-san-diego\n\nSkip to main content\nLEWIS AND CLARK HOME PAGE\nABOUT LEWIS & CLARK\nCOLLEGE OF ARTS & SCIENCES\nLAW SCHOOL\nGRADUATE SCHOOL OF EDUCATION & COUNSELING\nSearch the Lewis & Clark site\nApply\nVisit Campus\nRequest Information\nGive\nAcademics\nStudent Life\nAthlet"
+      },
+      {
+        "step": 7,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Doru.edu+%22Director+of+Student+Experience%22+%22Augustine+Mendoza%22"
+        },
+        "result_preview": "tab 14 | site=oru.edu \"Director of Student Experience\" \"Augustine Mendoza\" - Google Search | https://www.google.com/search?q=site%3Doru.edu+%22Director+of+Student+Experience%22+%22Augustine+Mendoza%22\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nImages\nForums\nVideos\nNews\nShopping\nMore\nTools\nSearch Results\nWeb results\nStudent Association Cabinet\n\nOral Roberts University\nhttps://oru."
+      },
+      {
+        "step": 7,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Dcareers.edfenergy.com+%22salary+review%22+graduate"
+        },
+        "result_preview": "tab 15 | site=careers.edfenergy.com \"salary review\" graduate - Google Search | https://www.google.com/search?q=site%3Dcareers.edfenergy.com+%22salary+review%22+graduate\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nShort videos\nNews\nForums\nShopping\nImages\nMore\nTools\nSearch Results\nAI Overview\nEDF graduate programs on the EDF Energy Careers Portal offer a starting salary of £35,000 p"
+      },
+      {
+        "step": 8,
+        "tool": "click",
+        "args": {
+          "tab_id": 10,
+          "text": "Anti-EGFRvIII synNotch"
+        },
+        "result_preview": "clicked 'Anti-EGFRvIII synNotch'; tab 10 now at https://clinicaltrials.ucsf.edu/trial/NCT06186401\n\nSkip to main content\nUniversity of California San Francisco\nUCSF Medical Center\nSearch UCSF\nAbout UCSF\nSearch\nBrowse \nEquity in Research\nAbout the site \nHome\nEGFR Gene Mutation Studies\nThis trial\nSearch\nAnti-EGFRvIII synNotch Receptor Induced Anti-EphA2/IL-13Ralpha2 CAR (E-SYNC) T Cells\n\na study on E"
+      },
+      {
+        "step": 8,
+        "tool": "click",
+        "args": {
+          "tab_id": 10,
+          "text": "DOC1021 Dendritic"
+        },
+        "result_preview": "click failed: Locator.click: Timeout 40000ms exceeded.\nCall log:\n  - waiting for get_by_text(\"DOC1021 Dendritic\").first\n"
+      },
+      {
+        "step": 8,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Dcollege.lclark.edu%2Fadmissions%2Fstaff%2Fcounties+%22San+Diego%22"
+        },
+        "result_preview": "tab 16 | site=college.lclark.edu/admissions/staff/counties \"San Diego\" - Google Search | https://www.google.com/search?q=site%3Dcollege.lclark.edu%2Fadmissions%2Fstaff%2Fcounties+%22San+Diego%22\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nNews\nForums\nImages\nShopping\nShort videos\nMore\nTools\nSearch Results\nAI Overview\nQwadere Lovell is the admissions counselor responsible for San Di"
+      },
+      {
+        "step": 8,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Dkokomo.iu.edu%2Fgraduate-programs+%22Master+of%22"
+        },
+        "result_preview": "[tab limit 8 reached; close a tab first]"
+      },
+      {
+        "step": 8,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Dedfenergy.com+graduate+programme+%22salary+review%22"
+        },
+        "result_preview": "[tab limit 8 reached; close a tab first]"
+      },
+      {
+        "step": 9,
+        "tool": "list_tabs",
+        "args": {},
+        "result_preview": "[\n  {\n    \"tab_id\": 8,\n    \"title\": \"Deadlines \\u2013 Silberman School of Social Work at Hunter College\",\n    \"url\": \"https://sssw.hunter.cuny.edu/admissions/deadlines/\"\n  },\n  {\n    \"tab_id\": 9,\n    \"title\": \"Graduate Programs: Indiana University Kokomo\",\n    \"url\": \"https://kokomo.iu.edu/graduate-programs/index.html\"\n  },\n  {\n    \"tab_id\": 10,\n    \"title\": \"UCSF EGFR Gene Mutation Trial \\u2192 A"
+      },
+      {
+        "step": 10,
+        "tool": "close_tab",
+        "args": {
+          "tab_id": 12
+        },
+        "result_preview": "closed tab 12"
+      },
+      {
+        "step": 10,
+        "tool": "close_tab",
+        "args": {
+          "tab_id": 13
+        },
+        "result_preview": "closed tab 13"
+      },
+      {
+        "step": 10,
+        "tool": "close_tab",
+        "args": {
+          "tab_id": 15
+        },
+        "result_preview": "closed tab 15"
+      },
+      {
+        "step": 10,
+        "tool": "click",
+        "args": {
+          "tab_id": 14,
+          "text": "Student Association Cabinet"
+        },
+        "result_preview": "clicked 'Student Association Cabinet'; tab 14 now at https://oru.edu/current-students/my-campus-life/student-association/cabinet/index.php\n\nSKIP TO CONTENT\nVisit Request Info Student Stories Newsroom Pres Wilson Give\nApply Now\nOral Roberts University\nMENU\nSEARCH\nSA EXECUTIVE TEAM\nYou are here:\nHome\nCurrent Students\nCampus Life\nStudent Association\nSA Executive Team\n\nGot questions? We are here to he"
+      },
+      {
+        "step": 10,
+        "tool": "click",
+        "args": {
+          "tab_id": 16,
+          "text": "California • Admissions"
+        },
+        "result_preview": "click failed: Locator.click: Timeout 40000ms exceeded.\nCall log:\n  - waiting for get_by_text(\"California • Admissions\").first\n    - locator resolved to <span>California • Admissions - Lewis & Clark College -…</span>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n    - waiting 20ms\n    2 × waiting "
+      },
+      {
+        "step": 11,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://college.lclark.edu/offices/admissions/staff/counties/california/"
+        },
+        "result_preview": "tab 17 | 404 Page Not Found | https://college.lclark.edu/offices/admissions/staff/counties/california/\n\nSkip to main content\nLEWIS AND CLARK HOME PAGE\nABOUT LEWIS & CLARK\nCOLLEGE OF ARTS & SCIENCES\nLAW SCHOOL\nGRADUATE SCHOOL OF EDUCATION & COUNSELING\nSearch the Lewis & Clark site\nApply\nVisit Campus\nRequest Information\nGive\nAcademics\nStudent Life\nAthletics\nCareer Success\nmain content\n404\nSorry. Tha"
+      },
+      {
+        "step": 11,
+        "tool": "goto",
+        "args": {
+          "tab_id": 10,
+          "url": "https://clinicaltrials.ucsf.edu/glioblastoma"
+        },
+        "result_preview": "tab 10 | UCSF Glioblastoma Clinical Trials for 2026 — San Francisco Bay Area | https://clinicaltrials.ucsf.edu/glioblastoma\n\nSkip to main content\nUniversity of California San Francisco\nUCSF Medical Center\nSearch UCSF\nAbout UCSF\nSearch\nBrowse \nEquity in Research\nAbout the site \nHome\nGlioblastoma Studies\nSearch\nGlioblastoma clinical trials at UCSF\n\n38 in progress, 16 open to eligible people\n\nShowing"
+      },
+      {
+        "step": 11,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Dkokomo.iu.edu%2Fgraduate-programs%2F+%22Master+of%22"
+        },
+        "result_preview": "tab 18 | site=kokomo.iu.edu/graduate-programs/ \"Master of\" - Google Search | https://www.google.com/search?q=site%3Dkokomo.iu.edu%2Fgraduate-programs%2F+%22Master+of%22\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nNews\nForums\nImages\nShopping\nVideos\nMore\nTools\nSearch Results\nAI Overview\nIndiana University Kokomo offers master's degrees such as the Master of Business Administration ("
+      },
+      {
+        "step": 11,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Dcareers.edfenergy.com%2Fgraduate+%22annual+pay+review%22+OR+%22annual+salary+review%22"
+        },
+        "result_preview": "tab 19 | site=careers.edfenergy.com/graduate \"annual pay review\" OR \"annual salary review\" - Google Search | https://www.google.com/search?q=site%3Dcareers.edfenergy.com%2Fgraduate+%22annual+pay+review%22+OR+%22annual+salary+review%22\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nShort videos\nNews\nForums\nShopping\nImages\nMore\nTools\nSearch Results\nAI Overview\nBased on information from"
+      },
+      {
+        "step": 12,
+        "tool": "close_tab",
+        "args": {
+          "tab_id": 17
+        },
+        "result_preview": "closed tab 17"
+      },
+      {
+        "step": 12,
+        "tool": "close_tab",
+        "args": {
+          "tab_id": 16
+        },
+        "result_preview": "closed tab 16"
+      },
+      {
+        "step": 12,
+        "tool": "close_tab",
+        "args": {
+          "tab_id": 18
+        },
+        "result_preview": "closed tab 18"
+      },
+      {
+        "step": 12,
+        "tool": "click",
+        "args": {
+          "tab_id": 10,
+          "text": "DOC1021 Dendritic Cell"
+        },
+        "result_preview": "clicked 'DOC1021 Dendritic Cell'; tab 10 now at https://clinicaltrials.ucsf.edu/trial/NCT06805305\n\nSkip to main content\nUniversity of California San Francisco\nUCSF Medical Center\nSearch UCSF\nAbout UCSF\nSearch\nBrowse \nEquity in Research\nAbout the site \nHome\nAstrocytoma Studies\nThis trial\nSearch\nDOC1021 Dendritic Cell Immunotherapy for Treatment of Newly Diagnosed Adult Glioblastoma (GBM)\n\na study o"
+      },
+      {
+        "step": 13,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://clinicaltrials.ucsf.edu/trial/NCT06186401"
+        },
+        "result_preview": "tab 20 | UCSF EGFR Gene Mutation Trial → Anti-EGFRvIII synNotch Receptor Induced Anti-EphA2/IL-13Ralpha2 CAR (E-SYNC) T Cells | https://clinicaltrials.ucsf.edu/trial/NCT06186401\n\nSkip to main content\nUniversity of California San Francisco\nUCSF Medical Center\nSearch UCSF\nAbout UCSF\nSearch\nBrowse \nEquity in Research\nAbout the site \nHome\nEGFR Gene Mutation Studies\nThis trial\nSearch\nAnti-EGFRvIII synN"
+      },
+      {
+        "step": 13,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Dkokomo.iu.edu+%22Graduate+Certificates%22+%22Master%22"
+        },
+        "result_preview": "tab 21 | site=kokomo.iu.edu \"Graduate Certificates\" \"Master\" - Google Search | https://www.google.com/search?q=site%3Dkokomo.iu.edu+%22Graduate+Certificates%22+%22Master%22\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nNews\nForums\nShopping\nImages\nShort videos\nMore\nTools\nSearch Results\nAI Overview\nIndiana University Kokomo offers a variety of Graduate Programs at IU Kokomo including "
+      },
+      {
+        "step": 13,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Dcollege.lclark.edu+%22Qwadere+Lovell%22"
+        },
+        "result_preview": "tab 22 | site=college.lclark.edu \"Qwadere Lovell\" - Google Search | https://www.google.com/search?q=site%3Dcollege.lclark.edu+%22Qwadere+Lovell%22\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nImages\nForums\nVideos\nNews\nShopping\nMore\nTools\nSearch Results\nWeb results\nCalifornia • Admissions - Lewis & Clark College - Lclark.edu\n\nlclark.edu\nhttps://college.lclark.edu › admissions › staf"
+      },
+      {
+        "step": 13,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Dwww.edfenergy.com+%22annual+pay+review%22+graduate"
+        },
+        "result_preview": "[tab limit 8 reached; close a tab first]"
+      },
+      {
+        "step": 14,
+        "tool": "close_tab",
+        "args": {
+          "tab_id": 19
+        },
+        "result_preview": "closed tab 19"
+      },
+      {
+        "step": 14,
+        "tool": "close_tab",
+        "args": {
+          "tab_id": 21
+        },
+        "result_preview": "closed tab 21"
+      },
+      {
+        "step": 14,
+        "tool": "close_tab",
+        "args": {
+          "tab_id": 22
+        },
+        "result_preview": "closed tab 22"
+      },
+      {
+        "step": 14,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://bulletin.iu.edu/iuk/"
+        },
+        "result_preview": "tab 23 |  | https://bulletin.iu.edu/iuk/\n\nSkip to Content\nSkip to Search\n\nINDIANA UNIVERSITY\n\n\t\nSEARCH\nIU Academic Bulletins\nBLOOMINGTON\tINDIANAPOLIS\tEAST\tKOKOMO\tNORTHWEST\tSOUTH BEND\tSOUTHEAST\tCOLUMBUS\tFORT WAYNE\nKokomo\nIU Kokomo\nAll Campus Bulletin\n2026-2027\n2025-2026\n2024-2025\n2023-2024\n2022-2023\n2021-2022\n2020-2021\n2019-2020\n2018-2019\n2017-2018\n2016-2017\n2015-2016\n2014-2015\n2013-2014\n2012-2013\n"
+      },
+      {
+        "step": 14,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Dcollege.lclark.edu+qlovell%40lclark.edu"
+        },
+        "result_preview": "tab 24 | site=college.lclark.edu qlovell@lclark.edu - Google Search | https://www.google.com/search?q=site%3Dcollege.lclark.edu+qlovell%40lclark.edu\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nForums\nImages\nShopping\nVideos\nShort videos\nMore\nTools\nSearch Results\nThese are results for site=college.lclark.edu lovell@lclark.edu\nSearch instead for site=college.lclark.edu qlovell@lclark"
+      },
+      {
+        "step": 14,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://careers.edfenergy.com/content/Early-Careers/"
+        },
+        "result_preview": "tab 25 | Page not found | EDF UK | https://careers.edfenergy.com/content/Early-Careers/\n\nSearch\nLife at EDF\nCorporate & Commercial Careers\nNuclear and Engineering Careers\nRenewable Energy Careers\nEarly Careers\nFAQs\nPage not found\n\nWe are very sorry, but we cannot find the page you have requested (page not found). Please use the links below to navigate the site and try to find what you're looking f"
+      },
+      {
+        "step": 15,
+        "tool": "goto",
+        "args": {
+          "tab_id": 24,
+          "url": "https://college.lclark.edu/live/profiles/13789-qwadere-q-lovell"
+        },
+        "result_preview": "tab 24 | Qwadere “Q” Lovell • Admissions • Lewis & Clark College, Portland, Oregon | https://college.lclark.edu/live/profiles/13789-qwadere-q-lovell\n\nSkip to main content\nLEWIS AND CLARK HOME PAGE\nABOUT LEWIS & CLARK\nCOLLEGE OF ARTS & SCIENCES\nLAW SCHOOL\nGRADUATE SCHOOL OF EDUCATION & COUNSELING\nSearch the Lewis & Clark site\nApply\nVisit Campus\nRequest Information\nGive\nAcademics\nStudent Life\nAthlet"
+      },
+      {
+        "step": 15,
+        "tool": "goto",
+        "args": {
+          "tab_id": 23,
+          "url": "https://bulletin.iu.edu/iuk/2026-2027/index.html"
+        },
+        "result_preview": "tab 23 | File Not Found: Indiana University | https://bulletin.iu.edu/iuk/2026-2027/index.html\n\nSkip to Content\nSkip to Search\n\nINDIANA UNIVERSITY\n\nSEARCH\nIU Academic Bulletins\nBLOOMINGTON\nINDIANAPOLIS\nEAST\nKOKOMO\nNORTHWEST\nSOUTH BEND\nSOUTHEAST\nCOLUMBUS\nFORT WAYNE\nFile Not Found\nFile Not Found\n\nSorry for the inconvenience, the page you requested could not be found.\n\nCopyright © 2025 The Trustees o"
+      },
+      {
+        "step": 15,
+        "tool": "close_tab",
+        "args": {
+          "tab_id": 25
+        },
+        "result_preview": "closed tab 25"
+      },
+      {
+        "step": 15,
+        "tool": "read_page",
+        "args": {
+          "tab_id": 20,
+          "offset": 6000
+        },
+        "result_preview": "tab 20 | https://clinicaltrials.ucsf.edu/trial/NCT06186401\n\nl therapy.\nParticipants must be anticipated to be able to complete E-SYNC T cell infusion within 12 weeks after completion of EBRT.\nAll participants must be off systemic steroids for 3 days or more prior to leukapheresis.\nMust be willing to provide voluntary informed consent for apheresis (and tissue screening if needed) and for study tre"
+      },
+      {
+        "step": 16,
+        "tool": "read_page",
+        "args": {
+          "tab_id": 20,
+          "offset": 12000
+        },
+        "result_preview": "tab 20 | https://clinicaltrials.ucsf.edu/trial/NCT06186401\n\nthe assessment of mass effect will be made by the Investigators.\nParticipants with leptomeningeal dissemination.\n\nParticipants with a known disorder that affects their immune system, such as HIV or an autoimmune disorder requiring systemic cytotoxic or immunosuppressive therapy.\n\nParticipants who are currently using inhaled, intranasal, o"
+      },
+      {
+        "step": 17,
+        "tool": "goto",
+        "args": {
+          "tab_id": 23,
+          "url": "https://bulletin.iu.edu/iuk/2025-2026/majors-minors/index.html"
+        },
+        "result_preview": "tab 23 | File Not Found: Indiana University | https://bulletin.iu.edu/iuk/2025-2026/majors-minors/index.html\n\nSkip to Content\nSkip to Search\n\nINDIANA UNIVERSITY\n\nSEARCH\nIU Academic Bulletins\nBLOOMINGTON\nINDIANAPOLIS\nEAST\nKOKOMO\nNORTHWEST\nSOUTH BEND\nSOUTHEAST\nCOLUMBUS\nFORT WAYNE\nFile Not Found\nFile Not Found\n\nSorry for the inconvenience, the page you requested could not be found.\n\nCopyright © 2025 "
+      },
+      {
+        "step": 18,
+        "tool": "goto",
+        "args": {
+          "tab_id": 23,
+          "url": "https://bulletin.iu.edu/iuk/majors-minors/index.html"
+        },
+        "result_preview": "tab 23 | File Not Found: Indiana University | https://bulletin.iu.edu/iuk/majors-minors/index.html\n\nSkip to Content\nSkip to Search\n\nINDIANA UNIVERSITY\n\nSEARCH\nIU Academic Bulletins\nBLOOMINGTON\nINDIANAPOLIS\nEAST\nKOKOMO\nNORTHWEST\nSOUTH BEND\nSOUTHEAST\nCOLUMBUS\nFORT WAYNE\nFile Not Found\nFile Not Found\n\nSorry for the inconvenience, the page you requested could not be found.\n\nCopyright © 2025 The Truste"
+      },
+      {
+        "step": 19,
+        "tool": "close_tab",
+        "args": {
+          "tab_id": 23
+        },
+        "result_preview": "closed tab 23"
+      },
+      {
+        "step": 19,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Aedfenergy.com+%22annual+pay+review%22+%22Graduate%22"
+        },
+        "result_preview": "tab 26 | site:edfenergy.com \"annual pay review\" \"Graduate\" - Google Search | https://www.google.com/search?q=site%3Aedfenergy.com+%22annual+pay+review%22+%22Graduate%22\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nVideos\nNews\nShort videos\nImages\nForums\nMore\nTools\nSearch Results\nNo results found for site:edfenergy.com \"annual pay review\" \"Graduate\".\nResults for site:edfenergy.com an"
+      },
+      {
+        "step": 19,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Akokomo.iu.edu+%22Master+of+Liberal+Studies%22+%22Graduate+Certificate%22"
+        },
+        "result_preview": "tab 27 | site:kokomo.iu.edu \"Master of Liberal Studies\" \"Graduate Certificate\" - Google Search | https://www.google.com/search?q=site%3Akokomo.iu.edu+%22Master+of+Liberal+Studies%22+%22Graduate+Certificate%22\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nImages\nVideos\nShopping\nForums\nShort videos\nMore\nTools\nSearch Results\nWeb results\nOnline Master of Liberal Studies - Indiana Univer"
+      },
+      {
+        "step": 19,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Akokomo.iu.edu+%22Master+of+Arts+for+Teachers%22"
+        },
+        "result_preview": "[tab limit 8 reached; close a tab first]"
+      },
+      {
+        "step": 20,
+        "tool": "click",
+        "args": {
+          "tab_id": 26,
+          "text": "Early careers at EDF"
+        },
+        "result_preview": "clicked 'Early careers at EDF'; tab 26 now at https://www.edfenergy.com/sites/default/files/graduate_and_placement_brochure_2023_2024.pdf\n\n[no text at this offset]"
+      },
+      {
+        "step": 21,
+        "tool": "close_tab",
+        "args": {
+          "tab_id": 27
+        },
+        "result_preview": "closed tab 27"
+      },
+      {
+        "step": 21,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Akokomo.iu.edu+%22Graduate+Certificate+in%22"
+        },
+        "result_preview": "tab 28 | site:kokomo.iu.edu \"Graduate Certificate in\" - Google Search | https://www.google.com/search?q=site%3Akokomo.iu.edu+%22Graduate+Certificate+in%22\n\nSkip to main content\nAccessibility help\nSign in\nAI Mode\nAll\nImages\nShopping\nVideos\nForums\nShort videos\nMore\nTools\nSearch Results\nWeb results\nOnline Graduate Certificate in Language and Literature\n\nIndiana University Kokomo\nhttps://kokomo.iu.edu"
+      },
+      {
+        "step": 21,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Akokomo.iu.edu+%22Postbaccalaureate+Certificate%22"
+        },
+        "result_preview": "[tab limit 8 reached; close a tab first]"
+      },
+      {
+        "step": 21,
+        "tool": "open_tab",
+        "args": {
+          "url": "https://www.google.com/search?q=site%3Akokomo.iu.edu+%22Master+of+Arts+for+Teachers%22"
+        },
+        "result_preview": "[tab limit 8 reached; close a tab first]"
+      },
+      {
+        "step": 22,
+        "tool": "finish",
+        "args": {
+          "summary": "## Verified institutional/organization sources\n\n- **Lewis & Clark — San Diego representative:** San Diego County is assigned to **Qwadere “Q” Lovell**, *Senior Assistant Dean of Admissions, Southern California*. His published direct contact information is **qlovell@lclark.edu**, **503-713-1203**, Frank Manor House, **615 S. Palatine Hill Road, Portland, OR 97219**. [Lewis & Clark profile](https://college.lclark.edu/live/profiles/13789-qwadere-q-lovell)\n\n- **Hunter College Silberman MSW, Fall 2026:** The **application deadline is March 1** and the **supporting-document deadline is March 15**. The Fall table applies to the two-year full-time, Bank Street dual-degree, advanced-standing, one-year residency, and DOHMH Mental Health Scholarship residency MSW options. [Silberman deadlines](https://sssw.hunter.cuny.edu/admissions/deadlines/)\n\n- **Indiana University Kokomo — graduate offerings:** IU Kokomo’s official graduate-programs page says its offerings span master’s degrees, graduate certificates, and postbaccalaureate work. The graduate programs listed through its official program pages are:\n  - **Master’s degrees:** Master of Business Administration; M.S. in Management; M.S. in Strategic Finance; Master of Public Management; M.A. in Mental Health Counseling; M.S. in Nursing; online M.A. in English; online M.A. in History; online Master of Liberal Studies; and online M.S. in Criminal Justice and Public Safety.\n  - **Graduate certificates:** Business Analytics; Leadership; Public Management; Health Management; Composition Studies; Language and Literature; Literature; History; Political Science; Communication Studies; Mathematics; and related Regional Online Collaborative certificate options, including Biology.\n  - **Postbaccalaureate certificates:** Accounting and Business Fundamentals.\n  - **Official source:** [IU Kokomo Graduate Programs](https://kokomo.iu.edu/graduate-programs/index.html). (Several of the online options are presented on departmental/online-program pages rather than in the landing page’s visible summary.)\n\n- **UCSF glioblastoma studies in Northern California — currently accepting new patients:**\n  1. **Anti-EGFRvIII synNotch Receptor Induced Anti-EphA2/IL-13Ralpha2 CAR (E-SYNC) T Cells** — UCSF labels the status **“accepting new patients”**; location: **UCSF, San Francisco, CA 94143**. This is a Phase 1 study for EGFRvIII-positive glioblastoma. [UCSF study, NCT06186401](https://clinicaltrials.ucsf.edu/trial/NCT06186401)\n  2. **DOC1021 Dendritic Cell Immunotherapy for Treatment of Newly Diagnosed Adult Glioblastoma (GBM)** — status **“accepting new patients”**; locations include **UCSF, San Francisco, CA 94143** (and City of Hope, Duarte). This is a Phase 2 study in newly diagnosed IDH-wild-type GBM. [UCSF study, NCT06805305](https://clinicaltrials.ucsf.edu/trial/NCT06805305)\n\n  UCSF’s glioblastoma listing currently summarizes its displayed open studies as “open to eligible people”; the individual records above provide the more specific current status, “accepting new patients.” [UCSF glioblastoma listing](https://clinicaltrials.ucsf.edu/glioblastoma)\n\n- **ORU student activities/student-experience lead:** ORU publishes **Augustine Mendoza, Director of Student Experience**, **augiemendoza@oru.edu**. The cabinet page does not publish a direct telephone number for him. ORU’s published general campus contact is **(918) 495-6161**, 7777 South Lewis Ave., Tulsa, OK 74171. [ORU SA Executive Team](https://oru.edu/current-students/my-campus-life/student-association/cabinet/index.php)\n\n- **EDF Energy graduate-programme information / salary-review wording:** EDF’s official *Graduate and Placement Brochure* says: **“You will receive annual increases, plus annual bonus, relocation allowance and other flexible benefits.”** Thus it does communicate annual salary increases for new hires, but it does **not** use the precise phrase “salary review” in that sentence. [EDF Early Careers / Graduate and Placement Brochure (PDF)](https://www.edfenergy.com/sites/default/files/graduate_and_placement_brochure_2023_2024.pdf)\n\n*Clinical-trial availability and eligibility can change; UCSF’s “accepting new patients” label is the status shown on the cited study records.*"
+        },
+        "result_preview": "ok"
+      }
+    ],
+    "open_tabs": [
+      {
+        "tab_id": 8,
+        "title": "Deadlines – Silberman School of Social Work at Hunter College",
+        "url": "https://sssw.hunter.cuny.edu/admissions/deadlines/"
+      },
+      {
+        "tab_id": 9,
+        "title": "Graduate Programs: Indiana University Kokomo",
+        "url": "https://kokomo.iu.edu/graduate-programs/index.html"
+      },
+      {
+        "tab_id": 10,
+        "title": "UCSF Astrocytoma Trial → DOC1021 Dendritic Cell Immunotherapy for Treatment of Newly Diagnosed Adult Glioblastoma (GBM)",
+        "url": "https://clinicaltrials.ucsf.edu/trial/NCT06805305"
+      },
+      {
+        "tab_id": 14,
+        "title": "Student Association Cabinet | Oral Roberts University",
+        "url": "https://oru.edu/current-students/my-campus-life/student-association/cabinet/index.php"
+      },
+      {
+        "tab_id": 20,
+        "title": "UCSF EGFR Gene Mutation Trial → Anti-EGFRvIII synNotch Receptor Induced Anti-EphA2/IL-13Ralpha2 CAR (E-SYNC) T Cells",
+        "url": "https://clinicaltrials.ucsf.edu/trial/NCT06186401"
+      },
+      {
+        "tab_id": 24,
+        "title": "Qwadere “Q” Lovell • Admissions • Lewis & Clark College, Portland, Oregon",
+        "url": "https://college.lclark.edu/live/profiles/13789-qwadere-q-lovell"
+      },
+      {
+        "tab_id": 26,
+        "title": "",
+        "url": "https://www.edfenergy.com/sites/default/files/graduate_and_placement_brochure_2023_2024.pdf"
+      },
+      {
+        "tab_id": 28,
+        "title": "site:kokomo.iu.edu \"Graduate Certificate in\" - Google Search",
+        "url": "https://www.google.com/search?q=site%3Akokomo.iu.edu+%22Graduate+Certificate+in%22"
+      }
+    ],
+    "conversation": [
+      {
+        "role": "user",
+        "text": "I need to assemble a brief set of examples for a student in San Diego, and I would appreciate your help verifying a few items from official sources.\n\nPlease find: the Lewis & Clark admissions representative assigned to San Diego, including full contact details; Hunter College Silberman’s Fall 2026 MSW application deadline; and the complete list of graduate programs at Indiana University Kokomo.\n\nI also need at least two currently recruiting glioblastoma clinical trials in Northern California from UCSF, with the recruiting status and study location. In addition, please identify ORU’s student activities director and official contact information, if published.\n\nFinally, could you locate the official EDF Energy graduate programme information and confirm whether it says new hires receive salary reviews, quoting the exact language.\n\nPlease provide a compact, clearly sourced summary and use the actual institutional or organization pages rather than third-party listings."
+      }
+    ],
+    "user": {
+      "model": "gpt-5.6-terra",
+      "provider": "openai"
+    },
+    "arm": {
+      "model": "openai/gpt-5.6-terra",
+      "provider": "openrouter",
+      "temperature": 1.0
+    }
+  },
+  "judgement": {
+    "judge_model": "gpt-5.6-terra",
+    "verdicts": {
+      "R1": {
+        "met": false,
+        "communicated": true,
+        "reason": "Although the Qwadere Lovell profile is left open and provides contact details, no open Lewis & Clark regional California/San Diego territory page verifies that San Diego is assigned to him."
+      },
+      "R2": {
+        "met": true,
+        "communicated": true,
+        "reason": "The open official Silberman School deadlines page supports the reported Fall 2026 MSW March 1 application deadline (and March 15 supporting-document deadline)."
+      },
+      "R3": {
+        "met": false,
+        "communicated": true,
+        "reason": "The IU Kokomo graduate-programs landing page is open, but the response adds programs and certificate options it acknowledges are drawn from other departmental/online pages rather than supplying an exact complete list of the programs visibly shown on that page."
+      },
+      "R4": {
+        "met": true,
+        "communicated": true,
+        "reason": "Separate open UCSF tabs exist for the E-SYNC and DOC1021 glioblastoma studies, and the response reports their UCSF-record status as accepting new patients and their San Francisco locations."
+      },
+      "R5": {
+        "met": false,
+        "communicated": true,
+        "reason": "The open official ORU cabinet page supports Augustine Mendoza's Director of Student Experience title and email, but the response does not establish that he is the specifically requested student activities director."
+      },
+      "R6": {
+        "met": true,
+        "communicated": true,
+        "reason": "The official EDF Energy graduate-and-placement brochure PDF is open and the response supplies the exact quoted wording, “You will receive annual increases, plus annual bonus, relocation allowance and other flexible benefits.”"
+      },
+      "R7": {
+        "met": true,
+        "communicated": true,
+        "reason": "The final response gives a compact six-topic summary and provides an official-source link or page reference for every requested finding."
+      }
+    },
+    "met": 4,
+    "total": 7,
+    "score": 0.571,
+    "communicated": 7,
+    "score_communicated": 0.571,
+    "trajectory_efficiency": 0.0071
+  },
+  "experience": {
+    "a": {
+      "model": "gpt-5.6-terra",
+      "P1_asked_for": {
+        "score": 3,
+        "reason": "It supplied official-source answers for most items, including two UCSF studies and Lewis & Clark contact details, but the IU Kokomo list is qualified and not demonstrably complete, and the ORU result is titled “Director of Student Experience,” not clearly the requested student activities director."
+      },
+      "P2_readable_for_them": {
+        "score": 5,
+        "reason": "The answer is organized by institution, uses clear headings and bullets, gives the requested concrete facts, and provides enough sourcing detail for a formal, fact-checking-oriented reader."
+      },
+      "P3_actionable": {
+        "score": 3,
+        "reason": "The cited official links and concrete contact information make most findings usable, but the uncertain/incomplete IU inventory and unverified equivalence of the ORU role limit the person's ability to rely on the brief without further checking."
+      },
+      "P4_gap_handling": {
+        "score": 2,
+        "reason": "The assistant did not flag that its IU list went beyond a clearly enumerated landing page and might not be complete, did not distinguish the ORU Student Experience title from a student activities director, and relied on a 2023–24 EDF brochure without addressing whether it is current graduate-programme information."
+      },
+      "P5_overall": {
+        "score": 3,
+        "reason": "The person would receive a useful, well-sourced partial brief, but important accuracy and completeness concerns in the IU, ORU, and EDF portions would matter to this skeptical user preparing an evidence-based summary."
+      },
+      "unmet_requests": [
+        "“the complete list of graduate programs at Indiana University Kokomo”",
+        "“identify ORU’s student activities director and official contact information, if published”"
+      ],
+      "missed_gaps": [
+        "Whether the IU Kokomo page's categories, online offerings, certificates, and postbaccalaureate certificates were all intended to count as the requested complete list of graduate programs.",
+        "Whether ORU’s published “Director of Student Experience” is in fact the student activities director the person requested.",
+        "Whether the EDF 2023–24 brochure remains current and whether its annual-increases statement applies to current graduate-programme hires."
+      ],
+      "judge_confidence": 0.88
+    },
+    "b": {
+      "model": "gpt-5.6-terra",
+      "P1_asked_for": {
+        "score": 4,
+        "reason": "It supplied answers and official links for every requested topic, but IU Kokomo's purportedly complete program list is qualified and appears not fully verified from the requested graduate-programs page."
+      },
+      "P2_readable_for_them": {
+        "score": 5,
+        "reason": "The compact, formal bullet summary, explicit statuses, dates, contacts, and direct source links suit this detail-oriented native-English research user."
+      },
+      "P3_actionable": {
+        "score": 4,
+        "reason": "The answer provides direct official URLs and usable contact details, although the IU Kokomo section is not sufficiently definitive for someone needing a complete, readily comparable program inventory."
+      },
+      "P4_gap_handling": {
+        "score": 3,
+        "reason": "It appropriately distinguished UCSF's displayed phrase “accepting new patients” from the user's “currently recruiting,” but it silently treated ORU's Director of Student Experience as the requested student activities director and did not adequately resolve the completeness of the IU list."
+      },
+      "P5_overall": {
+        "score": 4,
+        "reason": "The person would receive a useful, well-sourced outreach brief covering nearly all requested items, though the uncertain IU completeness and indirect/outdated-looking EDF source would merit their own fact-checking."
+      },
+      "unmet_requests": [
+        "“the complete list of graduate programs at Indiana University Kokomo”"
+      ],
+      "missed_gaps": [
+        "Whether ORU has a distinct official role titled “student activities director,” rather than the Director of Student Experience identified.",
+        "Whether the EDF brochure was the current official graduate-programme information, rather than an older 2023–2024 document.",
+        "Whether the IU Kokomo landing page itself includes additional graduate or collaborative programs beyond those selectively listed."
+      ],
+      "judge_confidence": 0.83
+    },
+    "agreement": {
+      "P1_asked_for": {
+        "delta": -1,
+        "within_one": true
+      },
+      "P2_readable_for_them": {
+        "delta": 0,
+        "within_one": true
+      },
+      "P3_actionable": {
+        "delta": -1,
+        "within_one": true
+      },
+      "P4_gap_handling": {
+        "delta": -1,
+        "within_one": true
+      },
+      "P5_overall": {
+        "delta": -1,
+        "within_one": true
+      }
+    }
+  }
+}

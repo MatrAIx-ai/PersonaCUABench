@@ -1,0 +1,902 @@
+[
+ {
+  "replicate": "r1",
+  "task": 5,
+  "persona": "education-faculty-advisor",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 1.0,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r1/results/4614aa083147/education-faculty-advisor__openai-gpt-5.6-terra__20260929T004352Z/result.json"
+ },
+ {
+  "replicate": "r1",
+  "task": 5,
+  "persona": "education-first-gen-applicant",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.5,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r1/results/4614aa083147/education-first-gen-applicant__openai-gpt-5.6-terra__20260929T005357Z/result.json"
+ },
+ {
+  "replicate": "r1",
+  "task": 5,
+  "persona": "education-k12-teacher",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.5,
+  "decision": "KEEP",
+  "note": "www.law.ubalt.edu certificate error on an agent-constructed hostname; the UBalt Visit page loaded and R2 was met.",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r1/results/4614aa083147/education-k12-teacher__openai-gpt-5.6-terra__20260929T004850Z/result.json"
+ },
+ {
+  "replicate": "r1",
+  "task": 5,
+  "persona": "education-parent-helper",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.5,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r1/results/4614aa083147/education-parent-helper__openai-gpt-5.6-terra__20260929T003442Z/result.json"
+ },
+ {
+  "replicate": "r1",
+  "task": 5,
+  "persona": "none",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.75,
+  "decision": "KEEP",
+  "note": "Same UBalt certificate error on an agent-constructed hostname; recovered, R2 met.",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r1/results/4614aa083147/none__openai-gpt-5.6-terra__20260929T003931Z/result.json"
+ },
+ {
+  "replicate": "r1",
+  "task": 4,
+  "persona": "education-faculty-advisor",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.429,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r1/results/6421b906fe97/education-faculty-advisor__openai-gpt-5.6-terra__20260929T002209Z/result.json"
+ },
+ {
+  "replicate": "r1",
+  "task": 4,
+  "persona": "education-first-gen-applicant",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.429,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r1/results/6421b906fe97/education-first-gen-applicant__openai-gpt-5.6-terra__20260929T000131Z/result.json"
+ },
+ {
+  "replicate": "r1",
+  "task": 4,
+  "persona": "education-k12-teacher",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.286,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r1/results/6421b906fe97/education-k12-teacher__openai-gpt-5.6-terra__20260929T002916Z/result.json"
+ },
+ {
+  "replicate": "r1",
+  "task": 4,
+  "persona": "education-parent-helper",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.714,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r1/results/6421b906fe97/education-parent-helper__openai-gpt-5.6-terra__20260929T000853Z/result.json"
+ },
+ {
+  "replicate": "r1",
+  "task": 4,
+  "persona": "none",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.571,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r1/results/6421b906fe97/none__openai-gpt-5.6-terra__20260929T001503Z/result.json"
+ },
+ {
+  "replicate": "r1",
+  "task": 1,
+  "persona": "education-faculty-advisor",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.5,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r1/results/65c9e7d383e0/education-faculty-advisor__openai-gpt-5.6-terra__20260928T231806Z/result.json"
+ },
+ {
+  "replicate": "r1",
+  "task": 1,
+  "persona": "education-first-gen-applicant",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.0,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r1/results/65c9e7d383e0/education-first-gen-applicant__openai-gpt-5.6-terra__20260928T232626Z/result.json"
+ },
+ {
+  "replicate": "r1",
+  "task": 1,
+  "persona": "education-k12-teacher",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.25,
+  "decision": "KEEP",
+  "note": "DNS failure on thepenpivot.com, a site the agent guessed; not a required source.",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r1/results/65c9e7d383e0/education-k12-teacher__openai-gpt-5.6-terra__20260928T232318Z/result.json"
+ },
+ {
+  "replicate": "r1",
+  "task": 1,
+  "persona": "education-parent-helper",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.0,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r1/results/65c9e7d383e0/education-parent-helper__openai-gpt-5.6-terra__20260928T232723Z/result.json"
+ },
+ {
+  "replicate": "r1",
+  "task": 1,
+  "persona": "none",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.5,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r1/results/65c9e7d383e0/none__openai-gpt-5.6-terra__20260928T231324Z/result.json"
+ },
+ {
+  "replicate": "r1",
+  "task": 3,
+  "persona": "education-faculty-advisor",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 1.0,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r1/results/8c30f2f9ceea/education-faculty-advisor__openai-gpt-5.6-terra__20260928T235928Z/result.json"
+ },
+ {
+  "replicate": "r1",
+  "task": 3,
+  "persona": "education-first-gen-applicant",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.167,
+  "decision": "KEEP",
+  "note": "cdrdv2-public.intel.com triggered a file download, not a block. The persona never named Tom's Hardware and the agent chose other chips.",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r1/results/8c30f2f9ceea/education-first-gen-applicant__openai-gpt-5.6-terra__20260928T235404Z/result.json"
+ },
+ {
+  "replicate": "r1",
+  "task": 3,
+  "persona": "education-k12-teacher",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.833,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r1/results/8c30f2f9ceea/education-k12-teacher__openai-gpt-5.6-terra__20260928T235205Z/result.json"
+ },
+ {
+  "replicate": "r1",
+  "task": 3,
+  "persona": "education-parent-helper",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.667,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r1/results/8c30f2f9ceea/education-parent-helper__openai-gpt-5.6-terra__20260928T235557Z/result.json"
+ },
+ {
+  "replicate": "r1",
+  "task": 3,
+  "persona": "none",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.833,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r1/results/8c30f2f9ceea/none__openai-gpt-5.6-terra__20260928T235741Z/result.json"
+ },
+ {
+  "replicate": "r1",
+  "task": 6,
+  "persona": "education-faculty-advisor",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.714,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r1/results/976970ff5d37/education-faculty-advisor__openai-gpt-5.6-terra__20260929T010121Z/result.json"
+ },
+ {
+  "replicate": "r1",
+  "task": 6,
+  "persona": "education-first-gen-applicant",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.714,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r1/results/976970ff5d37/education-first-gen-applicant__openai-gpt-5.6-terra__20260929T010641Z/result.json"
+ },
+ {
+  "replicate": "r1",
+  "task": 6,
+  "persona": "education-k12-teacher",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.714,
+  "decision": "KEEP",
+  "note": "PubMed search page served a reCAPTCHA wall; the agent reached the peer-reviewed article through Google and PMC instead, so the requested evidence stayed reachable.",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r1/results/976970ff5d37/education-k12-teacher__openai-gpt-5.6-terra__20260929T010326Z/result.json"
+ },
+ {
+  "replicate": "r1",
+  "task": 6,
+  "persona": "education-parent-helper",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.714,
+  "decision": "KEEP",
+  "note": "PubMed search page served a reCAPTCHA wall; the agent reached the peer-reviewed article through Google and PMC instead, so the requested evidence stayed reachable.",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r1/results/976970ff5d37/education-parent-helper__openai-gpt-5.6-terra__20260929T010815Z/result.json"
+ },
+ {
+  "replicate": "r1",
+  "task": 6,
+  "persona": "none",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 1.0,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r1/results/976970ff5d37/none__openai-gpt-5.6-terra__20260929T005842Z/result.json"
+ },
+ {
+  "replicate": "r1",
+  "task": 2,
+  "persona": "education-faculty-advisor",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.75,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r1/results/e15345ed27f1/education-faculty-advisor__openai-gpt-5.6-terra__20260928T233005Z/result.json"
+ },
+ {
+  "replicate": "r1",
+  "task": 2,
+  "persona": "education-first-gen-applicant",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.75,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r1/results/e15345ed27f1/education-first-gen-applicant__openai-gpt-5.6-terra__20260928T233603Z/result.json"
+ },
+ {
+  "replicate": "r1",
+  "task": 2,
+  "persona": "education-k12-teacher",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.75,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r1/results/e15345ed27f1/education-k12-teacher__openai-gpt-5.6-terra__20260928T233303Z/result.json"
+ },
+ {
+  "replicate": "r1",
+  "task": 2,
+  "persona": "education-parent-helper",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.75,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r1/results/e15345ed27f1/education-parent-helper__openai-gpt-5.6-terra__20260928T234003Z/result.json"
+ },
+ {
+  "replicate": "r1",
+  "task": 2,
+  "persona": "none",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 1.0,
+  "decision": "KEEP",
+  "note": "Cloudflare challenge on studylib.net, recovered elsewhere; score 1.0.",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r1/results/e15345ed27f1/none__openai-gpt-5.6-terra__20260928T234455Z/result.json"
+ },
+ {
+  "replicate": "r2",
+  "task": 5,
+  "persona": "education-faculty-advisor",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 1.0,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r2/results/4614aa083147/education-faculty-advisor__openai-gpt-5.6-terra__20260929T022529Z/result.json"
+ },
+ {
+  "replicate": "r2",
+  "task": 5,
+  "persona": "education-first-gen-applicant",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.5,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r2/results/4614aa083147/education-first-gen-applicant__openai-gpt-5.6-terra__20260929T023139Z/result.json"
+ },
+ {
+  "replicate": "r2",
+  "task": 5,
+  "persona": "education-k12-teacher",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 1.0,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r2/results/4614aa083147/education-k12-teacher__openai-gpt-5.6-terra__20260929T022906Z/result.json"
+ },
+ {
+  "replicate": "r2",
+  "task": 5,
+  "persona": "education-parent-helper",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.75,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r2/results/4614aa083147/education-parent-helper__openai-gpt-5.6-terra__20260929T021538Z/result.json"
+ },
+ {
+  "replicate": "r2",
+  "task": 5,
+  "persona": "none",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 1.0,
+  "decision": "KEEP",
+  "note": "Same UBalt certificate error; recovered, R2 met.",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r2/results/4614aa083147/none__openai-gpt-5.6-terra__20260929T022009Z/result.json"
+ },
+ {
+  "replicate": "r2",
+  "task": 4,
+  "persona": "education-faculty-advisor",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.571,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r2/results/6421b906fe97/education-faculty-advisor__openai-gpt-5.6-terra__20260929T020430Z/result.json"
+ },
+ {
+  "replicate": "r2",
+  "task": 4,
+  "persona": "education-first-gen-applicant",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.0,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r2/results/6421b906fe97/education-first-gen-applicant__openai-gpt-5.6-terra__20260929T014927Z/result.json"
+ },
+ {
+  "replicate": "r2",
+  "task": 4,
+  "persona": "education-k12-teacher",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.429,
+  "decision": "KEEP",
+  "note": "DNS failure on a search string typed into the URL bar; agent error, not environment.",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r2/results/6421b906fe97/education-k12-teacher__openai-gpt-5.6-terra__20260929T021104Z/result.json"
+ },
+ {
+  "replicate": "r2",
+  "task": 4,
+  "persona": "education-parent-helper",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.571,
+  "decision": "KEEP",
+  "note": "DNS failure on a search string typed into the URL bar; agent error, not environment.",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r2/results/6421b906fe97/education-parent-helper__openai-gpt-5.6-terra__20260929T015305Z/result.json"
+ },
+ {
+  "replicate": "r2",
+  "task": 4,
+  "persona": "none",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.429,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r2/results/6421b906fe97/none__openai-gpt-5.6-terra__20260929T015953Z/result.json"
+ },
+ {
+  "replicate": "r2",
+  "task": 1,
+  "persona": "education-faculty-advisor",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.5,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r2/results/65c9e7d383e0/education-faculty-advisor__openai-gpt-5.6-terra__20260929T011604Z/result.json"
+ },
+ {
+  "replicate": "r2",
+  "task": 1,
+  "persona": "education-first-gen-applicant",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.0,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r2/results/65c9e7d383e0/education-first-gen-applicant__openai-gpt-5.6-terra__20260929T012229Z/result.json"
+ },
+ {
+  "replicate": "r2",
+  "task": 1,
+  "persona": "education-k12-teacher",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.5,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r2/results/65c9e7d383e0/education-k12-teacher__openai-gpt-5.6-terra__20260929T011927Z/result.json"
+ },
+ {
+  "replicate": "r2",
+  "task": 1,
+  "persona": "education-parent-helper",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.0,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r2/results/65c9e7d383e0/education-parent-helper__openai-gpt-5.6-terra__20260929T012324Z/result.json"
+ },
+ {
+  "replicate": "r2",
+  "task": 1,
+  "persona": "none",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.5,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r2/results/65c9e7d383e0/none__openai-gpt-5.6-terra__20260929T011143Z/result.json"
+ },
+ {
+  "replicate": "r2",
+  "task": 3,
+  "persona": "education-faculty-advisor",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.833,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r2/results/8c30f2f9ceea/education-faculty-advisor__openai-gpt-5.6-terra__20260929T014806Z/result.json"
+ },
+ {
+  "replicate": "r2",
+  "task": 3,
+  "persona": "education-first-gen-applicant",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.667,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r2/results/8c30f2f9ceea/education-first-gen-applicant__openai-gpt-5.6-terra__20260929T014352Z/result.json"
+ },
+ {
+  "replicate": "r2",
+  "task": 3,
+  "persona": "education-k12-teacher",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.667,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r2/results/8c30f2f9ceea/education-k12-teacher__openai-gpt-5.6-terra__20260929T014223Z/result.json"
+ },
+ {
+  "replicate": "r2",
+  "task": 3,
+  "persona": "education-parent-helper",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.5,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r2/results/8c30f2f9ceea/education-parent-helper__openai-gpt-5.6-terra__20260929T014518Z/result.json"
+ },
+ {
+  "replicate": "r2",
+  "task": 3,
+  "persona": "none",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.833,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r2/results/8c30f2f9ceea/none__openai-gpt-5.6-terra__20260929T014646Z/result.json"
+ },
+ {
+  "replicate": "r2",
+  "task": 6,
+  "persona": "education-faculty-advisor",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.429,
+  "decision": "KEEP",
+  "note": "PubMed search page served a reCAPTCHA wall; the agent reached the peer-reviewed article through Google and PMC instead, so the requested evidence stayed reachable.",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r2/results/976970ff5d37/education-faculty-advisor__openai-gpt-5.6-terra__20260929T023807Z/result.json"
+ },
+ {
+  "replicate": "r2",
+  "task": 6,
+  "persona": "education-first-gen-applicant",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.143,
+  "decision": "KEEP",
+  "note": "PubMed search page served a reCAPTCHA wall; the agent reached the peer-reviewed article through Google and PMC instead, so the requested evidence stayed reachable.",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r2/results/976970ff5d37/education-first-gen-applicant__openai-gpt-5.6-terra__20260929T024327Z/result.json"
+ },
+ {
+  "replicate": "r2",
+  "task": 6,
+  "persona": "education-k12-teacher",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.571,
+  "decision": "KEEP",
+  "note": "PubMed search page served a reCAPTCHA wall; the agent reached the peer-reviewed article through Google and PMC instead, so the requested evidence stayed reachable.",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r2/results/976970ff5d37/education-k12-teacher__openai-gpt-5.6-terra__20260929T024002Z/result.json"
+ },
+ {
+  "replicate": "r2",
+  "task": 6,
+  "persona": "education-parent-helper",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.857,
+  "decision": "KEEP",
+  "note": "PubMed search page served a reCAPTCHA wall; the agent reached the peer-reviewed article through Google and PMC instead, so the requested evidence stayed reachable.",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r2/results/976970ff5d37/education-parent-helper__openai-gpt-5.6-terra__20260929T024600Z/result.json"
+ },
+ {
+  "replicate": "r2",
+  "task": 6,
+  "persona": "none",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.857,
+  "decision": "KEEP",
+  "note": "PubMed search page served a reCAPTCHA wall; the agent reached the peer-reviewed article through Google and PMC instead, so the requested evidence stayed reachable.",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r2/results/976970ff5d37/none__openai-gpt-5.6-terra__20260929T023520Z/result.json"
+ },
+ {
+  "replicate": "r2",
+  "task": 2,
+  "persona": "education-faculty-advisor",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 1.0,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r2/results/e15345ed27f1/education-faculty-advisor__openai-gpt-5.6-terra__20260929T012522Z/result.json"
+ },
+ {
+  "replicate": "r2",
+  "task": 2,
+  "persona": "education-first-gen-applicant",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.5,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r2/results/e15345ed27f1/education-first-gen-applicant__openai-gpt-5.6-terra__20260929T013350Z/result.json"
+ },
+ {
+  "replicate": "r2",
+  "task": 2,
+  "persona": "education-k12-teacher",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.75,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r2/results/e15345ed27f1/education-k12-teacher__openai-gpt-5.6-terra__20260929T013046Z/result.json"
+ },
+ {
+  "replicate": "r2",
+  "task": 2,
+  "persona": "education-parent-helper",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.5,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r2/results/e15345ed27f1/education-parent-helper__openai-gpt-5.6-terra__20260929T013620Z/result.json"
+ },
+ {
+  "replicate": "r2",
+  "task": 2,
+  "persona": "none",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.75,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r2/results/e15345ed27f1/none__openai-gpt-5.6-terra__20260929T013836Z/result.json"
+ },
+ {
+  "replicate": "r3",
+  "task": 5,
+  "persona": "education-faculty-advisor",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.5,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r3/results/4614aa083147/education-faculty-advisor__openai-gpt-5.6-terra__20260929T040615Z/result.json"
+ },
+ {
+  "replicate": "r3",
+  "task": 5,
+  "persona": "education-first-gen-applicant",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.25,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r3/results/4614aa083147/education-first-gen-applicant__openai-gpt-5.6-terra__20260929T041304Z/result.json"
+ },
+ {
+  "replicate": "r3",
+  "task": 5,
+  "persona": "education-k12-teacher",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.75,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r3/results/4614aa083147/education-k12-teacher__openai-gpt-5.6-terra__20260929T040825Z/result.json"
+ },
+ {
+  "replicate": "r3",
+  "task": 5,
+  "persona": "education-parent-helper",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.5,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r3/results/4614aa083147/education-parent-helper__openai-gpt-5.6-terra__20260929T035404Z/result.json"
+ },
+ {
+  "replicate": "r3",
+  "task": 5,
+  "persona": "none",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.25,
+  "decision": "KEEP",
+  "note": "ERR_CERT_COMMON_NAME_INVALID only on www.wcl.american.edu, a hostname the agent constructed; wcl.american.edu itself loaded cleanly 4 times.",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r3/results/4614aa083147/none__openai-gpt-5.6-terra__20260929T040101Z/result.json"
+ },
+ {
+  "replicate": "r3",
+  "task": 4,
+  "persona": "education-faculty-advisor",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.714,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r3/results/6421b906fe97/education-faculty-advisor__openai-gpt-5.6-terra__20260929T034317Z/result.json"
+ },
+ {
+  "replicate": "r3",
+  "task": 4,
+  "persona": "education-first-gen-applicant",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.286,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r3/results/6421b906fe97/education-first-gen-applicant__openai-gpt-5.6-terra__20260929T032804Z/result.json"
+ },
+ {
+  "replicate": "r3",
+  "task": 4,
+  "persona": "education-k12-teacher",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.286,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r3/results/6421b906fe97/education-k12-teacher__openai-gpt-5.6-terra__20260929T034808Z/result.json"
+ },
+ {
+  "replicate": "r3",
+  "task": 4,
+  "persona": "education-parent-helper",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.429,
+  "decision": "KEEP",
+  "note": "DNS failures only on agent-constructed URLs (a search string typed as a clinicaltrials.ucsf.edu hostname; silberman.hunter.cuny.edu); the real Silberman deadlines page was reached and R2 met.",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r3/results/6421b906fe97/education-parent-helper__openai-gpt-5.6-terra__20260929T033208Z/result.json"
+ },
+ {
+  "replicate": "r3",
+  "task": 4,
+  "persona": "none",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.286,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r3/results/6421b906fe97/none__openai-gpt-5.6-terra__20260929T033825Z/result.json"
+ },
+ {
+  "replicate": "r3",
+  "task": 1,
+  "persona": "education-faculty-advisor",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.5,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r3/results/65c9e7d383e0/education-faculty-advisor__openai-gpt-5.6-terra__20260929T025243Z/result.json"
+ },
+ {
+  "replicate": "r3",
+  "task": 1,
+  "persona": "education-first-gen-applicant",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.0,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r3/results/65c9e7d383e0/education-first-gen-applicant__openai-gpt-5.6-terra__20260929T025701Z/result.json"
+ },
+ {
+  "replicate": "r3",
+  "task": 1,
+  "persona": "education-k12-teacher",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.0,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r3/results/65c9e7d383e0/education-k12-teacher__openai-gpt-5.6-terra__20260929T025551Z/result.json"
+ },
+ {
+  "replicate": "r3",
+  "task": 1,
+  "persona": "education-parent-helper",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.0,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r3/results/65c9e7d383e0/education-parent-helper__openai-gpt-5.6-terra__20260929T025826Z/result.json"
+ },
+ {
+  "replicate": "r3",
+  "task": 1,
+  "persona": "none",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.5,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r3/results/65c9e7d383e0/none__openai-gpt-5.6-terra__20260929T024854Z/result.json"
+ },
+ {
+  "replicate": "r3",
+  "task": 3,
+  "persona": "education-faculty-advisor",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.833,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r3/results/8c30f2f9ceea/education-faculty-advisor__openai-gpt-5.6-terra__20260929T032627Z/result.json"
+ },
+ {
+  "replicate": "r3",
+  "task": 3,
+  "persona": "education-first-gen-applicant",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.5,
+  "decision": "EXCLUDE_RERUN",
+  "note": "The persona asked for the Intel Granite Rapids WS vs AMD Threadripper news. The Tom's Hardware article timed out twice (open_tab and click, 40 s each) and the fallback TechPowerUp article returned 403 Access Denied, so the environment stopped the requested evidence.",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r3/results/8c30f2f9ceea/education-first-gen-applicant__openai-gpt-5.6-terra__20260929T032018Z/result.json"
+ },
+ {
+  "replicate": "r3",
+  "task": 3,
+  "persona": "education-k12-teacher",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.667,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r3/results/8c30f2f9ceea/education-k12-teacher__openai-gpt-5.6-terra__20260929T031832Z/result.json"
+ },
+ {
+  "replicate": "r3",
+  "task": 3,
+  "persona": "education-parent-helper",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.833,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r3/results/8c30f2f9ceea/education-parent-helper__openai-gpt-5.6-terra__20260929T032312Z/result.json"
+ },
+ {
+  "replicate": "r3",
+  "task": 3,
+  "persona": "none",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.833,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r3/results/8c30f2f9ceea/none__openai-gpt-5.6-terra__20260929T032508Z/result.json"
+ },
+ {
+  "replicate": "r3",
+  "task": 6,
+  "persona": "education-faculty-advisor",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.286,
+  "decision": "KEEP",
+  "note": "Cloudflare challenge on one guilfordjournals.com article the agent chose for the cognitive-bias source; interchangeable sources exist and were reached in other cells. The other lost items are agent choices (Discogs instead of Wikipedia, weak thematic tie).",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r3/results/976970ff5d37/education-faculty-advisor__openai-gpt-5.6-terra__20260929T042035Z/result.json"
+ },
+ {
+  "replicate": "r3",
+  "task": 6,
+  "persona": "education-first-gen-applicant",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.143,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r3/results/976970ff5d37/education-first-gen-applicant__openai-gpt-5.6-terra__20260929T042535Z/result.json"
+ },
+ {
+  "replicate": "r3",
+  "task": 6,
+  "persona": "education-k12-teacher",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.857,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r3/results/976970ff5d37/education-k12-teacher__openai-gpt-5.6-terra__20260929T042304Z/result.json"
+ },
+ {
+  "replicate": "r3",
+  "task": 6,
+  "persona": "education-parent-helper",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.571,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r3/results/976970ff5d37/education-parent-helper__openai-gpt-5.6-terra__20260929T042711Z/result.json"
+ },
+ {
+  "replicate": "r3",
+  "task": 6,
+  "persona": "none",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.857,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r3/results/976970ff5d37/none__openai-gpt-5.6-terra__20260929T041857Z/result.json"
+ },
+ {
+  "replicate": "r3",
+  "task": 2,
+  "persona": "education-faculty-advisor",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.5,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r3/results/e15345ed27f1/education-faculty-advisor__openai-gpt-5.6-terra__20260929T025958Z/result.json"
+ },
+ {
+  "replicate": "r3",
+  "task": 2,
+  "persona": "education-first-gen-applicant",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.5,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r3/results/e15345ed27f1/education-first-gen-applicant__openai-gpt-5.6-terra__20260929T030804Z/result.json"
+ },
+ {
+  "replicate": "r3",
+  "task": 2,
+  "persona": "education-k12-teacher",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.75,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r3/results/e15345ed27f1/education-k12-teacher__openai-gpt-5.6-terra__20260929T030244Z/result.json"
+ },
+ {
+  "replicate": "r3",
+  "task": 2,
+  "persona": "education-parent-helper",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 0.75,
+  "decision": "KEEP",
+  "note": "",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r3/results/e15345ed27f1/education-parent-helper__openai-gpt-5.6-terra__20260929T030956Z/result.json"
+ },
+ {
+  "replicate": "r3",
+  "task": 2,
+  "persona": "none",
+  "executor": "openai/gpt-5.6-terra",
+  "score": 1.0,
+  "decision": "KEEP",
+  "note": "Cloudflare challenge on slidesgo.com/education, recovered; score 1.0.",
+  "result": "artifacts/experiments/2026-09-28/science-education-main-setting1-r3/results/e15345ed27f1/none__openai-gpt-5.6-terra__20260929T031405Z/result.json"
+ }
+]

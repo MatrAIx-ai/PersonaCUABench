@@ -1,0 +1,379 @@
+{
+ "experiment": "science-education main Setting 1",
+ "replicate": "r2",
+ "date_block_la": "2026-09-28",
+ "utc_start": "2026-09-29T01:11:43+00:00",
+ "utc_end": "2026-09-29T02:48:53+00:00",
+ "branch": "jiashu/science-education-main",
+ "git_sha": "4a1c0f221b0a80384d059cb487b3be1e470a148e",
+ "dirty": true,
+ "roles": {
+  "persona_simulator": "openai gpt-5.6-terra (direct OpenAI API), temperature 1",
+  "rubric_judge": "openai gpt-5.6-terra (direct OpenAI API)",
+  "executors": {
+   "terra": {
+    "provider": "openrouter",
+    "model": "openai/gpt-5.6-terra"
+   }
+  }
+ },
+ "runtime": {
+  "temperature": 1,
+  "max_steps": 50,
+  "max_tabs": 8,
+  "headless": true,
+  "profile_mode": "fresh persistent profile per cell, seeded from one identical 5-file warm cookie template"
+ },
+ "input_sha256": {
+  "tasks.json": "69ac69baecb6a5d97b2809dbea72c94ef17c48a4dd980aaee2fec2b021312ee7",
+  "personas": {
+   "education-faculty-advisor": "cb617cf9c3266de3263c9510c1b21aff38f7d3642090df9fae8ce357574ec275",
+   "education-k12-teacher": "fbf70112d883f2dfe36690e17f5743b5d1842ad489a727e978773760e393756f",
+   "education-first-gen-applicant": "d7ebad21846cb2c7fd197d0b7dda3284a74602760690a918ebe860156281fc0c",
+   "education-parent-helper": "7bd4ac957220fec7c1431de05e2e93080499f212a9b4a440e0da6ba2211f9d24"
+  },
+  "prompts": {
+   "agent.md": "f39509ce704f2e2f2b3181671fb150bbc981c471bed935fcca0b8e8c002b5e8f",
+   "experience_judge.md": "2829d702d0e0dbe8a9861ef680b6038f4b96b8ecf5ab10115b82d8cbe63aeb00",
+   "persona_user.md": "a4e17fa0c8467e98318309eb294f4ad931b25fcd148b7c21ead5f0c3ac728e5e",
+   "rubric_judge.md": "e830e04fa1b24c2ea2127cdc469c5906f1446679d0ea71a8a8dcf4db76b60f67"
+  }
+ },
+ "planned_cells": 30,
+ "cells": [
+  {
+   "cell": 1,
+   "task": 1,
+   "persona": "none",
+   "executor": "terra",
+   "provider": "openrouter",
+   "model": "openai/gpt-5.6-terra",
+   "exit": 0,
+   "utc_start": "2026-09-29T01:11:43+00:00",
+   "utc_end": "2026-09-29T01:16:03+00:00"
+  },
+  {
+   "cell": 2,
+   "task": 1,
+   "persona": "education-faculty-advisor",
+   "executor": "terra",
+   "provider": "openrouter",
+   "model": "openai/gpt-5.6-terra",
+   "exit": 0,
+   "utc_start": "2026-09-29T01:16:03+00:00",
+   "utc_end": "2026-09-29T01:19:26+00:00"
+  },
+  {
+   "cell": 3,
+   "task": 1,
+   "persona": "education-k12-teacher",
+   "executor": "terra",
+   "provider": "openrouter",
+   "model": "openai/gpt-5.6-terra",
+   "exit": 0,
+   "utc_start": "2026-09-29T01:19:27+00:00",
+   "utc_end": "2026-09-29T01:22:29+00:00"
+  },
+  {
+   "cell": 4,
+   "task": 1,
+   "persona": "education-first-gen-applicant",
+   "executor": "terra",
+   "provider": "openrouter",
+   "model": "openai/gpt-5.6-terra",
+   "exit": 0,
+   "utc_start": "2026-09-29T01:22:29+00:00",
+   "utc_end": "2026-09-29T01:23:24+00:00"
+  },
+  {
+   "cell": 5,
+   "task": 1,
+   "persona": "education-parent-helper",
+   "executor": "terra",
+   "provider": "openrouter",
+   "model": "openai/gpt-5.6-terra",
+   "exit": 0,
+   "utc_start": "2026-09-29T01:23:24+00:00",
+   "utc_end": "2026-09-29T01:25:21+00:00"
+  },
+  {
+   "cell": 6,
+   "task": 2,
+   "persona": "education-faculty-advisor",
+   "executor": "terra",
+   "provider": "openrouter",
+   "model": "openai/gpt-5.6-terra",
+   "exit": 0,
+   "utc_start": "2026-09-29T01:25:22+00:00",
+   "utc_end": "2026-09-29T01:30:46+00:00"
+  },
+  {
+   "cell": 7,
+   "task": 2,
+   "persona": "education-k12-teacher",
+   "executor": "terra",
+   "provider": "openrouter",
+   "model": "openai/gpt-5.6-terra",
+   "exit": 0,
+   "utc_start": "2026-09-29T01:30:46+00:00",
+   "utc_end": "2026-09-29T01:33:50+00:00"
+  },
+  {
+   "cell": 8,
+   "task": 2,
+   "persona": "education-first-gen-applicant",
+   "executor": "terra",
+   "provider": "openrouter",
+   "model": "openai/gpt-5.6-terra",
+   "exit": 0,
+   "utc_start": "2026-09-29T01:33:50+00:00",
+   "utc_end": "2026-09-29T01:36:19+00:00"
+  },
+  {
+   "cell": 9,
+   "task": 2,
+   "persona": "education-parent-helper",
+   "executor": "terra",
+   "provider": "openrouter",
+   "model": "openai/gpt-5.6-terra",
+   "exit": 0,
+   "utc_start": "2026-09-29T01:36:20+00:00",
+   "utc_end": "2026-09-29T01:38:35+00:00"
+  },
+  {
+   "cell": 10,
+   "task": 2,
+   "persona": "none",
+   "executor": "terra",
+   "provider": "openrouter",
+   "model": "openai/gpt-5.6-terra",
+   "exit": 0,
+   "utc_start": "2026-09-29T01:38:36+00:00",
+   "utc_end": "2026-09-29T01:42:22+00:00"
+  },
+  {
+   "cell": 11,
+   "task": 3,
+   "persona": "education-k12-teacher",
+   "executor": "terra",
+   "provider": "openrouter",
+   "model": "openai/gpt-5.6-terra",
+   "exit": 0,
+   "utc_start": "2026-09-29T01:42:23+00:00",
+   "utc_end": "2026-09-29T01:43:52+00:00"
+  },
+  {
+   "cell": 12,
+   "task": 3,
+   "persona": "education-first-gen-applicant",
+   "executor": "terra",
+   "provider": "openrouter",
+   "model": "openai/gpt-5.6-terra",
+   "exit": 0,
+   "utc_start": "2026-09-29T01:43:52+00:00",
+   "utc_end": "2026-09-29T01:45:18+00:00"
+  },
+  {
+   "cell": 13,
+   "task": 3,
+   "persona": "education-parent-helper",
+   "executor": "terra",
+   "provider": "openrouter",
+   "model": "openai/gpt-5.6-terra",
+   "exit": 0,
+   "utc_start": "2026-09-29T01:45:18+00:00",
+   "utc_end": "2026-09-29T01:46:46+00:00"
+  },
+  {
+   "cell": 14,
+   "task": 3,
+   "persona": "none",
+   "executor": "terra",
+   "provider": "openrouter",
+   "model": "openai/gpt-5.6-terra",
+   "exit": 0,
+   "utc_start": "2026-09-29T01:46:46+00:00",
+   "utc_end": "2026-09-29T01:48:05+00:00"
+  },
+  {
+   "cell": 15,
+   "task": 3,
+   "persona": "education-faculty-advisor",
+   "executor": "terra",
+   "provider": "openrouter",
+   "model": "openai/gpt-5.6-terra",
+   "exit": 0,
+   "utc_start": "2026-09-29T01:48:05+00:00",
+   "utc_end": "2026-09-29T01:49:26+00:00"
+  },
+  {
+   "cell": 16,
+   "task": 4,
+   "persona": "education-first-gen-applicant",
+   "executor": "terra",
+   "provider": "openrouter",
+   "model": "openai/gpt-5.6-terra",
+   "exit": 0,
+   "utc_start": "2026-09-29T01:49:26+00:00",
+   "utc_end": "2026-09-29T01:53:05+00:00"
+  },
+  {
+   "cell": 17,
+   "task": 4,
+   "persona": "education-parent-helper",
+   "executor": "terra",
+   "provider": "openrouter",
+   "model": "openai/gpt-5.6-terra",
+   "exit": 0,
+   "utc_start": "2026-09-29T01:53:05+00:00",
+   "utc_end": "2026-09-29T01:59:53+00:00"
+  },
+  {
+   "cell": 18,
+   "task": 4,
+   "persona": "none",
+   "executor": "terra",
+   "provider": "openrouter",
+   "model": "openai/gpt-5.6-terra",
+   "exit": 0,
+   "utc_start": "2026-09-29T01:59:53+00:00",
+   "utc_end": "2026-09-29T02:04:30+00:00"
+  },
+  {
+   "cell": 19,
+   "task": 4,
+   "persona": "education-faculty-advisor",
+   "executor": "terra",
+   "provider": "openrouter",
+   "model": "openai/gpt-5.6-terra",
+   "exit": 0,
+   "utc_start": "2026-09-29T02:04:30+00:00",
+   "utc_end": "2026-09-29T02:11:03+00:00"
+  },
+  {
+   "cell": 20,
+   "task": 4,
+   "persona": "education-k12-teacher",
+   "executor": "terra",
+   "provider": "openrouter",
+   "model": "openai/gpt-5.6-terra",
+   "exit": 0,
+   "utc_start": "2026-09-29T02:11:04+00:00",
+   "utc_end": "2026-09-29T02:15:37+00:00"
+  },
+  {
+   "cell": 21,
+   "task": 5,
+   "persona": "education-parent-helper",
+   "executor": "terra",
+   "provider": "openrouter",
+   "model": "openai/gpt-5.6-terra",
+   "exit": 0,
+   "utc_start": "2026-09-29T02:15:38+00:00",
+   "utc_end": "2026-09-29T02:20:08+00:00"
+  },
+  {
+   "cell": 22,
+   "task": 5,
+   "persona": "none",
+   "executor": "terra",
+   "provider": "openrouter",
+   "model": "openai/gpt-5.6-terra",
+   "exit": 0,
+   "utc_start": "2026-09-29T02:20:09+00:00",
+   "utc_end": "2026-09-29T02:25:29+00:00"
+  },
+  {
+   "cell": 23,
+   "task": 5,
+   "persona": "education-faculty-advisor",
+   "executor": "terra",
+   "provider": "openrouter",
+   "model": "openai/gpt-5.6-terra",
+   "exit": 0,
+   "utc_start": "2026-09-29T02:25:29+00:00",
+   "utc_end": "2026-09-29T02:29:06+00:00"
+  },
+  {
+   "cell": 24,
+   "task": 5,
+   "persona": "education-k12-teacher",
+   "executor": "terra",
+   "provider": "openrouter",
+   "model": "openai/gpt-5.6-terra",
+   "exit": 0,
+   "utc_start": "2026-09-29T02:29:06+00:00",
+   "utc_end": "2026-09-29T02:31:39+00:00"
+  },
+  {
+   "cell": 25,
+   "task": 5,
+   "persona": "education-first-gen-applicant",
+   "executor": "terra",
+   "provider": "openrouter",
+   "model": "openai/gpt-5.6-terra",
+   "exit": 0,
+   "utc_start": "2026-09-29T02:31:39+00:00",
+   "utc_end": "2026-09-29T02:35:19+00:00"
+  },
+  {
+   "cell": 26,
+   "task": 6,
+   "persona": "none",
+   "executor": "terra",
+   "provider": "openrouter",
+   "model": "openai/gpt-5.6-terra",
+   "exit": 0,
+   "utc_start": "2026-09-29T02:35:20+00:00",
+   "utc_end": "2026-09-29T02:38:06+00:00"
+  },
+  {
+   "cell": 27,
+   "task": 6,
+   "persona": "education-faculty-advisor",
+   "executor": "terra",
+   "provider": "openrouter",
+   "model": "openai/gpt-5.6-terra",
+   "exit": 0,
+   "utc_start": "2026-09-29T02:38:06+00:00",
+   "utc_end": "2026-09-29T02:40:01+00:00"
+  },
+  {
+   "cell": 28,
+   "task": 6,
+   "persona": "education-k12-teacher",
+   "executor": "terra",
+   "provider": "openrouter",
+   "model": "openai/gpt-5.6-terra",
+   "exit": 0,
+   "utc_start": "2026-09-29T02:40:01+00:00",
+   "utc_end": "2026-09-29T02:43:26+00:00"
+  },
+  {
+   "cell": 29,
+   "task": 6,
+   "persona": "education-first-gen-applicant",
+   "executor": "terra",
+   "provider": "openrouter",
+   "model": "openai/gpt-5.6-terra",
+   "exit": 0,
+   "utc_start": "2026-09-29T02:43:27+00:00",
+   "utc_end": "2026-09-29T02:45:59+00:00"
+  },
+  {
+   "cell": 30,
+   "task": 6,
+   "persona": "education-parent-helper",
+   "executor": "terra",
+   "provider": "openrouter",
+   "model": "openai/gpt-5.6-terra",
+   "exit": 0,
+   "utc_start": "2026-09-29T02:46:00+00:00",
+   "utc_end": "2026-09-29T02:48:53+00:00"
+  }
+ ],
+ "protocol_deviations_vs_shopping_main": [
+  "execution routed through OpenRouter; persona and judges on the direct OpenAI API (Shopping used one Azure gpt-5.6-terra deployment for every role)",
+  "per-cell profiles pre-seeded from a warm cookie template"
+ ]
+}

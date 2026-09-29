@@ -1,0 +1,213 @@
+[
+  {
+    "task_id": "65c9e7d383e015d946572f04512d5aa166a8f015",
+    "confirmed_task": "I’m putting together a quick, accessible study workflow for myself on latent growth models, and I want it to feel grounded in what I’d actually see in a browser rather than just a generic summary. Please start on Bing and search for “Latent Growth Models,” then look only at the main organic web results on the first page and pull out the top three with their titles, source sites, and a one-line note on what each seems to cover, because I want to know which sources are most visible right away. Open those three results in separate tabs and leave the search results page open too so I can compare them afterward. Once you’ve got that context, use Google to find one solid ChatGPT prompt template for turning source material into an outline, ideally from a page that actually shows the full prompt wording, because I want to reuse that structure for my own study note; open the page with the prompt and copy the exact template text. After that, go to 10015.io and use its bionic reading converter on this exact note text: “Latent growth models are statistical methods used to estimate change over time across individuals. They help researchers understand trajectories, differences in growth, and predictors of change.” I want the converted version in bionic reading style so it’s easier for me to scan, and please leave the converter result visible on the page as proof. Then finish by using Bing to find a free plagiarism checker that would work for a short note like this, open the actual tool page so I can verify it’s live, and tell me briefly how I’d paste in that same note and run an originality check before sharing it with classmates.",
+    "website": "https://www.google.com",
+    "reference_length": 4,
+    "level": "easy",
+    "rubrics": {
+      "R1": {
+        "requirement": "Identify the top 3 organic Bing results for the query “Latent Growth Models,” including each result’s title, source, and a brief summary of what it covers.",
+        "verification": "Grader confirms the Bing results page shows the query, the response lists three organic results matching visible titles/source labels from the page, and the relevant result tabs were opened."
+      },
+      "R2": {
+        "requirement": "Find one strong ChatGPT prompt template for turning source material into an outline and provide the exact prompt wording from the selected page.",
+        "verification": "Grader confirms a Google search was performed, a source page containing a visible prompt template was opened, and the returned wording matches the prompt shown on that page."
+      },
+      "R3": {
+        "requirement": "Convert the provided latent growth models note into bionic reading format and return the converted text.",
+        "verification": "Grader confirms the 10015.io converter page shows the input note and a visible converted output in bionic reading style, and the response includes the transformed text."
+      },
+      "R4": {
+        "requirement": "Find one free plagiarism checker and explain how to use it to test the same study note for originality.",
+        "verification": "Grader confirms a Bing search for plagiarism checkers was performed, a live tool page was opened, and the response names the tool and gives concise usage instructions tied to the provided note."
+      }
+    },
+    "categories": [
+      "Science and Education > Science and Education - Other",
+      "Science and Education > Education"
+    ],
+    "num_categories": 2
+  },
+  {
+    "task_id": "e15345ed27f1933065af403601876e5f6597a943",
+    "confirmed_task": "I’m putting together a very simple reading-support mini lesson for a student who does better with easier-to-scan text, and I want you to help me pull the pieces together in the browser. Start on Google and find one online English grammar practice quiz that feels appropriate for about 5th grade, then open the actual quiz page so you can verify it’s really a student-facing practice activity and leave that tab open for me as a reference; I need the quiz title and direct URL. Then use Google again to find a printable worksheet or practice page for an 8th-grade student about basic marketing strategies like product, price, place, and promotion or closely related introductory marketing concepts, because I want it to work as an extension activity after the grammar warm-up; open the real worksheet or resource page in its own tab so I can see that it looks classroom-appropriate and printable, and note the title and URL. After that, go to Slidesgo and pick a fun, classroom-appropriate presentation template that could reasonably hold both the grammar warm-up and the marketing extension in one student lesson deck, and open the template’s actual page so I can see the preview images; please include the template name, URL, and whether it’s available for Google Slides or PowerPoint. Finally, go to 10015.io’s bionic reading converter and convert this exact lesson intro into bionic reading format so I can paste it into the first slide of the template you chose: “Today we will warm up with a short grammar quiz, then practice how people use basic marketing strategies like product, price, place, and promotion. Read each direction carefully and do your best.” Please keep the useful tabs open and send me the quiz, worksheet, template, and the converted text in one clean summary.",
+    "website": "https://www.google.com",
+    "reference_length": 4,
+    "level": "easy",
+    "rubrics": {
+      "R1": {
+        "requirement": "A real online English grammar practice quiz appropriate for about 5th grade is found via Google, and the final response includes the quiz title and direct quiz page URL.",
+        "verification": "Grader can confirm there is an open tab showing the actual quiz page, not just search results, and the reported title/URL match the visible page."
+      },
+      "R2": {
+        "requirement": "A printable worksheet or practice page about basic marketing strategies or a closely related introductory marketing topic for about 8th grade is found via Google, and the final response includes the resource title and access URL.",
+        "verification": "Grader can confirm there is an open tab showing the actual worksheet/resource page with printable or classroom-use cues, and the reported title/URL match the visible page."
+      },
+      "R3": {
+        "requirement": "One Slidesgo template that is fun and classroom-appropriate for combining both activities into a single lesson deck is selected, and the final response includes the template name, Slidesgo URL, and use/download option.",
+        "verification": "Grader can confirm the Slidesgo template detail page is open with visible preview images and that the named template, URL, and Google Slides/PowerPoint option match the page."
+      },
+      "R4": {
+        "requirement": "The provided lesson intro is converted on 10015.io into bionic reading format and the full converted text is returned.",
+        "verification": "Grader can confirm the converter page shows transformed output corresponding to the provided passage and that the returned text matches the visible converted result."
+      }
+    },
+    "categories": [
+      "Science and Education > Education"
+    ],
+    "num_categories": 1
+  },
+  {
+    "task_id": "8c30f2f9ceeac75b05c725c5397022bb4f9d32a0",
+    "confirmed_task": "I’m putting together a super short beginner-friendly AI explainer for someone who doesn’t know much about the topic yet, so I want it to move from simple definitions to a recognizable product and then end with a real hardware example. Please start on Google and find IBM’s page that explains the main types of artificial intelligence and machine learning, then pull out at least three categories and rewrite them in plain English with one sentence each so they sound easy to follow. Once you’ve got that foundation, go to Copilot.com and figure out what the site is, then give me exactly one sentence on its purpose as an AI product a beginner would probably recognize; if there’s a landing page or main homepage, leave that open so I can glance at it myself. After that, use Google again to find the Tom’s Hardware article about Intel Granite Rapids WS competing with AMD Threadripper, open the actual Tom’s Hardware article in a new tab so I can see the headline and page for myself, and summarize the key points including the main competitive claims and any specs the article cites like core count or boost clock. Then tie that hardware example back to why strong chips matter for AI or advanced computing, and give me one concise final write-up that combines the IBM basics, the one-sentence Copilot description, and the Tom’s Hardware takeaway in a way a beginner could understand.",
+    "website": "https://www.google.com",
+    "reference_length": 6,
+    "level": "easy",
+    "rubrics": {
+      "R1": {
+        "requirement": "Provide at least three IBM-described categories related to artificial intelligence and/or machine learning, each rewritten in plain English with a one-sentence description.",
+        "verification": "Final response includes three or more distinct IBM-based categories with simple one-sentence explanations traceable to the IBM page opened from Google results."
+      },
+      "R2": {
+        "requirement": "Identify what Copilot is and summarize its purpose in exactly one sentence as an AI-related product example a beginner would recognize.",
+        "verification": "Final response contains a single sentence describing Copilot’s purpose, and the Copilot homepage or landing page is visibly open in the browser."
+      },
+      "R3": {
+        "requirement": "Find and summarize the Tom’s Hardware article about Intel Granite Rapids WS competing with AMD Threadripper, including the main competitive claims and any cited specs such as core count and boost clock.",
+        "verification": "A Tom’s Hardware article page is open in a separate tab, and the final response includes the article’s key claims plus cited specs mentioned in the article."
+      },
+      "R4": {
+        "requirement": "Connect the Tom’s Hardware hardware summary back to why powerful hardware matters for AI or advanced computing.",
+        "verification": "Final response explicitly links the hardware comparison to AI workloads, advanced computing, or the need for strong compute performance."
+      },
+      "R5": {
+        "requirement": "Return a concise final write-up that combines the IBM categories, the one-sentence Copilot description, and the Tom’s Hardware summary into a beginner-friendly explainer.",
+        "verification": "Final answer is a unified, concise explainer rather than disconnected notes, and it includes all three required parts in a beginner-friendly flow."
+      },
+      "R6": {
+        "requirement": "Open the Tom’s Hardware article in a new browser tab during the browsing process.",
+        "verification": "Browser state shows the Tom’s Hardware article open in its own tab, separate from the Google search results tab."
+      }
+    },
+    "categories": [
+      "Computers Electronics and Technology > Computers Electronics and Technology - Other",
+      "Science and Education > Science and Education - Other"
+    ],
+    "num_categories": 2
+  },
+  {
+    "task_id": "6421b906fe97b3799960af31c77f20ff25f756b1",
+    "confirmed_task": "I’m putting together a quick graduate outreach brief for a student in San Diego and want a few very specific examples from different kinds of schools and programs. Please start on Lewis & Clark’s admissions site and find the admissions representative who covers San Diego, California, then open that actual regional contact page and capture the rep’s name, email, phone, and anything else listed, and leave the page open so I can visually confirm how they assign territories. Then go to Hunter College Silberman’s site and find the Fall 2026 application deadline for the MSW program, making sure you’re on the real admissions or application page where the date is shown. After that, use Indiana University Kokomo’s graduate programs page to list all of the graduate programs they show there, and keep that page open in its own tab so I can compare the breadth of options at a smaller campus. Since the student is especially interested in California opportunities, go to the UCSF clinical trials site and find at least two glioblastoma trials in Northern California that are currently recruiting, then open the actual trial pages in separate tabs so you can give me each trial’s recruiting status and study location and I can see that they’re still live. For a student-life example, use Google to get to the official Oral Roberts University page that identifies the student activities director, and pull the person’s name plus email and phone if available, making sure it comes from an ORU page rather than a directory aggregator. Finally, use Google to find the official EDF Energy graduate programme page that mentions whether new hires get salary reviews, and quote the exact wording from the page if it’s there. Please give me everything back as a compact sourced summary, but keep the key pages open in tabs so I can glance at the evidence.",
+    "website": "https://www.google.com",
+    "reference_length": 7,
+    "level": "medium",
+    "rubrics": {
+      "R1": {
+        "requirement": "Correctly identify the Lewis & Clark admissions representative covering San Diego, California, including the representative’s name and listed contact details.",
+        "verification": "Grader can confirm the open Lewis & Clark regional contact page shows San Diego, California assigned to the named representative and displays the extracted contact information."
+      },
+      "R2": {
+        "requirement": "Report the Fall 2026 application deadline for Hunter College Silberman’s MSW program from the official page.",
+        "verification": "Grader can confirm the open Hunter Silberman admissions/application page visibly shows the Fall 2026 MSW deadline date reported in the summary."
+      },
+      "R3": {
+        "requirement": "List the graduate programs shown on Indiana University Kokomo’s graduate programs page.",
+        "verification": "Grader can compare the returned program list against the visible program names on the open IU Kokomo graduate programs page."
+      },
+      "R4": {
+        "requirement": "Identify at least two glioblastoma clinical trials in Northern California that are currently recruiting, including each trial’s recruiting status and study location.",
+        "verification": "Grader can inspect the separate open UCSF trial tabs and verify that each named trial is glioblastoma-related, marked currently recruiting, and has the reported Northern California location."
+      },
+      "R5": {
+        "requirement": "Find the Oral Roberts University student activities director’s name and contact information from an official ORU page.",
+        "verification": "Grader can confirm the open ORU page names the student activities director and shows the extracted email and/or phone details."
+      },
+      "R6": {
+        "requirement": "Determine whether EDF Energy’s graduate programme includes salary reviews for new hires and provide the exact confirming wording from the official page.",
+        "verification": "Grader can confirm the open EDF Energy page contains the quoted wording and that the answer matches the page text."
+      },
+      "R7": {
+        "requirement": "Return a compact summary with sources covering all requested items.",
+        "verification": "Grader can verify the final response includes all six requested findings, each paired with a source reference or page title/link, in a concise summary format."
+      }
+    },
+    "categories": [
+      "Science and Education > Universities and Colleges",
+      "Science and Education > Education"
+    ],
+    "num_categories": 2
+  },
+  {
+    "task_id": "4614aa083147e45cbc2977cc8634b9d9db25edfe",
+    "confirmed_task": "I’m trying to narrow down a few law schools in the Maryland/DC area and want a practical outreach plan before I start contacting anyone. On the University of Maryland Carey Law site, please find the actual way I can request admissions materials and also look for at least one upcoming online admissions event with its date and time, because I want to see how easy they make it to get information and whether there’s a virtual event I could realistically attend; open the event details page in its own tab and leave it there so I can look at it later. Then go to the University of Baltimore School of Law site and find the instructions for scheduling an admissions meeting by opening the relevant admissions event or meeting page and pulling the registration link or contact method from the actual details page, and keep that page open too so I can compare the two schools side by side. After that, on American University Washington College of Law’s site, find the PIPS Scholarship page and give me a short plain-English summary of what the scholarship is for, along with the application form link, because funding could change which school I prioritize; if there’s a dedicated scholarship page, leave that open in another tab as proof. Once you’ve gathered all of that, recommend which of these three schools I should contact first based on the best mix of easy admissions outreach and potential funding, and include the specific action or contact details you found for each school so I have a simple next move.",
+    "website": "https://www.google.com",
+    "reference_length": 4,
+    "level": "medium",
+    "rubrics": {
+      "R1": {
+        "requirement": "Correctly identify the University of Maryland Carey Law admissions-materials request method and report at least one upcoming online event with its date and time.",
+        "verification": "Grader can confirm the response matches information visible on the Maryland Carey admissions/request page and on an open online event details tab showing the event date/time."
+      },
+      "R2": {
+        "requirement": "Correctly find the University of Baltimore School of Law admissions meeting scheduling instructions, including the registration link or contact method from the relevant event/details page.",
+        "verification": "Grader can confirm the response against the open UBalt admissions meeting or event details page showing how to register or whom to contact."
+      },
+      "R3": {
+        "requirement": "Provide an accurate brief summary of American University Washington College of Law’s PIPS Scholarship and include the application form link.",
+        "verification": "Grader can confirm the summary and link against the open PIPS Scholarship page and the linked application form reference on American’s site."
+      },
+      "R4": {
+        "requirement": "Recommend which school to contact first using the gathered evidence about admissions outreach accessibility and potential funding, and include the specific contact/action details found for all three schools.",
+        "verification": "Grader can verify that the recommendation is supported by the findings from the Maryland Carey, UBalt, and American tabs and that each school’s specific action/contact details are included."
+      }
+    },
+    "categories": [
+      "Science and Education > Universities and Colleges",
+      "Law and Government > Legal"
+    ],
+    "num_categories": 2
+  },
+  {
+    "task_id": "976970ff5d37116847b8a9351a0922196bee88a2",
+    "confirmed_task": "I’m putting together a short youth mental-health workshop and want a tidy evidence pack I can actually cite, so could you do this in the browser and keep the key pages open for me? Start on Google and find one peer-reviewed academic source that clearly says eating disorders commonly begin during adolescence or the early teen years, then open the actual article or abstract page in its own tab and pull the exact supporting quote plus enough citation detail that I could reuse it. From there, use Google again to find one credible source explaining that the human brain keeps growing or developing after childhood, and open the source page itself so I can see it’s a real organization or publication rather than just a search snippet. After that, still using Google, find one credible source saying human cognitive biases are influenced by evolutionary processes, and open that source in a separate tab too because I want to compare the wording across the three sources. Once those evidence tabs are gathered, go to Wikipedia’s page for Lauryn Hill’s The Miseducation of Lauryn Hill, pull at least five song titles from the track listing, and leave that album page open so I can glance at the list myself. Then choose the one song title that would make the best discussion prompt for teens based on the themes from the three sources, and give me a concise workshop brief that ties the evidence together with the citations, the exact quote for the eating-disorders source, the five song titles, and a short explanation of why your chosen title fits.",
+    "website": "https://www.google.com",
+    "reference_length": 7,
+    "level": "medium",
+    "rubrics": {
+      "R1": {
+        "requirement": "Provides one peer-reviewed academic source stating that eating disorders commonly begin during adolescence or the early teen years, including a usable citation and the exact supporting quote.",
+        "verification": "Grader can confirm a Google result was opened to an article or abstract page in its own tab and that the final response includes both citation details and a direct quote supporting adolescent onset."
+      },
+      "R2": {
+        "requirement": "Provides one credible source explaining that the human brain continues to grow or develop after childhood, with a usable citation.",
+        "verification": "Grader can confirm the source page itself was opened from Google and that the final response includes a citation tied to the brain-development claim."
+      },
+      "R3": {
+        "requirement": "Provides one credible source supporting the claim that human cognitive biases are influenced by evolutionary processes, including title, publisher, and URL.",
+        "verification": "Grader can confirm the opened source page supports the claim and that the final response includes the source title, publisher, and URL."
+      },
+      "R4": {
+        "requirement": "Uses the opened evidence tabs to extract or summarize support from all three sources in a way that is coherent for the workshop theme.",
+        "verification": "Grader can confirm multiple source tabs were opened and the final brief accurately connects adolescent onset, ongoing brain development, and evolutionary influences on cognitive bias."
+      },
+      "R5": {
+        "requirement": "Lists at least five song titles from Lauryn Hill’s The Miseducation of Lauryn Hill sourced from Wikipedia.",
+        "verification": "Grader can confirm the Wikipedia album page is open and that at least five track titles in the response match the visible track listing."
+      },
+      "R6": {
+        "requirement": "Selects one song title from the album as a teen discussion prompt and explains why it fits the workshop themes drawn from the gathered evidence.",
+        "verification": "Grader can confirm the chosen title appears in the Wikipedia track list and that the explanation meaningfully links to the three evidence themes."
+      },
+      "R7": {
+        "requirement": "Returns the findings as a concise workshop brief including the three requested evidence sources, citations, the exact quote for the eating-disorders source, at least five song titles, and the chosen title with rationale.",
+        "verification": "Grader can confirm all required elements are present in one concise final brief and that the visible pages used match the cited sources."
+      }
+    },
+    "categories": [
+      "Health > Mental Health",
+      "Science and Education > Science and Education - Other"
+    ],
+    "num_categories": 2
+  }
+]
