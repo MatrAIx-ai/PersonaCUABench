@@ -26,8 +26,6 @@ confirms the request was met (P1 ≥ 4).
 > **Version scope.** v1 is cold-start only. Persistent state (memory, past sessions, the
 > user's files, browser history) is planned for **v2**.
 
-> Setup and run instructions for contributors: [CONTRIBUTING.md](CONTRIBUTING.md)
-
 ---
 
 ## 1. Tasks
@@ -328,7 +326,7 @@ In every task, the personas run from domain expert to casual or low-patience use
 cautious older user. Shared dimensions: age, education, life stage, tech-savviness, income,
 detail orientation, patience, precision of language, brief vs. full, decision style, risk,
 trust, shopping style, and budgeting. Each task adds its own set of domain dimensions
-(volunteering, parenting, collecting, fashion). Full plan: [PERSONA_PLANNING_ZH.md](PERSONA_PLANNING_ZH.md).
+(volunteering, parenting, collecting, fashion)..
 </details>
 
 <details>
