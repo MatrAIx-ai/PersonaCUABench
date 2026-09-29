@@ -33,13 +33,53 @@ def test_tasks():
 
 def test_personas_differ():  # the profiles the persona LLM is given
     prompts = {name: R.persona_lib.persona_system_prompt(HERE / "personas" / f"{name}.yaml")
-               for name in ("travel-expert", "elderly-novice")}
-    assert "75-84" in prompts["elderly-novice"]
-    assert "Frequent flyer" in prompts["travel-expert"]
-    assert prompts["travel-expert"] != prompts["elderly-novice"]
+               for name in ("event-pro", "older-city-visitor")}
+    assert "65-74" in prompts["older-city-visitor"]
+    assert "Experienced" in prompts["event-pro"]
+    assert prompts["event-pro"] != prompts["older-city-visitor"]
     # The profile carries no task: the need is added separately, per task.
     for p in prompts.values():
-        assert "Aurora" not in p
+        assert "Baltimore" not in p
+
+
+def test_persona_assignments():
+    assignments = json.loads((HERE / "persona_assignments.json").read_text())
+    assert {t["task_id"] for t in R.TASKS if "real" not in t} <= assignments.keys()
+    # REAL tasks get their personas later; any already assigned must exist.
+    for t in R.TASKS:
+        for name in assignments.get(t["task_id"], []) if "real" in t else []:
+            assert (HERE / "personas" / f"{name}.yaml").is_file(), name
+    assert {"clawbench-v1-794", "clawbench-v2-1102"} <= assignments.keys()
+    names = [name for group in assignments.values() for name in group]
+    assert len(names) == len(set(names)) == 24
+    assert all(len(group) == 3 for group in assignments.values())
+    assert all((HERE / "personas" / f"{name}.yaml").is_file() for name in names)
+
+
+def test_provider_clients():
+    keys = ("QWEN_BASE_URL", "QWEN_API_KEY", "AZURE_OPENAI_ENDPOINT",
+            "AZURE_OPENAI_API_KEY")
+    old = {key: R.os.environ.get(key) for key in keys}
+    try:
+        R.os.environ.update({
+            "QWEN_BASE_URL": "http://qwen.test/v1",
+            "QWEN_API_KEY": "",
+            "AZURE_OPENAI_ENDPOINT": "https://judge.openai.azure.com",
+            "AZURE_OPENAI_API_KEY": "test-key",
+        })
+        qwen, qwen_provider = R._client("qwen", "qwen")
+        azure, azure_provider = R._client("judge", "azure")
+        assert qwen_provider == "qwen" and str(qwen.base_url) == "http://qwen.test/v1/"
+        assert azure_provider == "azure"
+        assert str(azure.base_url) == "https://judge.openai.azure.com/openai/v1/"
+        qwen.close()
+        azure.close()
+    finally:
+        for key, value in old.items():
+            if value is None:
+                R.os.environ.pop(key, None)
+            else:
+                R.os.environ[key] = value
 
 
 class _StubBrowser:
@@ -122,7 +162,7 @@ def test_agent_loop(monkeypatched):
     assert len(run["conversation"]) == 3
     # The CUA carries no persona and never sees the hidden Odysseys text --
     # only what the user said.
-    assert "75-84" not in client.seen_system
+    assert "65-74" not in client.seen_system
     assert client.seen_first_user == user.opening
     assert R.TASKS[0]["confirmed_task"][:60] not in client.seen_system
     return run
@@ -147,9 +187,9 @@ def test_persona_user():
     client = _TextClient()
     R._client = lambda model, provider="": (client, "stub")
 
-    user = R.PersonaUser(task, HERE / "personas" / "elderly-novice.yaml", "stub")
+    user = R.PersonaUser(task, HERE / "personas" / "older-city-visitor.yaml", "stub")
     system = client.sent[0][0]["content"]
-    assert "75-84" in system                      # persona profile
+    assert "65-74" in system                      # persona profile
     assert task["confirmed_task"] in system       # hidden need
     assert user.opening == client.reply           # said in its own words
     assert user.reply("Which days?") == client.reply
@@ -255,6 +295,17 @@ def test_skip_existing_ignores_unscored(tmp: Path = Path("/tmp")):
         assert not R._is_scored(Path(d) / "missing.json")
 
 
+def test_complete_run_can_be_judged_later(tmp: Path = Path("/tmp")):
+    import tempfile
+    with tempfile.TemporaryDirectory() as d:
+        complete = Path(d) / "complete.json"
+        failed = Path(d) / "failed.json"
+        complete.write_text(json.dumps({"run": {"answer": "done", "stop_reason": "finish"}}))
+        failed.write_text(json.dumps({"run": {"answer": "", "stop_reason": "no_model_output"}}))
+        assert R._is_complete_run(complete)
+        assert not R._is_complete_run(failed)
+
+
 def test_judge(run):
     task = R.TASKS[0]
     rids = list(task["rubrics"])
@@ -278,6 +329,8 @@ def test_judge(run):
 if __name__ == "__main__":
     test_tasks()
     test_personas_differ()
+    test_persona_assignments()
+    test_provider_clients()
     run = test_agent_loop(None)
     test_persona_user()
     test_budget_exhausted_still_answers()
@@ -285,5 +338,6 @@ if __name__ == "__main__":
     test_judge_failure_keeps_the_run(run)
     test_extract_json()
     test_skip_existing_ignores_unscored()
+    test_complete_run_can_be_judged_later()
     test_judge(run)
     print("odyssey pipeline self-check OK")

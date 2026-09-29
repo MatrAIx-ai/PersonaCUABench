@@ -1,213 +1,207 @@
 [
   {
-    "task_id": "890a6880049a42684ac91a2e1809442846f9394c",
-    "confirmed_task": "I’m thinking about doing a simple public-transit outing from downtown Chicago to Aurora, Illinois soon, and I want a practical snapshot I can actually look at in the browser. On Google, please search for the recommended public-transit route from Chicago to Aurora, Illinois and open the actual transit directions so you can tell me the main mode I’d be taking and the estimated total travel time; leave that directions page open so I can review the route myself. Since I may need a little context for rail connections and fare structure, then go to Metra’s BNSF line page and summarize what the BNSF line is, where it runs, and where on that page or site fare information is listed; if there’s a separate fares link, open that in another tab so I have a visual reference. After that, head to Weather.com and pull up the local 10-day forecast for Aurora, Illinois, then give me the high and low temperatures for the next 3 days so I can judge whether the trip will feel comfortable. Please send everything back as one concise trip-planning summary, and keep the Google transit directions tab and the relevant Metra page open for comparison.",
-    "website": "https://www.google.com",
-    "reference_length": 5,
-    "level": "easy",
-    "rubrics": {
-      "R1": {
-        "requirement": "Find a recommended public-transit route from Chicago, Illinois to Aurora, Illinois on Google and report the main mode of transit and estimated total travel time.",
-        "verification": "Grader can confirm a Google transit directions/results page is open and the response includes a specific main mode and travel-time estimate taken from that page."
-      },
-      "R2": {
-        "requirement": "Summarize Metra’s BNSF line by stating what it is and where it runs.",
-        "verification": "Grader can confirm the Metra BNSF line page is open and the response accurately describes the line and its route coverage based on visible page text."
-      },
-      "R3": {
-        "requirement": "Identify where fare information for riding the BNSF line is listed, including any relevant fares link or section.",
-        "verification": "Grader can confirm the response points to a visible fare-information location on the BNSF line page or an opened fares tab/page on metra.com."
-      },
-      "R4": {
-        "requirement": "Report the forecasted high and low temperatures for the next 3 days from Weather.com’s 10-day forecast for Aurora, Illinois.",
-        "verification": "Grader can confirm a Weather.com 10-day forecast page for Aurora is open and the response includes three day-by-day high/low pairs matching the visible forecast."
-      },
-      "R5": {
-        "requirement": "Return all findings as one concise trip-planning summary that combines the Google transit recommendation, BNSF line context, fare-info location, and 3-day weather outlook.",
-        "verification": "Grader can confirm the final response is a single concise integrated summary containing all required elements from steps 1 through 3."
-      }
-    },
-    "categories": [
-      "Travel and Tourism > Ground Transportation",
-      "Travel and Tourism > Tourist Attractions"
-    ],
-    "num_categories": 2
-  },
-  {
-    "task_id": "ada70bfe81da1cd33bec47d79a9d279d7734a686",
-    "confirmed_task": "I’m trying to plan a Yorkshire family day out around Christmas and want to compare two festive options properly before I recommend one. Could you start on the official Stockeld Park site and open their Winter or Christmas ticket page, then the main activities page if needed, and pull together exactly what’s included with a standard festive ticket so I can see whether it feels like a full day out for kids; if there are photos or activity sections on the page, open the main ticket page and the activities/details page in separate tabs and leave them open so I can glance at them later. Then use Google to find the current Harrogate Christmas Funland page or official event listing, open the actual event page, and summarize what’s included there too, along with the location and the event dates, because I want to compare whether it sounds more substantial than Stockeld Park; if you find more than one relevant result, open the most official-looking listing in its own tab and verify it’s live before using it. After that, go to the official York Maze site and pull together the practical visitor details for using it as a backup daytime activity nearby, especially where it is, the opening times or seasonal opening info, and any important ticket or visit-planning notes like booking ahead, age guidance, or whether it’s seasonal, and leave the key visitor info page open as well. In the end, give me a concise side-by-side comparison of Stockeld Park versus Harrogate Christmas Funland, then a short recommendation on which festive option seems better for a family day out and whether York Maze sounds like a realistic backup plan.",
-    "website": "https://www.google.com",
-    "reference_length": 6,
-    "level": "easy",
-    "rubrics": {
-      "R1": {
-        "requirement": "Accurately summarize the activities included with Stockeld Park Winter/Christmas tickets using the official Stockeld Park pages.",
-        "verification": "Grader can confirm the summary matches visible included activities on the open Stockeld Park ticket/details tabs."
-      },
-      "R2": {
-        "requirement": "Find and use a live, relevant Harrogate Christmas Funland page or official listing and summarize what is included in the experience.",
-        "verification": "Grader can see an open Harrogate Christmas Funland page reached via Google and verify the included features against the visible listing content."
-      },
-      "R3": {
-        "requirement": "Include Harrogate Christmas Funland’s event location and event dates.",
-        "verification": "Grader can verify the location and dates directly on the open event/listing page."
-      },
-      "R4": {
-        "requirement": "Summarize York Maze visitor details including where it is, opening times or seasonal opening information, and important ticket or visit-planning notes from the official York Maze site.",
-        "verification": "Grader can confirm these details on the open York Maze visitor information page."
-      },
-      "R5": {
-        "requirement": "Present Stockeld Park and Harrogate Christmas Funland as a concise side-by-side comparison focused on what is included and overall suitability for a family festive outing.",
-        "verification": "Final response clearly compares both attractions using findings from Steps 1 and 2 rather than listing them separately."
-      },
-      "R6": {
-        "requirement": "Provide a short recommendation on which festive attraction seems better and whether York Maze works as a backup daytime activity.",
-        "verification": "Final response includes a reasoned recommendation grounded in the gathered details from all three sites."
-      }
-    },
-    "categories": [
-      "Travel and Tourism > Tourist Attractions",
-      "Community and Society > Holidays and Seasonal Events"
-    ],
-    "num_categories": 2
-  },
-  {
-    "task_id": "b6b8ad71aa3112840790066d7d62b498babdfa5c",
-    "confirmed_task": "I’m trying to decide whether driving this week is a bad idea, so can you build me a quick weather risk snapshot that starts with what it feels like right now and then widens out to the bigger trouble spots? First, on Google, search for Baltimore, Maryland weather and grab the current temperature plus the plain-English condition like cloudy, sunny, rain, or whatever it says, just so I have a baseline for home conditions. Then go to Wunderground and look up Syracuse, New York, and check the 10-day/7-day style forecast to find the lowest temperature expected over the next 7 days, including which day it happens, because I want to compare that colder destination against Baltimore. After that, use the National Weather Service forecast page for the Rittman, Ohio area near Marshallville and tell me what the current forecast says and whether there are any active alerts posted there, since that would really affect an Ohio leg of the drive; please open the actual forecast page and leave it visible so I can see the alert area and forecast text myself. Finally, go to the NWS Mount Holly page, find the winter forecast graphic, and report the snowfall amount shown there so I can tell whether the Mid-Atlantic part looks like a nuisance event or something more serious; if the graphic opens separately, leave that tab open too so I can look at the map. In the end, send me a short location-by-location summary with the key weather risk for Baltimore, Syracuse, Rittman/Marshallville, and the Mount Holly region.",
-    "website": "https://www.google.com",
-    "reference_length": 6,
-    "level": "easy",
-    "rubrics": {
-      "R1": {
-        "requirement": "Report Baltimore, Maryland’s current temperature and current weather conditions from Google.",
-        "verification": "Grader can confirm the answer against the Google weather module showing Baltimore weather with a numeric temperature and condition label."
-      },
-      "R2": {
-        "requirement": "Report the lowest forecasted temperature in Syracuse, New York over the next 7 days from Wunderground, including the day it occurs.",
-        "verification": "Grader can verify the selected low and day on the Syracuse forecast page in Wunderground’s multi-day forecast view."
-      },
-      "R3": {
-        "requirement": "Report the current National Weather Service forecast for the Rittman, Ohio area near Marshallville.",
-        "verification": "Grader can confirm the forecast wording on the forecast.weather.gov page for the specified area."
-      },
-      "R4": {
-        "requirement": "State whether any active weather alerts are posted for the Rittman, Ohio area near Marshallville.",
-        "verification": "Grader can verify the presence or absence of alert banners, watches, warnings, or advisories on the same NWS forecast page left open by the agent."
-      },
-      "R5": {
-        "requirement": "Report the predicted snowfall amount shown in the winter forecast graphic on the NWS Mount Holly page.",
-        "verification": "Grader can confirm the snowfall amount directly from the winter forecast graphic or image tab left open from the Mount Holly page."
-      },
-      "R6": {
-        "requirement": "Return the findings as a short summary organized by location or region, with a brief key weather risk for each one.",
-        "verification": "Grader can check that the final response includes Baltimore, Syracuse, Rittman/Marshallville, and the Mount Holly region, each with the requested weather detail and a concise risk statement."
-      }
-    },
-    "categories": [
-      "Science and Education > Weather",
-      "Travel and Tourism > Travel and Tourism - Other"
-    ],
-    "num_categories": 2
-  },
-  {
-    "task_id": "b21a86441ddca8186175bfffcaae0358ed66eec4",
-    "confirmed_task": "Can you help me plan a short LA trip from Pittsburgh and keep the key pages open so I can actually look at them afterward? Start on Google Flights, Kayak, or Expedia and search a round-trip from PIT to LAX for a simple 2-day trip, making sure the outbound gets into Los Angeles before 6:00 PM and the return lands back in Pittsburgh before midnight. I’d really prefer a nonstop if one exists, but if not, pick the option with the shortest total travel time that still feels like a good value, and open the top few flight options so I can compare before you choose the best one; then leave the selected flight page open in its own tab. After that, use Google Hotels or a hotel booking site to find me a hotel around Koreatown or West Hollywood with at least a 4.5 rating and a nightly rate under $350, and open the actual hotel listing so I can see the price, rating, photos, and map location, then keep that tab open too. Once the stay looks settled, go to Google Maps and pull up Griffith Observatory, The Getty Center, Santa Monica Pier, one well-rated Korean BBQ place in Koreatown, one coffee shop rated 4.5 or better, and somewhere with a great sunset view, because I want a realistic plan instead of a random list. Use the map routes to figure out a 2-day itinerary that avoids driving during LA rush hour as much as possible, especially around 7 to 10 AM and 4 to 7 PM, and try to keep travel between stops under about 40 minutes when that’s realistic, with a little buffer time between activities so the days don’t feel crammed. Open the important map views or route checks in separate tabs if needed so I can visually compare how far apart things are, and then give me a simple trip summary with the flight you chose, the hotel you recommend, and a 2-day schedule showing activity times plus the travel time between each stop.",
-    "website": "https://www.google.com",
-    "reference_length": 6,
-    "level": "medium",
-    "rubrics": {
-      "R1": {
-        "requirement": "A round-trip PIT to LAX flight search is completed on a flight site, with top candidate options reviewed and one selected that arrives in Los Angeles before 6:00 PM outbound and returns to Pittsburgh before midnight.",
-        "verification": "Grader can see an open flight search/results or details page showing PIT, LAX, round-trip results, visible candidate options, and the selected itinerary meeting the timing constraints."
-      },
-      "R2": {
-        "requirement": "The chosen flight reasonably reflects the stated preference hierarchy: nonstop if available, otherwise the shortest total travel time, while still balancing price and schedule.",
-        "verification": "Visible comparison among top few flight options supports why the selected itinerary is a reasonable best choice based on stops, duration, and price."
-      },
-      "R3": {
-        "requirement": "A hotel in Koreatown or West Hollywood is identified with rating at least 4.5 and nightly price under $350, and the actual listing page is opened.",
-        "verification": "Open hotel listing visibly shows neighborhood or map placement, nightly price under $350, rating of 4.5 or higher, and listing details/photos."
-      },
-      "R4": {
-        "requirement": "Google Maps is used to identify all required stop types: Griffith Observatory, The Getty Center, Santa Monica Pier, a Korean BBQ spot in Koreatown, a coffee shop rated at least 4.5, and a sunset-view location.",
-        "verification": "Open Google Maps place pages or map tabs show each required destination category and allow visual confirmation of their locations."
-      },
-      "R5": {
-        "requirement": "The itinerary routing is realistic, uses map route checks, avoids LA rush hour driving where practical, keeps travel between stops under about 40 minutes when possible, and includes buffer time.",
-        "verification": "Open route/map tabs and the written plan show travel-time checks, sensible sequencing, reduced rush-hour exposure, and spacing between activities."
-      },
-      "R6": {
-        "requirement": "A final travel plan is produced with the selected flight, hotel recommendation, and a 2-day itinerary including activity timing and travel times, while keeping the key browser pages open.",
-        "verification": "Final summary includes all required trip components, and the flight tab, hotel tab, and relevant map/route tabs remain open for visual review."
-      }
-    },
-    "categories": [
-      "Travel and Tourism > Air Travel",
-      "Travel and Tourism > Accommodation and Hotels"
-    ],
-    "num_categories": 2
-  },
-  {
-    "task_id": "795bfe117e0f58e49ca37ae8e453a507859a2a2b",
-    "confirmed_task": "I’m trying to piece together a really cheap trip to London for two, so can you help me build it in a practical order and keep the actual pages open where it matters? Start on Booking.com and search London for 2 adults staying this December, then find me at least one hotel that comes in under £100 total for the 2-night stay, because that ultra-budget option is going to set the tone for everything else. Open the actual property page in its own tab so I can see the photos and location, and note the hotel name, stay dates, total displayed price, and link. Once you’ve got that baseline, stay on Booking.com and look up NOX Hotel for a 1-night stay for 2 adults on any date in 2026, just so I can tell whether my bargain London option is unusually cheap or more normal for the city; open the NOX listing page too and record the date and total displayed price you find. After that, use Google to look for at least two hotels near Washington, DC Union Station that show 4-star-or-higher guest ratings and nightly prices under $200, because I may want a backup benchmark for city lodging in another trip later; please open each hotel result in its own tab or go to the actual hotel posting page so I can verify they’re real options and still look live. Then, because I want the whole trip to stay low-cost overall, go to Amazon and shortlist three mid-to-low-priced headphones or earbuds with active noise cancellation for travel that fit the same budget mindset, and open each product page in a separate tab so I can compare them side by side. In the end, send me one clean summary with the hotel names, prices, dates, ratings where relevant, key headphone features, and links, and leave the Booking.com property tabs and the Amazon product tabs open for me.",
-    "website": "https://www.google.com",
-    "reference_length": 5,
-    "level": "medium",
-    "rubrics": {
-      "R1": {
-        "requirement": "Identify at least one Booking.com London hotel for 2 adults in December with a displayed total price under £100 for the 2-night stay, and capture the hotel name, stay dates, total price, and link.",
-        "verification": "Grader can confirm the Booking.com search results or property page shows London, 2 adults December and a total under £100, with the property tab open."
-      },
-      "R2": {
-        "requirement": "Find a Booking.com NOX Hotel result for a 1-night stay in 2026 for 2 adults and record the specific date, displayed total price, and link.",
-        "verification": "Grader can confirm the NOX Hotel listing or property page on Booking.com shows a 1-night stay for 2 adults with a visible total price and the page left open."
-      },
-      "R3": {
-        "requirement": "Find at least two hotels near Washington, DC Union Station via Google that each show a guest rating of 4 stars or higher and a nightly price under $200, and record their names, ratings, prices, and links.",
-        "verification": "Grader can confirm on Google results, hotel panels, or linked hotel pages that two qualifying hotels near Union Station display ratings of 4.0+ and nightly prices below $200, with tabs open for the chosen options."
-      },
-      "R4": {
-        "requirement": "Shortlist at least three Amazon headphones or earbuds with active noise cancellation, including each product name, current price, key features, and link.",
-        "verification": "Grader can confirm three Amazon product pages are open and each page visibly indicates ANC or active noise cancellation, along with product name and current price."
-      },
-      "R5": {
-        "requirement": "Return one consolidated summary covering the London budget hotel, the NOX Hotel comparison, the two Washington, DC Union Station hotel benchmarks, and the three Amazon UK headphone options, with all requested names, dates, prices, ratings where relevant, key features, and links.",
-        "verification": "Grader can compare the final response against the collected browser evidence from the open Booking.com, Google, and Amazon UK tabs and verify all requested fields are included."
-      }
-    },
-    "categories": [
-      "Travel and Tourism > Air Travel",
-      "Travel and Tourism > Accommodation and Hotels"
-    ],
-    "num_categories": 2
-  },
-  {
-    "task_id": "73c63095aeed43efb10a74eee7db7459c5ea9f84",
-    "confirmed_task": "I’m trying to sort out a realistic housing plan in Grand Rapids, Michigan and want to compare a normal rental against cheaper live-in alternatives, with a hotel as a short-stay fallback while I go look at places. Please start on Zillow and search Grand Rapids rentals with the monthly rent set between $1,400 and $2,400, then open one listing that looks like a real option in its own tab so I can see the photos and map, and grab the basics for it like the address, monthly price, and the Zillow listing page. Use that exact monthly rent as the benchmark for whether a trailer or other small living setup would actually save me money, then go to Craigslist for Grand Rapids and find at least three listings that seem suitable for living in and are priced below that Zillow benchmark; open the actual posting pages so you can verify they’re still live and note each title, price, and link. After that, because I may need somewhere temporary while I travel to inspect options, go to Booking.com and look up a hotel in Grand Rapids with visible guest reviews, open the property page, and summarize the overall guest review score plus at least three takeaways from recent reviews so I can tell what staying there would really be like. Leave the Zillow tab and the Booking.com hotel page open so I can compare them visually afterward, then give me a concise recommendation on how the rental and cheaper Craigslist alternatives stack up against the hotel, and say which seems better reviewed for a temporary stay.",
+    "task_id": "2cb0ed2a5df6053c6c982a5c5d436d25e006370f",
+    "confirmed_task": "I’m putting together a really simple Baltimore event night plan and just want the official pages open so I know I’m starting from the right places. Please go to the official Please Find Your Seat site and grab the homepage URL for me, because that’s the event platform I want to use as the anchor for the night. Then find the official Pier 5 Hotel Baltimore website URL so I have a nearby hotel option tied to the same outing, and leave that hotel page open in its own tab so I can look at it afterward. After that, open The Capital Grille’s official homepage and note the restaurant brand name exactly as it appears there, since I want a recognizable dinner option to mention alongside the hotel and event plan. Keep the key pages open in separate tabs and give me a short planning summary with the Please Find Your Seat homepage URL, the Pier 5 Hotel Baltimore official URL, and The Capital Grille homepage URL plus the brand name shown on the page.",
     "website": "https://www.google.com",
     "reference_length": 4,
-    "level": "medium",
+    "level": "easy",
     "rubrics": {
       "R1": {
-        "requirement": "Identify one Zillow rental listing in Grand Rapids, Michigan within the $1,400 to $2,400 monthly rent range and provide its address, monthly rent, and Zillow property page URL.",
-        "verification": "Grader can confirm the Zillow listing page is open in a tab and shows a Grand Rapids rental with rent between $1,400 and $2,400, plus the reported address and URL match the visible page."
+        "requirement": "Provide the official homepage URL for the Please Find Your Seat event platform.",
+        "verification": "Grader confirms the returned URL is the official Please Find Your Seat homepage and matches the page opened in the browser."
       },
       "R2": {
-        "requirement": "Use the exact Zillow monthly rent from Step 1 as the benchmark and provide at least three Grand Rapids Craigslist listings suitable for living in that are priced below that benchmark, including each title, price, and posting URL.",
-        "verification": "Grader can confirm each Craigslist posting page is open or accessible, appears to be a live Grand Rapids-area listing suitable for living in, and the visible prices are all below the Zillow rent reported in Step 1."
+        "requirement": "Provide the official website URL for Pier 5 Hotel Baltimore and keep the hotel page open in its own tab.",
+        "verification": "Grader confirms the returned URL is the official Pier 5 Hotel Baltimore site and that the browser shows the hotel page open."
       },
       "R3": {
-        "requirement": "For one Booking.com hotel in Grand Rapids, Michigan, report the overall guest review score and summarize at least three takeaways from recent guest reviews.",
-        "verification": "Grader can confirm the Booking.com property page is open and shows a review score, and the summarized takeaways are grounded in visible recent review content on the page."
+        "requirement": "Provide The Capital Grille official homepage URL and identify the restaurant brand name shown on the homepage.",
+        "verification": "Grader confirms the URL is The Capital Grille official homepage and the reported brand name matches visible text on the page."
       },
       "R4": {
-        "requirement": "Return a concise recommendation comparing the Zillow rental, the cheaper Craigslist alternatives, and the Booking.com hotel, and explicitly state which appears better reviewed for a temporary stay.",
-        "verification": "Grader can confirm the final summary references the gathered Zillow, Craigslist, and Booking.com findings and includes a clear conclusion about the better-reviewed temporary-stay option."
+        "requirement": "Return all four findings together in a short planning summary covering the event platform, hotel, dinner option.",
+        "verification": "Grader confirms the final response includes the Please Find Your Seat URL, Pier 5 Hotel Baltimore URL, The Capital Grille URL plus brand name."
       }
     },
     "categories": [
-      "Business and Consumer Services > Real Estate",
-      "Travel and Tourism > Accommodation and Hotels"
+      "Community and Society > Community and Society - Other",
+      "Travel and Tourism > Accommodation and Hotels",
+      "Food and Drink > Restaurants and Delivery"
+    ],
+    "num_categories": 3
+  },
+  {
+    "task_id": "140960bb7293bdeeb6bcc60931681cb9b815351b",
+    "confirmed_task": "I'm trying to plan a really simple errand loop around Chapel Hill and Carrboro, so could you start on Google and find at least three public little free pantries or community food boxes in or very close to Chapel Hill/Carrboro, then open the actual map or listing pages for each one in separate tabs so I can visually confirm they're real places and still look active. Once you have those, go to Publix and check the current weekly BOGO deals, and from that ad pick the deals that would work for a carnivore-style dinner, meaning meat, seafood, cheese, eggs, or other animal-based items only, because I want to turn the pantry run into a quick grocery stop too. From those BOGO items, choose one specific dinner pairing made only from the qualifying deals and leave the weekly ad or product pages open so I can look at the prices and packaging myself. After that, go to Bisou Bisou's site and find one cocktail on the menu that is actually green, then open the menu page and tell me the drink name and ingredients so I have an optional treat stop after the errands. Please give me the pantry locations with addresses or clear location descriptions, the exact Publix BOGO items you used and the dinner pairing, plus the green cocktail name and ingredients.",
+    "website": "https://www.google.com",
+    "reference_length": 4,
+    "level": "easy",
+    "rubrics": {
+      "R1": {
+        "requirement": "Find at least three public food box or mini pantry locations in or near Chapel Hill/Carrboro and provide an address or clear location description for each.",
+        "verification": "Grader can confirm three distinct pantry or food box locations from Google results or map/listing pages, with separate tabs or visible listing details showing each location."
+      },
+      "R2": {
+        "requirement": "Identify current Publix BOGO items that fit a carnivore diet.",
+        "verification": "Grader can confirm the listed items appear in the current Publix weekly BOGO ad or product pages and that the items are animal-based foods such as meat, seafood, cheese, eggs, or similar."
+      },
+      "R3": {
+        "requirement": "Propose one dinner pairing made only from the carnivore-diet-friendly Publix BOGO items identified.",
+        "verification": "Grader can verify that every component of the proposed dinner pairing comes directly from the qualifying BOGO items found in Step 2."
+      },
+      "R4": {
+        "requirement": "Identify one green cocktail from Bisou Bisou's cocktail menu and provide its name and ingredients.",
+        "verification": "Grader can confirm the cocktail appears on the Bisou Bisou menu page and that the response includes the exact drink name and ingredient list from the site."
+      }
+    },
+    "categories": [
+      "Community and Society > Philanthropy",
+      "Reference Materials > Maps"
+    ],
+    "num_categories": 2
+  },
+  {
+    "task_id": "f979f723a3f6f65ea8d75903425f22c67505daf1",
+    "confirmed_task": "I’m trying to put together a Christmas gift built around Pokémon cards, but I want a realistic backup plan in case the main item is sold out. Please start on Collector Store and look up the Pokémon Phantasmal Flames Booster Elite Trainer Box, then open the actual product page and check whether it says it’s in stock or sold out, and note the listed price so I know if the original idea is still viable. After that, go to Best Buy and search for Pokémon trading cards or Pokémon card gift items and pick one gift option that looks like a reasonable substitute, making sure to open the product page so I can see the listing myself and leaving that tab open as a reference. Then use that same general idea on Walgreens by searching for Pokémon trading cards and finding two available options with prices, opening each Walgreens product in its own tab so I can compare them side by side and verify they’re actually live listings. In the end, give me a short backup-plan summary with the Collector Store stock status and price, the Best Buy product name and price, and the two Walgreens options with their prices.",
+    "website": "https://www.google.com",
+    "reference_length": 4,
+    "level": "easy",
+    "rubrics": {
+      "R1": {
+        "requirement": "Find the Collector Store product page for the Pokémon Phantasmal Flames Booster Elite Trainer Box and capture its stock status and listed price.",
+        "verification": "Grader can confirm the browser is on the Collector Store product page showing the product title plus a visible in-stock or sold-out indicator and a price."
+      },
+      "R2": {
+        "requirement": "Identify one Pokémon card gift option on Best Buy and record its product name and price from the product page.",
+        "verification": "Grader can confirm a Best Buy product page is open with a Pokémon card-related item, and the visible page shows the product name and price."
+      },
+      "R3": {
+        "requirement": "Find two available Pokémon trading card options on Walgreens and record the product name and price for each from live product pages.",
+        "verification": "Grader can confirm two Walgreens product tabs are open, each showing a Pokémon trading card listing with visible product names and prices."
+      },
+      "R4": {
+        "requirement": "Provide a short summary that combines the Collector Store stock status and price, the Best Buy backup option with price, and the two Walgreens options with prices as a practical gift backup plan.",
+        "verification": "Grader can compare the final written summary against the visible product pages and confirm all requested items and prices are included accurately."
+      }
+    },
+    "categories": [
+      "Ecommerce & Shopping > Ecommerce and Shopping - Other",
+      "Games > Games - Other",
+      "Community and Society > Holidays and Seasonal Events"
+    ],
+    "num_categories": 3
+  },
+  {
+    "task_id": "d3250da48cc778a40d11683a56fdfca962d6fe19",
+    "confirmed_task": "I’m putting together a coordinated holiday gift bundle for one family and want it to feel like everything belongs together instead of looking random. On Kohl’s, please find two gift ideas for siblings that stay under $25 each and are actually available for pickup in store today as a backup to shipping — one that would make sense for a 12-year-old girl and one for an 11-year-old boy — and open each product in its own tab so I can compare the vibe and price side by side. Once you’ve got those, go to Etsy and open a personalized family Christmas ornament listing that looks giftable, then tell me the shop name and exactly what customization choices the listing offers, because I’d like to add something with the family name and need to know what I can personalize. After that, use Target to find a shatterproof gold-and-white ornament set that visually matches the personalized ornament and would work as filler in the bundle, and open the actual product page so I can see the photos and any color or finish options shown. Then head to Walmart and browse for two boys outfit gift options for a younger boy, and pick the one that best matches the overall style and price level of the other gifts so the bundle feels consistent; please keep the better outfit page open for me. Finally, use Google to find one highly rated hot buttered rum recipe from a recognizable recipe site, open the actual recipe page, and give me the recipe name, source, ingredient list, and basic preparation steps so I can include a cozy holiday extra with the package idea. At the end, send me a concise summary with all the selected items, prices, pickup-today details for Kohl’s, the Etsy customization options, the Target ornament details, the two Walmart outfit options with your preferred pick, and the recipe source and steps.",
+    "website": "https://www.google.com",
+    "reference_length": 6,
+    "level": "medium",
+    "rubrics": {
+      "R1": {
+        "requirement": "Identify two Kohl’s gift ideas for siblings, one for a 12-year-old girl and one for an 11-year-old boy, each under $25, and confirm pickup in store today on the product pages.",
+        "verification": "Grader can confirm two separate Kohl’s product pages are open or were visited, each showing a product title, price below $25, and visible pickup-today availability information."
+      },
+      "R2": {
+        "requirement": "Review one Etsy personalized family Christmas ornament listing and report the shop name plus the visible customization or variation options offered.",
+        "verification": "Grader can confirm an Etsy listing page was opened and that the response includes the shop name and the customization fields or variation choices shown on that listing."
+      },
+      "R3": {
+        "requirement": "Find one Target shatterproof gold-and-white ornament set and report the product name along with any listed color or finish options visible on the product page.",
+        "verification": "Grader can confirm a Target product page for a shatterproof gold-and-white ornament set was opened and that the response matches the product title and visible option details on the page."
+      },
+      "R4": {
+        "requirement": "Provide two Walmart boys outfit gift options with product names and prices, and identify which one best matches the style and price level of the other selected gifts.",
+        "verification": "Grader can confirm two Walmart product pages or listings were reviewed and that the response includes two outfit names, their prices, and a clearly stated preferred choice."
+      },
+      "R5": {
+        "requirement": "Find one highly rated hot buttered rum recipe via Google and include the recipe name, source, ingredient list, and basic preparation steps from the actual recipe page.",
+        "verification": "Grader can confirm a Google results page led to a recipe page and that the response includes the recipe title, source site, ingredients, and preparation summary."
+      },
+      "R6": {
+        "requirement": "Return a concise final summary that includes all selected products, prices, Kohl’s pickup-today details, Etsy customization information, Target ornament details, the two Walmart outfit options with the preferred pick, and the recipe source and steps.",
+        "verification": "Grader can confirm the final response synthesizes outputs from all prior steps into one coherent holiday bundle summary with no major omissions."
+      }
+    },
+    "categories": [
+      "Ecommerce & Shopping > Ecommerce and Shopping - Other",
+      "Community and Society > Holidays and Seasonal Events",
+      "Lifestyle > Gifts and Flowers"
+    ],
+    "num_categories": 3
+  },
+  {
+    "task_id": "e7596a6d6079be82e5219c1ac1c5f40f33d2bce8",
+    "confirmed_task": "I’m putting together a quick starter pack for a Colorado outreach idea centered on helping children in need, and I want it to feel grounded before I share it with anyone. Please start on Google and find at least three Colorado charities that specifically help children in need, then open each organization’s official site in its own tab so you can confirm it’s the real organization and leave those tabs open so I can look at them later; I need each charity’s name and official website for the brief. After that, go to Microsoft’s nonprofit resources site and look for at least three software companies listed there along with the exact nonprofit discount or free-program names they offer, because I want to include practical tools these kinds of charities could actually use; if the offer details live on separate pages, open those in separate tabs too and keep the most useful one visible so I have browser proof of what you found. Then go back to Google and look up how lower, middle, and upper class are commonly described in the U.S., including income ranges and the main factors people use beyond income, and do the same specifically for Colorado so I can shape future donor messaging with a little context. Please pull everything together into one organized brief with the charity list, the software offers, and concise U.S. and Colorado class summaries, including a plain-language definition of middle class.",
+    "website": "https://www.google.com",
+    "reference_length": 7,
+    "level": "medium",
+    "rubrics": {
+      "R1": {
+        "requirement": "Identify at least three Colorado charities that help children in need and provide each organization’s name plus official website URL.",
+        "verification": "Grader confirms the final brief lists three or more Colorado child-focused charities and that corresponding official organization sites were opened in browser tabs."
+      },
+      "R2": {
+        "requirement": "Use browser verification for the charity research by opening each organization’s official site in its own tab and leaving those tabs available for review.",
+        "verification": "Grader checks that multiple charity website tabs are open and correspond to the organizations named in the brief."
+      },
+      "R3": {
+        "requirement": "List at least three software companies from Microsoft nonprofit resources and include the exact nonprofit discount or free-program name offered by each.",
+        "verification": "Grader confirms the companies and program names match Microsoft nonprofit resources content shown in the browser."
+      },
+      "R4": {
+        "requirement": "Provide a short description of each nonprofit software offer and keep at least one supporting Microsoft offer page visible or open as browser proof.",
+        "verification": "Grader checks the brief includes descriptions and that one or more relevant Microsoft nonprofit resource or offer-detail tabs remain open."
+      },
+      "R5": {
+        "requirement": "Summarize U.S. lower-, middle-, and upper-class income ranges and the key factors commonly used to classify class status, including a plain-language definition of middle class.",
+        "verification": "Grader confirms the brief contains U.S. class ranges, non-income factors, and a clear plain-language middle-class summary."
+      },
+      "R6": {
+        "requirement": "Include the same class-income summary for Colorado, covering lower-, middle-, and upper-class income ranges and key classification factors.",
+        "verification": "Grader confirms the brief separately includes Colorado-specific class ranges and factors, not just national information."
+      },
+      "R7": {
+        "requirement": "Return all findings as one organized brief that combines the charity list, software tools list, and U.S. and Colorado class-income summaries.",
+        "verification": "Grader checks the final response is structured as a single coherent brief with all required sections present."
+      }
+    },
+    "categories": [
+      "Community and Society > Philanthropy"
+    ],
+    "num_categories": 1
+  },
+  {
+    "task_id": "946321e8a9788f485d360f619127a2e7b7e1693a",
+    "confirmed_task": "I’m planning a cozy Christmas day at home with my toddler and want ideas for both of us that I can actually look at on screen afterward. Could you start on Hobbycraft and find three low-mess Christmas craft activities that feel toddler-friendly, then open the actual project pages in separate tabs so I can compare the photos and note the materials each one needs? After that, use Google to find three more at-home Christmas activity ideas for a toddler that are clearly different from the Hobbycraft ones, because I want a fuller mix of options beyond simple repeats, and open at least one of those source pages so I can see it’s a real activity page. Once you’ve got the toddler plan sorted, switch over to Scratch Magazine and look for Grinch Christmas nail inspiration, then find one Grinch tutorial page I could realistically follow and leave that tutorial page open so I can check the design details myself. From there, go to Amazon and find at least three Grinch-themed nail art ideas or products that use different materials, like stickers or decals, gel polish, brushes, glitter, rhinestones, stamping plates, or similar, and make sure they actually fit the style or techniques shown on the Scratch tutorial. Please open the most promising Amazon product pages in their own tabs so I can compare them visually, and then give me a clear summary with the toddler activity options, the Scratch tutorial, and the three nail product ideas with links plus a quick note on how each one matches the Grinch look.",
+    "website": "https://www.google.com",
+    "reference_length": 5,
+    "level": "medium",
+    "rubrics": {
+      "R1": {
+        "requirement": "Exactly three low-mess toddler-friendly Christmas craft activities are identified on Hobbycraft, with materials summarized for each.",
+        "verification": "Grader can confirm three distinct Hobbycraft activity pages were opened or visited and the final response includes each activity name plus its materials list."
+      },
+      "R2": {
+        "requirement": "At least three additional at-home toddler Christmas activity ideas are found via Google and are different from the Hobbycraft activities, each with a short description.",
+        "verification": "Grader can confirm Google search results were used, at least one non-Hobbycraft source page was opened, and the final response lists three distinct additional ideas that do not duplicate the Hobbycraft ones."
+      },
+      "R3": {
+        "requirement": "Grinch Christmas nail inspiration is found on Scratch Magazine, including one specific Grinch tutorial page title and URL.",
+        "verification": "Grader can confirm navigation on Scratch Magazine to a Grinch-related nail page and that a tutorial page was left open or clearly identified with title and link."
+      },
+      "R4": {
+        "requirement": "At least three Amazon Grinch-themed nail art ideas or products are found using different material types, such as decals, gel polish, glitter, brushes, rhinestones, or stamping plates.",
+        "verification": "Grader can confirm three Amazon product pages or listings were opened or visited, with products spanning different materials such as decals, gel, glitter, brushes, rhinestones, or stamping tools."
+      },
+      "R5": {
+        "requirement": "The final summary ties the Amazon products back to the Scratch tutorial style or techniques and includes all toddler activities, the tutorial, and product links.",
+        "verification": "Grader can confirm the final response contains the three Hobbycraft crafts with materials, three additional Google-sourced toddler ideas with descriptions, one Scratch tutorial title and URL, and three Amazon product ideas with links plus notes explaining how they match the Scratch inspiration."
+      }
+    },
+    "categories": [
+      "Hobbies and Leisure > Crafts",
+      "Community and Society > Holidays and Seasonal Events"
     ],
     "num_categories": 2
   }

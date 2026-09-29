@@ -18,7 +18,7 @@ for that" apart from "the agent could not do it".
     python odyssey/run.py --task 1 --persona elderly-novice
     python odyssey/run.py --all --persona none        # control: Odysseys text verbatim
 
-Keys come from the repo's .env / env vars (OPENROUTER_API_KEY, OPENAI_API_KEY ...).
+Endpoints and keys come from the repo's .env / environment variables.
 """
 from __future__ import annotations
 
@@ -38,16 +38,19 @@ sys.path.insert(0, str(HERE))
 
 import persona as persona_lib  # noqa: E402  (odyssey/persona.py)
 
-# Every model here speaks the OpenAI chat API; providers differ only in where
-# they live and which env var holds the key.
+# Both endpoints speak the OpenAI chat API. Qwen may be a local server with no
+# authentication; Azure requires its resource key.
 PROVIDERS = {
-    "openrouter": ("OPENROUTER_API_KEY", "https://openrouter.ai/api/v1"),
-    "openai": ("OPENAI_API_KEY", None),          # None = the SDK's default endpoint
-    # A collaborator's Azure AI Foundry endpoint. Its /openai/v1 surface speaks
-    # the same chat API and takes the key directly, so no azure-identity needed.
-    # Only gpt-5.6-terra is deployed there; other model ids 404.
-    "azure": ("AZURA_API_KEY", "https://MatrAIxWild.services.ai.azure.com/openai/v1"),
+    "qwen": ("QWEN_API_KEY", "QWEN_BASE_URL", False),
+    "azure": ("AZURE_OPENAI_API_KEY", "AZURE_OPENAI_ENDPOINT", True),
 }
+# Every execution backbone has its own API; each entry in backbones.json is a
+# provider named after the backbone, e.g. --provider claude-opus-5.5.
+BACKBONES = json.loads(Path(os.environ.get("BACKBONES_FILE", HERE / "backbones.json"))
+                       .read_text(encoding="utf-8"))
+BACKBONES.pop("_note", None)
+for _name, _b in BACKBONES.items():
+    PROVIDERS[_name] = (_b["api_key_env"], _b["base_url_env"], _b.get("key_required", True))
 
 
 def load_dotenv(path: Path = REPO / ".env") -> None:
@@ -70,24 +73,57 @@ PROMPTS = HERE / "prompts"
 
 
 def prompt(name: str) -> str:
-    """The text of odyssey/prompts/<name>.md, without its leading HTML comment.
-
-    Prompts live as files so they can be read and revised without touching the
-    pipeline; the comment at the top of each one documents its placeholders and
-    is stripped here so it never reaches a model.
-    """
+    """The text of odyssey/prompts/<name>.md, without its leading HTML comment."""
     text = (PROMPTS / f"{name}.md").read_text(encoding="utf-8")
     return re.sub(r"\A<!--.*?-->\s*", "", text, flags=re.S).strip()
 
 
 TASKS = json.loads((HERE / "tasks.json").read_text(encoding="utf-8"))
+# REAL tasks (sandboxed replicas of real sites), written by prepare_real.py.
+REAL_TASKS_FILE = HERE / "tasks_real.json"
+REAL_EVALS = HERE / "real_evals"
+if REAL_TASKS_FILE.is_file():
+    TASKS += json.loads(REAL_TASKS_FILE.read_text(encoding="utf-8"))
 PAGE_CHARS = 6000          # per read_page slice
 MAX_TABS = 8
 DEFAULT_PROFILE = HERE / ".chrome-profile"   # gitignored; keeps consent cookies
 
 MAX_QUESTIONS = 5          # ask_user calls per run
 
-AGENT_RULES = prompt("agent").format(max_questions=MAX_QUESTIONS)
+AGENT_RULES = """
+You are an assistant browsing the live internet in a real Chromium browser to
+carry out a request from a user. Work through it yourself with the tools; never
+claim you visited a page you did not open, and never invent numbers -- every
+figure you report must come from text you actually read with read_page.
+
+Users differ: some spell out exactly which sites and details they want, others
+describe their situation loosely. If something you need is genuinely unclear,
+you may ask the user with ask_user (at most {max_questions} questions) -- but do
+not ask about what you can reasonably decide yourself.
+
+How to work:
+- For directions, use Google's official Maps URL form:
+  https://www.google.com/maps/dir/?api=1&origin=<from>&destination=<to>&travelmode=transit
+  (travelmode = transit | driving | walking | bicycling).
+- For a specific place, use:
+  https://www.google.com/maps/search/?api=1&query=<place+name>
+  Do NOT hand-build /maps/place/<name> or /maps/dir/<a>/<b> URLs without the
+  ?api=1 form -- Google silently drops you at a default location and the page
+  you read will be empty.
+- To search the web, open_tab on https://www.google.com/search?q=<url-encoded
+  query>. Google sometimes answers with an "unusual traffic" / captcha page --
+  if it does, fall back to https://html.duckduckgo.com/html/?q=<query> for the
+  search, then open_tab the real result URL directly (metra.com, weather.com,
+  booking.com ... ) so the source page itself is what stays open.
+- Prefer navigating straight to a known site's URL over searching for it.
+- read_page returns a slice of the page text; call it again with a larger
+  offset to keep reading a long page.
+- If a page blocks you, is empty, or shows a consent/captcha wall, try click on
+  the consent button, or open a different source. Do not get stuck: after two
+  failed attempts on one page, move on and say so in your summary.
+- Leave open every tab the request asks you to keep open. Do not close them.
+- When you are done, call finish with your complete final answer to the user.
+""".strip().format(max_questions=MAX_QUESTIONS)
 
 TOOLS = [
     {"type": "function", "function": {
@@ -111,7 +147,9 @@ TOOLS = [
             "required": ["tab_id"]}}},
     {"type": "function", "function": {
         "name": "click",
-        "description": "Click the first element in a tab whose visible text contains the given string.",
+        "description": "Click a visible element in a tab: a button or link named exactly "
+                       "this, else one whose text is exactly this, else the first whose "
+                       "text contains it.",
         "parameters": {"type": "object", "properties": {
             "tab_id": {"type": "integer"}, "text": {"type": "string"}},
             "required": ["tab_id", "text"]}}},
@@ -182,6 +220,8 @@ class Browser:
 
     def __init__(self, headless: bool = False, nav_timeout_ms: int = 40000,
                  profile_dir: str | os.PathLike = DEFAULT_PROFILE):
+        import shutil
+
         from playwright.sync_api import sync_playwright
 
         # The real installed Chrome with a persistent profile, not the bundled
@@ -190,9 +230,14 @@ class Browser:
         # once does not come back every run.
         self._pw = sync_playwright().start()
         Path(profile_dir).mkdir(parents=True, exist_ok=True)
+        # Prefer the system Google Chrome expected by the benchmark.  Bare
+        # servers often have no system browser, though; in that case Playwright
+        # can use the Chrome-for-Testing build installed in its own cache.
+        launch_options = ({"channel": "chrome"}
+                          if shutil.which("google-chrome") or
+                          shutil.which("google-chrome-stable") else {})
         self._ctx = self._pw.chromium.launch_persistent_context(
             user_data_dir=str(profile_dir),
-            channel="chrome",
             headless=headless,
             viewport={"width": 1440, "height": 900},
             locale="en-US",
@@ -215,6 +260,7 @@ class Browser:
                 "--disable-features=site-per-process,IsolateOrigins",
                 "--js-flags=--max-old-space-size=256",
             ],
+            **launch_options,
         )
         self._ctx.set_default_timeout(nav_timeout_ms)
         self._tabs: dict[int, object] = {}
@@ -297,12 +343,34 @@ class Browser:
 
     def click(self, tab_id: int, text: str) -> str:
         page = self._page(tab_id)
-        try:
-            page.get_by_text(text, exact=False).first.click()
-        except Exception as exc:
-            return f"click failed: {exc}"
-        self._settle(page)
-        return f"clicked {text!r}; tab {tab_id} now at {page.url}\n\n{self._text(page)}"
+        # Most specific match first, and only visible elements: "Send" must hit
+        # the Send button, not a hidden label or a "Sent" folder containing it.
+        candidates = (page.get_by_role("button", name=text, exact=True),
+                      page.get_by_role("link", name=text, exact=True),
+                      page.get_by_text(text, exact=True),
+                      page.get_by_role("button", name=text),
+                      page.get_by_text(text, exact=False))
+        last_error = None
+        for attempt in range(2):          # a page still rendering gets one more look
+            if attempt:
+                time.sleep(1.5)
+            for locator in candidates:
+                try:
+                    for i in range(min(locator.count(), 10)):
+                        element = locator.nth(i)
+                        if element.is_visible():
+                            element.click(timeout=10000)
+                            self._settle(page)
+                            return (f"clicked {text!r}; tab {tab_id} now at {page.url}"
+                                    f"\n\n{self._text(page)}")
+                except Exception as exc:
+                    last_error = exc
+        if last_error and "intercepts pointer events" in str(last_error):
+            return (f"click failed: {text!r} is visible but covered by another element, "
+                    f"such as an open dialog or overlay. Read the page and deal with that first.")
+        if last_error:
+            return f"click failed on {text!r}: {str(last_error).splitlines()[0]}"
+        return f"click failed: no visible element matching {text!r}"
 
     def type_text(self, tab_id: int, selector: str, text: str, press_enter: bool = False) -> str:
         page = self._page(tab_id)
@@ -324,6 +392,28 @@ class Browser:
             return f"no tab {tab_id}"
         page.close()
         return f"closed tab {tab_id}"
+
+    # REAL sites keep their state in this browser. Underscored so they are not
+    # mistaken for agent tools; the agent never gets them in TOOLS.
+    def _real_reset(self, url: str, task_ref: str) -> None:
+        """Load the task's initial state, as agisdk's harness does before a run."""
+        page = self._ctx.new_page()
+        try:
+            page.goto(f"{url}/config?run_id=0&task_id={task_ref}&latency=0")
+            page.wait_for_load_state("networkidle")
+            page.goto(f"{url}/finish")
+        finally:
+            page.close()
+
+    def _real_state(self, url: str) -> dict:
+        """The site's final state: the JSON its /finish page shows."""
+        page = self._ctx.new_page()
+        try:
+            page.goto(f"{url}/finish")
+            page.wait_for_load_state("networkidle")
+            return json.loads(page.wait_for_selector("pre").inner_text())
+        finally:
+            page.close()
 
     def open_tabs(self) -> list[dict]:
         out = []
@@ -348,16 +438,22 @@ class Browser:
 def _client(model: str, provider: str = ""):
     from openai import OpenAI
 
-    provider = provider or ("openai" if model.startswith(("gpt-", "o1", "o3", "o4"))
-                            else "openrouter")
+    provider = provider or ("azure" if model.startswith(("gpt-", "o1", "o3", "o4"))
+                            else "qwen")
     if provider not in PROVIDERS:
         raise SystemExit(f"unknown provider {provider!r}; known: {sorted(PROVIDERS)}")
-    key_env, base_url = PROVIDERS[provider]
+    key_env, url_env, key_required = PROVIDERS[provider]
     key = os.environ.get(key_env, "").strip()
-    if not key:
+    base_url = os.environ.get(url_env, "").strip()
+    if not base_url:
+        raise SystemExit(f"no endpoint for provider {provider!r}: set {url_env} "
+                         f"(in the repo-root .env, or exported)")
+    if key_required and not key:
         raise SystemExit(f"no API key for provider {provider!r}: set {key_env} "
                          f"(in the repo-root .env, or exported)")
-    return OpenAI(api_key=key, base_url=base_url), provider
+    if provider == "azure" and not base_url.rstrip("/").endswith("/openai/v1"):
+        base_url = base_url.rstrip("/") + "/openai/v1/"
+    return OpenAI(api_key=key or "not-needed", base_url=base_url), provider
 
 
 def extract_json(text: str) -> dict | None:
@@ -445,6 +541,13 @@ class PersonaUser:
                             {"role": "user", "text": answer}]
         return answer
 
+    def state_explicitly(self, preferences: list[str]) -> None:
+        """C3 oracle: the person spells out every preference in the opening."""
+        self.opening += "\n\nTo be explicit, I also want:\n" + \
+            "\n".join(f"- {p}" for p in preferences)
+        self.messages[-1]["content"] = self.opening
+        self.transcript[0]["text"] = self.opening
+
     def info(self) -> dict:
         return {"model": self.model, "provider": self.provider}
 
@@ -452,17 +555,31 @@ class PersonaUser:
 def run_agent(task: dict, user: PersonaUser, model: str, *, max_steps: int,
               headless: bool, temperature: float,
               profile_dir: str | os.PathLike = DEFAULT_PROFILE,
-              provider: str = "") -> dict:
+              provider: str = "", state: str = "") -> dict:
     client, provider = _client(model, provider)
-    # The CUA carries no persona: it knows the user only through what they say.
-    messages = [{"role": "system", "content": AGENT_RULES},
+    # The CUA carries no persona: it knows the user only through what they say
+    # and, under C2, the persistent state left by earlier sessions with them.
+    system = AGENT_RULES
+    if state:
+        system += ("\n\n# Persistent state from earlier sessions with this user\n\n"
+                   + state)
+    real = task.get("real")
+    if real:
+        # The user is already on the site, as in REAL's own harness.
+        system += (f"\n\n# Where you are\n\nThe user's browser is already open on "
+                   f"{real['site']} in tab 1 ({real['url']}). Do the task on that site.")
+    messages = [{"role": "system", "content": system},
                 {"role": "user", "content": user.opening}]
     questions = 0
 
     browser = Browser(headless=headless, profile_dir=profile_dir)
     trajectory: list[dict] = []
     answer, stop_reason, empty_turns = "", "max_steps", 0
+    real_state, real_error = None, ""
     try:
+        if real:
+            browser._real_reset(real["url"], f"{real['version']}.{real['id']}")
+            browser.open_tab(real["url"])
         for step in range(max_steps):
             resp = _create_with_retry(
                 client, model=model, messages=messages, tools=TOOLS,
@@ -508,6 +625,7 @@ def run_agent(task: dict, user: PersonaUser, model: str, *, max_steps: int,
                     except Exception as exc:
                         result = f"{type(exc).__name__}: {exc}"
                 trajectory.append({"step": step, "tool": name, "args": args,
+                                   "result": str(result),
                                    "result_preview": str(result)[:400]})
                 messages.append({"role": "tool", "tool_call_id": call.id,
                                  "content": str(result)[:PAGE_CHARS + 500]})
@@ -530,19 +648,64 @@ def run_agent(task: dict, user: PersonaUser, model: str, *, max_steps: int,
             except Exception as exc:
                 answer, stop_reason = "", f"max_steps_no_summary ({type(exc).__name__})"
         open_tabs = browser.open_tabs()
+        if real:
+            try:
+                real_state = browser._real_state(real["url"])
+            except Exception as exc:
+                real_error = f"{type(exc).__name__}: {exc}"
     finally:
         browser.close()
 
     return {"answer": answer, "stop_reason": stop_reason, "steps": len(trajectory),
             "max_steps": max_steps, "trajectory": trajectory, "open_tabs": open_tabs,
             "conversation": user.transcript, "user": user.info(),
-            "arm": {"model": model, "provider": provider, "temperature": temperature}}
+            "agent_messages": messages,
+            "persona_messages": getattr(user, "messages", []),
+            "arm": {"model": model, "provider": provider, "temperature": temperature},
+            **({"real_state": real_state, "real_state_error": real_error} if real else {})}
 
 
 # --------------------------------------------------------------------------- #
 # Judge
 # --------------------------------------------------------------------------- #
-JUDGE_PROMPT = prompt("rubric_judge")
+JUDGE_PROMPT = """You are grading a web agent against a fixed rubric. A user \
+asked the agent for help in their own words; the agent browsed the live \
+internet and produced a final answer.
+
+For each rubric item decide two things independently:
+
+- met: was the requirement actually satisfied, by evidence in the final answer, \
+the action log and the tabs left open? A requirement that a page be left open is \
+met only if that page appears in the open tabs. A reported figure counts only if \
+the agent actually visited a page that would show it. Judge this the same way \
+whether or not the user asked for it.
+- communicated: did the conversation make this requirement known to the agent -- \
+said explicitly, or implied clearly enough that a reasonable assistant would act \
+on it? A specific site or detail the user never mentioned and the agent never \
+asked about is NOT communicated.
+
+Do not reward or penalise tone, personality, verbosity or writing style.
+
+## What the user actually needed (hidden from the agent)
+{task}
+
+## Conversation between the user and the agent
+{conversation}
+
+## Rubric
+{rubric}
+
+## Agent's final answer
+{answer}
+
+## Action log (tool calls the agent made)
+{actions}
+
+## Tabs left open at the end
+{tabs}
+
+Return ONLY a JSON object, one entry per rubric id:
+{{"R1": {{"met": true, "communicated": true, "reason": "<one sentence citing the evidence>"}}, ...}}"""
 
 
 def judge_run(task: dict, run: dict, *, judge_model: str, judge_provider: str) -> dict:
@@ -591,6 +754,37 @@ def judge_run(task: dict, run: dict, *, judge_model: str, judge_provider: str) -
             **score_verdicts(task, verdicts, run["steps"])}
 
 
+def judge_real(task: dict, run: dict) -> dict:
+    """Score a REAL task with its own checkers on the site's final state.
+
+    Deterministic: no LLM. The task passes only if every checker prints SUCCESS.
+    """
+    real = task["real"]
+    base = {"judge_model": "real-state-checker", "total": 1,
+            "communicated": None, "score_communicated": None}
+    if run.get("real_state") is None:
+        return {**base, "error": run.get("real_state_error") or "no final state",
+                "verdicts": {}, "met": None, "score": None}
+    import tempfile
+    with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False,
+                                     encoding="utf-8") as f:
+        json.dump(run["real_state"], f)
+        state_path = f.name
+    outputs, passed = {}, True
+    try:
+        for script in real["eval_scripts"]:
+            proc = subprocess.run([sys.executable, str(REAL_EVALS / script), state_path],
+                                  capture_output=True, text=True, timeout=60)
+            out = (proc.stdout or "").strip()
+            outputs[script] = out[-500:] or (proc.stderr or "").strip()[-500:]
+            passed = passed and "SUCCESS" in out.upper()
+    finally:
+        os.unlink(state_path)
+    return {**base, "verdicts": {"R1": {"met": passed, "reason": json.dumps(outputs)}},
+            "met": int(passed), "score": float(passed),
+            "trajectory_efficiency": round(float(passed) / max(run["steps"], 1), 4)}
+
+
 def score_verdicts(task: dict, verdicts: dict, steps: int) -> dict:
     """score over every rubric item, plus score over only the communicated ones.
 
@@ -627,6 +821,16 @@ def _is_scored(path: Path) -> bool:
     return (rec.get("judgement") or {}).get("score") is not None
 
 
+def _is_complete_run(path: Path) -> bool:
+    """True for a saved browse that can be judged later without rerunning it."""
+    try:
+        rec = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return False
+    run = rec.get("run") or {}
+    return bool(run.get("answer")) and run.get("stop_reason") != "no_model_output"
+
+
 def resolve_tasks(spec: str | None, run_all: bool) -> list[dict]:
     if run_all or not spec:
         return TASKS
@@ -643,24 +847,51 @@ def resolve_tasks(spec: str | None, run_all: bool) -> list[dict]:
     return picked
 
 
+CONDITIONS = ("c1", "c2", "c3")
+
+
+def load_condition_inputs(condition: str, task: dict, persona: str,
+                          state_dir: Path, pref_dir: Path) -> tuple[str, list[str]]:
+    """(persistent state, oracle preferences) for one cell.
+
+    c1 prompt-only    -> neither
+    c2 prompt + state -> <state_dir>/<persona>.md
+    c3 oracle         -> <pref_dir>/<task12>/<persona>.json {"preferences": [{"text": ...}]}
+    A missing file is an error: a C2/C3 run without its input would be a C1 run
+    filed under the wrong condition.
+    """
+    if condition == "c2":
+        path = state_dir / f"{persona}.md"
+        if not path.is_file():
+            raise SystemExit(f"C2 needs persistent state at {path}")
+        return path.read_text(encoding="utf-8").strip(), []
+    if condition == "c3":
+        path = pref_dir / task["task_id"][:12] / f"{persona}.json"
+        if not path.is_file():
+            raise SystemExit(f"C3 needs the preference checklist at {path}")
+        prefs = [p["text"] for p in json.loads(path.read_text(encoding="utf-8"))["preferences"]]
+        return "", prefs
+    return "", []
+
+
 def main() -> None:
+    load_dotenv()
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--task", help="1-6, a task_id prefix, or a comma-separated list")
     ap.add_argument("--all", action="store_true", help="run all 6 tasks")
-    ap.add_argument("--persona", default="elderly-novice",
+    ap.add_argument("--persona", default="event-pro",
                     help="the user asking: a name under odyssey/personas/ (omit .yaml), "
                          "or 'none' for the Odysseys task text verbatim")
-    ap.add_argument("--model", default="qwen/qwen3.8-27b", help="the CUA doing the work")
-    ap.add_argument("--provider", default="openrouter",
-                    help="override routing for --model, e.g. openrouter for a "
-                         "qwen id served somewhere other than DashScope")
-    ap.add_argument("--persona-model", default="qwen/qwen3.8-27b",
+    qwen_model = os.environ.get("QWEN_MODEL", "qwen/qwen3.8-27b")
+    ap.add_argument("--model", default=qwen_model, help="the CUA doing the work")
+    ap.add_argument("--provider", default="qwen")
+    ap.add_argument("--persona-model", default=qwen_model,
                     help="the LLM playing the persona user")
-    ap.add_argument("--persona-provider", default="openrouter")
-    ap.add_argument("--judge-model", default="gpt-5.5")
-    ap.add_argument("--judge-provider", default="",
-                    help="default: openai for gpt-*/o* ids, openrouter otherwise")
+    ap.add_argument("--persona-provider", default="qwen")
+    ap.add_argument("--judge-model",
+                    default=os.environ.get("AZURE_OPENAI_DEPLOYMENT", "gpt-5.5"))
+    ap.add_argument("--judge-provider", default="azure")
     # 30 demonstrably truncates the medium tasks before the agent can finish.
     ap.add_argument("--max-steps", type=int, default=50)
     ap.add_argument("--temperature", type=float, default=0.7)
@@ -676,9 +907,17 @@ def main() -> None:
     ap.add_argument("--skip-existing", action="store_true",
                     help="skip a cell that already has a judged result, so an "
                          "interrupted grid resumes by re-running the same command")
+    ap.add_argument("--condition", choices=CONDITIONS, default="c1",
+                    help="c1 prompt-only, c2 prompt + persistent state, c3 oracle "
+                         "(every preference stated). --persona none is always c0.")
+    ap.add_argument("--state-dir", default=str(HERE / "states"),
+                    help="C2 persistent state: <dir>/<persona>.md")
+    ap.add_argument("--pref-dir", default=str(HERE / "preferences"),
+                    help="C3 checklists: <dir>/<task12>/<persona>.json")
     ap.add_argument("--out", default=str(HERE / "results"))
     args = ap.parse_args()
-    load_dotenv()
+    # The control has no persona, hence no state or preferences to give.
+    condition = "c0" if args.persona == "none" else args.condition
 
     persona_path = HERE / "personas" / f"{args.persona}.yaml"
     if args.persona != "none" and not persona_path.is_file():
@@ -700,38 +939,44 @@ def main() -> None:
         # A model id like "qwen/qwen3.8-27b" would otherwise split the run
         # directory across an extra path level.
         safe_model = args.model.replace("/", "-")
-        cell = Path(args.out) / task["task_id"][:12]
+        cell = Path(args.out) / task["task_id"][:12] / condition
+        completion_check = _is_complete_run if args.no_judge else _is_scored
         if args.skip_existing and any(
-            _is_scored(d / "result.json")
+            completion_check(d / "result.json")
             for d in cell.glob(f"{args.persona}__{safe_model}__*")
         ):
-            print(f"skip {task['task_id'][:12]} [{task['level']}] persona={args.persona} "
-                  f"-- already has a result")
+            print(f"skip {task['task_id'][:12]} [{task['level']}] {condition} "
+                  f"persona={args.persona} -- already has a result")
             continue
+        state, preferences = load_condition_inputs(
+            condition, task, args.persona, Path(args.state_dir), Path(args.pref_dir))
         out_dir = cell / f"{args.persona}__{safe_model}__{stamp}"
         out_dir.mkdir(parents=True, exist_ok=True)
-        print(f"\n=== {task['task_id'][:12]} [{task['level']}] persona={args.persona} "
-              f"model={args.model} ===")
+        print(f"\n=== {task['task_id'][:12]} [{task['level']}] {condition} "
+              f"persona={args.persona} model={args.model} ===")
 
         try:
             user = PersonaUser(task, None if args.persona == "none" else persona_path,
                                args.persona_model, args.persona_provider,
                                temperature=args.temperature)
+            if preferences:
+                user.state_explicitly(preferences)
             print(f"  user says: {user.opening[:300]!r}", flush=True)
             run = run_agent(task, user, args.model, max_steps=args.max_steps,
                             headless=args.headless, temperature=args.temperature,
-                            profile_dir=args.profile, provider=args.provider)
+                            profile_dir=args.profile, provider=args.provider,
+                            state=state)
         except Exception as exc:  # a dead task must not take the grid with it
             print(f"FAILED: {type(exc).__name__}: {exc}")
             (out_dir / "error.txt").write_text(f"{type(exc).__name__}: {exc}\n",
                                                encoding="utf-8")
             continue
         record = {"task_id": task["task_id"], "level": task["level"],
-                  "persona": args.persona, "run": run}
+                  "persona": args.persona, "condition": condition, "run": run}
         if run["stop_reason"] == "no_model_output":
             # Not a result. Leave it unscored so a resume retries the cell.
             record = {"task_id": task["task_id"], "level": task["level"],
-                      "persona": args.persona, "run": run,
+                      "persona": args.persona, "condition": condition, "run": run,
                       "judgement": {"error": "model returned no output", "verdicts": {},
                                     "met": None, "total": len(task["rubrics"]),
                                     "score": None}}
@@ -741,8 +986,9 @@ def main() -> None:
             continue
         if not args.no_judge:
             try:
-                record["judgement"] = judge_run(task, run, judge_model=args.judge_model,
-                                                judge_provider=judge_provider)
+                record["judgement"] = (judge_real(task, run) if task.get("real") else
+                                       judge_run(task, run, judge_model=args.judge_model,
+                                                 judge_provider=judge_provider))
             except Exception as exc:  # never lose a completed browse to the judge
                 record["judgement"] = {"error": f"{type(exc).__name__}: {exc}",
                                        "verdicts": {}, "met": None,

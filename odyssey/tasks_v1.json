@@ -1,0 +1,214 @@
+[
+  {
+    "task_id": "890a6880049a42684ac91a2e1809442846f9394c",
+    "confirmed_task": "I’m thinking about doing a simple public-transit outing from downtown Chicago to Aurora, Illinois soon, and I want a practical snapshot I can actually look at in the browser. On Google, please search for the recommended public-transit route from Chicago to Aurora, Illinois and open the actual transit directions so you can tell me the main mode I’d be taking and the estimated total travel time; leave that directions page open so I can review the route myself. Since I may need a little context for rail connections and fare structure, then go to Metra’s BNSF line page and summarize what the BNSF line is, where it runs, and where on that page or site fare information is listed; if there’s a separate fares link, open that in another tab so I have a visual reference. After that, head to Weather.com and pull up the local 10-day forecast for Aurora, Illinois, then give me the high and low temperatures for the next 3 days so I can judge whether the trip will feel comfortable. Please send everything back as one concise trip-planning summary, and keep the Google transit directions tab and the relevant Metra page open for comparison.",
+    "website": "https://www.google.com",
+    "reference_length": 5,
+    "level": "easy",
+    "rubrics": {
+      "R1": {
+        "requirement": "Find a recommended public-transit route from Chicago, Illinois to Aurora, Illinois on Google and report the main mode of transit and estimated total travel time.",
+        "verification": "Grader can confirm a Google transit directions/results page is open and the response includes a specific main mode and travel-time estimate taken from that page."
+      },
+      "R2": {
+        "requirement": "Summarize Metra’s BNSF line by stating what it is and where it runs.",
+        "verification": "Grader can confirm the Metra BNSF line page is open and the response accurately describes the line and its route coverage based on visible page text."
+      },
+      "R3": {
+        "requirement": "Identify where fare information for riding the BNSF line is listed, including any relevant fares link or section.",
+        "verification": "Grader can confirm the response points to a visible fare-information location on the BNSF line page or an opened fares tab/page on metra.com."
+      },
+      "R4": {
+        "requirement": "Report the forecasted high and low temperatures for the next 3 days from Weather.com’s 10-day forecast for Aurora, Illinois.",
+        "verification": "Grader can confirm a Weather.com 10-day forecast page for Aurora is open and the response includes three day-by-day high/low pairs matching the visible forecast."
+      },
+      "R5": {
+        "requirement": "Return all findings as one concise trip-planning summary that combines the Google transit recommendation, BNSF line context, fare-info location, and 3-day weather outlook.",
+        "verification": "Grader can confirm the final response is a single concise integrated summary containing all required elements from steps 1 through 3."
+      }
+    },
+    "categories": [
+      "Travel and Tourism > Ground Transportation",
+      "Travel and Tourism > Tourist Attractions"
+    ],
+    "num_categories": 2
+  },
+  {
+    "task_id": "ada70bfe81da1cd33bec47d79a9d279d7734a686",
+    "confirmed_task": "I’m trying to plan a Yorkshire family day out around Christmas and want to compare two festive options properly before I recommend one. Could you start on the official Stockeld Park site and open their Winter or Christmas ticket page, then the main activities page if needed, and pull together exactly what’s included with a standard festive ticket so I can see whether it feels like a full day out for kids; if there are photos or activity sections on the page, open the main ticket page and the activities/details page in separate tabs and leave them open so I can glance at them later. Then use Google to find the current Harrogate Christmas Funland page or official event listing, open the actual event page, and summarize what’s included there too, along with the location and the event dates, because I want to compare whether it sounds more substantial than Stockeld Park; if you find more than one relevant result, open the most official-looking listing in its own tab and verify it’s live before using it. After that, go to the official York Maze site and pull together the practical visitor details for using it as a backup daytime activity nearby, especially where it is, the opening times or seasonal opening info, and any important ticket or visit-planning notes like booking ahead, age guidance, or whether it’s seasonal, and leave the key visitor info page open as well. In the end, give me a concise side-by-side comparison of Stockeld Park versus Harrogate Christmas Funland, then a short recommendation on which festive option seems better for a family day out and whether York Maze sounds like a realistic backup plan.",
+    "website": "https://www.google.com",
+    "reference_length": 6,
+    "level": "easy",
+    "rubrics": {
+      "R1": {
+        "requirement": "Accurately summarize the activities included with Stockeld Park Winter/Christmas tickets using the official Stockeld Park pages.",
+        "verification": "Grader can confirm the summary matches visible included activities on the open Stockeld Park ticket/details tabs."
+      },
+      "R2": {
+        "requirement": "Find and use a live, relevant Harrogate Christmas Funland page or official listing and summarize what is included in the experience.",
+        "verification": "Grader can see an open Harrogate Christmas Funland page reached via Google and verify the included features against the visible listing content."
+      },
+      "R3": {
+        "requirement": "Include Harrogate Christmas Funland’s event location and event dates.",
+        "verification": "Grader can verify the location and dates directly on the open event/listing page."
+      },
+      "R4": {
+        "requirement": "Summarize York Maze visitor details including where it is, opening times or seasonal opening information, and important ticket or visit-planning notes from the official York Maze site.",
+        "verification": "Grader can confirm these details on the open York Maze visitor information page."
+      },
+      "R5": {
+        "requirement": "Present Stockeld Park and Harrogate Christmas Funland as a concise side-by-side comparison focused on what is included and overall suitability for a family festive outing.",
+        "verification": "Final response clearly compares both attractions using findings from Steps 1 and 2 rather than listing them separately."
+      },
+      "R6": {
+        "requirement": "Provide a short recommendation on which festive attraction seems better and whether York Maze works as a backup daytime activity.",
+        "verification": "Final response includes a reasoned recommendation grounded in the gathered details from all three sites."
+      }
+    },
+    "categories": [
+      "Travel and Tourism > Tourist Attractions",
+      "Community and Society > Holidays and Seasonal Events"
+    ],
+    "num_categories": 2
+  },
+  {
+    "task_id": "b6b8ad71aa3112840790066d7d62b498babdfa5c",
+    "confirmed_task": "I’m trying to decide whether driving this week is a bad idea, so can you build me a quick weather risk snapshot that starts with what it feels like right now and then widens out to the bigger trouble spots? First, on Google, search for Baltimore, Maryland weather and grab the current temperature plus the plain-English condition like cloudy, sunny, rain, or whatever it says, just so I have a baseline for home conditions. Then go to Wunderground and look up Syracuse, New York, and check the 10-day/7-day style forecast to find the lowest temperature expected over the next 7 days, including which day it happens, because I want to compare that colder destination against Baltimore. After that, use the National Weather Service forecast page for the Rittman, Ohio area near Marshallville and tell me what the current forecast says and whether there are any active alerts posted there, since that would really affect an Ohio leg of the drive; please open the actual forecast page and leave it visible so I can see the alert area and forecast text myself. Finally, go to the NWS Mount Holly page, find the winter forecast graphic, and report the snowfall amount shown there so I can tell whether the Mid-Atlantic part looks like a nuisance event or something more serious; if the graphic opens separately, leave that tab open too so I can look at the map. In the end, send me a short location-by-location summary with the key weather risk for Baltimore, Syracuse, Rittman/Marshallville, and the Mount Holly region.",
+    "website": "https://www.google.com",
+    "reference_length": 6,
+    "level": "easy",
+    "rubrics": {
+      "R1": {
+        "requirement": "Report Baltimore, Maryland’s current temperature and current weather conditions from Google.",
+        "verification": "Grader can confirm the answer against the Google weather module showing Baltimore weather with a numeric temperature and condition label."
+      },
+      "R2": {
+        "requirement": "Report the lowest forecasted temperature in Syracuse, New York over the next 7 days from Wunderground, including the day it occurs.",
+        "verification": "Grader can verify the selected low and day on the Syracuse forecast page in Wunderground’s multi-day forecast view."
+      },
+      "R3": {
+        "requirement": "Report the current National Weather Service forecast for the Rittman, Ohio area near Marshallville.",
+        "verification": "Grader can confirm the forecast wording on the forecast.weather.gov page for the specified area."
+      },
+      "R4": {
+        "requirement": "State whether any active weather alerts are posted for the Rittman, Ohio area near Marshallville.",
+        "verification": "Grader can verify the presence or absence of alert banners, watches, warnings, or advisories on the same NWS forecast page left open by the agent."
+      },
+      "R5": {
+        "requirement": "Report the predicted snowfall amount shown in the winter forecast graphic on the NWS Mount Holly page.",
+        "verification": "Grader can confirm the snowfall amount directly from the winter forecast graphic or image tab left open from the Mount Holly page."
+      },
+      "R6": {
+        "requirement": "Return the findings as a short summary organized by location or region, with a brief key weather risk for each one.",
+        "verification": "Grader can check that the final response includes Baltimore, Syracuse, Rittman/Marshallville, and the Mount Holly region, each with the requested weather detail and a concise risk statement."
+      }
+    },
+    "categories": [
+      "Science and Education > Weather",
+      "Travel and Tourism > Travel and Tourism - Other"
+    ],
+    "num_categories": 2
+  },
+  {
+    "task_id": "b21a86441ddca8186175bfffcaae0358ed66eec4",
+    "confirmed_task": "Can you help me plan a short LA trip from Pittsburgh and keep the key pages open so I can actually look at them afterward? Start on Google Flights, Kayak, or Expedia and search a round-trip from PIT to LAX for a simple 2-day trip, making sure the outbound gets into Los Angeles before 6:00 PM and the return lands back in Pittsburgh before midnight. I’d really prefer a nonstop if one exists, but if not, pick the option with the shortest total travel time that still feels like a good value, and open the top few flight options so I can compare before you choose the best one; then leave the selected flight page open in its own tab. After that, use Google Hotels or a hotel booking site to find me a hotel around Koreatown or West Hollywood with at least a 4.5 rating and a nightly rate under $350, and open the actual hotel listing so I can see the price, rating, photos, and map location, then keep that tab open too. Once the stay looks settled, go to Google Maps and pull up Griffith Observatory, The Getty Center, Santa Monica Pier, one well-rated Korean BBQ place in Koreatown, one coffee shop rated 4.5 or better, and somewhere with a great sunset view, because I want a realistic plan instead of a random list. Use the map routes to figure out a 2-day itinerary that avoids driving during LA rush hour as much as possible, especially around 7 to 10 AM and 4 to 7 PM, and try to keep travel between stops under about 40 minutes when that’s realistic, with a little buffer time between activities so the days don’t feel crammed. Open the important map views or route checks in separate tabs if needed so I can visually compare how far apart things are, and then give me a simple trip summary with the flight you chose, the hotel you recommend, and a 2-day schedule showing activity times plus the travel time between each stop.",
+    "website": "https://www.google.com",
+    "reference_length": 6,
+    "level": "medium",
+    "rubrics": {
+      "R1": {
+        "requirement": "A round-trip PIT to LAX flight search is completed on a flight site, with top candidate options reviewed and one selected that arrives in Los Angeles before 6:00 PM outbound and returns to Pittsburgh before midnight.",
+        "verification": "Grader can see an open flight search/results or details page showing PIT, LAX, round-trip results, visible candidate options, and the selected itinerary meeting the timing constraints."
+      },
+      "R2": {
+        "requirement": "The chosen flight reasonably reflects the stated preference hierarchy: nonstop if available, otherwise the shortest total travel time, while still balancing price and schedule.",
+        "verification": "Visible comparison among top few flight options supports why the selected itinerary is a reasonable best choice based on stops, duration, and price."
+      },
+      "R3": {
+        "requirement": "A hotel in Koreatown or West Hollywood is identified with rating at least 4.5 and nightly price under $350, and the actual listing page is opened.",
+        "verification": "Open hotel listing visibly shows neighborhood or map placement, nightly price under $350, rating of 4.5 or higher, and listing details/photos."
+      },
+      "R4": {
+        "requirement": "Google Maps is used to identify all required stop types: Griffith Observatory, The Getty Center, Santa Monica Pier, a Korean BBQ spot in Koreatown, a coffee shop rated at least 4.5, and a sunset-view location.",
+        "verification": "Open Google Maps place pages or map tabs show each required destination category and allow visual confirmation of their locations."
+      },
+      "R5": {
+        "requirement": "The itinerary routing is realistic, uses map route checks, avoids LA rush hour driving where practical, keeps travel between stops under about 40 minutes when possible, and includes buffer time.",
+        "verification": "Open route/map tabs and the written plan show travel-time checks, sensible sequencing, reduced rush-hour exposure, and spacing between activities."
+      },
+      "R6": {
+        "requirement": "A final travel plan is produced with the selected flight, hotel recommendation, and a 2-day itinerary including activity timing and travel times, while keeping the key browser pages open.",
+        "verification": "Final summary includes all required trip components, and the flight tab, hotel tab, and relevant map/route tabs remain open for visual review."
+      }
+    },
+    "categories": [
+      "Travel and Tourism > Air Travel",
+      "Travel and Tourism > Accommodation and Hotels"
+    ],
+    "num_categories": 2
+  },
+  {
+    "task_id": "795bfe117e0f58e49ca37ae8e453a507859a2a2b",
+    "confirmed_task": "I’m trying to piece together a really cheap trip to London for two, so can you help me build it in a practical order and keep the actual pages open where it matters? Start on Booking.com and search London for 2 adults staying this December, then find me at least one hotel that comes in under £100 total for the 2-night stay, because that ultra-budget option is going to set the tone for everything else. Open the actual property page in its own tab so I can see the photos and location, and note the hotel name, stay dates, total displayed price, and link. Once you’ve got that baseline, stay on Booking.com and look up NOX Hotel for a 1-night stay for 2 adults on any date in 2026, just so I can tell whether my bargain London option is unusually cheap or more normal for the city; open the NOX listing page too and record the date and total displayed price you find. After that, use Google to look for at least two hotels near Washington, DC Union Station that show 4-star-or-higher guest ratings and nightly prices under $200, because I may want a backup benchmark for city lodging in another trip later; please open each hotel result in its own tab or go to the actual hotel posting page so I can verify they’re real options and still look live. Then, because I want the whole trip to stay low-cost overall, go to Amazon and shortlist three mid-to-low-priced headphones or earbuds with active noise cancellation for travel that fit the same budget mindset, and open each product page in a separate tab so I can compare them side by side. In the end, send me one clean summary with the hotel names, prices, dates, ratings where relevant, key headphone features, and links, and leave the Booking.com property tabs and the Amazon product tabs open for me.",
+    "website": "https://www.google.com",
+    "reference_length": 5,
+    "level": "medium",
+    "rubrics": {
+      "R1": {
+        "requirement": "Identify at least one Booking.com London hotel for 2 adults in December with a displayed total price under £100 for the 2-night stay, and capture the hotel name, stay dates, total price, and link.",
+        "verification": "Grader can confirm the Booking.com search results or property page shows London, 2 adults December and a total under £100, with the property tab open."
+      },
+      "R2": {
+        "requirement": "Find a Booking.com NOX Hotel result for a 1-night stay in 2026 for 2 adults and record the specific date, displayed total price, and link.",
+        "verification": "Grader can confirm the NOX Hotel listing or property page on Booking.com shows a 1-night stay for 2 adults with a visible total price and the page left open."
+      },
+      "R3": {
+        "requirement": "Find at least two hotels near Washington, DC Union Station via Google that each show a guest rating of 4 stars or higher and a nightly price under $200, and record their names, ratings, prices, and links.",
+        "verification": "Grader can confirm on Google results, hotel panels, or linked hotel pages that two qualifying hotels near Union Station display ratings of 4.0+ and nightly prices below $200, with tabs open for the chosen options."
+      },
+      "R4": {
+        "requirement": "Shortlist at least three Amazon headphones or earbuds with active noise cancellation, including each product name, current price, key features, and link.",
+        "verification": "Grader can confirm three Amazon product pages are open and each page visibly indicates ANC or active noise cancellation, along with product name and current price."
+      },
+      "R5": {
+        "requirement": "Return one consolidated summary covering the London budget hotel, the NOX Hotel comparison, the two Washington, DC Union Station hotel benchmarks, and the three Amazon UK headphone options, with all requested names, dates, prices, ratings where relevant, key features, and links.",
+        "verification": "Grader can compare the final response against the collected browser evidence from the open Booking.com, Google, and Amazon UK tabs and verify all requested fields are included."
+      }
+    },
+    "categories": [
+      "Travel and Tourism > Air Travel",
+      "Travel and Tourism > Accommodation and Hotels"
+    ],
+    "num_categories": 2
+  },
+  {
+    "task_id": "73c63095aeed43efb10a74eee7db7459c5ea9f84",
+    "confirmed_task": "I’m trying to sort out a realistic housing plan in Grand Rapids, Michigan and want to compare a normal rental against cheaper live-in alternatives, with a hotel as a short-stay fallback while I go look at places. Please start on Zillow and search Grand Rapids rentals with the monthly rent set between $1,400 and $2,400, then open one listing that looks like a real option in its own tab so I can see the photos and map, and grab the basics for it like the address, monthly price, and the Zillow listing page. Use that exact monthly rent as the benchmark for whether a trailer or other small living setup would actually save me money, then go to Craigslist for Grand Rapids and find at least three listings that seem suitable for living in and are priced below that Zillow benchmark; open the actual posting pages so you can verify they’re still live and note each title, price, and link. After that, because I may need somewhere temporary while I travel to inspect options, go to Booking.com and look up a hotel in Grand Rapids with visible guest reviews, open the property page, and summarize the overall guest review score plus at least three takeaways from recent reviews so I can tell what staying there would really be like. Leave the Zillow tab and the Booking.com hotel page open so I can compare them visually afterward, then give me a concise recommendation on how the rental and cheaper Craigslist alternatives stack up against the hotel, and say which seems better reviewed for a temporary stay.",
+    "website": "https://www.google.com",
+    "reference_length": 4,
+    "level": "medium",
+    "rubrics": {
+      "R1": {
+        "requirement": "Identify one Zillow rental listing in Grand Rapids, Michigan within the $1,400 to $2,400 monthly rent range and provide its address, monthly rent, and Zillow property page URL.",
+        "verification": "Grader can confirm the Zillow listing page is open in a tab and shows a Grand Rapids rental with rent between $1,400 and $2,400, plus the reported address and URL match the visible page."
+      },
+      "R2": {
+        "requirement": "Use the exact Zillow monthly rent from Step 1 as the benchmark and provide at least three Grand Rapids Craigslist listings suitable for living in that are priced below that benchmark, including each title, price, and posting URL.",
+        "verification": "Grader can confirm each Craigslist posting page is open or accessible, appears to be a live Grand Rapids-area listing suitable for living in, and the visible prices are all below the Zillow rent reported in Step 1."
+      },
+      "R3": {
+        "requirement": "For one Booking.com hotel in Grand Rapids, Michigan, report the overall guest review score and summarize at least three takeaways from recent guest reviews.",
+        "verification": "Grader can confirm the Booking.com property page is open and shows a review score, and the summarized takeaways are grounded in visible recent review content on the page."
+      },
+      "R4": {
+        "requirement": "Return a concise recommendation comparing the Zillow rental, the cheaper Craigslist alternatives, and the Booking.com hotel, and explicitly state which appears better reviewed for a temporary stay.",
+        "verification": "Grader can confirm the final summary references the gathered Zillow, Craigslist, and Booking.com findings and includes a clear conclusion about the better-reviewed temporary-stay option."
+      }
+    },
+    "categories": [
+      "Business and Consumer Services > Real Estate",
+      "Travel and Tourism > Accommodation and Hotels"
+    ],
+    "num_categories": 2
+  }
+]
