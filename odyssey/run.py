@@ -130,6 +130,9 @@ MAX_TABS = 8
 DEFAULT_PROFILE = HERE / ".chrome-profile"   # gitignored; keeps consent cookies
 
 MAX_QUESTIONS = 5          # ask_user calls per run
+# Consecutive tool-free turns before a run is called over. One is a progress
+# note; three in a row is a model that has stopped working.
+MAX_TEXT_TURNS = 3
 
 
 def task_for_record(record: dict) -> tuple[dict, str]:
@@ -1156,7 +1159,7 @@ def run_agent(task: dict, user: PersonaUser, model: str, *, max_steps: int,
     # called, what it cost and how long it waited. The trajectory records what
     # the tools did; this records what the model did.
     turns: list[dict] = []
-    answer, stop_reason, empty_turns = "", "max_steps", 0
+    answer, stop_reason, empty_turns, text_turns = "", "max_steps", 0, 0
     started_at = datetime.now(timezone.utc)
     started = time.monotonic()
     try:
@@ -1187,10 +1190,24 @@ def run_agent(task: dict, user: PersonaUser, model: str, *, max_steps: int,
                 time.sleep(3)
                 continue
             empty_turns = 0
+            if calls:
+                text_turns = 0            # it is working again
             if not calls:
-                # No tool call and no finish: treat the plain text as the answer.
-                answer, stop_reason = (msg.content or "").strip(), "no_tool_call"
-                break
+                # Text with no tool call is usually a progress note -- "the page
+                # is loading, I'll check the transcript next" -- not an answer.
+                # Taking it as one closed the browser mid-task and handed the
+                # judges an unfinished run, which then scored as the agent's
+                # failure. Nudge instead, and only give up if it keeps talking.
+                text_turns += 1
+                if text_turns >= MAX_TEXT_TURNS:
+                    answer, stop_reason = (msg.content or "").strip(), "no_tool_call"
+                    break
+                messages.append({"role": "user", "content":
+                                 "That was not a tool call. If you are still "
+                                 "working, continue with the tools. If you are "
+                                 "done, call finish with your complete final "
+                                 "answer -- plain text is not delivered."})
+                continue
             for call in calls:
                 name = call.function.name
                 try:

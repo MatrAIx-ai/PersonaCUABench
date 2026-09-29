@@ -284,6 +284,96 @@ def check_judge_calls() -> None:
         R._client = saved
 
 
+def check_progress_note_is_not_an_answer() -> None:
+    """A tool-free turn is a nudge, not the end of the run.
+
+    Astra pauses between tool calls to narrate ("the lecture is playing, I'll
+    check the transcript next"). Treating that as the final answer closed the
+    browser mid-task and scored an unfinished run as the agent's failure.
+    """
+    scripted = [
+        ("text", "Opening the page now, I'll check the fares next."),
+        ("tool", "open_tab"),
+        ("text", "Loaded. Reading the timetable next."),
+        ("finish", "High 54F, low 39F; BNSF fares are on the Metra page."),
+    ]
+
+    class Client:
+        def __init__(self):
+            self.turn = 0
+            self.nudges = 0
+
+        class chat:
+            pass
+
+        def create(self, **kwargs):
+            self.nudges += sum(
+                1 for m in kwargs["messages"]
+                if m.get("role") == "user" and "not a tool call" in str(m.get("content")))
+            kind, payload = scripted[self.turn]
+            self.turn += 1
+            call = None
+            if kind == "tool":
+                call = types.SimpleNamespace(id="c1", function=types.SimpleNamespace(
+                    name=payload, arguments='{"url": "https://example.com"}'))
+            elif kind == "finish":
+                call = types.SimpleNamespace(id="c2", function=types.SimpleNamespace(
+                    name="finish", arguments=json.dumps({"summary": payload})))
+            message = types.SimpleNamespace(
+                content=payload if kind == "text" else None,
+                tool_calls=[call] if call else None,
+                model_dump=lambda exclude_none=False: {"role": "assistant"})
+            return types.SimpleNamespace(
+                choices=[types.SimpleNamespace(message=message)],
+                usage=types.SimpleNamespace(prompt_tokens=1, completion_tokens=1,
+                                            prompt_tokens_details=None,
+                                            completion_tokens_details=None))
+
+    client = Client()
+    client.chat.completions = types.SimpleNamespace(create=client.create)
+
+    class Browser:
+        def __init__(self, **_):
+            pass
+
+        def open_tab(self, url):
+            return f"tab 1 | Stub | {url}"
+
+        def open_tabs(self):
+            return []
+
+        def shot(self, *_, **__):
+            return None
+
+        def close(self):
+            pass
+
+    saved_client, saved_browser = R._client, R.Browser
+    R._client = lambda model, provider="": (client, "openrouter")
+    R.Browser = Browser
+    try:
+        run = R.run_agent(R.TASKS[0], _StubUser(), "stub", max_steps=10,
+                          headless=True, temperature=1.0)
+    finally:
+        R._client, R.Browser = saved_client, saved_browser
+
+    assert run["stop_reason"] == "finish", run["stop_reason"]
+    assert run["answer"].startswith("High 54F"), run["answer"]
+    assert client.nudges >= 1, "the model was never told to keep working"
+    assert client.turn == len(scripted), "the run ended early"
+
+
+class _StubUser:
+    opening = "I want a transit plan from downtown Chicago to Aurora."
+    transcript = [{"role": "user", "text": opening}]
+
+    def reply(self, question):
+        return "whatever you think"
+
+    def info(self):
+        return {"model": "stub", "provider": "stub"}
+
+
 def check_cost_report() -> None:
     with tempfile.TemporaryDirectory() as tmp:
         root = Path(tmp)
@@ -337,6 +427,7 @@ def main() -> None:
     check_cache_switch()
     check_cache_retry()
     check_judge_calls()
+    check_progress_note_is_not_an_answer()
     check_cost_report()
     print("accounting self-check OK")
 
