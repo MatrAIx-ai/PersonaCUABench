@@ -23,9 +23,6 @@ task completion kept as a guardrail:
 passes the original rubric, every hidden preference is honored, and the persona judge
 confirms the request was met (P1 ≥ 4).
 
-> **Version scope.** v1 is cold-start only. Persistent state (memory, past sessions, the
-> user's files, browser history) is planned for **v2**.
-
 ---
 
 ## 1. Tasks
@@ -39,7 +36,6 @@ confirms the request was met (P1 ≥ 4).
 | **Platform** | 🌐 Live web (Chrome on real sites) · 🧪 Sandboxed web (deterministic replicas of real sites, publicly hosted, nothing to deploy) |
 | **Action type** | 🔎 Read: research, compare, keep pages open · ✍️ Write: order, book, send, post, hire |
 | **Full list** | [benchmark/v1_tasks.json](benchmark/v1_tasks.json): instruction, rubric or checker, source id, and the reason for every dropped task |
-| **Planned for v2** | 20 OSWorld desktop work tasks. They need the OSWorld VM sandbox, which is hard for collaborators to deploy |
 
 ### How tasks were selected
 
@@ -221,33 +217,6 @@ more than one result counts as done, and different people would pick different o
 | REAL | omnizon-13 | Omnizon (Amazon) | unreachable: Omnizon v2 host resets the TLS handshake from our network (v1 host returns 451); restore if reachable elsewhere |
 | REAL | omnizon-17 | Omnizon (Amazon) | unreachable: Omnizon v2 host resets the TLS handshake from our network (v1 host returns 451); restore if reachable elsewhere |
 | REAL | omnizon-29 | Omnizon (Amazon) | unreachable: Omnizon v2 host resets the TLS handshake from our network (v1 host returns 451); restore if reachable elsewhere |
-</details>
-
-<details>
-<summary><b>Planned for v2: OSWorld desktop work (20)</b></summary>
-
-| ID | Work category | Task |
-|---|---|---|
-| `035f41ba` | Finance & Data Analysis | Help me fill in the Gross profit column by subtracting all the available expenses including discounts, allowan… |
-| `1de60575` | Finance & Data Analysis | Summarize the total revenue for each promotion type in a new sheet (Sheet2) with the promotion names as the co… |
-| `8e116af7` | Finance & Data Analysis | Please update my bookkeeping sheet with the recent transactions from the provided folder, detailing my expense… |
-| `337d318b` | Finance & Data Analysis | Cross-check the invoices with the bank statements and identify any discrepancies. Then pull out the invoices t… |
-| `5203d847` | Office Admin & Communication | Create a local folder called "Promotions" and create a filter to auto move the inbox emails whose subject cont… |
-| `415ef462` | Office Admin & Communication | There's an e-mail containing the AWS invoice for December saved in local "Bills" folder. Extract the invoice P… |
-| `185f29bd` | Office Admin & Communication | Transfer the data from our 'Employee Performance Evaluation Summary' Excel sheet into our standardized PDF eva… |
-| `869de13e` | Office Admin & Communication | Can you organize my desktop by identifying academic papers, coding projects, and other documents, ensuring no … |
-| `af23762e` | Documents & Presentations | I am making PPT on LibreOffice Impress for presentation tomorrow. I need to summarize contents on one slide us… |
-| `81c425f5` | Documents & Presentations | Can you assist me in transferring the data from LibreOffice Calc in the current sheet to a LibreOffice Writer … |
-| `eb303e01` | Documents & Presentations | Tomorrow, I'm scheduled to deliver a talk, and my PowerPoint slides and speaking notes are saved on the deskto… |
-| `00fa164e` | Documents & Presentations | I need to include the experiment results from "~/Documents/awesome-desktop/expe-results.xlsx" into the current… |
-| `2c9fc0de` | Software Engineering & IT Ops | Could you help me push the changes from commandline in current project to origin main, with the commit message… |
-| `5812b315` | Software Engineering & IT Ops | Please create an SSH user named "charles" with password "Ex@mpleP@55w0rd!" on Ubuntu who is only allowed to ac… |
-| `48d05431` | Software Engineering & IT Ops | When I ran "conda install datasets" in terminal, I got "conda: command not found". Could you help me solve it … |
-| `9219480b` | Software Engineering & IT Ops | Hi, I recently playing with developing a small python-based tetris game. While I have finished most of the par… |
-| `67890eb6` | Research & Teaching | I am an NLP researcher. Check out the best long paper awards of ACL from 2019 to 2022 and record the 'title', … |
-| `b5062e3e` | Research & Teaching | Please help me to extract the name, e-mail, and affiliation of the first author from each paper in the folder … |
-| `aceb0368` | Research & Teaching | I am grading students' English exam papers, but the test consists only of multiple-choice questions. It's too … |
-| `7e287123` | Research & Teaching | I am an assistant professor of CS at HKU, I want to apply for the General Research Fund next year and need som… |
 </details>
 
 ---
@@ -576,7 +545,6 @@ odyssey/
   run_backbone.sh          # full grid for one or more backbones
   results/<task12>/.../<persona>__<model>__<stamp>/result.json
 benchmark/v1_tasks.json    # the v1 task set (all sources) + dropped tasks with reasons
-osworld/tasks_work20.json  # OSWorld work tasks (planned for v2)
 ```
 
 ## License
