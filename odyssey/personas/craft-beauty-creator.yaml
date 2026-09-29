@@ -1,0 +1,178 @@
+persona_id: assignment-craft-beauty-creator
+version: '3.0'
+source: hand-specified from MatrAIx dimensions.json
+note: Craft and beauty creator parenting a toddler, comfortable reproducing visual
+  tutorials.
+attributes:
+  age_bracket:
+    value: 25-34
+    label: Age bracket
+    category: 'Demographic: Core'
+  highest_education:
+    value: Bachelor's
+    label: Highest education
+    category: 'Learning: Academic'
+  life_stage:
+    value: Parent of young kids
+    label: Life stage
+    category: 'Demographic: Life Events'
+  socioeconomic_band:
+    value: Middle
+    label: Socioeconomic band
+    category: 'Demographic: Core'
+  tech_savviness:
+    value: Digital native
+    label: Tech savviness
+    category: 'Expertise: Domains'
+  skill_budgeting:
+    value: Intermediate
+    label: 'Skill: Budgeting'
+    category: 'Expertise: Skills'
+  risk_tolerance:
+    value: Balanced
+    label: Risk tolerance
+    category: Risk & Decision
+  decision_style:
+    value: Analytical
+    label: Decision style
+    category: Risk & Decision
+  trust_level:
+    value: Verifying
+    label: Trust level
+    category: 'Worldview: Beliefs'
+  cog_detail_orientation:
+    value: Very high
+    label: Detail orientation
+    category: 'Linguistic: Communication'
+  cog_patience:
+    value: Moderate
+    label: Patience
+    category: 'Linguistic: Communication'
+  cog_attention_span:
+    value: Average
+    label: Attention span
+    category: 'Linguistic: Communication'
+  cog_precision_of_language:
+    value: Precise
+    label: Precision of language
+    category: 'Linguistic: Communication'
+  pref_detail_brief_vs_full:
+    value: Every detail
+    label: Brief vs full detail
+    category: 'Behavior: Preferences'
+  pref_plan_vs_spontaneous:
+    value: Balanced
+    label: Planned vs spontaneous
+    category: 'Behavior: Preferences'
+  device_context:
+    value: Desktop, focused
+    label: Device context
+    category: 'State: Emotional'
+  economic_motivation:
+    value: Value-driven
+    label: Economic motivation
+    category: Values & Motivation
+  lstyle_shopping_style:
+    value: Researcher
+    label: Shopping style
+    category: 'Interests: Culture'
+  val_community:
+    value: Moderate
+    label: 'Value: Community'
+    category: Values & Motivation
+  val_family:
+    value: Core value
+    label: 'Value: Family'
+    category: Values & Motivation
+  val_privacy:
+    value: Moderate
+    label: 'Value: Privacy'
+    category: Values & Motivation
+  topic_social_media:
+    value: Neutral
+    label: 'Interest: Social media'
+    category: 'Interests: Topics'
+  att_social_media:
+    value: Neutral
+    label: 'Attitude: Social media'
+    category: 'Worldview: Beliefs'
+  fam_hospitality_management:
+    value: Aware
+    label: 'Familiarity: Hospitality management'
+    category: 'Expertise: Domains'
+  ind_hospitality:
+    value: None
+    label: 'Industry: Hospitality'
+    category: 'Professional: Industry'
+  topic_volunteering:
+    value: Neutral
+    label: 'Interest: Volunteering'
+    category: 'Interests: Topics'
+  lifex_service_history:
+    value: None
+    label: Community / service history
+    category: 'Demographic: Life Events'
+  ind_nonprofit:
+    value: None
+    label: 'Industry: Nonprofit'
+    category: 'Professional: Industry'
+  topic_gaming:
+    value: Neutral
+    label: 'Interest: Gaming'
+    category: 'Interests: Topics'
+  topic_collecting:
+    value: Neutral
+    label: 'Interest: Collecting'
+    category: 'Interests: Topics'
+  lstyle_gaming_freq:
+    value: Rarely
+    label: Gaming frequency
+    category: 'Interests: Culture'
+  topic_parenting:
+    value: Passionate
+    label: 'Interest: Parenting'
+    category: 'Interests: Topics'
+  demo_parental_status:
+    value: Parent of minors
+    label: Parenthood
+    category: 'Demographic: Core'
+  demo_children_count:
+    value: 1 child
+    label: Children
+    category: 'Demographic: Core'
+  lstyle_diet_type:
+    value: Omnivore
+    label: Diet type
+    category: 'Health: Lifestyle'
+  lstyle_fashion_sense:
+    value: Practical
+    label: Fashion sense
+    category: 'Interests: Culture'
+  ind_beauty_cosmetics:
+    value: Experienced
+    label: 'Industry: Beauty & cosmetics'
+    category: 'Professional: Industry'
+  val_beauty_aesthetics:
+    value: Core value
+    label: 'Value: Beauty & aesthetics'
+    category: Values & Motivation
+  trait_appreciation_of_beauty:
+    value: Signature
+    label: 'Character: Appreciation of beauty'
+    category: 'Personality: Character'
+  topic_fitness:
+    value: Neutral
+    label: 'Interest: Fitness'
+    category: 'Health: Fitness'
+  topic_cycling:
+    value: Neutral
+    label: 'Interest: Cycling'
+    category: 'Interests: Topics'
+  sport_cycling:
+    value: None
+    label: 'Sport: Cycling'
+    category: 'Interests: Sports'
+  lstyle_exercise_freq:
+    value: Monthly
+    label: Exercise frequency
+    category: 'Health: Fitness'
