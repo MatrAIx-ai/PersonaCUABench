@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>跨场景 Persona 树状图｜2026-09-29</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f7f7f4;
+      --paper: #fff;
+      --ink: #172724;
+      --muted: #51615b;
+      --line: #d3ded8;
+      --accent: #12684e;
+      --accent-soft: #e8f3ed;
+      --warm: #f5efe5;
+      --warm-ink: #73572e;
+      --focus: #164c9e;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; }
+    button, input, select { font: inherit; }
+    button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+    .wrap { max-width: 1240px; padding: 32px 24px 70px; margin: 0 auto; }
+    .eyebrow { color: var(--accent); font-size: 12px; font-weight: 750; letter-spacing: .13em; text-transform: uppercase; }
+    h1 { margin: 5px 0 10px; font-size: clamp(26px, 4vw, 38px); line-height: 1.2; letter-spacing: -.025em; }
+    .lede { max-width: 860px; color: var(--muted); margin: 0; font-size: 16px; }
+    .header-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 28px; }
+    .date { white-space: nowrap; color: var(--muted); font-size: 13px; }
+    .metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 25px 0 23px; }
+    .metric { padding: 14px 16px; border: 1px solid var(--line); background: var(--paper); border-radius: 10px; }
+    .metric strong { display: block; font-size: 23px; line-height: 1.1; color: var(--accent); }
+    .metric span { color: var(--muted); font-size: 12px; }
+    .root { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 22px 24px; }
+    .root-title { display: flex; flex-wrap: wrap; align-items: baseline; gap: 12px; }
+    .root h2 { margin: 0; font-size: 21px; }
+    .root-title p { margin: 0; color: var(--muted); }
+    .dimension-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 0; padding: 0; list-style: none; }
+    .dimension-list li, .tag { border-radius: 999px; padding: 4px 9px; background: var(--accent-soft); color: #225641; font-size: 12px; }
+    .root-note { margin: 15px 0 0; color: var(--muted); font-size: 13px; }
+    .root-stem { width: 2px; height: 24px; background: var(--line); margin-left: 36px; }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0 0 18px; }
+    .toolbar input { width: min(100%, 350px); flex: 1 1 250px; }
+    .toolbar input, .toolbar select, .toolbar button { min-height: 40px; border: 1px solid #b9cbc1; border-radius: 8px; background: var(--paper); color: var(--ink); padding: 8px 11px; }
+    .toolbar button { cursor: pointer; }
+    .toolbar button:hover { border-color: var(--accent); color: var(--accent); }
+    .status { margin-left: auto; color: var(--muted); font-size: 13px; }
+    .tree { position: relative; padding-left: 36px; border-left: 2px solid var(--line); margin-left: 36px; }
+    details { min-width: 0; }
+    summary { cursor: pointer; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    .branch { position: relative; margin: 0 0 12px 18px; }
+    .branch::before { content: ""; position: absolute; left: -54px; top: 27px; width: 52px; height: 2px; background: var(--line); }
+    .branch:last-child::after { content: ""; position: absolute; left: -56px; top: 29px; bottom: 0; width: 4px; background: var(--bg); }
+    .branch > summary { position: relative; border: 1px solid var(--line); background: var(--paper); border-radius: 11px; padding: 14px 16px; display: flex; align-items: center; gap: 10px; }
+    .branch > summary::before, .subtype > summary::before, .persona > summary::before { content: "+"; display: inline-grid; flex: 0 0 20px; place-items: center; width: 20px; height: 20px; border: 1px solid #aac5b5; border-radius: 5px; color: var(--accent); font-weight: 700; line-height: 1; }
+    .branch[open] > summary::before, .subtype[open] > summary::before, .persona[open] > summary::before { content: "−"; }
+    .branch-title { font-size: 18px; font-weight: 700; }
+    .count { margin-left: auto; white-space: nowrap; color: var(--muted); font-size: 12px; }
+    .branch-desc { color: var(--muted); font-size: 13px; }
+    .subtypes { margin: 7px 0 14px 21px; padding-left: 22px; border-left: 2px solid var(--line); }
+    .subtype { position: relative; margin: 11px 0; }
+    .subtype::before { content: ""; position: absolute; width: 21px; height: 2px; left: -23px; top: 19px; background: var(--line); }
+    .subtype > summary { display: flex; align-items: center; gap: 8px; border-radius: 8px; padding: 7px 8px; font-weight: 650; }
+    .subtype > summary:hover, .persona > summary:hover { background: #f1f6f2; }
+    .personas { border-left: 2px solid var(--line); margin: 4px 0 8px 18px; padding-left: 24px; }
+    .persona { position: relative; margin: 8px 0; }
+    .persona::before { content: ""; position: absolute; width: 24px; height: 2px; left: -26px; top: 24px; background: var(--line); }
+    .persona > summary { display: flex; align-items: flex-start; gap: 9px; padding: 10px 9px; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); }
+    .persona > summary::before { margin-top: 2px; }
+    .persona-main { min-width: 0; flex: 1; }
+    .persona-name { font-weight: 700; }
+    .persona-name small { font-weight: 500; color: var(--muted); }
+    .persona-desc { display: block; color: var(--muted); font-size: 13px; margin-top: 1px; }
+    .persona .count { margin-top: 4px; }
+    .persona-body { border: 1px solid var(--line); border-top: 0; background: #fcfdfb; margin: -5px 5px 0; padding: 16px 18px 12px; border-radius: 0 0 8px 8px; }
+    .tags { display: flex; flex-wrap: wrap; gap: 5px; }
+    .tag { background: #f0f3ef; color: #4b5f53; padding: 2px 7px; }
+    .task-head { font-weight: 700; margin: 16px 0 4px; font-size: 13px; }
+    .task-note { color: var(--muted); margin: 0 0 10px; font-size: 12px; }
+    .tasks { list-style: none; padding: 0; margin: 0; border-left: 2px solid var(--line); }
+    .tasks li { position: relative; padding: 6px 0 6px 22px; font-size: 13px; }
+    .tasks li::before { content: ""; position: absolute; left: 0; top: 18px; width: 16px; height: 2px; background: var(--line); }
+    .difficulty { display: inline-block; min-width: 30px; margin-right: 7px; color: var(--accent); font-size: 11px; font-weight: 700; }
+    .difficulty.medium { color: var(--warm-ink); }
+    .missing > summary { background: var(--warm); }
+    .missing .branch-title { color: var(--warm-ink); }
+    .missing-intro { margin: 9px 0 15px; color: var(--muted); font-size: 13px; }
+    .unmapped { background: var(--paper); border: 1px solid #dfd4bd; border-radius: 8px; padding: 12px 14px; margin: 9px 0; }
+    .unmapped h4 { margin: 0 0 4px; font-size: 14px; }
+    .unmapped p { margin: 0; color: var(--muted); font-size: 12px; }
+    .unmapped .tasks { margin-top: 8px; }
+    .source { margin-top: 22px; padding: 18px 20px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper); color: var(--muted); font-size: 13px; }
+    .source h2 { color: var(--ink); margin: 0 0 7px; font-size: 16px; }
+    .source p { margin: 6px 0; }
+    .source a { color: var(--accent); }
+    .empty { border: 1px dashed var(--line); background: var(--paper); color: var(--muted); padding: 25px; border-radius: 9px; }
+    [hidden] { display: none !important; }
+    @media (max-width: 760px) {
+      .wrap { padding: 22px 15px 55px; }
+      .header-row { display: block; }
+      .date { margin-top: 9px; }
+      .metrics { grid-template-columns: repeat(2, 1fr); }
+      .root { padding: 18px; }
+      .root-stem { margin-left: 19px; }
+      .tree { margin-left: 19px; padding-left: 19px; }
+      .branch { margin-left: 9px; }
+      .branch::before { left: -38px; width: 36px; }
+      .branch:last-child::after { left: -40px; }
+      .branch-desc { display: none; }
+      .subtypes { margin-left: 11px; padding-left: 12px; }
+      .subtype::before { width: 11px; left: -13px; }
+      .personas { margin-left: 10px; padding-left: 12px; }
+      .persona::before { width: 12px; left: -14px; }
+      .count { font-size: 11px; }
+      .status { width: 100%; margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+<main class="wrap">
+  <header>
+    <div class="eyebrow">PERSONA × SCENARIO × TASK</div>
+    <div class="header-row">
+      <div>
+        <h1>跨场景人物树状图</h1>
+        <p class="lede">从共同描述维度出发，按主要行为特征逐层展开到具体人物，再到他或她在所属场景中对应的任务。</p>
+      </div>
+      <div class="date">整理日期：2026-09-29</div>
+    </div>
+    <div class="metrics" aria-label="数据概览">
+      <div class="metric"><strong>9</strong><span>附件列出的场景</span></div>
+      <div class="metric"><strong>7</strong><span>已有四人设的场景</span></div>
+      <div class="metric"><strong>28</strong><span>已定义 Persona</span></div>
+      <div class="metric"><strong>42</strong><span>与已定义人物关联的场景任务</span></div>
+    </div>
+  </header>
+
+  <section class="root" aria-labelledby="root-heading">
+    <div class="root-title">
+      <h2 id="root-heading">共性｜同一组人物描述维度</h2>
+      <p>所有场景的人物都可沿这些横向维度比较。</p>
+    </div>
+    <ul class="dimension-list">
+      <li>人口：年龄、教育、收入、家庭阶段</li>
+      <li>能力：技术与领域技能</li>
+      <li>态度：AI 信任与隐私</li>
+      <li>决策：风险承受与决策风格</li>
+      <li>人格：谨慎、焦虑、条理等</li>
+      <li>当下状态：目标、设备、时间压力</li>
+      <li>偏好：详略、计划性、耐心</li>
+      <li>健康与无障碍</li>
+    </ul>
+    <p class="root-note">下方树按“主要特征”给每个人选一个位置；年龄、专业度、预算和无障碍需求会交叉，不能理解为互斥的人群。</p>
+  </section>
+  <div class="root-stem" aria-hidden="true"></div>
+
+  <div class="toolbar" aria-label="树图操作">
+    <input id="search" type="search" placeholder="搜索人物、特征、场景或任务…" aria-label="搜索树图">
+    <select id="domain" aria-label="按场景筛选"><option value="">全部场景</option></select>
+    <button id="expand" type="button">展开全部</button>
+    <button id="collapse" type="button">收起全部</button>
+    <span id="status" class="status" role="status" aria-live="polite"></span>
+  </div>
+  <section id="tree" class="tree" aria-label="人物与任务树状图"></section>
+  <p id="empty" class="empty" hidden>没有找到匹配的人物或任务。可以换一个关键词。</p>
+
+  <section class="source" aria-labelledby="source-heading">
+    <h2 id="source-heading">关系与来源说明</h2>
+    <p>已定义的每位 Persona 都关联本场景的六道题（3 道 Easy、3 道 Medium）。这表示实验设计中的任务对应关系，不表示任务已经全部执行。相同的六道题会在同一场景的四个人物下重复显示。</p>
+    <p>人物定义来自本次粘贴的 Persona 清单；Travel、Science、Technology、Lifestyle、Health、Community 的任务短述来自此前粘贴的场景任务表。Shopping 与 Food 的六题还分别用仓库中冻结的任务输入核对。Beauty 的两题来自此前粘贴的 Claw Bench 列表，属于另一来源，目前没有四人设。</p>
+    <p>Community 与 Beauty 只有场景标题，未给出人物定义；因此列在“人物待定义”分支。此前材料另有 Arts & Entertainment 六题，但本次 Persona 清单没有对应的场景人物定义，未纳入 9 场景主树。</p>
+    <p>此前的四个 <em>General-purpose personas (v2.0)</em> 与 Travel 正式 P1–P4 部分重叠，且归属不明，未额外算作四个人。Control（none）是原始任务文本基线，不是人物。</p>
+    <p>可核对仓库文件：<a href="../../../FOOD_MAIN_EXPERIMENT_PLAN.md">Food 实验计划</a> · <a href="../2026-09-26/shopping-main-setting1-r1/inputs/tasks.json">Shopping 六题输入</a> · <a href="../2026-09-28/food-main-nocap-setting1-r1/inputs/tasks.json">Food 六题输入</a></p>
+  </section>
+</main>
+
+<script>
+"use strict";
+
+const domains = {
+  travel: {name:"旅行与旅游", owner:"Haoming Li", tasks:[
+    ["易","芝加哥市中心到 Aurora 的公共交通出行：路线、时刻与可查看页面"],
+    ["易","约克郡圣诞家庭出游：比较两种节庆活动"],
+    ["易","本周驾车天气风险：当前体感与更大范围的危险区域"],
+    ["中","匹兹堡到洛杉矶短途旅行：规划行程并保留关键页面"],
+    ["中","两人低预算伦敦旅行：按实际预订顺序搭建方案"],
+    ["中","Grand Rapids 住房方案：常规租房、低价替代及酒店过渡"]
+  ]},
+  science: {name:"科学与教育", owner:"Jiashu He", tasks:[
+    ["易","潜在增长模型：可浏览、易理解的学习流程"],
+    ["易","阅读支持：为需要易扫读文字的学生准备微型课堂材料"],
+    ["易","AI 入门解释：基本概念、熟悉产品与真实硬件例子"],
+    ["中","圣迭戈研究生项目：不同学校与项目的具体联系简报"],
+    ["中","马里兰／华盛顿特区法学院：筛选与联系计划"],
+    ["中","青少年心理健康工作坊：可引用的研究证据包"]
+  ]},
+  technology: {name:"计算机、电子与科技", owner:"Sherry", tasks:[
+    ["易","Chromebook 使用说明：Firefox 与 Chrome 中的 Apple 密码"],
+    ["易","小型 AM5 电脑：核对 ASUS ROG Strix B650E-I 主板官方产品页"],
+    ["易","月度订阅预算：创作者会员与 ChatGPT 费用比较"],
+    ["中","初中数字素养课：组合一节课可用的教学材料"],
+    ["中","RStudio 中 swirl 的 Getting and Cleaning Data 课程故障排查"],
+    ["中","打开并播放 Stanford CS231N 入门讲座视频"]
+  ]},
+  lifestyle: {name:"生活方式", owner:"Yingtao Luo", tasks:[
+    ["易","父亲节礼物：实用工具与户外休闲单品比较"],
+    ["易","全黑晚间穿搭：以连衣裙为核心搭配完整造型"],
+    ["易","男士穿搭清单：配饰、基础款与二手单品"],
+    ["中","伴侣共享日记：隐私、共享权限与外部 AI 访问"],
+    ["中","多人圣诞礼物：兼顾不同对象的平衡清单"],
+    ["中","预算型穿搭：有真实商品对照的服饰清单"]
+  ]},
+  shopping: {name:"电商与购物", owner:"Defu Cao", tasks:[
+    ["易","Kobe Bryant 球鞋：即将发售与现在可买的款式"],
+    ["易","Theory 绿色晚礼服：美国配送、产品照片与价格"],
+    ["易","平价二手 Toyota：跨汽车网站比较"],
+    ["中","明尼阿波利斯家庭用车：Cars.com 上 5 万美元以内候选"],
+    ["中","英国朋友的舒适订阅之夜：可在浏览器查看的方案"],
+    ["中","家中不同车辆的配件：保留真实产品页面"]
+  ]},
+  health: {name:"健康与健身", owner:"Yiyang Wang", tasks:[
+    ["易","Fresno／Clovis 普拉提：可在页面比较的场所"],
+    ["易","Fresno 瑜伽入门：本地工作室与居家练习"],
+    ["易","免费 YouTube 视频：居家瑜伽入门计划"],
+    ["中","洛杉矶生育医院：筛选十家提供产科与分娩服务的医院"],
+    ["中","纽约膝关节外科医生：ACL／半月板手术候选"],
+    ["中","Fresno 本周健身：平缓瑜伽与较高强度活动比较"]
+  ]},
+  food: {name:"餐饮", owner:"TBD · Jade Xu", tasks:[
+    ["易","帕尔马干酪与香醋球芽甘蓝食谱、Le Creuset 荷兰锅、洗碗机 air gap 视频"],
+    ["易","一周备餐：Instant Pot 扁豆、蔬菜火鸡辣豆酱和两种甜点"],
+    ["易","明尼阿波利斯酒会餐饮服务商、Surdyk’s 与 mulligatawny 汤"],
+    ["中","《塞尔达：旷野之息》甜点桌、食谱、X-Carve 装饰与设备展示"],
+    ["中","波士顿两顿晚餐：商务餐与纪念日晚餐及近期可订情况"],
+    ["中","英国圣诞聚会：无麸质前菜、螺旋火腿与礼物"]
+  ]},
+  community: {name:"社区与社会", owner:"Xu Hu", tasks:[
+    ["易","巴尔的摩活动之夜：打开官方活动页面"],
+    ["易","Chapel Hill／Carrboro：查找至少三处公共小型食品柜"],
+    ["易","宝可梦卡牌圣诞礼物：主选与缺货备选"],
+    ["中","一个家庭的协调式节日礼品组合"],
+    ["中","科罗拉多州儿童援助外展构想：资料起步包"],
+    ["中","与幼儿在家共度圣诞节：可直接查看的活动创意"]
+  ]},
+  beauty: {name:"美妆、个人护理与健身", owner:"Xu Hu", tasks:[
+    ["另","StyleSeat：寻找评分至少 4.8 的发型师并预约最早可用理发时段（Claw Bench 794）"],
+    ["另","Strava：在 athlete Posts 发布“Great morning ride!”（Claw Bench 1102）"]
+  ]}
+};
+
+const branches = [
+  {id:"expert", name:"专业与证据驱动", desc:"熟悉领域术语，重视来源核实、细节或品质。", subtypes:[
+    {id:"domain-expert",name:"领域实务专家",people:[
+      {domain:"travel",id:"P1",name:"旅行与交通专业人士",age:"35–44",desc:"资深旅行／交通从业者；熟悉城市规划，桌面端细致规划。",tags:["高领域经验","高技术熟练度","完整细节"]},
+      {domain:"science",id:"P1",name:"资深社科教授／导师",age:"55–64",desc:"统计和研究方法专家；核对证据、要求规范引用。",tags:["博士","统计专家","AI 怀疑"]},
+      {domain:"technology",id:"P1",name:"技术爱好者",age:"25–34",desc:"熟悉 Python、数据科学与技术规格；要求解释证据和取舍。",tags:["技术熟练","分析型","隐私重视"]},
+      {domain:"food",id:"P4",name:"专业餐饮研究者",age:"45–54",desc:"餐饮业主管，烹饪与检索经验丰富，偏好质量与完整细节。",tags:["餐饮专家","高收入","合成专家上界"]}
+    ]},
+    {id:"research-expert",name:"研究与品质导向者",people:[
+      {domain:"lifestyle",id:"P4",name:"重证据的品质追求者",age:"45–54",desc:"工程研究专业人士；核查材料、耐用性、合身度与权限。",tags:["高收入","官方来源","详细对照"]},
+      {domain:"shopping",id:"P4",name:"高端商品研究者",age:"45–54",desc:"偏好品质，分析商品来源、可得性与证据。",tags:["高收入","品质优先","来源验证"]},
+      {domain:"health",id:"P4",name:"循证健康专业人士",age:"45–54",desc:"核对服务资质、官方信息与不确定性。",tags:["高健康素养","高收入","详细研究"]}
+    ]}
+  ]},
+  {id:"young", name:"年轻、预算与入门", desc:"手机或数字工具熟练，但在特定领域是新手，常关注价格与速度。", subtypes:[
+    {id:"student-budget",name:"学生与初入职场的预算型用户",people:[
+      {domain:"travel",id:"P3",name:"预算紧的学生",age:"18–24",desc:"不会开车，手机优先；懂应用但缺旅行经验，偏好便宜、快捷。",tags:["学生","旅行新手","低耐心"]},
+      {domain:"technology",id:"P2",name:"非技术专业大学生",age:"18–24",desc:"日常应用熟练，技术课程新手，想要有证据的易懂解释。",tags:["大学生","节省开支","谨慎核对"]},
+      {domain:"lifestyle",id:"P1",name:"省钱的时尚探索者",age:"18–24",desc:"大学生，熟悉线上和二手购物；重价格、搭配与简短建议。",tags:["低收入","手机优先","时尚兴趣"]},
+      {domain:"health",id:"P1",name:"预算敏感的年轻成人",age:"18–24",desc:"健康服务比较新手；关注免费资源与可操作下一步。",tags:["健康服务新手","手机优先","简短回答"]}
+    ]},
+    {id:"young-family",name:"年轻家庭与生活新手",people:[
+      {domain:"shopping",id:"P1",name:"预算敏感的年轻家长",age:"25–34",desc:"为家庭快速比价；手机优先，喜欢简短结论。",tags:["家长","商品比价","低耐心"]},
+      {domain:"food",id:"P1",name:"预算敏感的烹饪新手",age:"25–34",desc:"职业早期，做饭经验少；想要便宜、简短、实用的建议。",tags:["烹饪新手","低预算","手机优先"]}
+    ]}
+  ]},
+  {id:"older", name:"年长与谨慎规划", desc:"更重视可靠性、风险控制、清晰表达和页面可读性。", subtypes:[
+    {id:"retired-low-vision",name:"退休且需要易读信息的用户",people:[
+      {domain:"travel",id:"P2",name:"年长旅行新手",age:"75–84",desc:"很少旅行、技术不熟，低视力并使用放大工具。",tags:["退休","低视力","风险规避"]},
+      {domain:"lifestyle",id:"P3",name:"谨慎的退休学校管理者",age:"65–74",desc:"替自己和亲属购物；重隐私、可信度与清晰步骤。",tags:["退休","低视力","重隐私"]},
+      {domain:"shopping",id:"P2",name:"谨慎的祖父母",age:"65–74",desc:"购物风险敏感，网站使用信心较低，需要易读推荐。",tags:["退休","低视力","证据谨慎"]},
+      {domain:"health",id:"P2",name:"谨慎的健康服务比较者",age:"65–74",desc:"固定预算、基本健康素养；核对服务信息与费用。",tags:["退休","低视力","费用敏感"]}
+    ]},
+    {id:"dietary-planner",name:"饮食风险与可读性规划者",people:[
+      {domain:"food",id:"P2",name:"谨慎的饮食规划者",age:"55–64",desc:"重视营养和风险，愿意核实细节，需要放大阅读。",tags:["泛化食物过敏","风险规避","放大阅读"]}
+    ]}
+  ]},
+  {id:"busy", name:"忙碌与务实决策", desc:"时间受限，偏好简洁比较、可立即执行的方案。", subtypes:[
+    {id:"busy-parent",name:"兼顾家庭与工作的家长",people:[
+      {domain:"lifestyle",id:"P2",name:"忙碌务实的家长",age:"35–44",desc:"运营经理兼家长；关注耐用、舒适、价值与日记隐私。",tags:["家长","运营经理","时间压力"]},
+      {domain:"shopping",id:"P3",name:"忙碌的家庭采购者",age:"35–44",desc:"运营经理兼家长；要简洁、可执行的商品 shortlist。",tags:["家长","实用价值","时间压力"]},
+      {domain:"health",id:"P3",name:"忙碌的健康规划家长",age:"30–39",desc:"项目经理兼家长；重地点、时间安排与健康服务价值。",tags:["家长","项目经理","时间压力"]}
+    ]},
+    {id:"deadline-worker",name:"有截止时间的专业或家务执行者",people:[
+      {domain:"technology",id:"P3",name:"赶期限的营销专业人士",age:"25–34",desc:"熟悉办公工具，技术非专家；要简短建议与下一步。",tags:["营销工作","低耐心","截止时间"]},
+      {domain:"food",id:"P3",name:"时间紧的家庭餐饮规划者",age:"35–44",desc:"运营经理，有日常烹饪经验；偏好务实、简洁的安排。",tags:["熟练家常烹饪","时间压力","简洁"]}
+    ]}
+  ]},
+  {id:"teaching", name:"教学与家庭协助", desc:"围绕学生或子女完成任务，需要把资料转成可用方案。", subtypes:[
+    {id:"classroom",name:"课堂教学实践者",people:[
+      {domain:"science",id:"P2",name:"初中人文教师",age:"35–44",desc:"教学经验强、研究方法非专家；思考过程较长，重学生可用性。",tags:["教师","家长","详细表达"]},
+      {domain:"technology",id:"P4",name:"技术谨慎的初中教师",age:"45–54",desc:"熟悉课堂工具，面对新技术谨慎；要清楚步骤和少术语。",tags:["教师","技术谨慎","隐私重视"]}
+    ]},
+    {id:"parent-helper",name:"替子女寻找资源的家长",people:[
+      {domain:"science",id:"P4",name:"学校资源家长助手",age:"45–54",desc:"簿记员，替孩子找学校与资源；网站操作谨慎，善于事实核查。",tags:["家长","研究新手","正式表达"]}
+    ]}
+  ]},
+  {id:"language", name:"语言与在地适应", desc:"理解目标，但对当地网站、专业术语或英语表达不够熟悉。", subtypes:[
+    {id:"immigrant",name:"新移民与本地规则新手",people:[
+      {domain:"travel",id:"P4",name:"非英语母语的新移民",age:"25–34",desc:"熟悉手机工具，但不熟当地网站与交通／天气术语。",tags:["语言障碍","在地规则新手","耐心"]}
+    ]},
+    {id:"first-gen",name:"第一代大学生与学术新手",people:[
+      {domain:"science",id:"P3",name:"第一代大学申请者",age:"25–34",desc:"英西双语、研究写作新手；手机熟练，有截止时间。",tags:["第一代大学生","语言门槛","研究新手"]}
+    ]}
+  ]}
+];
+
+const root = document.getElementById("tree");
+const domainFilter = document.getElementById("domain");
+const searchInput = document.getElementById("search");
+const status = document.getElementById("status");
+const empty = document.getElementById("empty");
+
+function element(tag, cls, value) {
+  const node = document.createElement(tag);
+  if (cls) node.className = cls;
+  if (value !== undefined) node.textContent = value;
+  return node;
+}
+function taskList(tasks) {
+  const list = element("ul", "tasks");
+  for (const [level, label] of tasks) {
+    const item = element("li", "task");
+    const badge = element("span", "difficulty" + (level === "中" ? " medium" : ""), level);
+    item.append(badge, document.createTextNode(label));
+    item.dataset.search = (level + " " + label).toLowerCase();
+    list.append(item);
+  }
+  return list;
+}
+function addPersona(container, person, groupContext) {
+  const domain = domains[person.domain];
+  const details = element("details", "persona");
+  details.dataset.domain = person.domain;
+  details.dataset.personSearch = [groupContext, domain.name, domain.owner, person.id, person.name, person.age, person.desc, ...person.tags].join(" ").toLowerCase();
+  const summary = element("summary");
+  const main = element("span", "persona-main");
+  const name = element("span", "persona-name");
+  name.append(document.createTextNode(domain.name + " · " + person.id + " · " + person.name + " "));
+  name.append(element("small", "", person.age + " 岁"));
+  main.append(name, element("span", "persona-desc", person.desc));
+  summary.append(main, element("span", "count", "6 项任务"));
+  const body = element("div", "persona-body");
+  const tags = element("div", "tags");
+  for (const t of person.tags) tags.append(element("span", "tag", t));
+  body.append(tags, element("p", "task-head", "最底层｜这个人物对应的任务"));
+  body.append(element("p", "task-note", "按当前场景的任务表，P1–P4 均关联以下六道题。"));
+  body.append(taskList(domain.tasks));
+  details.append(summary, body);
+  container.append(details);
+}
+function addBranch(branch) {
+  const details = element("details", "branch");
+  details.dataset.group = branch.id;
+  const summary = element("summary");
+  const total = branch.subtypes.reduce((n, s) => n + s.people.length, 0);
+  summary.append(element("span", "branch-title", branch.name));
+  summary.append(element("span", "branch-desc", branch.desc));
+  summary.append(element("span", "count", total + " 人 · " + branch.subtypes.length + " 类细分"));
+  details.append(summary);
+  const nested = element("div", "subtypes");
+  for (const subtype of branch.subtypes) {
+    const sub = element("details", "subtype");
+    sub.dataset.subtype = subtype.id;
+    const subSummary = element("summary");
+    subSummary.append(element("span", "", subtype.name), element("span", "count", subtype.people.length + " 人"));
+    sub.append(subSummary);
+    const people = element("div", "personas");
+    for (const person of subtype.people) addPersona(people, person, branch.name + " " + branch.desc + " " + subtype.name);
+    sub.append(people);
+    nested.append(sub);
+  }
+  details.append(nested);
+  root.append(details);
+}
+function addUnmapped() {
+  const details = element("details", "branch missing");
+  details.id = "unmapped";
+  const summary = element("summary");
+  summary.append(element("span", "branch-title", "人物待定义"));
+  summary.append(element("span", "branch-desc", "已有场景或任务，但缺少该场景的 Persona 描述。"));
+  summary.append(element("span", "count", "2 个场景"));
+  details.append(summary);
+  const content = element("div", "subtypes");
+  content.append(element("p", "missing-intro", "这些任务不能归给具体人物；任务列在场景下，等待负责人确定 Persona。"));
+  for (const code of ["community", "beauty"]) {
+    const domain = domains[code];
+    const box = element("div", "unmapped");
+    box.dataset.domain = code;
+    box.dataset.search = [domain.name, domain.owner, ...domain.tasks.flat()].join(" ").toLowerCase();
+    box.append(element("h4", "", domain.name + " · " + domain.owner));
+    box.append(element("p", "", code === "beauty" ? "人物未定义；仅列出另一个任务来源中的两道题。" : "人物未定义；已有六道场景任务。"));
+    box.append(taskList(domain.tasks));
+    content.append(box);
+  }
+  details.append(content);
+  root.append(details);
+}
+
+for (const branch of branches) addBranch(branch);
+addUnmapped();
+for (const code of Object.keys(domains)) domainFilter.append(new Option(domains[code].name, code));
+
+const allPeople = [...root.querySelectorAll(".persona")];
+if (allPeople.length !== 28 || branches.length !== 6) throw new Error("Persona tree data count mismatch");
+for (const person of allPeople) if (person.querySelectorAll(".task").length !== 6) throw new Error("Task link count mismatch");
+
+function filterTree() {
+  const term = searchInput.value.trim().toLowerCase();
+  const selected = domainFilter.value;
+  let visiblePeople = 0;
+  let visibleUnmapped = 0;
+  for (const person of allPeople) {
+    const tasks = [...person.querySelectorAll(".task")];
+    const contextMatch = person.dataset.personSearch.includes(term);
+    const matchingTasks = term ? tasks.filter(t => t.dataset.search.includes(term)) : tasks;
+    const show = (!selected || person.dataset.domain === selected) && (!term || contextMatch || matchingTasks.length > 0);
+    person.hidden = !show;
+    for (const task of tasks) task.hidden = Boolean(term && !contextMatch && !task.dataset.search.includes(term));
+    if (show) {
+      visiblePeople++;
+      if (term || selected) person.open = true;
+    }
+  }
+  for (const subtype of root.querySelectorAll(".subtype")) {
+    const show = [...subtype.querySelectorAll(".persona")].some(p => !p.hidden);
+    subtype.hidden = !show;
+    if (show && (term || selected)) subtype.open = true;
+  }
+  for (const branch of root.querySelectorAll(".branch:not(.missing)")) {
+    const show = [...branch.querySelectorAll(".subtype")].some(s => !s.hidden);
+    branch.hidden = !show;
+    if (show && (term || selected)) branch.open = true;
+  }
+  const missing = document.getElementById("unmapped");
+  for (const box of missing.querySelectorAll(".unmapped")) {
+    const show = (!selected || box.dataset.domain === selected) && (!term || box.dataset.search.includes(term));
+    box.hidden = !show;
+    if (show) visibleUnmapped++;
+    for (const task of box.querySelectorAll(".task")) {
+      task.hidden = Boolean(term && ![domains[box.dataset.domain].name, domains[box.dataset.domain].owner].join(" ").toLowerCase().includes(term) && !task.dataset.search.includes(term));
+    }
+  }
+  missing.hidden = visibleUnmapped === 0;
+  if (visibleUnmapped && (term || selected)) missing.open = true;
+  empty.hidden = visiblePeople + visibleUnmapped > 0;
+  status.textContent = visiblePeople + " 位人物" + (visibleUnmapped ? " · " + visibleUnmapped + " 个待定义场景" : "");
+}
+searchInput.addEventListener("input", filterTree);
+domainFilter.addEventListener("change", filterTree);
+document.getElementById("expand").addEventListener("click", () => {
+  for (const node of root.querySelectorAll("details:not([hidden])")) node.open = true;
+});
+document.getElementById("collapse").addEventListener("click", () => {
+  for (const node of root.querySelectorAll("details")) node.open = false;
+});
+filterTree();
+</script>
+</body>
+</html>

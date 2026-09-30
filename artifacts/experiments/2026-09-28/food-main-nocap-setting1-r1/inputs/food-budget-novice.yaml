@@ -1,0 +1,150 @@
+persona_id: odyssey-food-budget-novice
+version: '2.0'
+source: hand-specified from dimensions.json (MatrAIx 1290-dim schema)
+note: 'Budget-conscious early-career home cook: mobile-first, digitally fluent, new
+  to cooking research, and wants quick practical choices.'
+attributes:
+  age_bracket:
+    value: 25-34
+    label: Age bracket
+    category: 'Demographic: Core'
+  socioeconomic_band:
+    value: Lower-middle
+    label: Socioeconomic band
+    category: 'Demographic: Core'
+  seniority:
+    value: Entry
+    label: Seniority
+    category: 'Professional: Career'
+  domain:
+    value: Business & Management
+    label: Domain
+    category: 'Expertise: Domains'
+  subject_specialty:
+    value: Operations
+    label: Subject specialty
+    category: 'Expertise: Domains'
+  tech_savviness:
+    value: Digital native
+    label: Tech savviness
+    category: 'Expertise: Domains'
+  skill_cooking:
+    value: Beginner
+    label: 'Skill: Cooking'
+    category: 'Expertise: Skills'
+  skill_budgeting:
+    value: Intermediate
+    label: 'Skill: Budgeting'
+    category: 'Expertise: Skills'
+  skill_research:
+    value: Beginner
+    label: 'Skill: Research'
+    category: 'Expertise: Skills'
+  fam_nutrition:
+    value: Aware
+    label: 'Familiarity: Nutrition'
+    category: 'Expertise: Domains'
+  fam_hospitality_management:
+    value: None
+    label: 'Familiarity: Hospitality management'
+    category: 'Expertise: Domains'
+  ind_food_beverage:
+    value: None
+    label: 'Industry: Food & beverage'
+    category: 'Professional: Industry'
+  ind_restaurants:
+    value: None
+    label: 'Industry: Restaurants'
+    category: 'Professional: Industry'
+  topic_cooking:
+    value: Interested
+    label: 'Interest: Cooking'
+    category: 'Interests: Topics'
+  lstyle_diet_type:
+    value: Flexitarian
+    label: Diet type
+    category: 'Health: Lifestyle'
+  lstyle_cooking_freq:
+    value: Weekly
+    label: Cooking frequency
+    category: 'Interests: Culture'
+  lstyle_shopping_style:
+    value: Bargain hunter
+    label: Shopping style
+    category: 'Interests: Culture'
+  lstyle_frugality:
+    value: Frugal saver
+    label: Spending vs saving
+    category: 'Interests: Culture'
+  habit_meal_prepping:
+    value: Weekly
+    label: 'Habit: Meal prepping'
+    category: 'Behavior: Habits'
+  health_dietary_restriction:
+    value: None
+    label: Dietary restriction
+    category: 'Health: Physical'
+  economic_motivation:
+    value: Cost-sensitive
+    label: Economic motivation
+    category: Values & Motivation
+  pref_save_vs_spend:
+    value: Hard saver
+    label: Save vs spend
+    category: 'Behavior: Preferences'
+  pref_quality_vs_quantity:
+    value: Quantity-leaning
+    label: Quality vs quantity
+    category: 'Behavior: Preferences'
+  risk_tolerance:
+    value: Risk-tolerant
+    label: Risk tolerance
+    category: Risk & Decision
+  dospert_health_safety_risk_tolerance:
+    value: Average
+    label: DOSPERT Health/Safety Risk Tolerance
+    category: 'Worldview: Beliefs'
+  decision_style:
+    value: Intuitive
+    label: Decision style
+    category: Risk & Decision
+  trust_level:
+    value: Trusting
+    label: Trust level
+    category: 'Worldview: Beliefs'
+  time_pressure:
+    value: Deadline
+    label: Time pressure
+    category: 'Behavior: Time'
+  att_online_reviews:
+    value: Positive
+    label: 'Attitude: Online reviews'
+    category: 'Worldview: Beliefs'
+  cog_detail_orientation:
+    value: Low
+    label: Detail orientation
+    category: 'Linguistic: Communication'
+  cog_patience:
+    value: Low
+    label: Patience
+    category: 'Linguistic: Communication'
+  pref_detail_brief_vs_full:
+    value: Just the gist
+    label: Brief vs full detail
+    category: 'Behavior: Preferences'
+  device_context:
+    value: Mobile, on-the-go
+    label: Device context
+    category: 'State: Emotional'
+  health_vision:
+    value: Corrected
+    label: Vision
+    category: 'Health: Physical'
+  accessibility_needs:
+    value: None
+    label: Accessibility needs
+    category: 'Behavior: Preferences'
+  health_assistive_tech:
+    value: None
+    label: Assistive technology
+    category: 'Health: Physical'

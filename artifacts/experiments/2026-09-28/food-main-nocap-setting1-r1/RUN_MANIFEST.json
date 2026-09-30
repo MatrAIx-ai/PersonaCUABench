@@ -1,0 +1,79 @@
+{
+  "experiment_id": "food-main-nocap-setting1-r1",
+  "status": "finalized_with_unresolved_environment_cells",
+  "started_at_utc": "2026-09-28T21:33:51Z",
+  "started_at_local": "2026-09-28T14:33:51-0700",
+  "date_timezone": "America/Los_Angeles",
+  "replicate": 1,
+  "replicates_planned": 3,
+  "tasks": 6,
+  "arms": [
+    "none",
+    "food-budget-novice",
+    "food-busy-host",
+    "food-cautious-dietary-planner",
+    "food-culinary-researcher"
+  ],
+  "planned_cells": 30,
+  "completed_cells": 30,
+  "numeric_completed_at_utc": "2026-09-30T00:39:02Z",
+  "numeric_completed_at_local": "2026-09-29T17:39:02-0700",
+  "finalized_at_utc": "2026-09-30T02:24:15Z",
+  "finalized_at_local": "2026-09-29T19:24:15-0700",
+  "attempt_directories": 47,
+  "numeric_scored_attempts": 42,
+  "selected_numeric_cells": 30,
+  "older_duplicate_scored_attempts": 12,
+  "error_only_attempts": 5,
+  "environment_validity": {
+    "keep": 25,
+    "exclude_rerun": 5,
+    "unclassified": 0,
+    "retries_exhausted": 5,
+    "audit_json": "analysis/ENVIRONMENT_VALIDITY_AUDIT.json",
+    "audit_markdown": "analysis/ENVIRONMENT_VALIDITY_AUDIT.md"
+  },
+  "experience_judging": {
+    "selected_cells": 30,
+    "dimensions_expected": 150,
+    "comparable_pairs": 148,
+    "within_one": 147,
+    "outside_one": 1,
+    "not_applicable_pairs": 2
+  },
+  "final_analysis": {
+    "json": "analysis/FOOD_R1_FINAL.json",
+    "markdown": "analysis/FOOD_R1_FINAL.md"
+  },
+  "protocol": {
+    "base_main_commit": "4a1c0f221b0a80384d059cb487b3be1e470a148e",
+    "food_input_commit": "19e0633",
+    "food_protocol_commit": "4c4212d",
+    "executor_model": "gpt-5.6-terra",
+    "executor_provider": "azure",
+    "persona_simulator_model": "gpt-5.6-terra",
+    "persona_simulator_provider": "azure",
+    "task_judge_model": "gpt-5.6-terra",
+    "task_judge_provider": "azure",
+    "experience_judges": [
+      "azure/gpt-5.6-terra",
+      "azure/gpt-5.6-terra"
+    ],
+    "temperature": 1.0,
+    "max_steps": 50,
+    "max_questions": 5,
+    "headless": true,
+    "fresh_profile_per_cell": true,
+    "odyssey_max_tabs": 0,
+    "tab_policy": "unlimited; attachment requests live Chrome without infrastructure limitation"
+  },
+  "smoke_gate": {
+    "cell": "none/task-1",
+    "result": "pass",
+    "task_score": 0.75,
+    "tab_limit_hits": 0,
+    "http_403_hits": 0,
+    "http_429_hits": 0,
+    "captcha_hits": 0
+  }
+}

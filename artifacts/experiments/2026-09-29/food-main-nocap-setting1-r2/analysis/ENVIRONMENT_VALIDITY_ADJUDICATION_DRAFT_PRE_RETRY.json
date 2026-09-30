@@ -1,0 +1,102 @@
+{
+  "schema_version": "draft-pre-retry-1",
+  "generated_at_utc": "2026-09-30T05:40:16Z",
+  "status": "DRAFT_PRE_RETRY_NOT_FINAL_AUDIT",
+  "experiment_root": "artifacts/experiments/2026-09-29/food-main-nocap-setting1-r2",
+  "grid": {
+    "expected_cells": 30,
+    "numeric_cells": 30,
+    "duplicate_numeric_cells": 0,
+    "schema_invalid_numeric_cells": 0,
+    "historical_error_only_attempts": 0
+  },
+  "summary": {
+    "keep": 20,
+    "rerun": 10
+  },
+  "rerun_cells": [
+    {
+      "task": 3,
+      "task_id": "eb8a01554a84cf5d16a84a766d0f6cfb55d33c81",
+      "persona": "none",
+      "impacted_rubrics": ["R3"],
+      "signal": "Google unusual-traffic /sorry page prevented Google provenance; recipe recovered only via DuckDuckGo"
+    },
+    {
+      "task": 3,
+      "task_id": "eb8a01554a84cf5d16a84a766d0f6cfb55d33c81",
+      "persona": "food-busy-host",
+      "impacted_rubrics": ["R3"],
+      "signal": "Google unusual-traffic /sorry page prevented Google provenance; actual recipe content otherwise recovered"
+    },
+    {
+      "task": 3,
+      "task_id": "eb8a01554a84cf5d16a84a766d0f6cfb55d33c81",
+      "persona": "food-culinary-researcher",
+      "impacted_rubrics": ["R3"],
+      "signal": "Google unusual-traffic /sorry page prevented Google provenance; recipe recovered only via DuckDuckGo"
+    },
+    {
+      "task": 4,
+      "task_id": "5944875c7f32a98df978040e4447534f7ba0aadb",
+      "persona": "none",
+      "impacted_rubrics": ["R1"],
+      "signal": "Google unusual-traffic /sorry page forced BOTW guide discovery through DuckDuckGo"
+    },
+    {
+      "task": 4,
+      "task_id": "5944875c7f32a98df978040e4447534f7ba0aadb",
+      "persona": "food-budget-novice",
+      "impacted_rubrics": ["R1"],
+      "signal": "Google unusual-traffic /sorry page forced BOTW guide discovery through fallback search"
+    },
+    {
+      "task": 4,
+      "task_id": "5944875c7f32a98df978040e4447534f7ba0aadb",
+      "persona": "food-cautious-dietary-planner",
+      "impacted_rubrics": ["R1"],
+      "signal": "Google unusual-traffic /sorry page forced BOTW guide discovery through DuckDuckGo"
+    },
+    {
+      "task": 5,
+      "task_id": "18ddad3e0781d4b8fb2e1998ff836a0b07d0cdce",
+      "persona": "none",
+      "impacted_rubrics": ["R2"],
+      "signal": "OpenTable Mare search/listing returned explicit Access Denied"
+    },
+    {
+      "task": 5,
+      "task_id": "18ddad3e0781d4b8fb2e1998ff836a0b07d0cdce",
+      "persona": "food-cautious-dietary-planner",
+      "impacted_rubrics": ["R3"],
+      "signal": "Grill 23 booking path reached an OpenTable listing that returned explicit Access Denied"
+    },
+    {
+      "task": 6,
+      "task_id": "e20742e26a4d6f9c3d62a9d1cef634297bd4204f",
+      "persona": "none",
+      "impacted_rubrics": ["R3"],
+      "signal": "The Kitchn search and two specific article URLs returned human-verification / automation-denied pages"
+    },
+    {
+      "task": 6,
+      "task_id": "e20742e26a4d6f9c3d62a9d1cef634297bd4204f",
+      "persona": "food-culinary-researcher",
+      "impacted_rubrics": ["R3"],
+      "signal": "The Kitchn spiral-ham article returned a human-verification / automation-denied page"
+    }
+  ],
+  "reviewed_false_positive_keep": [
+    {"task": 1, "persona": "food-cautious-dietary-planner", "reason": "R3 failed because playback was not started; Google block affected a different completed requirement"},
+    {"task": 2, "persona": "none", "reason": "fallback recovered sources; only exact-title reporting failed"},
+    {"task": 2, "persona": "food-busy-host", "reason": "communicated R4 failed from non-Feel Good Foodie selections after persona omitted source constraints"},
+    {"task": 2, "persona": "food-cautious-dietary-planner", "reason": "fallback recovered sources; only exact-title reporting failed"},
+    {"task": 4, "persona": "food-busy-host", "reason": "wrong or redirected URLs and incomplete recovery, not an unrecovered target access denial"},
+    {"task": 5, "persona": "food-budget-novice", "reason": "generic booking click and incomplete date navigation; OpenTable denial maps to uncommunicated R2"},
+    {"task": 5, "persona": "food-culinary-researcher", "reason": "source selection and failure to explore available official reservation paths; OpenTable denial maps primarily to uncommunicated R2"},
+    {"task": 6, "persona": "food-budget-novice", "reason": "unsupported product evidence after search fallback; no material target access denial"},
+    {"task": 6, "persona": "food-busy-host", "reason": "product evidence and organization defects after search fallback; no material target access denial"},
+    {"task": 6, "persona": "food-cautious-dietary-planner", "reason": "The Kitchn was uncommunicated; first-party surfaces loaded and product-card navigation was incomplete"}
+  ],
+  "finalization_requirement": "After matched retries, select the latest numeric attempt per cell, re-adjudicate environment materiality, refresh result hashes, and emit the formal ENVIRONMENT_VALIDITY_AUDIT files."
+}

@@ -1,0 +1,35 @@
+{
+  "experiment_id": "food-main-nocap-setting1-r1",
+  "date_block": "2026-09-28",
+  "timezone": "America/Los_Angeles",
+  "protocol_base_git_sha": "4a1c0f221b0a80384d059cb487b3be1e470a148e",
+  "experiment_input_git_sha": "19e0633",
+  "food_protocol_git_sha": "4c4212d",
+  "protocol_difference_from_main": "ODYSSEY_MAX_TABS=0 disables the artificial tab-count guard",
+  "replicate": 1,
+  "planned_formal_replicates": 3,
+  "tasks": 6,
+  "personas": [
+    "none",
+    "food-budget-novice",
+    "food-busy-host",
+    "food-cautious-dietary-planner",
+    "food-culinary-researcher"
+  ],
+  "models": {
+    "persona_simulator": "azure/gpt-5.6-terra",
+    "executor": "azure/gpt-5.6-terra",
+    "task_judge": "azure/gpt-5.6-terra",
+    "experience_judge_a": "azure/gpt-5.6-terra",
+    "experience_judge_b": "azure/gpt-5.6-terra"
+  },
+  "temperature": 1,
+  "max_steps": 50,
+  "max_tabs": null,
+  "max_tabs_env": "ODYSSEY_MAX_TABS=0",
+  "max_questions": 5,
+  "headless": true,
+  "fresh_profile_per_cell": true,
+  "result_root": "artifacts/experiments/2026-09-28/food-main-nocap-setting1-r1/results",
+  "profile_root": "artifacts/chrome-profiles/food-20260928-nocap-r1-cells"
+}

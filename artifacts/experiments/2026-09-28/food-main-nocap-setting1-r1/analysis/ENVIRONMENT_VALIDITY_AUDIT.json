@@ -1,0 +1,1283 @@
+{
+  "audit_version": 4,
+  "audited_at": "2026-09-30T02:07:40.859Z",
+  "experiment_id": "food-main-nocap-setting1-r1",
+  "results_root": "/Users/defu.cao/Documents/PersonaCUABench/artifacts/experiments/2026-09-28/food-main-nocap-setting1-r1/results",
+  "scope": {
+    "planned_cells": 30,
+    "numeric_scored_cells": 30,
+    "manually_audited_cells": 30,
+    "task_id_format_in_this_audit": "full canonical task id",
+    "inputs_checked_per_cell": [
+      "frozen task and rubrics",
+      "persona conversation",
+      "trajectory and environment-signal triage",
+      "final answer and open tabs",
+      "task-judge verdicts"
+    ],
+    "selection_policy": "latest execution-integrity-eligible finite numeric result per task/persona/model, using the timestamp suffix and relative-path tie-break implemented by food_main_setting1_analysis.py; frozen after the final retry round",
+    "selection_implementation": "artifacts/experiments/food_main_setting1_analysis.py::select_latest_scored",
+    "final_freeze": "All 30 latest selected cells reviewed; five persistent environment-blocked cells remain excluded after retry exhaustion. No further reruns are requested."
+  },
+  "decision_rule": {
+    "KEEP": "No material unrecovered environment obstruction to required or communicated evidence. Persona omission, source choice, navigation, and early stop remain genuine outcomes.",
+    "EXCLUDE_RERUN": "Compatibility status used by food_main_setting1_analysis.py when a material unrecovered environment obstruction prevented required or communicated evidence. At final freeze, retry_state=EXHAUSTED_UNRESOLVED means the cell stays outside the KEEP overlay and does not request another rerun.",
+    "transient_recovery": "Recovered or incidental errors do not invalidate a cell.",
+    "score_mutation": false,
+    "final_freeze": "Score never determines environment validity. Final status depends only on material blocking and usable alternate-evidence recovery."
+  },
+  "counts": {
+    "selected_numeric_scored_cells": 30,
+    "KEEP": 25,
+    "EXCLUDE_RERUN": 5,
+    "discovered_numeric_scored_attempts": 42,
+    "older_duplicate_scored_attempts": 12,
+    "historical_attempt_errors_outside_scored_cells": 5,
+    "structurally_limited_cells": 0,
+    "persistent_unresolved_after_retry_exhaustion": 5,
+    "additional_reruns_requested": 0
+  },
+  "counts_by_persona": {
+    "none": {
+      "KEEP": 4,
+      "EXCLUDE_RERUN": 2
+    },
+    "food-budget-novice": {
+      "KEEP": 5,
+      "EXCLUDE_RERUN": 1
+    },
+    "food-busy-host": {
+      "KEEP": 6,
+      "EXCLUDE_RERUN": 0
+    },
+    "food-cautious-dietary-planner": {
+      "KEEP": 5,
+      "EXCLUDE_RERUN": 1
+    },
+    "food-culinary-researcher": {
+      "KEEP": 5,
+      "EXCLUDE_RERUN": 1
+    }
+  },
+  "counts_by_task": {
+    "082aa17f3e88": {
+      "label": "Food task 1",
+      "KEEP": 5,
+      "EXCLUDE_RERUN": 0
+    },
+    "0ab48db60760": {
+      "label": "Food task 2",
+      "KEEP": 5,
+      "EXCLUDE_RERUN": 0
+    },
+    "eb8a01554a84": {
+      "label": "Food task 3",
+      "KEEP": 5,
+      "EXCLUDE_RERUN": 0
+    },
+    "5944875c7f32": {
+      "label": "Food task 4",
+      "KEEP": 5,
+      "EXCLUDE_RERUN": 0
+    },
+    "18ddad3e0781": {
+      "label": "Food task 5",
+      "KEEP": 2,
+      "EXCLUDE_RERUN": 3
+    },
+    "e20742e26a4d": {
+      "label": "Food task 6",
+      "KEEP": 3,
+      "EXCLUDE_RERUN": 2
+    }
+  },
+  "cells": [
+    {
+      "task_id": "082aa17f3e88c3ce10796244e3677c5643dd19c9",
+      "task_label": "I’m setting up a new kitchen and want one of the first things I m…",
+      "persona": "none",
+      "model": "gpt-5.6-terra",
+      "status": "KEEP",
+      "selected_result_path": "results/082aa17f3e88/none__gpt-5.6-terra__20260928T213351Z/result.json",
+      "selected_result_sha256": "63ca8330faf8a5ad1c47ef7ad78a73bb587e1b6b1617286884224c504e7af96b",
+      "score": 0.75,
+      "communicated_rubrics": [
+        "R1",
+        "R2",
+        "R3",
+        "R4"
+      ],
+      "impacted_rubrics": [],
+      "blocking_causes": [],
+      "evidence": "No scanned page-level environment blocker in the selected trajectory; unmet rubrics: R3.",
+      "decision_basis": "The recorded misses remain communication, navigation, source choice, or agent-execution outcomes.",
+      "task_index": 1,
+      "level": "easy",
+      "selected_attempt_path": "results/082aa17f3e88/none__gpt-5.6-terra__20260928T213351Z",
+      "selected_attempt_timestamp": "20260928T213351Z",
+      "scored_attempt_count": 1,
+      "score_communicated": 0.75,
+      "steps": 20,
+      "stop_reason": "no_tool_call",
+      "unmet_communicated_rubrics": [
+        "R3"
+      ],
+      "attempts_reviewed": 1,
+      "additional_rerun_requested": false,
+      "retry_state": "NOT_REQUIRED"
+    },
+    {
+      "task_id": "082aa17f3e88c3ce10796244e3677c5643dd19c9",
+      "task_label": "I’m setting up a new kitchen and want one of the first things I m…",
+      "persona": "food-budget-novice",
+      "model": "gpt-5.6-terra",
+      "status": "KEEP",
+      "selected_result_path": "results/082aa17f3e88/food-budget-novice__gpt-5.6-terra__20260928T215230Z/result.json",
+      "selected_result_sha256": "abb0a2609f404b7681c30b06896c499aec0749da3e52823098999f98345646ef",
+      "score": 1,
+      "communicated_rubrics": [
+        "R1",
+        "R2",
+        "R3",
+        "R4"
+      ],
+      "impacted_rubrics": [],
+      "blocking_causes": [],
+      "evidence": "All original-task rubrics passed and no page-level environment blocker was scanned.",
+      "decision_basis": "The selected numeric result is an environment-valid observation.",
+      "task_index": 1,
+      "level": "easy",
+      "selected_attempt_path": "results/082aa17f3e88/food-budget-novice__gpt-5.6-terra__20260928T215230Z",
+      "selected_attempt_timestamp": "20260928T215230Z",
+      "scored_attempt_count": 1,
+      "score_communicated": 1,
+      "steps": 14,
+      "stop_reason": "no_tool_call",
+      "unmet_communicated_rubrics": [],
+      "attempts_reviewed": 1,
+      "additional_rerun_requested": false,
+      "retry_state": "NOT_REQUIRED"
+    },
+    {
+      "task_id": "082aa17f3e88c3ce10796244e3677c5643dd19c9",
+      "task_label": "I’m setting up a new kitchen and want one of the first things I m…",
+      "persona": "food-busy-host",
+      "model": "gpt-5.6-terra",
+      "status": "KEEP",
+      "selected_result_path": "results/082aa17f3e88/food-busy-host__gpt-5.6-terra__20260928T221632Z/result.json",
+      "selected_result_sha256": "73c53df65b24c92d624cf1ed7ce6616f06b5d83aa1ead29f5f629bcff1512837",
+      "score": 1,
+      "communicated_rubrics": [
+        "R1",
+        "R2",
+        "R3",
+        "R4"
+      ],
+      "impacted_rubrics": [],
+      "blocking_causes": [],
+      "evidence": "Le Creuset and Brussels-sprouts URLs initially timed out, but usable evidence was recovered and all four rubrics passed.",
+      "decision_basis": "Transient navigation failures did not censor any rubric.",
+      "task_index": 1,
+      "level": "easy",
+      "selected_attempt_path": "results/082aa17f3e88/food-busy-host__gpt-5.6-terra__20260928T221632Z",
+      "selected_attempt_timestamp": "20260928T221632Z",
+      "scored_attempt_count": 1,
+      "score_communicated": 1,
+      "steps": 20,
+      "stop_reason": "finish",
+      "unmet_communicated_rubrics": [],
+      "attempts_reviewed": 1,
+      "additional_rerun_requested": false,
+      "retry_state": "NOT_REQUIRED"
+    },
+    {
+      "task_id": "082aa17f3e88c3ce10796244e3677c5643dd19c9",
+      "task_label": "I’m setting up a new kitchen and want one of the first things I m…",
+      "persona": "food-cautious-dietary-planner",
+      "model": "gpt-5.6-terra",
+      "status": "KEEP",
+      "selected_result_path": "results/082aa17f3e88/food-cautious-dietary-planner__gpt-5.6-terra__20260928T223839Z/result.json",
+      "selected_result_sha256": "bde583605d92081150b3a40a109e32fc1fa4cb57ec0df747124f675e86ebef17",
+      "score": 0.75,
+      "communicated_rubrics": [
+        "R1",
+        "R2",
+        "R3",
+        "R4"
+      ],
+      "impacted_rubrics": [],
+      "blocking_causes": [],
+      "evidence": "No scanned page-level environment blocker in the selected trajectory; unmet rubrics: R3.",
+      "decision_basis": "The recorded misses remain communication, navigation, source choice, or agent-execution outcomes.",
+      "task_index": 1,
+      "level": "easy",
+      "selected_attempt_path": "results/082aa17f3e88/food-cautious-dietary-planner__gpt-5.6-terra__20260928T223839Z",
+      "selected_attempt_timestamp": "20260928T223839Z",
+      "scored_attempt_count": 1,
+      "score_communicated": 0.75,
+      "steps": 31,
+      "stop_reason": "finish",
+      "unmet_communicated_rubrics": [
+        "R3"
+      ],
+      "attempts_reviewed": 1,
+      "additional_rerun_requested": false,
+      "retry_state": "NOT_REQUIRED"
+    },
+    {
+      "task_id": "082aa17f3e88c3ce10796244e3677c5643dd19c9",
+      "task_label": "I’m setting up a new kitchen and want one of the first things I m…",
+      "persona": "food-culinary-researcher",
+      "model": "gpt-5.6-terra",
+      "status": "KEEP",
+      "selected_result_path": "results/082aa17f3e88/food-culinary-researcher__gpt-5.6-terra__20260930T001448Z/result.json",
+      "selected_result_sha256": "0a2ad690d2ae4625065b3fe8e7e8c16b746b93e8a6fbbd3492cf196c437a1413",
+      "score": 1,
+      "communicated_rubrics": [
+        "R1",
+        "R2",
+        "R3",
+        "R4"
+      ],
+      "impacted_rubrics": [],
+      "blocking_causes": [],
+      "evidence": "All original-task rubrics passed and no page-level environment blocker was scanned.",
+      "decision_basis": "The selected numeric result is an environment-valid observation.",
+      "task_index": 1,
+      "level": "easy",
+      "selected_attempt_path": "results/082aa17f3e88/food-culinary-researcher__gpt-5.6-terra__20260930T001448Z",
+      "selected_attempt_timestamp": "20260930T001448Z",
+      "scored_attempt_count": 1,
+      "score_communicated": 1,
+      "steps": 17,
+      "stop_reason": "finish",
+      "unmet_communicated_rubrics": [],
+      "attempts_reviewed": 1,
+      "additional_rerun_requested": false,
+      "retry_state": "NOT_REQUIRED"
+    },
+    {
+      "task_id": "0ab48db6076089bbcf42047d162009a50eb9ca50",
+      "task_label": "I’m trying to put together a simple, semi-healthy meal prep menu…",
+      "persona": "none",
+      "model": "gpt-5.6-terra",
+      "status": "KEEP",
+      "selected_result_path": "results/0ab48db60760/none__gpt-5.6-terra__20260928T213759Z/result.json",
+      "selected_result_sha256": "6da41ddd7352d23dd2146b7b4438dbec2271bf0f51ff1f1f920eb5f1a0fe7cd8",
+      "score": 0.75,
+      "communicated_rubrics": [
+        "R1",
+        "R2",
+        "R3",
+        "R4"
+      ],
+      "impacted_rubrics": [],
+      "blocking_causes": [],
+      "evidence": "No scanned page-level environment blocker in the selected trajectory; unmet rubrics: R2.",
+      "decision_basis": "The recorded misses remain communication, navigation, source choice, or agent-execution outcomes.",
+      "task_index": 2,
+      "level": "easy",
+      "selected_attempt_path": "results/0ab48db60760/none__gpt-5.6-terra__20260928T213759Z",
+      "selected_attempt_timestamp": "20260928T213759Z",
+      "scored_attempt_count": 1,
+      "score_communicated": 0.75,
+      "steps": 18,
+      "stop_reason": "finish",
+      "unmet_communicated_rubrics": [
+        "R2"
+      ],
+      "attempts_reviewed": 1,
+      "additional_rerun_requested": false,
+      "retry_state": "NOT_REQUIRED"
+    },
+    {
+      "task_id": "0ab48db6076089bbcf42047d162009a50eb9ca50",
+      "task_label": "I’m trying to put together a simple, semi-healthy meal prep menu…",
+      "persona": "food-budget-novice",
+      "model": "gpt-5.6-terra",
+      "status": "KEEP",
+      "selected_result_path": "results/0ab48db60760/food-budget-novice__gpt-5.6-terra__20260928T215600Z/result.json",
+      "selected_result_sha256": "bf8f4ab31f616f2878f79381810b86b578b134a43a38576dc5c1a950c3303822",
+      "score": 0.75,
+      "communicated_rubrics": [
+        "R1",
+        "R4"
+      ],
+      "impacted_rubrics": [],
+      "blocking_causes": [],
+      "evidence": "A Feel Good Foodie page-text read crashed, but communicated R1/R4 passed; the hidden R2 miss was a turkey-chili title mismatch.",
+      "decision_basis": "The crash did not cause the unmet rubric.",
+      "task_index": 2,
+      "level": "easy",
+      "selected_attempt_path": "results/0ab48db60760/food-budget-novice__gpt-5.6-terra__20260928T215600Z",
+      "selected_attempt_timestamp": "20260928T215600Z",
+      "scored_attempt_count": 1,
+      "score_communicated": 1,
+      "steps": 16,
+      "stop_reason": "finish",
+      "unmet_communicated_rubrics": [],
+      "attempts_reviewed": 1,
+      "additional_rerun_requested": false,
+      "retry_state": "NOT_REQUIRED"
+    },
+    {
+      "task_id": "0ab48db6076089bbcf42047d162009a50eb9ca50",
+      "task_label": "I’m trying to put together a simple, semi-healthy meal prep menu…",
+      "persona": "food-busy-host",
+      "model": "gpt-5.6-terra",
+      "status": "KEEP",
+      "selected_result_path": "results/0ab48db60760/food-busy-host__gpt-5.6-terra__20260928T222253Z/result.json",
+      "selected_result_sha256": "c8464e344bba4154bd95af70271fb402fea7e3b60e3cb2be3830755e55072a6d",
+      "score": 0.75,
+      "communicated_rubrics": [
+        "R2",
+        "R3",
+        "R4"
+      ],
+      "impacted_rubrics": [],
+      "blocking_causes": [],
+      "evidence": "No scanned page-level environment blocker in the selected trajectory; unmet rubrics: R2.",
+      "decision_basis": "The recorded misses remain communication, navigation, source choice, or agent-execution outcomes.",
+      "task_index": 2,
+      "level": "easy",
+      "selected_attempt_path": "results/0ab48db60760/food-busy-host__gpt-5.6-terra__20260928T222253Z",
+      "selected_attempt_timestamp": "20260928T222253Z",
+      "scored_attempt_count": 1,
+      "score_communicated": 0.667,
+      "steps": 14,
+      "stop_reason": "finish",
+      "unmet_communicated_rubrics": [
+        "R2"
+      ],
+      "attempts_reviewed": 1,
+      "additional_rerun_requested": false,
+      "retry_state": "NOT_REQUIRED"
+    },
+    {
+      "task_id": "0ab48db6076089bbcf42047d162009a50eb9ca50",
+      "task_label": "I’m trying to put together a simple, semi-healthy meal prep menu…",
+      "persona": "food-cautious-dietary-planner",
+      "model": "gpt-5.6-terra",
+      "status": "KEEP",
+      "selected_result_path": "results/0ab48db60760/food-cautious-dietary-planner__gpt-5.6-terra__20260928T224615Z/result.json",
+      "selected_result_sha256": "68ee629c39ffa598338bb411580f7f89c0a78621350688d610de46c751e2b5f0",
+      "score": 0.75,
+      "communicated_rubrics": [
+        "R2",
+        "R3",
+        "R4"
+      ],
+      "impacted_rubrics": [],
+      "blocking_causes": [],
+      "evidence": "No scanned page-level environment blocker in the selected trajectory; unmet rubrics: R2.",
+      "decision_basis": "The recorded misses remain communication, navigation, source choice, or agent-execution outcomes.",
+      "task_index": 2,
+      "level": "easy",
+      "selected_attempt_path": "results/0ab48db60760/food-cautious-dietary-planner__gpt-5.6-terra__20260928T224615Z",
+      "selected_attempt_timestamp": "20260928T224615Z",
+      "scored_attempt_count": 1,
+      "score_communicated": 0.667,
+      "steps": 21,
+      "stop_reason": "finish",
+      "unmet_communicated_rubrics": [
+        "R2"
+      ],
+      "attempts_reviewed": 1,
+      "additional_rerun_requested": false,
+      "retry_state": "NOT_REQUIRED"
+    },
+    {
+      "task_id": "0ab48db6076089bbcf42047d162009a50eb9ca50",
+      "task_label": "I’m trying to put together a simple, semi-healthy meal prep menu…",
+      "persona": "food-culinary-researcher",
+      "model": "gpt-5.6-terra",
+      "status": "KEEP",
+      "selected_result_path": "results/0ab48db60760/food-culinary-researcher__gpt-5.6-terra__20260930T001857Z/result.json",
+      "selected_result_sha256": "f2c0ee3e9f9d75b48ab0c531e4494866e9ccfa0776fa786c1b06cf4a045d0045",
+      "score": 0.75,
+      "communicated_rubrics": [
+        "R1",
+        "R2",
+        "R3",
+        "R4"
+      ],
+      "impacted_rubrics": [],
+      "blocking_causes": [],
+      "evidence": "No scanned page-level environment blocker in the selected trajectory; unmet rubrics: R2.",
+      "decision_basis": "The recorded misses remain communication, navigation, source choice, or agent-execution outcomes.",
+      "task_index": 2,
+      "level": "easy",
+      "selected_attempt_path": "results/0ab48db60760/food-culinary-researcher__gpt-5.6-terra__20260930T001857Z",
+      "selected_attempt_timestamp": "20260930T001857Z",
+      "scored_attempt_count": 1,
+      "score_communicated": 0.75,
+      "steps": 27,
+      "stop_reason": "finish",
+      "unmet_communicated_rubrics": [
+        "R2"
+      ],
+      "attempts_reviewed": 1,
+      "additional_rerun_requested": false,
+      "retry_state": "NOT_REQUIRED"
+    },
+    {
+      "task_id": "eb8a01554a84cf5d16a84a766d0f6cfb55d33c81",
+      "task_label": "I’m planning a holiday party in Minneapolis and want a quick shor…",
+      "persona": "none",
+      "model": "gpt-5.6-terra",
+      "status": "KEEP",
+      "selected_result_path": "results/eb8a01554a84/none__gpt-5.6-terra__20260928T213944Z/result.json",
+      "selected_result_sha256": "9ad939a28e65e75a3b343e74ded5b68baac32bfbb420de6623b93a34346da511",
+      "score": 1,
+      "communicated_rubrics": [
+        "R1",
+        "R2",
+        "R3",
+        "R4"
+      ],
+      "impacted_rubrics": [],
+      "blocking_causes": [],
+      "evidence": "All original-task rubrics passed and no page-level environment blocker was scanned.",
+      "decision_basis": "The selected numeric result is an environment-valid observation.",
+      "task_index": 3,
+      "level": "easy",
+      "selected_attempt_path": "results/eb8a01554a84/none__gpt-5.6-terra__20260928T213944Z",
+      "selected_attempt_timestamp": "20260928T213944Z",
+      "scored_attempt_count": 1,
+      "score_communicated": 1,
+      "steps": 30,
+      "stop_reason": "finish",
+      "unmet_communicated_rubrics": [],
+      "attempts_reviewed": 1,
+      "additional_rerun_requested": false,
+      "retry_state": "NOT_REQUIRED"
+    },
+    {
+      "task_id": "eb8a01554a84cf5d16a84a766d0f6cfb55d33c81",
+      "task_label": "I’m planning a holiday party in Minneapolis and want a quick shor…",
+      "persona": "food-budget-novice",
+      "model": "gpt-5.6-terra",
+      "status": "KEEP",
+      "selected_result_path": "results/eb8a01554a84/food-budget-novice__gpt-5.6-terra__20260928T215739Z/result.json",
+      "selected_result_sha256": "e08ae7bf3a7f483f42ffe4946318a95737c445e74b14a21e187d90f32ac148e8",
+      "score": 0.75,
+      "communicated_rubrics": [
+        "R2",
+        "R3",
+        "R4"
+      ],
+      "impacted_rubrics": [],
+      "blocking_causes": [],
+      "evidence": "One bar-service vendor timed out; the hidden R1 miss arose because The Knot listings were never visited.",
+      "decision_basis": "An unrelated vendor timeout did not force the omitted The Knot step.",
+      "task_index": 3,
+      "level": "easy",
+      "selected_attempt_path": "results/eb8a01554a84/food-budget-novice__gpt-5.6-terra__20260928T215739Z",
+      "selected_attempt_timestamp": "20260928T215739Z",
+      "scored_attempt_count": 1,
+      "score_communicated": 1,
+      "steps": 19,
+      "stop_reason": "finish",
+      "unmet_communicated_rubrics": [],
+      "attempts_reviewed": 1,
+      "additional_rerun_requested": false,
+      "retry_state": "NOT_REQUIRED"
+    },
+    {
+      "task_id": "eb8a01554a84cf5d16a84a766d0f6cfb55d33c81",
+      "task_label": "I’m planning a holiday party in Minneapolis and want a quick shor…",
+      "persona": "food-busy-host",
+      "model": "gpt-5.6-terra",
+      "status": "KEEP",
+      "selected_result_path": "results/eb8a01554a84/food-busy-host__gpt-5.6-terra__20260928T222426Z/result.json",
+      "selected_result_sha256": "76c924ff7f068d6759ce0e10258dcebd8f99c7e7dc954bd9f684d92ffef42c6c",
+      "score": 0.75,
+      "communicated_rubrics": [
+        "R2",
+        "R3",
+        "R4"
+      ],
+      "impacted_rubrics": [],
+      "blocking_causes": [],
+      "evidence": "No scanned page-level environment blocker in the selected trajectory; unmet rubrics: R1.",
+      "decision_basis": "The recorded misses remain communication, navigation, source choice, or agent-execution outcomes.",
+      "task_index": 3,
+      "level": "easy",
+      "selected_attempt_path": "results/eb8a01554a84/food-busy-host__gpt-5.6-terra__20260928T222426Z",
+      "selected_attempt_timestamp": "20260928T222426Z",
+      "scored_attempt_count": 1,
+      "score_communicated": 1,
+      "steps": 11,
+      "stop_reason": "finish",
+      "unmet_communicated_rubrics": [],
+      "attempts_reviewed": 1,
+      "additional_rerun_requested": false,
+      "retry_state": "NOT_REQUIRED"
+    },
+    {
+      "task_id": "eb8a01554a84cf5d16a84a766d0f6cfb55d33c81",
+      "task_label": "I’m planning a holiday party in Minneapolis and want a quick shor…",
+      "persona": "food-cautious-dietary-planner",
+      "model": "gpt-5.6-terra",
+      "status": "KEEP",
+      "selected_result_path": "results/eb8a01554a84/food-cautious-dietary-planner__gpt-5.6-terra__20260928T224952Z/result.json",
+      "selected_result_sha256": "d265a2a567a8ac6a539c2c654a887a126a045cdb2b65713a71103dc45131992f",
+      "score": 0.75,
+      "communicated_rubrics": [
+        "R2",
+        "R3",
+        "R4"
+      ],
+      "impacted_rubrics": [],
+      "blocking_causes": [],
+      "evidence": "Two vendor sites timed out; the hidden R1 miss arose because The Knot listings were never visited.",
+      "decision_basis": "The vendor timeouts did not prevent the omitted source-specific action.",
+      "task_index": 3,
+      "level": "easy",
+      "selected_attempt_path": "results/eb8a01554a84/food-cautious-dietary-planner__gpt-5.6-terra__20260928T224952Z",
+      "selected_attempt_timestamp": "20260928T224952Z",
+      "scored_attempt_count": 1,
+      "score_communicated": 1,
+      "steps": 23,
+      "stop_reason": "finish",
+      "unmet_communicated_rubrics": [],
+      "attempts_reviewed": 1,
+      "additional_rerun_requested": false,
+      "retry_state": "NOT_REQUIRED"
+    },
+    {
+      "task_id": "eb8a01554a84cf5d16a84a766d0f6cfb55d33c81",
+      "task_label": "I’m planning a holiday party in Minneapolis and want a quick shor…",
+      "persona": "food-culinary-researcher",
+      "model": "gpt-5.6-terra",
+      "status": "KEEP",
+      "selected_result_path": "results/eb8a01554a84/food-culinary-researcher__gpt-5.6-terra__20260930T002222Z/result.json",
+      "selected_result_sha256": "a2f4542e289dd4c273734ff5624555b944ac4105d56e10fde7c6ee434f14625b",
+      "score": 0.25,
+      "communicated_rubrics": [
+        "R1",
+        "R2",
+        "R4"
+      ],
+      "impacted_rubrics": [],
+      "blocking_causes": [],
+      "evidence": "No scanned page-level environment blocker in the selected trajectory; unmet rubrics: R1, R2, R3.",
+      "decision_basis": "The recorded misses remain communication, navigation, source choice, or agent-execution outcomes.",
+      "task_index": 3,
+      "level": "easy",
+      "selected_attempt_path": "results/eb8a01554a84/food-culinary-researcher__gpt-5.6-terra__20260930T002222Z",
+      "selected_attempt_timestamp": "20260930T002222Z",
+      "scored_attempt_count": 1,
+      "score_communicated": 0.333,
+      "steps": 19,
+      "stop_reason": "finish",
+      "unmet_communicated_rubrics": [
+        "R1",
+        "R2"
+      ],
+      "attempts_reviewed": 1,
+      "additional_rerun_requested": false,
+      "retry_state": "NOT_REQUIRED"
+    },
+    {
+      "task_id": "5944875c7f32a98df978040e4447534f7ba0aadb",
+      "task_label": "I’m putting together a small Zelda: Breath of the Wild–themed des…",
+      "persona": "none",
+      "model": "gpt-5.6-terra",
+      "status": "KEEP",
+      "selected_result_path": "results/5944875c7f32/none__gpt-5.6-terra__20260928T214437Z/result.json",
+      "selected_result_sha256": "a9761a770cda35fb18fc16aa11378172ccc3258061696f2a4197431034a55026",
+      "score": 0.714,
+      "communicated_rubrics": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "R5",
+        "R6",
+        "R7"
+      ],
+      "impacted_rubrics": [],
+      "blocking_causes": [],
+      "evidence": "No scanned page-level environment blocker in the selected trajectory; unmet rubrics: R4, R6.",
+      "decision_basis": "The recorded misses remain communication, navigation, source choice, or agent-execution outcomes.",
+      "task_index": 4,
+      "level": "medium",
+      "selected_attempt_path": "results/5944875c7f32/none__gpt-5.6-terra__20260928T214437Z",
+      "selected_attempt_timestamp": "20260928T214437Z",
+      "scored_attempt_count": 1,
+      "score_communicated": 0.714,
+      "steps": 16,
+      "stop_reason": "no_tool_call",
+      "unmet_communicated_rubrics": [
+        "R4",
+        "R6"
+      ],
+      "attempts_reviewed": 1,
+      "additional_rerun_requested": false,
+      "retry_state": "NOT_REQUIRED"
+    },
+    {
+      "task_id": "5944875c7f32a98df978040e4447534f7ba0aadb",
+      "task_label": "I’m putting together a small Zelda: Breath of the Wild–themed des…",
+      "persona": "food-budget-novice",
+      "model": "gpt-5.6-terra",
+      "status": "KEEP",
+      "selected_result_path": "results/5944875c7f32/food-budget-novice__gpt-5.6-terra__20260928T220250Z/result.json",
+      "selected_result_sha256": "8eee54c205755023d507b3fd26152fb39af13c881c06d8f9b797a05daa22efb1",
+      "score": 0.571,
+      "communicated_rubrics": [
+        "R1",
+        "R2",
+        "R4",
+        "R5",
+        "R6",
+        "R7"
+      ],
+      "impacted_rubrics": [],
+      "blocking_causes": [],
+      "evidence": "Sally's and IGN timeouts recovered. The selected frame video was unavailable, and an Apple link landed on a generic iPad guide.",
+      "decision_basis": "Unmet communicated R4/R6 followed source selection and early stopping while other search/help routes remained usable.",
+      "task_index": 4,
+      "level": "medium",
+      "selected_attempt_path": "results/5944875c7f32/food-budget-novice__gpt-5.6-terra__20260928T220250Z",
+      "selected_attempt_timestamp": "20260928T220250Z",
+      "scored_attempt_count": 1,
+      "score_communicated": 0.667,
+      "steps": 20,
+      "stop_reason": "no_tool_call",
+      "unmet_communicated_rubrics": [
+        "R4",
+        "R6"
+      ],
+      "attempts_reviewed": 1,
+      "additional_rerun_requested": false,
+      "retry_state": "NOT_REQUIRED"
+    },
+    {
+      "task_id": "5944875c7f32a98df978040e4447534f7ba0aadb",
+      "task_label": "I’m putting together a small Zelda: Breath of the Wild–themed des…",
+      "persona": "food-busy-host",
+      "model": "gpt-5.6-terra",
+      "status": "KEEP",
+      "selected_result_path": "results/5944875c7f32/food-busy-host__gpt-5.6-terra__20260928T222734Z/result.json",
+      "selected_result_sha256": "6d7d2860bc4c2912652617ddeae2440dbe3ef3b2dbba96185a448683c41bb8de",
+      "score": 0.429,
+      "communicated_rubrics": [
+        "R1",
+        "R5",
+        "R6",
+        "R7"
+      ],
+      "impacted_rubrics": [],
+      "blocking_causes": [],
+      "evidence": "The help.easel.com DNS failure recovered through an accessible Inventables Easel page.",
+      "decision_basis": "Communicated R7 failed because the chocolate comparison recipe was not identified or left open, unrelated to Easel.",
+      "task_index": 4,
+      "level": "medium",
+      "selected_attempt_path": "results/5944875c7f32/food-busy-host__gpt-5.6-terra__20260928T222734Z",
+      "selected_attempt_timestamp": "20260928T222734Z",
+      "scored_attempt_count": 1,
+      "score_communicated": 0.75,
+      "steps": 19,
+      "stop_reason": "finish",
+      "unmet_communicated_rubrics": [
+        "R7"
+      ],
+      "attempts_reviewed": 1,
+      "additional_rerun_requested": false,
+      "retry_state": "NOT_REQUIRED"
+    },
+    {
+      "task_id": "5944875c7f32a98df978040e4447534f7ba0aadb",
+      "task_label": "I’m putting together a small Zelda: Breath of the Wild–themed des…",
+      "persona": "food-cautious-dietary-planner",
+      "model": "gpt-5.6-terra",
+      "status": "KEEP",
+      "selected_result_path": "results/5944875c7f32/food-cautious-dietary-planner__gpt-5.6-terra__20260928T225616Z/result.json",
+      "selected_result_sha256": "c61f5006eab68da00dc3c789ae9a860a36e863a182fb83c00e196b847711c30f",
+      "score": 0.571,
+      "communicated_rubrics": [
+        "R1",
+        "R2",
+        "R5",
+        "R6",
+        "R7"
+      ],
+      "impacted_rubrics": [],
+      "blocking_causes": [],
+      "evidence": "The D23 Dole Whip URL timed out then resolved as a 404; Google still exposed a usable Dole Whip result route.",
+      "decision_basis": "Communicated R2 failed after the agent stopped without opening another recipe page; this was a stale-source/navigation outcome.",
+      "task_index": 4,
+      "level": "medium",
+      "selected_attempt_path": "results/5944875c7f32/food-cautious-dietary-planner__gpt-5.6-terra__20260928T225616Z",
+      "selected_attempt_timestamp": "20260928T225616Z",
+      "scored_attempt_count": 1,
+      "score_communicated": 0.8,
+      "steps": 20,
+      "stop_reason": "no_tool_call",
+      "unmet_communicated_rubrics": [
+        "R2"
+      ],
+      "attempts_reviewed": 1,
+      "additional_rerun_requested": false,
+      "retry_state": "NOT_REQUIRED"
+    },
+    {
+      "task_id": "5944875c7f32a98df978040e4447534f7ba0aadb",
+      "task_label": "I’m putting together a small Zelda: Breath of the Wild–themed des…",
+      "persona": "food-culinary-researcher",
+      "model": "gpt-5.6-terra",
+      "status": "KEEP",
+      "selected_result_path": "results/5944875c7f32/food-culinary-researcher__gpt-5.6-terra__20260930T003947Z/result.json",
+      "selected_result_sha256": "6bd961ca2eff451f71f38f78aafe91b6c9f94486bfcb3484fa4d1c341018bb94",
+      "score": 0.857,
+      "communicated_rubrics": [
+        "R2",
+        "R3",
+        "R4",
+        "R5",
+        "R6",
+        "R7"
+      ],
+      "impacted_rubrics": [],
+      "blocking_causes": [],
+      "evidence": "Latest rerun: Google and an initial Game8 load were blocked, but DuckDuckGo/direct pages recovered the required sources. Instructables “Picture Frame With Bent Picture” remained open and supplied the X-Carve/Easel frame workflow, materials, dimensions, clamping, trimming, sanding, and finishing. All persona-communicated rubrics passed; only hidden/uncommunicated R1 remained unmet.",
+      "decision_basis": "The formerly material R4 source block was recovered in the newest scored attempt. Remaining noise is transient or affects only an uncommunicated hidden constraint.",
+      "task_index": 4,
+      "level": "medium",
+      "selected_attempt_path": "results/5944875c7f32/food-culinary-researcher__gpt-5.6-terra__20260930T003947Z",
+      "selected_attempt_timestamp": "20260930T003947Z",
+      "scored_attempt_count": 2,
+      "score_communicated": 1,
+      "steps": 32,
+      "stop_reason": "no_tool_call",
+      "unmet_communicated_rubrics": [],
+      "attempts_reviewed": 2,
+      "additional_rerun_requested": false,
+      "retry_state": "RESOLVED_BY_RETRY"
+    },
+    {
+      "task_id": "18ddad3e0781d4b8fb2e1998ff836a0b07d0cdce",
+      "task_label": "I’m in Boston for the next two days on a work trip with my wife,…",
+      "persona": "none",
+      "model": "gpt-5.6-terra",
+      "status": "EXCLUDE_RERUN",
+      "selected_result_path": "results/18ddad3e0781/none__gpt-5.6-terra__20260930T013337Z/result.json",
+      "selected_result_sha256": "244749edeec428132448e601482e36adebc787544da35276b1c77e863fb23229",
+      "score": 0.25,
+      "communicated_rubrics": [
+        "R1",
+        "R2",
+        "R3",
+        "R4"
+      ],
+      "impacted_rubrics": [
+        "R2"
+      ],
+      "blocking_causes": [
+        "Date-specific OpenTable search returned Access Denied",
+        "Mamma Maria and Grill 23 OpenTable listings returned Access Denied"
+      ],
+      "evidence": "Final-freeze attempt steps 0 and 4: the date-specific OpenTable search and both the Mamma Maria and Grill 23 OpenTable listings returned Access Denied; step 6 date-specific booking endpoints also returned provider errors. Official sites, Maps, and a default-date SevenRooms view recovered restaurant context but not the visibly open OpenTable listing required by R2.",
+      "decision_basis": "Communicated R2 explicitly requires an open OpenTable listing, so the unrecovered source-specific block independently invalidates the cell. R3/R4 also remained unmet, but are not attributed to environment here because their availability gaps are mixed with navigation. The third scored attempt remains unresolved.",
+      "task_index": 5,
+      "level": "medium",
+      "selected_attempt_path": "results/18ddad3e0781/none__gpt-5.6-terra__20260930T013337Z",
+      "selected_attempt_timestamp": "20260930T013337Z",
+      "scored_attempt_count": 3,
+      "score_communicated": 0.25,
+      "steps": 26,
+      "stop_reason": "finish",
+      "unmet_communicated_rubrics": [
+        "R2",
+        "R3",
+        "R4"
+      ],
+      "attempts_reviewed": 3,
+      "additional_rerun_requested": false,
+      "retry_state": "EXHAUSTED_UNRESOLVED"
+    },
+    {
+      "task_id": "18ddad3e0781d4b8fb2e1998ff836a0b07d0cdce",
+      "task_label": "I’m in Boston for the next two days on a work trip with my wife,…",
+      "persona": "food-budget-novice",
+      "model": "gpt-5.6-terra",
+      "status": "EXCLUDE_RERUN",
+      "selected_result_path": "results/18ddad3e0781/food-budget-novice__gpt-5.6-terra__20260930T013620Z/result.json",
+      "selected_result_sha256": "d5d3d9fa0da256b108a8db3d5f15a8764b2e1ec247ea355589b5708bc5b82281",
+      "score": 0,
+      "communicated_rubrics": [
+        "R3",
+        "R4"
+      ],
+      "impacted_rubrics": [
+        "R4"
+      ],
+      "blocking_causes": [
+        "Date-specific Mare OpenTable listing returned Access Denied"
+      ],
+      "evidence": "Final-freeze attempt steps 3–4: Mare's official reservation page explicitly routes booking through OpenTable, while the date-specific Mare OpenTable URL returned Access Denied; another official booking click still exposed no inventory. A Mamma Maria SevenRooms check concerned a backup, not selected Mare, and therefore did not recover R4.",
+      "decision_basis": "The provider block cleanly censors the availability component of communicated R4. R3/Ostra remains mixed with widget navigation, and uncommunicated R1/R2 are not environment grounds. The third scored attempt remains unresolved.",
+      "task_index": 5,
+      "level": "medium",
+      "selected_attempt_path": "results/18ddad3e0781/food-budget-novice__gpt-5.6-terra__20260930T013620Z",
+      "selected_attempt_timestamp": "20260930T013620Z",
+      "scored_attempt_count": 3,
+      "score_communicated": 0,
+      "steps": 29,
+      "stop_reason": "finish",
+      "unmet_communicated_rubrics": [
+        "R3",
+        "R4"
+      ],
+      "attempts_reviewed": 3,
+      "additional_rerun_requested": false,
+      "retry_state": "EXHAUSTED_UNRESOLVED"
+    },
+    {
+      "task_id": "18ddad3e0781d4b8fb2e1998ff836a0b07d0cdce",
+      "task_label": "I’m in Boston for the next two days on a work trip with my wife,…",
+      "persona": "food-busy-host",
+      "model": "gpt-5.6-terra",
+      "status": "KEEP",
+      "selected_result_path": "results/18ddad3e0781/food-busy-host__gpt-5.6-terra__20260928T222943Z/result.json",
+      "selected_result_sha256": "19bacaea45eb0b1848e458ab1b029c889ff065c3786d182b2cae09290493cbbb",
+      "score": 0.25,
+      "communicated_rubrics": [
+        "R1",
+        "R3",
+        "R4"
+      ],
+      "impacted_rubrics": [],
+      "blocking_causes": [],
+      "evidence": "Mistral's OpenTable page was denied, but Google Reserve exposed concrete September 28 slots for R3.",
+      "decision_basis": "R1 lacked an independent fine-dining source; R4 failed when the agent did not change the booking date or try the usable SevenRooms route.",
+      "task_index": 5,
+      "level": "medium",
+      "selected_attempt_path": "results/18ddad3e0781/food-busy-host__gpt-5.6-terra__20260928T222943Z",
+      "selected_attempt_timestamp": "20260928T222943Z",
+      "scored_attempt_count": 1,
+      "score_communicated": 0.333,
+      "steps": 26,
+      "stop_reason": "finish",
+      "unmet_communicated_rubrics": [
+        "R1",
+        "R4"
+      ],
+      "attempts_reviewed": 1,
+      "additional_rerun_requested": false,
+      "retry_state": "NOT_REQUIRED"
+    },
+    {
+      "task_id": "18ddad3e0781d4b8fb2e1998ff836a0b07d0cdce",
+      "task_label": "I’m in Boston for the next two days on a work trip with my wife,…",
+      "persona": "food-cautious-dietary-planner",
+      "model": "gpt-5.6-terra",
+      "status": "EXCLUDE_RERUN",
+      "selected_result_path": "results/18ddad3e0781/food-cautious-dietary-planner__gpt-5.6-terra__20260930T014204Z/result.json",
+      "selected_result_sha256": "abaa294e6b542451472c428fc5ed0b973bf73747d1c99314cbe58f352e146396",
+      "score": 0.25,
+      "communicated_rubrics": [
+        "R1",
+        "R3",
+        "R4"
+      ],
+      "impacted_rubrics": [
+        "R3",
+        "R4"
+      ],
+      "blocking_causes": [
+        "Grill 23 and Ostra OpenTable listings returned Access Denied",
+        "SevenRooms/Resy alternatives were unusable and official booking controls exposed no inventory"
+      ],
+      "evidence": "Final-freeze attempt step 2: the selected Grill 23 and Ostra OpenTable listings both returned Access Denied. Their official booking controls exposed no inventory; the attempted Grill 23 SevenRooms and Ostra Resy alternatives were not found. Official pages and Maps recovered fit and price context, but no selectable next-two-day inventory.",
+      "decision_basis": "The direct booking-provider blocks materially censor the availability requirements in communicated R3 and R4. Uncommunicated R2 is not used. The third scored attempt remains unresolved.",
+      "task_index": 5,
+      "level": "medium",
+      "selected_attempt_path": "results/18ddad3e0781/food-cautious-dietary-planner__gpt-5.6-terra__20260930T014204Z",
+      "selected_attempt_timestamp": "20260930T014204Z",
+      "scored_attempt_count": 3,
+      "score_communicated": 0.333,
+      "steps": 28,
+      "stop_reason": "finish",
+      "unmet_communicated_rubrics": [
+        "R3",
+        "R4"
+      ],
+      "attempts_reviewed": 3,
+      "additional_rerun_requested": false,
+      "retry_state": "EXHAUSTED_UNRESOLVED"
+    },
+    {
+      "task_id": "18ddad3e0781d4b8fb2e1998ff836a0b07d0cdce",
+      "task_label": "I’m in Boston for the next two days on a work trip with my wife,…",
+      "persona": "food-culinary-researcher",
+      "model": "gpt-5.6-terra",
+      "status": "KEEP",
+      "selected_result_path": "results/18ddad3e0781/food-culinary-researcher__gpt-5.6-terra__20260930T010127Z/result.json",
+      "selected_result_sha256": "c2046f001e5462c65f266852cb94791ad6b5054b5523349120fd74748099668e",
+      "score": 0.75,
+      "communicated_rubrics": [
+        "R1",
+        "R3",
+        "R4"
+      ],
+      "impacted_rubrics": [],
+      "blocking_causes": [],
+      "evidence": "Latest rerun recovered all communicated evidence through Ostra’s official menu/private-events/reservation pages and Mamma Maria’s official pages plus dated SevenRooms results. Communicated R1, R3, and R4 passed. OpenTable remained unavailable only for R2, which the persona did not communicate.",
+      "decision_basis": "The old R4 environment failure was recovered; no unmet persona-communicated rubric is materially blocked in the newest attempt.",
+      "task_index": 5,
+      "level": "medium",
+      "selected_attempt_path": "results/18ddad3e0781/food-culinary-researcher__gpt-5.6-terra__20260930T010127Z",
+      "selected_attempt_timestamp": "20260930T010127Z",
+      "scored_attempt_count": 2,
+      "score_communicated": 1,
+      "steps": 42,
+      "stop_reason": "finish",
+      "unmet_communicated_rubrics": [],
+      "attempts_reviewed": 2,
+      "additional_rerun_requested": false,
+      "retry_state": "RESOLVED_BY_RETRY"
+    },
+    {
+      "task_id": "e20742e26a4d6f9c3d62a9d1cef634297bd4204f",
+      "task_label": "I’m putting together a small Christmas get-together here in the U…",
+      "persona": "none",
+      "model": "gpt-5.6-terra",
+      "status": "EXCLUDE_RERUN",
+      "selected_result_path": "results/e20742e26a4d/none__gpt-5.6-terra__20260930T014627Z/result.json",
+      "selected_result_sha256": "d8f15cfda7a65340e32a242b8032da2c8bb8abebfc838834cd3c07061d0cd851",
+      "score": 0.571,
+      "communicated_rubrics": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "R5",
+        "R6",
+        "R7"
+      ],
+      "impacted_rubrics": [
+        "R3"
+      ],
+      "blocking_causes": [
+        "The Kitchn baked-ham and spiral-ham articles returned human-verification Access Denied"
+      ],
+      "evidence": "Final-freeze attempt steps 10 and 16: both The Kitchn baked-ham and spiral-ham articles displayed Access Denied / Please verify you are a human. Search-result snippets and alternate engines recovered only partial index text, not a visible Kitchn article; the final answer explicitly disclosed that limitation.",
+      "decision_basis": "Communicated R3 requires preparation, heating, and finishing guidance verified from a visible The Kitchn article. The persistent anti-automation wall independently censors that evidence. R1/R5 are separate source-selection outcomes. The third scored attempt remains unresolved.",
+      "task_index": 6,
+      "level": "medium",
+      "selected_attempt_path": "results/e20742e26a4d/none__gpt-5.6-terra__20260930T014627Z",
+      "selected_attempt_timestamp": "20260930T014627Z",
+      "scored_attempt_count": 3,
+      "score_communicated": 0.571,
+      "steps": 54,
+      "stop_reason": "finish",
+      "unmet_communicated_rubrics": [
+        "R1",
+        "R3",
+        "R5"
+      ],
+      "attempts_reviewed": 3,
+      "additional_rerun_requested": false,
+      "retry_state": "EXHAUSTED_UNRESOLVED"
+    },
+    {
+      "task_id": "e20742e26a4d6f9c3d62a9d1cef634297bd4204f",
+      "task_label": "I’m putting together a small Christmas get-together here in the U…",
+      "persona": "food-budget-novice",
+      "model": "gpt-5.6-terra",
+      "status": "KEEP",
+      "selected_result_path": "results/e20742e26a4d/food-budget-novice__gpt-5.6-terra__20260928T221359Z/result.json",
+      "selected_result_sha256": "199478555433ac2453bacc63d5c13b78087195ab0080fadd9590760f3f402c71",
+      "score": 0,
+      "communicated_rubrics": [
+        "R7"
+      ],
+      "impacted_rubrics": [],
+      "blocking_causes": [],
+      "evidence": "No scanned page-level environment blocker in the selected trajectory; unmet rubrics: R1, R2, R3, R4, R5, R6, R7.",
+      "decision_basis": "The recorded misses remain communication, navigation, source choice, or agent-execution outcomes.",
+      "task_index": 6,
+      "level": "medium",
+      "selected_attempt_path": "results/e20742e26a4d/food-budget-novice__gpt-5.6-terra__20260928T221359Z",
+      "selected_attempt_timestamp": "20260928T221359Z",
+      "scored_attempt_count": 1,
+      "score_communicated": 0,
+      "steps": 13,
+      "stop_reason": "finish",
+      "unmet_communicated_rubrics": [
+        "R7"
+      ],
+      "attempts_reviewed": 1,
+      "additional_rerun_requested": false,
+      "retry_state": "NOT_REQUIRED"
+    },
+    {
+      "task_id": "e20742e26a4d6f9c3d62a9d1cef634297bd4204f",
+      "task_label": "I’m putting together a small Christmas get-together here in the U…",
+      "persona": "food-busy-host",
+      "model": "gpt-5.6-terra",
+      "status": "KEEP",
+      "selected_result_path": "results/e20742e26a4d/food-busy-host__gpt-5.6-terra__20260928T223341Z/result.json",
+      "selected_result_sha256": "46878c632494d1b5a5198e4b98102ac038e2d88e19ff501032e08c9ce88e9948",
+      "score": 0.429,
+      "communicated_rubrics": [
+        "R2",
+        "R5",
+        "R7"
+      ],
+      "impacted_rubrics": [],
+      "blocking_causes": [],
+      "evidence": "No scanned page-level environment blocker in the selected trajectory; unmet rubrics: R1, R3, R4, R6.",
+      "decision_basis": "The recorded misses remain communication, navigation, source choice, or agent-execution outcomes.",
+      "task_index": 6,
+      "level": "medium",
+      "selected_attempt_path": "results/e20742e26a4d/food-busy-host__gpt-5.6-terra__20260928T223341Z",
+      "selected_attempt_timestamp": "20260928T223341Z",
+      "scored_attempt_count": 1,
+      "score_communicated": 1,
+      "steps": 21,
+      "stop_reason": "finish",
+      "unmet_communicated_rubrics": [],
+      "attempts_reviewed": 1,
+      "additional_rerun_requested": false,
+      "retry_state": "NOT_REQUIRED"
+    },
+    {
+      "task_id": "e20742e26a4d6f9c3d62a9d1cef634297bd4204f",
+      "task_label": "I’m putting together a small Christmas get-together here in the U…",
+      "persona": "food-cautious-dietary-planner",
+      "model": "gpt-5.6-terra",
+      "status": "KEEP",
+      "selected_result_path": "results/e20742e26a4d/food-cautious-dietary-planner__gpt-5.6-terra__20260930T001048Z/result.json",
+      "selected_result_sha256": "a25ae9aa7d2eff5fa825d183012ea6c612b0406e94d690cfe3d9666cd8ac38c9",
+      "score": 0.286,
+      "communicated_rubrics": [
+        "R1",
+        "R2",
+        "R4",
+        "R5",
+        "R7"
+      ],
+      "impacted_rubrics": [],
+      "blocking_causes": [],
+      "evidence": "No scanned page-level environment blocker in the selected trajectory; unmet rubrics: R1, R3, R4, R5, R6.",
+      "decision_basis": "The recorded misses remain communication, navigation, source choice, or agent-execution outcomes.",
+      "task_index": 6,
+      "level": "medium",
+      "selected_attempt_path": "results/e20742e26a4d/food-cautious-dietary-planner__gpt-5.6-terra__20260930T001048Z",
+      "selected_attempt_timestamp": "20260930T001048Z",
+      "scored_attempt_count": 1,
+      "score_communicated": 0.4,
+      "steps": 35,
+      "stop_reason": "no_tool_call",
+      "unmet_communicated_rubrics": [
+        "R1",
+        "R4",
+        "R5"
+      ],
+      "attempts_reviewed": 1,
+      "additional_rerun_requested": false,
+      "retry_state": "NOT_REQUIRED"
+    },
+    {
+      "task_id": "e20742e26a4d6f9c3d62a9d1cef634297bd4204f",
+      "task_label": "I’m putting together a small Christmas get-together here in the U…",
+      "persona": "food-culinary-researcher",
+      "model": "gpt-5.6-terra",
+      "status": "EXCLUDE_RERUN",
+      "selected_result_path": "results/e20742e26a4d/food-culinary-researcher__gpt-5.6-terra__20260930T015630Z/result.json",
+      "selected_result_sha256": "78907d7eeea072480db6b482e9d1facb1e76ed0203785793f5c3a5104422845d",
+      "score": 0.429,
+      "communicated_rubrics": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "R5",
+        "R6",
+        "R7"
+      ],
+      "impacted_rubrics": [
+        "R3"
+      ],
+      "blocking_causes": [
+        "The Kitchn spiral-ham article returned human-verification Access Denied"
+      ],
+      "evidence": "Final-freeze attempt step 7: following the search result to The Kitchn's spiral-ham comparison article immediately produced human verification / automation denial. The answer therefore relied on search-result summary text rather than a visible article; no open tab recovered the article body.",
+      "decision_basis": "Communicated R3 requires visible Kitchn article guidance, and the third scored attempt still could not access it. R4/R5/R6 remain separate product-page and navigation outcomes. The third scored attempt remains unresolved.",
+      "task_index": 6,
+      "level": "medium",
+      "selected_attempt_path": "results/e20742e26a4d/food-culinary-researcher__gpt-5.6-terra__20260930T015630Z",
+      "selected_attempt_timestamp": "20260930T015630Z",
+      "scored_attempt_count": 3,
+      "score_communicated": 0.429,
+      "steps": 57,
+      "stop_reason": "finish",
+      "unmet_communicated_rubrics": [
+        "R3",
+        "R4",
+        "R5",
+        "R6"
+      ],
+      "attempts_reviewed": 3,
+      "additional_rerun_requested": false,
+      "retry_state": "EXHAUSTED_UNRESOLVED"
+    }
+  ],
+  "retained_subset_descriptive_only": {
+    "cells": 25,
+    "warning": "The KEEP-only overlay contains 25 environment-valid selected cells and is task/persona imbalanced because five retry-exhausted cells remain excluded. Keep the all-numeric 30-cell result separate."
+  },
+  "structural_limit": {
+    "setting": "ODYSSEY_MAX_TABS=0",
+    "affected_cells": 0,
+    "interpretation": "The formal Food r1 run had no artificial browser-tab cap; the separate cap-8 pilot is excluded."
+  },
+  "manifest_recommendation": {
+    "manifest_path": "/Users/defu.cao/Documents/PersonaCUABench/artifacts/experiments/2026-09-28/food-main-nocap-setting1-r1/RUN_MANIFEST.json",
+    "needs_correction": true,
+    "recommended_completed_numeric_results": 30,
+    "recommended_environment_valid_cells": 25,
+    "recommended_environment_excluded_rerun_cells": 5,
+    "recommended_persistent_unresolved_after_retry_exhaustion": 5,
+    "recommended_historical_attempt_errors": 5,
+    "recommended_status": "numeric_grid_complete; final_environment_freeze_closed_with_persistent_exclusions",
+    "note": "This audit does not modify RUN_MANIFEST.json, raw results, profiles, run.py, or secrets. The five EXCLUDE_RERUN cells are frozen unresolved and no additional reruns are requested."
+  },
+  "refresh_policy": "Final freeze: do not initiate another rerun from this audit. Post-freeze annotations that change result.json bytes require a provenance-only SHA-256 refresh; any future numeric attempt that changes latest selection requires a fresh full environment audit.",
+  "latest_selection_validation": {
+    "all_30_selected_cells_present": true,
+    "selected_paths_match_food_main_setting1_analysis": true,
+    "selected_result_hashes_recorded": true,
+    "discovered_attempt_directories": 47,
+    "discovered_numeric_scored_attempts": 42,
+    "selected_numeric_scored_cells": 30,
+    "older_duplicate_scored_attempts": 12,
+    "historical_error_files": 5,
+    "persistent_unresolved_after_retry_exhaustion": 5,
+    "another_rerun_required": false,
+    "selected_result_hashes_match_files": true,
+    "hashes_refreshed_after_experience_judge_write": 30,
+    "environment_decisions_changed_during_hash_refresh": 0
+  },
+  "final_freeze": {
+    "status": "CLOSED_AFTER_RETRY_EXHAUSTION",
+    "selected_cells_frozen": 30,
+    "persistent_unresolved_cells": 5,
+    "additional_reruns_requested": 0,
+    "interpretation": "EXCLUDE_RERUN remains the downstream-compatible status name, but these five cells are retry-exhausted persistent exclusions rather than new rerun requests."
+  },
+  "persistent_unresolved_after_retry_exhaustion": [
+    {
+      "task_index": 5,
+      "task_id": "18ddad3e0781d4b8fb2e1998ff836a0b07d0cdce",
+      "persona": "none",
+      "model": "gpt-5.6-terra",
+      "selected_result_path": "results/18ddad3e0781/none__gpt-5.6-terra__20260930T013337Z/result.json",
+      "selected_result_sha256": "244749edeec428132448e601482e36adebc787544da35276b1c77e863fb23229",
+      "scored_attempts_reviewed": 3,
+      "retry_state": "EXHAUSTED_UNRESOLVED",
+      "impacted_rubrics": [
+        "R2"
+      ],
+      "blocking_causes": [
+        "Date-specific OpenTable search returned Access Denied",
+        "Mamma Maria and Grill 23 OpenTable listings returned Access Denied"
+      ],
+      "evidence": "Final-freeze attempt steps 0 and 4: the date-specific OpenTable search and both the Mamma Maria and Grill 23 OpenTable listings returned Access Denied; step 6 date-specific booking endpoints also returned provider errors. Official sites, Maps, and a default-date SevenRooms view recovered restaurant context but not the visibly open OpenTable listing required by R2.",
+      "decision_basis": "Communicated R2 explicitly requires an open OpenTable listing, so the unrecovered source-specific block independently invalidates the cell. R3/R4 also remained unmet, but are not attributed to environment here because their availability gaps are mixed with navigation. The third scored attempt remains unresolved.",
+      "additional_rerun_requested": false
+    },
+    {
+      "task_index": 5,
+      "task_id": "18ddad3e0781d4b8fb2e1998ff836a0b07d0cdce",
+      "persona": "food-budget-novice",
+      "model": "gpt-5.6-terra",
+      "selected_result_path": "results/18ddad3e0781/food-budget-novice__gpt-5.6-terra__20260930T013620Z/result.json",
+      "selected_result_sha256": "d5d3d9fa0da256b108a8db3d5f15a8764b2e1ec247ea355589b5708bc5b82281",
+      "scored_attempts_reviewed": 3,
+      "retry_state": "EXHAUSTED_UNRESOLVED",
+      "impacted_rubrics": [
+        "R4"
+      ],
+      "blocking_causes": [
+        "Date-specific Mare OpenTable listing returned Access Denied"
+      ],
+      "evidence": "Final-freeze attempt steps 3–4: Mare's official reservation page explicitly routes booking through OpenTable, while the date-specific Mare OpenTable URL returned Access Denied; another official booking click still exposed no inventory. A Mamma Maria SevenRooms check concerned a backup, not selected Mare, and therefore did not recover R4.",
+      "decision_basis": "The provider block cleanly censors the availability component of communicated R4. R3/Ostra remains mixed with widget navigation, and uncommunicated R1/R2 are not environment grounds. The third scored attempt remains unresolved.",
+      "additional_rerun_requested": false
+    },
+    {
+      "task_index": 5,
+      "task_id": "18ddad3e0781d4b8fb2e1998ff836a0b07d0cdce",
+      "persona": "food-cautious-dietary-planner",
+      "model": "gpt-5.6-terra",
+      "selected_result_path": "results/18ddad3e0781/food-cautious-dietary-planner__gpt-5.6-terra__20260930T014204Z/result.json",
+      "selected_result_sha256": "abaa294e6b542451472c428fc5ed0b973bf73747d1c99314cbe58f352e146396",
+      "scored_attempts_reviewed": 3,
+      "retry_state": "EXHAUSTED_UNRESOLVED",
+      "impacted_rubrics": [
+        "R3",
+        "R4"
+      ],
+      "blocking_causes": [
+        "Grill 23 and Ostra OpenTable listings returned Access Denied",
+        "SevenRooms/Resy alternatives were unusable and official booking controls exposed no inventory"
+      ],
+      "evidence": "Final-freeze attempt step 2: the selected Grill 23 and Ostra OpenTable listings both returned Access Denied. Their official booking controls exposed no inventory; the attempted Grill 23 SevenRooms and Ostra Resy alternatives were not found. Official pages and Maps recovered fit and price context, but no selectable next-two-day inventory.",
+      "decision_basis": "The direct booking-provider blocks materially censor the availability requirements in communicated R3 and R4. Uncommunicated R2 is not used. The third scored attempt remains unresolved.",
+      "additional_rerun_requested": false
+    },
+    {
+      "task_index": 6,
+      "task_id": "e20742e26a4d6f9c3d62a9d1cef634297bd4204f",
+      "persona": "none",
+      "model": "gpt-5.6-terra",
+      "selected_result_path": "results/e20742e26a4d/none__gpt-5.6-terra__20260930T014627Z/result.json",
+      "selected_result_sha256": "d8f15cfda7a65340e32a242b8032da2c8bb8abebfc838834cd3c07061d0cd851",
+      "scored_attempts_reviewed": 3,
+      "retry_state": "EXHAUSTED_UNRESOLVED",
+      "impacted_rubrics": [
+        "R3"
+      ],
+      "blocking_causes": [
+        "The Kitchn baked-ham and spiral-ham articles returned human-verification Access Denied"
+      ],
+      "evidence": "Final-freeze attempt steps 10 and 16: both The Kitchn baked-ham and spiral-ham articles displayed Access Denied / Please verify you are a human. Search-result snippets and alternate engines recovered only partial index text, not a visible Kitchn article; the final answer explicitly disclosed that limitation.",
+      "decision_basis": "Communicated R3 requires preparation, heating, and finishing guidance verified from a visible The Kitchn article. The persistent anti-automation wall independently censors that evidence. R1/R5 are separate source-selection outcomes. The third scored attempt remains unresolved.",
+      "additional_rerun_requested": false
+    },
+    {
+      "task_index": 6,
+      "task_id": "e20742e26a4d6f9c3d62a9d1cef634297bd4204f",
+      "persona": "food-culinary-researcher",
+      "model": "gpt-5.6-terra",
+      "selected_result_path": "results/e20742e26a4d/food-culinary-researcher__gpt-5.6-terra__20260930T015630Z/result.json",
+      "selected_result_sha256": "78907d7eeea072480db6b482e9d1facb1e76ed0203785793f5c3a5104422845d",
+      "scored_attempts_reviewed": 3,
+      "retry_state": "EXHAUSTED_UNRESOLVED",
+      "impacted_rubrics": [
+        "R3"
+      ],
+      "blocking_causes": [
+        "The Kitchn spiral-ham article returned human-verification Access Denied"
+      ],
+      "evidence": "Final-freeze attempt step 7: following the search result to The Kitchn's spiral-ham comparison article immediately produced human verification / automation denial. The answer therefore relied on search-result summary text rather than a visible article; no open tab recovered the article body.",
+      "decision_basis": "Communicated R3 requires visible Kitchn article guidance, and the third scored attempt still could not access it. R4/R5/R6 remain separate product-page and navigation outcomes. The third scored attempt remains unresolved.",
+      "additional_rerun_requested": false
+    }
+  ],
+  "hashes_refreshed_at": "2026-09-30T02:22:31.389Z",
+  "provenance_refresh": {
+    "reason": "Experience Judge A/B outputs were written into all 30 frozen selected result.json files after the environment decision audit, changing file bytes but not task/persona/model selection or environment-validity decisions.",
+    "prior_audit_version": 3,
+    "selected_paths_changed": 0,
+    "selected_result_hashes_changed_and_refreshed": 30,
+    "environment_decisions_changed": 0,
+    "status_counts_changed": 0,
+    "interpretation": "Version 4 refreshes content provenance only. Version 3 KEEP/EXCLUDE_RERUN decisions, causal evidence, paths, scores, and retry states remain frozen."
+  }
+}

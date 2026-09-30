@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Food Persona 实验结果 — Preliminary / incomplete · 正式实验仍在运行或审计中</title>
+  <style>
+    :root { color-scheme:light dark; --bg:#f7f8f6; --card:#fff; --text:#202821; --muted:#59675e; --line:#d9e0d8; --accent:#2c6b47; --soft:#e9f2eb; --warn:#875815; --warn-soft:#fff5e4; }
+    @media (prefers-color-scheme:dark) { :root { --bg:#171c18; --card:#222a23; --text:#f1f5ef; --muted:#b3c1b4; --line:#3b4a3e; --accent:#96d3a9; --soft:#2a4030; --warn:#efc27a; --warn-soft:#453824; } }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:var(--text); font:15px/1.55 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    main { width:min(1260px,calc(100% - 32px)); margin:auto; padding:42px 0 64px; }
+    h1 { margin:2px 0 8px; font-size:clamp(1.8rem,4vw,2.55rem); line-height:1.15; }
+    h2 { margin:40px 0 13px; font-size:1.28rem; } h3 { margin:25px 0 10px; font-size:1.02rem; }
+    p { margin:0; } .spaced { margin-top:10px; }
+    .eyebrow { color:var(--accent); font-size:.8rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; }
+    .subtitle,.meta,.caption,footer { color:var(--muted); } .meta { margin-top:10px; font-size:.85rem; }
+    .status { display:inline-block; margin-top:17px; padding:6px 11px; border:1px solid var(--warn); border-radius:999px; background:var(--warn-soft); color:var(--warn); font-weight:700; font-size:.86rem; }
+    .stats { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin-top:26px; }
+    .stat { padding:16px 18px; border:1px solid var(--line); border-radius:10px; background:var(--card); }
+    .stat strong { display:block; color:var(--accent); font-size:1.5rem; line-height:1.2; }
+    .stat span { display:block; margin-top:6px; color:var(--muted); font-size:.8rem; }
+    .table-wrap { overflow-x:auto; border:1px solid var(--line); border-radius:10px; background:var(--card); }
+    table { width:100%; border-collapse:collapse; font-size:.89rem; }
+    th,td { padding:11px 12px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top; }
+    th { background:var(--soft); font-size:.77rem; font-weight:700; white-space:nowrap; }
+    td:not(:first-child) { white-space:nowrap; } tbody tr:last-child td { border-bottom:0; } tbody tr:hover { background:var(--soft); }
+    .caption { margin-top:8px; font-size:.82rem; }
+    .callout { margin-top:23px; padding:15px 17px; border:1px solid var(--line); border-left:4px solid var(--warn); border-radius:8px; background:var(--warn-soft); }
+    .callout strong { display:block; margin-bottom:4px; }
+    ul { margin:8px 0 0; padding-left:22px; } li + li { margin-top:7px; }
+    code { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.9em; }
+    footer { margin-top:42px; padding-top:18px; border-top:1px solid var(--line); font-size:.8rem; }
+    @media (max-width:800px) { .stats { grid-template-columns:repeat(2,minmax(0,1fr)); } main { width:calc(100% - 24px); padding-top:28px; } }
+  </style>
+</head>
+<body><main>
+    <header>
+      <div class="eyebrow">Food &amp; Drink / Setting 1</div>
+      <h1>Food Persona 正式实验结果</h1>
+      <p class="subtitle">main-style / no-cap · live Chrome · 6 道题 × 4 个 Persona + Control × 3 次正式重复</p>
+      <p class="status" role="status">Preliminary / incomplete · 正式实验仍在运行或审计中</p>
+      <p class="meta">日期块：2026-09-28、2026-09-29（America/Los_Angeles）；页面生成：2026-09-30 06:09 UTC；analysis schema 1.3。</p>
+    </header>
+
+    <section class="stats" aria-label="结果概览"><div class="stat"><strong>60 / 90</strong><span>Raw 数值结果 / 正式计划格</span></div><div class="stat"><strong>25 / 5 / 30</strong><span>KEEP / EXCLUDE_RERUN / 未分类</span></div><div class="stat"><strong>16</strong><span>主分析中的 KEEP 匹配 persona–control 对</span></div><div class="stat"><strong>58.8%</strong><span>Raw cell-macro 完成率（含环境排除格）</span></div></section>
+
+    <aside class="callout warning">
+      <strong>当前解读边界</strong>
+      已审计 30/60 个 raw 数值格：KEEP 25，EXCLUDE_RERUN 5，未分类 30。 已完成双体验 Judge 的 raw 格为 30/60。
+      当前页面是自动更新的初步快照，不应作为最终 Persona 排名。
+      EXCLUDE_RERUN 表示网页环境没有产生可用于主分析的有效结果，并不等于模型执行失败或 0 分。
+    </aside>
+
+    <section>
+      <h2>结果</h2>
+      <p>Raw rubric micro 为 171/300 = 57.0%。 KEEP-only rubric micro 为 78/124 = 62.9%。 主结论只看下面同一 replicate、同一 task、同一执行模型中 persona 与 Control 双方都被审计为 KEEP 的匹配对。</p>
+
+      <h3>主表：environment-KEEP 匹配的 Persona − Control</h3>
+      <div class="table-wrap"><table style="min-width:1180px"><thead><tr><th scope="col">Persona</th><th scope="col">匹配对 n</th><th scope="col">覆盖任务</th><th scope="col">完成率 Δ</th><th scope="col">胜 / 平 / 负</th><th scope="col">沟通覆盖率 Δ</th><th scope="col">仅已沟通完成率 Δ</th><th scope="col">缺失任务</th></tr></thead><tbody><tr><td>P1 · 预算敏感的烹饪新手</td><td>4</td><td>4 / 6</td><td>−3.6 pp</td><td>1 / 1 / 2</td><td>−22.3 pp</td><td>+11.3 pp</td><td>T5、T6</td></tr>
+<tr><td>P2 · 谨慎的饮食规划者</td><td>4</td><td>4 / 6</td><td>−9.8 pp</td><td>0 / 2 / 2</td><td>−19.6 pp</td><td>+0.1 pp</td><td>T5、T6</td></tr>
+<tr><td>P3 · 时间紧张的家庭餐饮规划者</td><td>4</td><td>4 / 6</td><td>−7.1 pp</td><td>1 / 1 / 2</td><td>−23.2 pp</td><td>+5.1 pp</td><td>T5、T6</td></tr>
+<tr><td>P4 · 专业餐饮研究者</td><td>4</td><td>4 / 6</td><td>−8.9 pp</td><td>2 / 1 / 1</td><td>−9.8 pp</td><td>−3.3 pp</td><td>T5、T6</td></tr></tbody></table></div>
+      <p class="caption">Δ = Persona − Control；每一对要求双方在同一重复、同一任务和同一执行模型上均为 KEEP。n 与覆盖任务数必须和效应值一起阅读；缺失任务不会被隐式补零。</p>
+
+      <h3>次级表：balanced raw 匹配对</h3>
+      <div class="table-wrap"><table style="min-width:1180px"><thead><tr><th scope="col">Persona</th><th scope="col">匹配对 n</th><th scope="col">覆盖任务</th><th scope="col">完成率 Δ</th><th scope="col">胜 / 平 / 负</th><th scope="col">沟通覆盖率 Δ</th><th scope="col">仅已沟通完成率 Δ</th><th scope="col">缺失任务</th></tr></thead><tbody><tr><td>P1 · 预算敏感的烹饪新手</td><td>12</td><td>6 / 6</td><td>−27.7 pp</td><td>1 / 2 / 9</td><td>−36.9 pp</td><td>−10.9 pp</td><td>无</td></tr>
+<tr><td>P2 · 谨慎的饮食规划者</td><td>12</td><td>6 / 6</td><td>−16.7 pp</td><td>0 / 4 / 8</td><td>−19.6 pp</td><td>−5.0 pp</td><td>无</td></tr>
+<tr><td>P3 · 时间紧张的家庭餐饮规划者</td><td>12</td><td>6 / 6</td><td>−18.7 pp</td><td>1 / 3 / 8</td><td>−33.9 pp</td><td>+0.3 pp</td><td>无</td></tr>
+<tr><td>P4 · 专业餐饮研究者</td><td>12</td><td>6 / 6</td><td>−6.2 pp</td><td>5 / 2 / 5</td><td>−11.6 pp</td><td>−2.3 pp</td><td>无</td></tr></tbody></table></div>
+      <p class="caption">Balanced raw 仍按同格 persona–Control 配对，因此不会把尚未出现对应 persona 的孤立 Control 格混入差值；但它保留 EXCLUDE_RERUN 的数值结果，仅用于诊断和敏感性比较，不是环境有效的主结论。</p>
+    </section>
+
+    <section>
+      <h2>重复运行、raw 与环境审计进度</h2>
+      <div class="table-wrap"><table style="min-width:1120px"><thead><tr><th scope="col">重复</th><th scope="col">日期块</th><th scope="col">manifest 状态</th><th scope="col">发现尝试</th><th scope="col">Raw 数值 / 计划</th><th scope="col">执行完整性未选尝试</th><th scope="col">审计 / KEEP / EXCLUDE / 未分类</th><th scope="col">体验 A+B / Raw</th></tr></thead><tbody><tr><td>r1</td><td>2026-09-28</td><td>finalized_with_unresolved_environment_cells</td><td>47</td><td>30 / 30</td><td>17</td><td>30 / 25 / 5 / 0</td><td>30 / 30</td></tr>
+<tr><td>r2</td><td>2026-09-29</td><td>environment_retry_in_progress</td><td>32</td><td>30 / 30</td><td>2</td><td>0 / 0 / 0 / 30</td><td>0 / 30</td></tr>
+<tr><td>r3</td><td>2026-09-29</td><td>planned</td><td>0</td><td>0 / 30</td><td>0</td><td>0 / 0 / 0 / 0</td><td>0 / 0</td></tr></tbody></table></div>
+      <p class="caption">Raw 数值格是每个 replicate/task/persona/model 的最新可评分结果；旧重复尝试、error-only 和无数值结果不会被当成 0 分。任务与运行配置快照一致。 cap-8 pilot 独立保存，不进入本页。</p>
+    </section>
+
+    <section>
+      <h2>KEEP-only 敏感性分析（按实验组）</h2>
+      <div class="table-wrap"><table style="min-width:1050px"><thead><tr><th scope="col">实验组</th><th scope="col">KEEP n</th><th scope="col">Cell-macro 完成率</th><th scope="col">Rubric micro</th><th scope="col">沟通覆盖率</th><th scope="col">仅已沟通要求完成率</th></tr></thead><tbody><tr><td>Control · 原始任务</td><td>4</td><td>80.3%</td><td>15 / 19 = 78.9%</td><td>19 / 19 = 100.0%</td><td>15 / 19 = 78.9%</td></tr>
+<tr><td>P1 · 预算敏感的烹饪新手</td><td>5</td><td>61.4%</td><td>14 / 26 = 53.8%</td><td>16 / 26 = 61.5%</td><td>13 / 16 = 81.2%</td></tr>
+<tr><td>P2 · 谨慎的饮食规划者</td><td>5</td><td>62.1%</td><td>15 / 26 = 57.7%</td><td>20 / 26 = 76.9%</td><td>14 / 20 = 70.0%</td></tr>
+<tr><td>P3 · 时间紧张的家庭餐饮规划者</td><td>6</td><td>60.1%</td><td>17 / 30 = 56.7%</td><td>20 / 30 = 66.7%</td><td>16 / 20 = 80.0%</td></tr>
+<tr><td>P4 · 专业餐饮研究者</td><td>5</td><td>72.1%</td><td>17 / 23 = 73.9%</td><td>20 / 23 = 87.0%</td><td>17 / 20 = 85.0%</td></tr></tbody></table></div>
+      <p class="caption">这是被环境审计保留下来的描述性子集。各组 KEEP n 和任务构成可能不同，均值会受到 composition skew 影响，不能据此做简单横向排名。</p>
+
+      <h3>Arm × Task KEEP 数量</h3>
+      <div class="table-wrap"><table style="min-width:850px"><thead><tr><th scope="col">实验组</th><th scope="col">T1</th><th scope="col">T2</th><th scope="col">T3</th><th scope="col">T4</th><th scope="col">T5</th><th scope="col">T6</th><th scope="col">合计</th></tr></thead><tbody><tr><td>Control · 原始任务</td><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td><td>4</td></tr>
+<tr><td>P1 · 预算敏感的烹饪新手</td><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td><td>5</td></tr>
+<tr><td>P2 · 谨慎的饮食规划者</td><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td><td>5</td></tr>
+<tr><td>P3 · 时间紧张的家庭餐饮规划者</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>6</td></tr>
+<tr><td>P4 · 专业餐饮研究者</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td><td>5</td></tr></tbody></table></div>
+      <p class="caption">0 表示该 arm–task 在当前审计中没有 KEEP 格；此矩阵直接展示 KEEP-only 均值的样本构成是否平衡。</p>
+    </section>
+
+    <section>
+      <h2>逐题 Raw / KEEP 汇总</h2>
+      <div class="table-wrap"><table style="min-width:1080px"><thead><tr><th scope="col">任务</th><th scope="col">Raw n</th><th scope="col">Raw cell-macro</th><th scope="col">Raw rubric micro</th><th scope="col">KEEP n</th><th scope="col">KEEP cell-macro</th><th scope="col">KEEP rubric micro</th></tr></thead><tbody><tr><td>T1 · 抱子甘蓝、Le Creuset 与洗碗机气隙</td><td>10</td><td>90.0%</td><td>90.0%</td><td>5</td><td>90.0%</td><td>90.0%</td></tr>
+<tr><td>T2 · 扁豆、火鸡辣椒和提前准备的甜点</td><td>10</td><td>62.5%</td><td>62.5%</td><td>5</td><td>75.0%</td><td>75.0%</td></tr>
+<tr><td>T3 · 明尼阿波利斯酒吧餐饮与 mulligatawny</td><td>10</td><td>62.5%</td><td>62.5%</td><td>5</td><td>70.0%</td><td>70.0%</td></tr>
+<tr><td>T4 · BOTW 甜点与展示设备</td><td>10</td><td>65.7%</td><td>65.7%</td><td>5</td><td>62.8%</td><td>62.9%</td></tr>
+<tr><td>T5 · 波士顿商务和纪念日晚餐</td><td>10</td><td>37.5%</td><td>37.5%</td><td>2</td><td>50.0%</td><td>50.0%</td></tr>
+<tr><td>T6 · 英国圣诞菜单与礼品</td><td>10</td><td>34.3%</td><td>34.3%</td><td>3</td><td>23.8%</td><td>23.8%</td></tr></tbody></table></div>
+      <p class="caption">Raw 包含被环境审计排除的数值格；KEEP 只包含审计为 KEEP 的格。未分类的正在运行格只出现在 Raw，不进入 KEEP。</p>
+    </section>
+
+    <section>
+      <h2>Persona 体验评分：Raw 与 KEEP</h2>
+      <div class="table-wrap"><table style="min-width:1320px"><thead><tr><th scope="col">维度（1–5）</th><th scope="col">Raw Judge A 均值/中位数</th><th scope="col">Raw Judge B 均值/中位数</th><th scope="col">Raw |A−B|≤1</th><th scope="col">KEEP Judge A 均值/中位数</th><th scope="col">KEEP Judge B 均值/中位数</th><th scope="col">KEEP |A−B|≤1</th></tr></thead><tbody><tr><td>要求符合度</td><td>3.90 / 4 (n=30, 无数值=30)</td><td>3.90 / 4 (n=30, 无数值=30)</td><td>30 / 30</td><td>4.00 / 4 (n=25, 无数值=0)</td><td>4.04 / 4 (n=25, 无数值=0)</td><td>25 / 25</td></tr>
+<tr><td>Persona 可读性</td><td>4.43 / 5 (n=30, 无数值=30)</td><td>4.37 / 4.5 (n=30, 无数值=30)</td><td>29 / 30</td><td>4.40 / 5 (n=25, 无数值=0)</td><td>4.36 / 4 (n=25, 无数值=0)</td><td>25 / 25</td></tr>
+<tr><td>可执行性</td><td>3.53 / 3 (n=30, 无数值=30)</td><td>3.70 / 3.5 (n=30, 无数值=30)</td><td>30 / 30</td><td>3.64 / 4 (n=25, 无数值=0)</td><td>3.84 / 4 (n=25, 无数值=0)</td><td>25 / 25</td></tr>
+<tr><td>缺口处理与主动性</td><td>3.69 / 4 (n=29, 无数值=31)</td><td>3.59 / 4 (n=29, 无数值=31)</td><td>28 / 28</td><td>3.88 / 4 (n=24, 无数值=1)</td><td>3.79 / 4 (n=24, 无数值=1)</td><td>23 / 23</td></tr>
+<tr><td>整体体验</td><td>3.73 / 4 (n=30, 无数值=30)</td><td>3.63 / 4 (n=30, 无数值=30)</td><td>30 / 30</td><td>3.80 / 4 (n=25, 无数值=0)</td><td>3.76 / 4 (n=25, 无数值=0)</td><td>25 / 25</td></tr></tbody></table></div>
+      <p class="caption">Judge A 与 Judge B 是两次独立调用，始终分别展示，绝不平均。“无数值”在未完成页面中既可能是尚未评分，也可能是 Judge 返回 N/A，二者都不是 0 分；Raw 体验包含 EXCLUDE_RERUN，KEEP 体验是环境有效子集。</p>
+
+      <h3>满分任务切片</h3>
+      <div class="table-wrap"><table style="min-width:1450px"><thead><tr><th scope="col">人口</th><th scope="col">切片</th><th scope="col">格数 / 分母</th><th scope="col">各组格数</th><th scope="col">要求符合度 A/B</th><th scope="col">Persona 可读性 A/B</th><th scope="col">可执行性 A/B</th><th scope="col">缺口处理与主动性 A/B</th><th scope="col">整体体验 A/B</th></tr></thead><tbody><tr><td>Raw</td><td>原任务满分</td><td>9 / 60</td><td>Control 2 · P1 2 · P2 0 · P3 1 · P4 4</td><td>4.00 / 4.00</td><td>4.50 / 4.75</td><td>3.50 / 4.00</td><td>4.25 / 4.25</td><td>4.00 / 3.75</td></tr>
+<tr><td>Raw</td><td>已沟通要求满分</td><td>21 / 60</td><td>Control 2 · P1 5 · P2 2 · P3 6 · P4 6</td><td>4.18 / 4.27</td><td>4.36 / 4.36</td><td>3.82 / 4.00</td><td>3.91 / 3.82</td><td>3.91 / 3.82</td></tr>
+<tr><td>KEEP</td><td>原任务满分</td><td>4 / 25</td><td>Control 1 · P1 1 · P2 0 · P3 1 · P4 1</td><td>4.00 / 4.00</td><td>4.50 / 4.75</td><td>3.50 / 4.00</td><td>4.25 / 4.25</td><td>4.00 / 3.75</td></tr>
+<tr><td>KEEP</td><td>已沟通要求满分</td><td>11 / 25</td><td>Control 1 · P1 3 · P2 1 · P3 3 · P4 3</td><td>4.18 / 4.27</td><td>4.36 / 4.36</td><td>3.82 / 4.00</td><td>3.91 / 3.82</td><td>3.91 / 3.82</td></tr></tbody></table></div>
+      <p class="caption">“原任务满分”要求 judgement.score = 1；“已沟通要求满分”要求 score_communicated = 1。A/B 是切片内两个 Judge 各自的均值，不作合并。样本很小时只作探索性机制检查。</p>
+    </section>
+
+    <section>
+      <h2>具体是怎么做的</h2>
+      <div class="table-wrap"><table style="min-width:900px"><thead><tr><th scope="col">项目</th><th scope="col">固定设置</th></tr></thead><tbody><tr><td>正式网格</td><td>6 个 canonical Food 任务 × Control/P1/P2/P3/P4 × r1/r2/r3 = 90 格；每个 Persona 都跑每道题</td></tr>
+<tr><td>Persona 模拟</td><td>azure/gpt-5.6-terra；temperature=1；每次尝试重新生成 persona utterance</td></tr>
+<tr><td>网页执行</td><td>azure/gpt-5.6-terra；live headless Chrome；每格全新 profile；最多 50 步、5 次 ask_user</td></tr>
+<tr><td>任务评分</td><td>azure/gpt-5.6-terra；沿用 canonical task 的原 rubric</td></tr>
+<tr><td>体验评分</td><td>azure/gpt-5.6-terra；Judge A/B 为两次独立调用</td></tr>
+<tr><td>环境协议</td><td>主分析使用独立轨迹审计；实质阻断必要证据才标 EXCLUDE_RERUN；同配置最多按计划重跑</td></tr>
+<tr><td>代码基线</td><td>4a1c0f221b0a80384d059cb487b3be1e470a148e；main-style；ODYSSEY_MAX_TABS=0，仅移除人工 tab 数量上限</td></tr></tbody></table></div>
+
+      <h3>四个 Persona 与 Control</h3>
+      <div class="table-wrap"><table style="min-width:900px"><thead><tr><th scope="col">组</th><th scope="col">设定与检验重点</th></tr></thead><tbody><tr><td>P1 · 预算敏感的烹饪新手</td><td>25–34 岁、预算有限、烹饪研究经验少、偏好短而实用的移动端建议；检验成本与低耐心带来的需求压缩。</td></tr>
+<tr><td>P2 · 谨慎的饮食规划者</td><td>55–64 岁、有未指定过敏原的食物过敏和放大阅读需求；检验风险核查、证据与可读性。</td></tr>
+<tr><td>P3 · 时间紧张的家庭餐饮规划者</td><td>35–44 岁、有日常烹饪经验、时间紧、偏好务实简洁；检验物流和比较要求是否保留。</td></tr>
+<tr><td>P4 · 专业餐饮研究者</td><td>45–54 岁、餐饮领域专家、重证据、品质与完整细节；作为合成专家上界条件。</td></tr>
+<tr><td>Control · none</td><td>不做 Persona 改写，直接把 canonical task 原文交给同一执行模型。</td></tr></tbody></table></div>
+    </section>
+
+    <section>
+      <h2>评分标准</h2>
+      <p><strong>原任务完成率</strong> = 命中的 canonical rubric 条目数 ÷ 原 rubric 条目数。报告 cell-macro（每格等权）、task-macro（每题等权）和 rubric-micro（所有条目汇总）时会明确标注。</p>
+      <p class="spaced"><strong>沟通覆盖率</strong> = Persona utterance 已表达、或 Agent 通过 ask_user 补问而纳入的 rubric 条目数 ÷ 原 rubric 条目数。它衡量 Persona 改写有没有保留原任务要求。</p>
+      <p class="spaced"><strong>仅已沟通要求的完成率</strong> = 已沟通且完成的 rubric 条目数 ÷ 已沟通 rubric 条目数；一个格没有已沟通条目时，不进入 cell-macro 分母，且会单独计数。</p>
+      <p class="spaced"><strong>Persona 体验</strong>：Judge A/B 分别对要求符合度、Persona 可读性、可执行性、缺口处理与主动性、整体体验打 1–5 分。两次 Judge 不平均，并报告一致性与 N/A。</p>
+      <p class="spaced"><strong>配对效应</strong>：在同一 replicate、task、execution model 内计算 Persona − Control；胜/平/负按完成率差值的正/零/负计数。主表进一步要求双方环境状态均为 KEEP。</p>
+    </section>
+
+    <section>
+      <h2>限制与解读</h2>
+      <ul>
+        <li><strong>这不是 exact-main。</strong>这是 main-style / no-cap：prompt、工具、模型和评分规则保持计划设置，但 <code>ODYSSEY_MAX_TABS=0</code> 移除了 main 的人工 8-tab guard；因此不可把 Food 绝对分数与 Shopping exact-main 无条件横比。</li>
+        <li><strong>EXCLUDE_RERUN 不是模型失败。</strong>403、429、CAPTCHA、DNS、超时或站点阻断只有在实质影响必要 rubric 证据时才排除；它表示该格没有环境有效结果。error-only 和无数值评分也不记为 0。</li>
+        <li><strong>Raw 保留排除格。</strong>所有 raw 汇总与 balanced raw 配对都包含有数值的 EXCLUDE_RERUN 格；它们用于审计透明度和敏感性比较，不是主结果。</li>
+        <li><strong>KEEP 均值可能构成偏斜。</strong>网站阻断并非随机，各 arm/task 的 KEEP 数不同；因此主表采用双方均 KEEP 的同格配对，同时仍显示 n、任务覆盖和缺失任务。</li>
+        <li><strong>统计规模有限。</strong>即使 90 格完成，每个 Persona 最多只有 18 个 raw cell；满分切片更小。本报告给出描述性效应、配对胜平负和双 Judge 一致性，不将其包装成显著性结论。</li>
+        <li><strong>重跑并非逐字重放。</strong>同配置重跑保持任务、persona YAML、模型、温度和规则不变，但 temperature=1 的 persona utterance 会重新采样，这是当前 runner 的既有行为。</li>
+      </ul>
+    </section>
+
+    <footer>数据由 <code>food_main_setting1_analysis.py</code> 从日期分隔的正式目录重算；本页由 <code>food_main_setting1_html.py</code> 生成。命令：<code>python3 artifacts/experiments/food_main_setting1_html.py</code>。</footer>
+    </main></body>
+</html>

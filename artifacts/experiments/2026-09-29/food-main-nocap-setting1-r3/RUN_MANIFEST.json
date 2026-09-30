@@ -1,0 +1,42 @@
+{
+  "experiment_id": "food-main-nocap-setting1-r3",
+  "status": "planned",
+  "date_block": "2026-09-29",
+  "date_timezone": "America/Los_Angeles",
+  "replicate": 3,
+  "replicates_planned": 3,
+  "tasks": 6,
+  "arms": [
+    "none",
+    "food-budget-novice",
+    "food-busy-host",
+    "food-cautious-dietary-planner",
+    "food-culinary-researcher"
+  ],
+  "planned_cells": 30,
+  "completed_cells": 0,
+  "result_root": "artifacts/experiments/2026-09-29/food-main-nocap-setting1-r3/results",
+  "profile_root": "artifacts/chrome-profiles/food-20260929-nocap-r3-cells",
+  "protocol": {
+    "base_main_commit": "4a1c0f221b0a80384d059cb487b3be1e470a148e",
+    "food_input_commit": "19e0633",
+    "food_protocol_commit": "4c4212d",
+    "executor_model": "gpt-5.6-terra",
+    "executor_provider": "azure",
+    "persona_simulator_model": "gpt-5.6-terra",
+    "persona_simulator_provider": "azure",
+    "task_judge_model": "gpt-5.6-terra",
+    "task_judge_provider": "azure",
+    "experience_judges": [
+      "azure/gpt-5.6-terra",
+      "azure/gpt-5.6-terra"
+    ],
+    "temperature": 1.0,
+    "max_steps": 50,
+    "max_questions": 5,
+    "headless": true,
+    "fresh_profile_per_cell": true,
+    "odyssey_max_tabs": 0,
+    "tab_policy": "unlimited; attachment requests live Chrome without infrastructure limitation"
+  }
+}

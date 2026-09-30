@@ -1,0 +1,206 @@
+[
+  {
+    "task_id": "082aa17f3e88c3ce10796244e3677c5643dd19c9",
+    "confirmed_task": "I’m setting up a new kitchen and want one of the first things I make to be roasted Brussels sprouts, so could you start on Google and find me a recipe that clearly uses both Parmesan and balsamic vinegar, then open the actual recipe page and note the title, oven temperature, and cook time because I want to make sure the cookware I buy fits that kind of roasting setup. Once you’ve got that recipe open, head to Le Creuset and look for a light green Dutch oven, and specifically check whether the 5.5 qt size is offered in that color so I can see if it would work for recipes in that range; please open the product page itself and leave it open so I can look at the color and size options on the page. While you’re at it, I’m also sorting out kitchen appliances before I start cooking, so go to YouTube and find a practical video about whether a dishwasher installation needs an air gap, open the video page, start playing it, and tell me the main decision points like when an air gap is required, when a high loop is used instead, and why the air gap exists in the first place. Please keep the recipe tab, the Le Creuset product tab, and the YouTube video tab open in separate tabs so I can compare everything visually afterward.",
+    "website": "https://www.google.com",
+    "reference_length": 4,
+    "level": "easy",
+    "rubrics": {
+      "R1": {
+        "requirement": "A roasted Brussels sprouts recipe was found and the actual recipe page shows both Parmesan and balsamic vinegar, along with the recipe title, oven temperature, and cook time.",
+        "verification": "Grader can confirm the open recipe page contains the recipe title and visible recipe details, and the ingredients or recipe text visibly includes Parmesan and balsamic vinegar."
+      },
+      "R2": {
+        "requirement": "A light green Le Creuset Dutch oven product page was opened and the agent correctly confirmed whether the 5.5 qt size is available in that color, including product name and color.",
+        "verification": "Grader can inspect the open Le Creuset product page and see the product name, the selected or referenced light green color, and visible size options or product details indicating whether 5.5 qt is available."
+      },
+      "R3": {
+        "requirement": "A relevant YouTube video about dishwasher air gaps was opened and played, and the summary captures when an air gap is required, the high loop alternative, and why an air gap is used.",
+        "verification": "Grader can confirm the YouTube video page is open with playback started and that the reported summary matches the topic and covers requirement conditions, alternatives, and purpose."
+      },
+      "R4": {
+        "requirement": "The browser state preserves visual proof by keeping the recipe page, Le Creuset product page, and YouTube video page open in separate tabs.",
+        "verification": "Grader can inspect the browser tab bar and confirm all three relevant pages remain open for side-by-side review."
+      }
+    },
+    "categories": [
+      "Food and Drink > Cooking and Recipes",
+      "Ecommerce & Shopping > Ecommerce and Shopping - Other",
+      "Home and Garden > Home Improvement and Maintenance"
+    ],
+    "num_categories": 3
+  },
+  {
+    "task_id": "0ab48db6076089bbcf42047d162009a50eb9ca50",
+    "confirmed_task": "I’m trying to put together a simple, semi-healthy meal prep menu for the week, mostly so I can batch-cook lunches and have a couple of make-ahead desserts ready too. Could you start on Google and search for an easy Instant Pot lentils recipe, then open the actual recipe page and pull out the basics I’d need for meal prep: what type of lentils it uses, the water-to-lentil ratio, and the cook time? Please leave that recipe tab open so I can glance at it later. Then go to Ambitious Kitchen and find a healthy turkey chili recipe that includes extra vegetables, because I want something hearty to pair with the lentils for lunches; open the recipe itself and note the exact recipe title plus at least two added vegetables from the ingredients list, and keep that page open in its own tab too so I can compare the two recipes side by side. After that, on Feel Good Foodie, look up recipes for halva, chia pudding, and pecan bars, open the actual recipe page for each one in separate tabs, and grab the page URLs so I have the real recipe links. Once you’ve seen all three, pick the two dessert options that seem most practical for make-ahead prep and tell me which two you’d choose. At the end, give me one concise meal prep summary that explains the lentil base, the turkey chili pairing, and the two dessert picks with their Feel Good Foodie recipe URLs.",
+    "website": "https://www.google.com",
+    "reference_length": 4,
+    "level": "easy",
+    "rubrics": {
+      "R1": {
+        "requirement": "Identify an easy Instant Pot lentils recipe found via Google and capture the lentil type, water ratio, and cook time from the opened recipe page.",
+        "verification": "Grader can confirm a Google search was used, an actual recipe page was opened and left available, and the reported lentil type, ratio, and cook time match visible recipe instructions."
+      },
+      "R2": {
+        "requirement": "Find a healthy turkey chili recipe on Ambitious Kitchen, open the recipe page, and record the exact recipe title plus at least two vegetables from the ingredients list.",
+        "verification": "Grader can verify the browser is on an Ambitious Kitchen recipe page, the title matches the visible page title, and at least two reported vegetables appear in the ingredients list."
+      },
+      "R3": {
+        "requirement": "Locate Feel Good Foodie recipe pages for halva, chia pudding, and pecan bars, open each in its own tab, and capture the correct recipe page URL for each.",
+        "verification": "Grader can confirm three Feel Good Foodie recipe tabs are open for halva, chia pudding, and pecan bars, and the provided URLs correspond to those visible pages."
+      },
+      "R4": {
+        "requirement": "Produce a concise meal prep summary that explains the lentil base, the turkey chili pairing, and selects the two most practical make-ahead dessert options from the Feel Good Foodie results with their URLs.",
+        "verification": "Grader can compare the final summary against the gathered recipe details and confirm that exactly two dessert choices were selected from the three Feel Good Foodie pages and that their URLs are included."
+      }
+    },
+    "categories": [
+      "Food and Drink > Cooking and Recipes"
+    ],
+    "num_categories": 1
+  },
+  {
+    "task_id": "eb8a01554a84cf5d16a84a766d0f6cfb55d33c81",
+    "confirmed_task": "I’m planning a holiday party in Minneapolis and want a quick shortlist of bar caterers that actually look local and usable. Please start on The Knot and look specifically for Minneapolis-area wine or liquor bar service caterers, then open the actual vendor listings in separate tabs so I can compare them visually, and pull together at least five options with each business name and city/state. If Surdyk’s shows up in that shortlist, go to Surdyk’s Catering and look through their site to see whether they feel more full-service than the others, then summarize at least three catering services or service types they offer, including any food and beverage options you can verify on the page, and leave the Surdyk’s page open so I can glance at it later. After that, because I may want a nonalcoholic menu item to pair with whichever caterer seems best, use Google to find a pressure-cooker or Instant Pot mulligatawny soup recipe, open the actual recipe page, and give me the ingredient list plus the basic cooking steps from that one recipe. Please return everything as one concise planning summary so I can compare the caterers, any Surdyk’s details if relevant, and the soup idea all in one place.",
+    "website": "https://www.google.com",
+    "reference_length": 4,
+    "level": "easy",
+    "rubrics": {
+      "R1": {
+        "requirement": "Provide at least five Minneapolis-area wine or liquor bar service caterers sourced from The Knot, each with business name and location in city/state format.",
+        "verification": "Grader confirms at least five vendor names and matching city/state details from The Knot listings, with evidence that vendor pages were opened or reviewed in browser tabs."
+      },
+      "R2": {
+        "requirement": "If Surdyk’s is included in the The Knot shortlist, summarize at least three Surdyk’s Catering full-service offerings or service types from surdykscatering.com, including food and/or beverage offerings.",
+        "verification": "Grader confirms Surdyk’s appeared in the shortlist and that the summary includes three verified offerings visible on Surdyk’s site; Surdyk’s page remains open as browser proof."
+      },
+      "R3": {
+        "requirement": "Provide one pressure-cooker or Instant Pot mulligatawny soup recipe found via Google, including the ingredient list and basic cooking steps from a single recipe page.",
+        "verification": "Grader confirms Google was used to reach a recipe page and that the final response includes ingredients and basic steps consistent with one visible recipe source."
+      },
+      "R4": {
+        "requirement": "Return all requested information as one concise planning summary combining the caterer shortlist, any applicable Surdyk’s comparison details, and the soup recipe information.",
+        "verification": "Grader checks that the response is a single concise summary covering all required outputs without omitting any applicable section."
+      }
+    },
+    "categories": [
+      "Food and Drink > Beverages",
+      "Community and Society > Holidays and Seasonal Events"
+    ],
+    "num_categories": 2
+  },
+  {
+    "task_id": "5944875c7f32a98df978040e4447534f7ba0aadb",
+    "confirmed_task": "I’m putting together a small Zelda: Breath of the Wild–themed dessert setup for a get-together and want it to feel like it came straight out of the game, but still be practical to make in a real kitchen. Please start on Google and find a genuinely comprehensive BOTW cooking guide or full recipe list that covers the game’s meals and elixirs, then open the actual guide page so I can visually confirm it looks complete and leave that tab open as the inspiration reference. From that, pick a tropical direction that feels like a natural fit for a real dessert—something in the fruit-and-island vibe of the game—and then use Google to find a copycat Disney Dole Whip recipe page with a clear ingredient list and simple prep, because I think that could become the main dessert. Since I may want a richer backup option for people who don’t want pineapple, go to Sally’s Baking Addiction and find the chocolate buttercream frosting recipe that takes 20 minutes or less and uses 6 ingredients, and keep that recipe page open in its own tab too so I can compare the two dessert directions side by side. After that, use Google to find one recommended method for making a custom photo frame with an X-Carve CNC that I could turn into a Zelda-themed sign or menu card, and summarize the materials, software or workflow, and key steps. Then use Google again to find one reliable method for mirroring an iPhone screen to another device so I can show the BOTW inspiration page while assembling everything, and finally find how to switch an iPad keyboard from the floating mini keyboard back to the full-size keyboard in case I end up typing labels on an iPad instead. In the end, give me a concise plan that ties the BOTW cooking inspiration to the tropical dessert choice, the chocolate comparison option, and the presentation setup, and mention which tabs you left open for me to review.",
+    "website": "https://www.google.com",
+    "reference_length": 7,
+    "level": "medium",
+    "rubrics": {
+      "R1": {
+        "requirement": "A comprehensive, trustworthy BOTW cooking guide or full recipe list is found via Google, and the actual guide page is opened and left open so it can be visually confirmed as a complete reference covering the game's meals and elixirs.",
+        "verification": "Grader can confirm the open tab displays a BOTW cooking guide or recipe list page that appears comprehensive, covering meals and elixirs from the game."
+      },
+      "R2": {
+        "requirement": "A tropical BOTW-inspired dessert direction is selected based on the game inspiration, and a copycat Disney Dole Whip recipe page is found with ingredients and basic preparation captured.",
+        "verification": "Grader can confirm a Dole Whip recipe page is open and the response includes a clear tropical theme connection plus the recipe’s ingredient list and prep summary."
+      },
+      "R3": {
+        "requirement": "A Sally’s Baking Addiction chocolate buttercream frosting recipe is found that takes 20 minutes or less and uses 6 ingredients, with the ingredient list and total time recorded, and the page left open in its own tab.",
+        "verification": "Grader can confirm the Sally’s Baking Addiction recipe tab is open and the response states the total time and a 6-ingredient list matching the page."
+      },
+      "R4": {
+        "requirement": "One recommended X-Carve CNC custom photo frame method is found and summarized with key steps, materials, and any software or workflow details relevant to making a Zelda-themed sign or menu card.",
+        "verification": "Grader can confirm a source page about making a custom frame with an X-Carve CNC is open and the response includes materials, process steps, and software/workflow notes."
+      },
+      "R5": {
+        "requirement": "One reliable method for mirroring or sharing an iPhone screen to another device is found and summarized with the required steps and destination requirements.",
+        "verification": "Grader can confirm a relevant help or instructional page is open and the response explains a valid mirroring method with actionable steps."
+      },
+      "R6": {
+        "requirement": "At least one valid method is provided for returning the iPad floating mini keyboard to the full-size keyboard.",
+        "verification": "Grader can confirm a relevant help page is open and the response includes a valid method such as dragging from the keyboard control or pinching outward on the mini keyboard."
+      },
+      "R7": {
+        "requirement": "The final response is a concise integrated plan that clearly connects the BOTW recipe inspiration to the tropical dessert choice, the richer chocolate comparison option, and the presentation/display setup, while mentioning which tabs were left open for review.",
+        "verification": "Grader can confirm the final write-up synthesizes all findings into one coherent plan and explicitly references the open tabs for the BOTW guide and dessert comparison pages."
+      }
+    },
+    "categories": [
+      "Food and Drink > Cooking and Recipes",
+      "Games > Video Games Consoles and Accessories"
+    ],
+    "num_categories": 2
+  },
+  {
+    "task_id": "18ddad3e0781d4b8fb2e1998ff836a0b07d0cdce",
+    "confirmed_task": "I’m in Boston for the next two days on a work trip with my wife, and I want to lock in two different dinners that feel right for each occasion. First, on the Michelin Guide site, please find me one Boston restaurant that’s Michelin-starred or clearly in that polished fine-dining tier for a business dinner, and keep it around a $500 per person ceiling so I know it’s appropriate without going overboard. Then switch to OpenTable and look for a separate restaurant in Boston that feels genuinely romantic for an anniversary dinner, ideally Italian seafood or something very Boston-specific, because I want the second night to feel more personal and celebratory. Once you have both, use Google to open the actual restaurant websites or current listing pages in separate tabs and verify that the business-dinner place really looks suitable for client-style dining and that the anniversary place clearly handles special occasions like anniversaries or romantic dinners; while you’re there, check whether each one appears to have availability sometime in the next two days. Please leave the final restaurant pages open so I can look at the photos, ambiance, and booking details myself, and give me a short summary of which place is for the business dinner and which is for the anniversary dinner, why each one fits, the expected price level, the special-occasion evidence you found, and the availability status for the next two days.",
+    "website": "https://www.google.com",
+    "reference_length": 4,
+    "level": "medium",
+    "rubrics": {
+      "R1": {
+        "requirement": "Select one Boston restaurant from the Michelin Guide or a clearly equivalent fine-dining listing that is appropriate for a business dinner and plausibly within the stated $500 per person budget.",
+        "verification": "Grader can confirm a Michelin Guide restaurant page or equivalent fine-dining page is open showing the Boston restaurant name, cuisine/style, and price indicators consistent with the budget."
+      },
+      "R2": {
+        "requirement": "Select one separate Boston restaurant from OpenTable that is romantic and suitable for an anniversary dinner, matching the preference for Italian seafood or Boston-specific cuisine.",
+        "verification": "Grader can confirm an OpenTable listing page is open showing the restaurant name, cuisine category, and visual or descriptive cues indicating a romantic/special-occasion setting."
+      },
+      "R3": {
+        "requirement": "Verify that the business-dinner restaurant appears suitable for polished client or business dining, report the expected price level, and report whether it has availability within the next two days.",
+        "verification": "Grader can confirm an official site or current booking/listing page is open for the business restaurant with visible evidence such as fine-dining descriptions, ambiance cues, price indicators, reservation interface, or available time slots/dates within the next two days, and the response states the expected price level."
+      },
+      "R4": {
+        "requirement": "Verify that the anniversary restaurant handles romantic or special-occasion dining, report the expected price level, and report whether it has availability within the next two days.",
+        "verification": "Grader can confirm an official site or current booking/listing page is open for the anniversary restaurant with visible evidence such as anniversary/private dining language, romantic ambiance cues, price indicators, guest photos, or available reservation times/dates within the next two days, and the response states the expected price level."
+      }
+    },
+    "categories": [
+      "Food and Drink > Restaurants and Delivery",
+      "Travel and Tourism > Travel and Tourism - Other"
+    ],
+    "num_categories": 2
+  },
+  {
+    "task_id": "e20742e26a4d6f9c3d62a9d1cef634297bd4204f",
+    "confirmed_task": "I’m putting together a small Christmas get-together here in the UK and want one tidy plan I can glance at later. Could you start on Sainsbury’s and find three gluten-free Christmas starter ideas that feel properly festive, then open the actual recipe or product pages in separate tabs so I can compare the photos and names, because I’m trying to decide whether the meal should lean more elegant, cosy, or party-food style. Once you’ve got that food direction, go to The Kitchn and find their guidance for cooking a spiral-cut ham, then give me the main cooking approach in a short summary that matches the festive theme from the starters so I can picture the full menu. After that, switch to Marks & Spencer and find three stocking-filler gift ideas for the dads coming over, keeping each one under £20, and open the product pages so I can visually compare whether they feel useful or just novelty gifts. Then check Boots for two men’s gift sets that include aftershave or body spray, with prices, so I can compare those against the M&S options as slightly more polished backups. Please leave the most promising Sainsbury’s starter tab and the two best gift pages open at the end, and give me one concise menu-and-gift shortlist with item names, prices where relevant, and a quick note on why each option fits.",
+    "website": "https://www.google.com",
+    "reference_length": 7,
+    "level": "medium",
+    "rubrics": {
+      "R1": {
+        "requirement": "Provide three gluten-free Christmas starter ideas from Sainsbury’s with the correct names.",
+        "verification": "Grader can confirm three distinct Sainsbury’s starter recipe or product pages were opened and the returned names match visible page titles."
+      },
+      "R2": {
+        "requirement": "Use the Sainsbury’s starters to infer a festive food theme and carry that into the menu framing.",
+        "verification": "Final write-up explicitly links the starter choices to a coherent festive style such as elegant, cosy, or party-food and uses that framing for the main course."
+      },
+      "R3": {
+        "requirement": "Summarize The Kitchn’s recommended method for cooking a spiral-cut ham, including the key preparation and cooking steps.",
+        "verification": "Returned summary reflects the visible Kitchn article guidance on how to prepare, heat, and finish a spiral-cut ham."
+      },
+      "R4": {
+        "requirement": "Provide three Marks & Spencer stocking-filler gift ideas suitable for fathers that each cost under £20, including item name and price.",
+        "verification": "Grader can confirm each selected M&S product page shows a price below £20 and that the returned names and prices match the visible listings."
+      },
+      "R5": {
+        "requirement": "Provide two Boots men’s gift sets that include aftershave or body spray, including item name and price for each.",
+        "verification": "Grader can confirm the Boots product pages are gift sets for men and that the visible product details indicate aftershave or body spray is included."
+      },
+      "R6": {
+        "requirement": "Include browser-only proof by leaving open the most promising Sainsbury’s starter tab and the two best gift product pages at the end.",
+        "verification": "Open tabs at completion include one Sainsbury’s starter page and two selected gift pages from M&S and/or Boots for visual review."
+      },
+      "R7": {
+        "requirement": "Return everything as one concise menu-and-gift shortlist with names, prices where relevant, and a brief note explaining why each option fits.",
+        "verification": "Final response is a combined shortlist covering starters, ham approach, M&S gifts, and Boots gift sets, with short fit notes and prices where applicable."
+      }
+    },
+    "categories": [
+      "Food and Drink > Cooking and Recipes",
+      "Community and Society > Holidays and Seasonal Events"
+    ],
+    "num_categories": 2
+  }
+]

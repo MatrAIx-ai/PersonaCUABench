@@ -17,9 +17,9 @@ separate KEEP-only overlay.  The all-numeric results remain unchanged.
 Example:
 
     python artifacts/experiments/food_main_setting1_analysis.py \
-      artifacts/experiments/2026-09-28/food-main-setting1-r1 \
+      artifacts/experiments/2026-09-28/food-main-nocap-setting1-r1 \
       --output-prefix \
-      artifacts/experiments/2026-09-28/food-main-setting1-r1/analysis/formal-posthoc
+      artifacts/experiments/2026-09-28/food-main-nocap-setting1-r1/analysis/formal-posthoc
 
 The command writes ``<prefix>.json`` and ``<prefix>.md``.  Passing a prefix
 that already ends in ``.json`` or ``.md`` is also accepted; that suffix is
@@ -40,7 +40,7 @@ from pathlib import Path
 from typing import Any, Iterable, Sequence
 
 
-SCHEMA_VERSION = "1.1"
+SCHEMA_VERSION = "1.3"
 EXPERIENCE_DIMENSIONS = (
     "P1_asked_for",
     "P2_readable_for_them",
@@ -415,6 +415,194 @@ def planned_cells(replicate: Replicate) -> tuple[int | None, str]:
     return None, "unavailable"
 
 
+def string_list(value: Any) -> list[str]:
+    """Normalize a manifest/runtime list without inventing missing values."""
+    if not isinstance(value, list):
+        return []
+    return [str(item) for item in value if item is not None]
+
+
+def input_integrity_analysis(replicates: Sequence[Replicate]) -> dict[str, Any]:
+    """Describe formal-input completeness and cross-replicate consistency.
+
+    Only ``results/`` is required to make the analyzer usable on legacy or
+    partially archived runs.  Formal Food roots should additionally carry the
+    manifest and both input snapshots.  Problems are surfaced rather than
+    silently changing which numeric results are selected.
+    """
+
+    rows: list[dict[str, Any]] = []
+    issues: list[dict[str, Any]] = []
+
+    def add_issue(replicate: Replicate, code: str, detail: str) -> None:
+        issue = {
+            "replicate": replicate.experiment_id,
+            "root": replicate.root.as_posix(),
+            "code": code,
+            "detail": detail,
+        }
+        issues.append(issue)
+        row_issues.append(issue)
+
+    for replicate in sorted(replicates, key=lambda item: item.root_key):
+        row_issues: list[dict[str, Any]] = []
+        manifest_path = replicate.root / "RUN_MANIFEST.json"
+        runtime_path = replicate.root / "inputs" / "runtime-config.json"
+        tasks_path = replicate.root / "inputs" / "tasks.json"
+
+        task_ids = [
+            str(task["task_id"])
+            for task in replicate.tasks
+            if isinstance(task, dict) and task.get("task_id")
+        ]
+        duplicate_task_ids = sorted(
+            task_id for task_id, count in Counter(task_ids).items() if count > 1
+        )
+        manifest_personas = string_list(replicate.manifest.get("arms"))
+        runtime_personas = string_list(replicate.runtime_config.get("personas"))
+        personas = runtime_personas or manifest_personas
+
+        if not manifest_path.is_file():
+            add_issue(replicate, "missing_run_manifest", "RUN_MANIFEST.json is absent")
+        if not runtime_path.is_file():
+            add_issue(
+                replicate,
+                "missing_runtime_config",
+                "inputs/runtime-config.json is absent",
+            )
+        if not tasks_path.is_file():
+            add_issue(replicate, "missing_tasks_snapshot", "inputs/tasks.json is absent")
+        if len(task_ids) != len(replicate.tasks):
+            add_issue(
+                replicate,
+                "invalid_task_entries",
+                "one or more tasks.json entries are not objects with a task_id",
+            )
+        if duplicate_task_ids:
+            add_issue(
+                replicate,
+                "duplicate_task_ids",
+                "duplicate task IDs: " + ", ".join(duplicate_task_ids),
+            )
+
+        manifest_experiment_id = replicate.manifest.get("experiment_id")
+        runtime_experiment_id = replicate.runtime_config.get("experiment_id")
+        if (
+            manifest_experiment_id
+            and runtime_experiment_id
+            and str(manifest_experiment_id) != str(runtime_experiment_id)
+        ):
+            add_issue(
+                replicate,
+                "experiment_id_mismatch",
+                f"manifest={manifest_experiment_id!r}, runtime={runtime_experiment_id!r}",
+            )
+
+        manifest_replicate = replicate.manifest.get("replicate")
+        runtime_replicate = replicate.runtime_config.get("replicate")
+        if (
+            manifest_replicate is not None
+            and runtime_replicate is not None
+            and manifest_replicate != runtime_replicate
+        ):
+            add_issue(
+                replicate,
+                "replicate_number_mismatch",
+                f"manifest={manifest_replicate!r}, runtime={runtime_replicate!r}",
+            )
+
+        if (
+            manifest_personas
+            and runtime_personas
+            and sorted(manifest_personas) != sorted(runtime_personas)
+        ):
+            add_issue(
+                replicate,
+                "persona_set_mismatch",
+                f"manifest arms={manifest_personas!r}, runtime personas={runtime_personas!r}",
+            )
+
+        for source_name, declared in (
+            ("manifest", replicate.manifest.get("tasks")),
+            ("runtime", replicate.runtime_config.get("tasks")),
+        ):
+            if is_number(declared) and int(declared) != len(task_ids):
+                add_issue(
+                    replicate,
+                    "task_count_mismatch",
+                    f"{source_name} declares {int(declared)} tasks; snapshot contains {len(task_ids)}",
+                )
+
+        planned, planned_source = planned_cells(replicate)
+        derived_planned = len(task_ids) * len(personas) if task_ids and personas else None
+        if planned is not None and derived_planned is not None and planned != derived_planned:
+            add_issue(
+                replicate,
+                "planned_cell_mismatch",
+                f"{planned_source}={planned}; task/persona product={derived_planned}",
+            )
+
+        rows.append(
+            {
+                "experiment_id": replicate.experiment_id,
+                "root": replicate.root.as_posix(),
+                "files": {
+                    "run_manifest": manifest_path.is_file(),
+                    "runtime_config": runtime_path.is_file(),
+                    "tasks_snapshot": tasks_path.is_file(),
+                },
+                "date_block": (
+                    replicate.manifest.get("date_block")
+                    or replicate.runtime_config.get("date_block")
+                ),
+                "replicate": (
+                    manifest_replicate
+                    if manifest_replicate is not None
+                    else runtime_replicate
+                ),
+                "task_ids": task_ids,
+                "personas": personas,
+                "planned_cells": planned,
+                "planned_cells_source": planned_source,
+                "derived_task_persona_cells": derived_planned,
+                "issues": row_issues,
+            }
+        )
+
+    if rows:
+        reference = rows[0]
+        for row in rows[1:]:
+            if sorted(row["task_ids"]) != sorted(reference["task_ids"]):
+                issue = {
+                    "replicate": row["experiment_id"],
+                    "root": row["root"],
+                    "code": "cross_replicate_task_set_mismatch",
+                    "detail": f"task ID set differs from {reference['experiment_id']}",
+                }
+                issues.append(issue)
+                row["issues"].append(issue)
+            if sorted(row["personas"]) != sorted(reference["personas"]):
+                issue = {
+                    "replicate": row["experiment_id"],
+                    "root": row["root"],
+                    "code": "cross_replicate_persona_set_mismatch",
+                    "detail": f"persona set differs from {reference['experiment_id']}",
+                }
+                issues.append(issue)
+                row["issues"].append(issue)
+
+    return {
+        "status": "pass" if not issues else "warning",
+        "policy": (
+            "results/ is the only hard requirement; formal Food roots are expected to include "
+            "RUN_MANIFEST.json, inputs/runtime-config.json, and inputs/tasks.json. Diagnostics "
+            "do not remove or alter numeric results."
+        ),
+        "issues": issues,
+        "replicates": rows,
+    }
+
+
 def judgement_counts(attempt: Attempt) -> tuple[int | None, int | None]:
     judgement = (attempt.record or {}).get("judgement")
     if not isinstance(judgement, dict):
@@ -567,6 +755,29 @@ def completion_analysis(
             **completion_stats(group),
         },
     )
+    replicate_groups: dict[str, list[Attempt]] = defaultdict(list)
+    for attempt in selected:
+        replicate_groups[attempt.replicate.root_key].append(attempt)
+    per_replicate = []
+    for root_key in sorted(replicate_groups):
+        group = replicate_groups[root_key]
+        replicate = group[0].replicate
+        per_replicate.append(
+            {
+                "experiment_id": replicate.experiment_id,
+                "root": replicate.root.as_posix(),
+                "date_block": (
+                    replicate.manifest.get("date_block")
+                    or replicate.runtime_config.get("date_block")
+                ),
+                "replicate": (
+                    replicate.manifest.get("replicate")
+                    if replicate.manifest.get("replicate") is not None
+                    else replicate.runtime_config.get("replicate")
+                ),
+                **completion_stats(group),
+            }
+        )
 
     all_stats = completion_stats(selected)
     task_means = [row["score_mean"] for row in per_task if is_number(row["score_mean"])]
@@ -582,6 +793,7 @@ def completion_analysis(
         "per_arm": per_arm,
         "per_task": per_task,
         "per_arm_per_task": per_arm_per_task,
+        "per_replicate": per_replicate,
     }
 
 
@@ -891,6 +1103,232 @@ def paired_delta_analysis(
     }
 
 
+def arm_task_count_matrix(
+    items: Sequence[Attempt],
+    arm_universe: Sequence[Attempt],
+    catalog: Sequence[dict[str, Any]],
+) -> dict[str, Any]:
+    """Return a complete arm x task count grid, including explicit zeros.
+
+    ``arm_universe`` defines which persona/model arms must be present in the
+    output.  For the environment overlay this is the all-selected population,
+    while ``items`` is the KEEP-only subset.  That distinction prevents an arm
+    with no KEEP cells from disappearing from the formal report.
+    """
+
+    task_rows = [
+        {"task_id": str(row["task_id"]), "task_label": str(row["label"])}
+        for row in catalog
+    ]
+    arms = sorted({item.arm_key for item in arm_universe})
+    counts: Counter[tuple[str, str, str]] = Counter(
+        (item.persona or "<missing>", item.model or "<missing>", item.task_id or "")
+        for item in items
+    )
+    rows: list[dict[str, Any]] = []
+    for persona, model in arms:
+        by_task = [
+            {
+                **task,
+                "cells": counts[(persona, model, task["task_id"])],
+            }
+            for task in task_rows
+        ]
+        rows.append(
+            {
+                "persona": persona,
+                "model": model,
+                "arm": f"{persona} / {model}",
+                "cells": sum(int(row["cells"]) for row in by_task),
+                "by_task": by_task,
+            }
+        )
+    return {
+        "definition": (
+            "Count of cells in the requested population for each persona/model arm and task; "
+            "zeroes are retained for arms present in the all-selected arm universe."
+        ),
+        "task_ids": [row["task_id"] for row in task_rows],
+        "task_labels": [row["task_label"] for row in task_rows],
+        "rows": rows,
+    }
+
+
+def environment_valid_paired_delta_analysis(
+    selected: Sequence[Attempt],
+    keep: Sequence[Attempt],
+    baseline_persona: str,
+    catalog: Sequence[dict[str, Any]],
+) -> dict[str, Any]:
+    """Pair persona and control only when both cells are audit-classified KEEP."""
+
+    def attempt_identity(item: Attempt) -> tuple[str, str]:
+        return (item.replicate.root_key, item.relative_path)
+
+    keep_identities = {attempt_identity(item) for item in keep}
+    baseline: dict[tuple[str, str, str], Attempt] = {}
+    for item in selected:
+        if item.persona == baseline_persona and item.task_id and item.model:
+            baseline[(item.replicate.root_key, item.task_id, item.model)] = item
+
+    catalog_task_ids = [str(row["task_id"]) for row in catalog]
+    candidate_arms = sorted(
+        {
+            (item.persona or "<missing>", item.model or "<missing>")
+            for item in selected
+            if item.persona != baseline_persona
+        }
+    )
+    candidate_personas = sorted({persona for persona, _ in candidate_arms})
+    pairs: list[dict[str, Any]] = []
+    ineligible: list[dict[str, Any]] = []
+
+    for item in selected:
+        if item.persona == baseline_persona or not item.task_id or not item.model:
+            continue
+        key = (item.replicate.root_key, item.task_id, item.model)
+        base = baseline.get(key)
+        persona_keep = attempt_identity(item) in keep_identities
+        baseline_keep = base is not None and attempt_identity(base) in keep_identities
+        if base is None or not persona_keep or not baseline_keep:
+            reasons = []
+            if base is None:
+                reasons.append("missing_selected_baseline")
+            if not persona_keep:
+                reasons.append("persona_not_keep")
+            if base is not None and not baseline_keep:
+                reasons.append("baseline_not_keep")
+            ineligible.append(
+                {
+                    "replicate": item.replicate.experiment_id,
+                    "task_id": item.task_id,
+                    "persona": item.persona,
+                    "model": item.model,
+                    "reasons": reasons,
+                }
+            )
+            continue
+
+        persona_coverage = cell_communication_coverage(item)
+        baseline_coverage = cell_communication_coverage(base)
+        persona_communicated = cell_communicated_score(item)
+        baseline_communicated = cell_communicated_score(base)
+        pairs.append(
+            {
+                "replicate": item.replicate.experiment_id,
+                "task_id": item.task_id,
+                "persona": item.persona,
+                "model": item.model,
+                "persona_completion": round_number(item.score),
+                "baseline_completion": round_number(base.score),
+                "completion_delta": round_number(float(item.score) - float(base.score)),
+                "persona_communication_coverage": round_number(persona_coverage),
+                "baseline_communication_coverage": round_number(baseline_coverage),
+                "communication_coverage_delta": round_number(
+                    persona_coverage - baseline_coverage
+                    if persona_coverage is not None and baseline_coverage is not None
+                    else None
+                ),
+                "persona_communicated_only_completion": round_number(
+                    persona_communicated
+                ),
+                "baseline_communicated_only_completion": round_number(
+                    baseline_communicated
+                ),
+                "communicated_only_completion_delta": round_number(
+                    persona_communicated - baseline_communicated
+                    if persona_communicated is not None and baseline_communicated is not None
+                    else None
+                ),
+            }
+        )
+
+    pairs.sort(key=lambda row: (row["persona"], row["model"], row["replicate"], row["task_id"]))
+    ineligible.sort(
+        key=lambda row: (row["persona"], row["model"], row["replicate"], row["task_id"])
+    )
+
+    def aggregate_rows(
+        group_keys: Sequence[Any],
+        key_function: Any,
+        identity_function: Any,
+    ) -> list[dict[str, Any]]:
+        grouped: dict[Any, list[dict[str, Any]]] = defaultdict(list)
+        for row in pairs:
+            grouped[key_function(row)].append(row)
+        aggregate: list[dict[str, Any]] = []
+        for key in group_keys:
+            rows = grouped.get(key, [])
+            completion_deltas = [float(row["completion_delta"]) for row in rows]
+            coverage_deltas = [
+                float(row["communication_coverage_delta"])
+                for row in rows
+                if is_number(row["communication_coverage_delta"])
+            ]
+            communicated_deltas = [
+                float(row["communicated_only_completion_delta"])
+                for row in rows
+                if is_number(row["communicated_only_completion_delta"])
+            ]
+            represented = sorted({str(row["task_id"]) for row in rows})
+            represented_set = set(represented)
+            aggregate.append(
+                {
+                    **identity_function(key),
+                    "eligible_pair_n": len(rows),
+                    "tasks_represented": len(represented),
+                    "task_ids_represented": represented,
+                    "missing_task_ids": [
+                        task_id for task_id in catalog_task_ids if task_id not in represented_set
+                    ],
+                    "completion_delta_mean": round_number(mean(completion_deltas)),
+                    "completion_delta_median": round_number(median(completion_deltas)),
+                    "completion_wins": sum(value > 0 for value in completion_deltas),
+                    "completion_ties": sum(value == 0 for value in completion_deltas),
+                    "completion_losses": sum(value < 0 for value in completion_deltas),
+                    "communication_coverage_delta_mean": round_number(mean(coverage_deltas)),
+                    "communication_coverage_delta_n": len(coverage_deltas),
+                    "communicated_only_completion_delta_mean": round_number(
+                        mean(communicated_deltas)
+                    ),
+                    "communicated_only_completion_delta_n": len(communicated_deltas),
+                }
+            )
+        return aggregate
+
+    aggregate_by_persona_and_model = aggregate_rows(
+        candidate_arms,
+        lambda row: (str(row["persona"]), str(row["model"])),
+        lambda key: {
+            "persona": key[0],
+            "model": key[1],
+            "arm": f"{key[0]} / {key[1]}",
+        },
+    )
+    aggregate_by_persona = aggregate_rows(
+        candidate_personas,
+        lambda row: str(row["persona"]),
+        lambda persona: {
+            "persona": persona,
+            "models": sorted(
+                {model for candidate_persona, model in candidate_arms if candidate_persona == persona}
+            ),
+        },
+    )
+    return {
+        "baseline_persona": baseline_persona,
+        "population": "environment-audit KEEP cells only",
+        "eligibility_rule": (
+            "A persona/control pair is eligible only when both selected numeric cells have "
+            "audit status KEEP for the same replicate, task_id, and execution model."
+        ),
+        "pairs": pairs,
+        "ineligible_candidates": ineligible,
+        "aggregate_by_persona": aggregate_by_persona,
+        "aggregate_by_persona_and_model": aggregate_by_persona_and_model,
+    }
+
+
 def noise_text(attempt: Attempt) -> str:
     chunks: list[str] = []
     record = attempt.record or {}
@@ -1042,6 +1480,7 @@ def environment_validity_analysis(
     audits: Sequence[ValidityAudit],
     selected: Sequence[Attempt],
     catalog: Sequence[dict[str, Any]],
+    baseline_persona: str,
 ) -> dict[str, Any]:
     """Build a separate KEEP-only overlay without mutating all-numeric data."""
 
@@ -1243,6 +1682,10 @@ def environment_validity_analysis(
             "run_behavior": run_behavior_analysis(keep),
             "experience": experience_analysis(keep),
             "perfect_slices": perfect_slices(keep),
+            "arm_task_keep_counts": arm_task_count_matrix(keep, selected, catalog),
+            "paired_persona_minus_none": environment_valid_paired_delta_analysis(
+                selected, keep, baseline_persona, catalog
+            ),
         },
     }
 
@@ -1265,8 +1708,15 @@ def build_counts(
             {
                 "experiment_id": replicate.experiment_id,
                 "root": replicate.root.as_posix(),
-                "date_block": replicate.manifest.get("date_block"),
-                "replicate": replicate.manifest.get("replicate", replicate.runtime_config.get("replicate")),
+                "date_block": (
+                    replicate.manifest.get("date_block")
+                    or replicate.runtime_config.get("date_block")
+                ),
+                "replicate": (
+                    replicate.manifest.get("replicate")
+                    if replicate.manifest.get("replicate") is not None
+                    else replicate.runtime_config.get("replicate")
+                ),
                 "planned_cells": planned,
                 "planned_cells_source": source,
                 "discovered_attempts": len(replicate_attempts),
@@ -1371,6 +1821,7 @@ def analyze(
                 "communicated items are excluded only from the cell-macro rate and are counted explicitly."
             ),
         },
+        "input_integrity": input_integrity_analysis(replicates),
         "inputs": replicate_rows,
         "task_catalog": catalog,
         "counts": counts,
@@ -1383,7 +1834,7 @@ def analyze(
         "paired_persona_minus_none": paired_delta_analysis(selected, baseline_persona),
         "external_noise": external_noise_analysis(attempts),
         "environment_validity": environment_validity_analysis(
-            replicates, validity_audits, selected, catalog
+            replicates, validity_audits, selected, catalog, baseline_persona
         ),
     }
 
@@ -1484,6 +1935,82 @@ def environment_validity_markdown(summary: dict[str, Any]) -> list[str]:
                     format_number(row["rubric_micro_completion"]),
                 ]
                 for row in completion["per_arm"]
+            ],
+        )
+    )
+    lines.extend(["", "### KEEP-only completion by replicate", ""])
+    lines.extend(
+        markdown_table(
+            ["Replicate", "KEEP cells", "Score mean", "Rubric met / total", "Rubric micro"],
+            [
+                [
+                    row["experiment_id"],
+                    row["cells"],
+                    format_number(row["score_mean"]),
+                    f"{row['rubric_met']} / {row['rubric_total']}",
+                    format_number(row["rubric_micro_completion"]),
+                ]
+                for row in completion["per_replicate"]
+            ],
+        )
+    )
+
+    keep_matrix = keep["arm_task_keep_counts"]
+    lines.extend(["", "### Arm × task KEEP counts", ""])
+    lines.extend(
+        markdown_table(
+            ["Arm", *keep_matrix["task_labels"], "Total"],
+            [
+                [row["arm"], *[cell["cells"] for cell in row["by_task"]], row["cells"]]
+                for row in keep_matrix["rows"]
+            ],
+        )
+    )
+
+    keep_paired = keep["paired_persona_minus_none"]
+    task_label_by_id = {
+        row["task_id"]: row["label"] for row in summary["task_catalog"]
+    }
+    lines.extend(
+        [
+            "",
+            "### Environment-valid matched persona-minus-control deltas",
+            "",
+            keep_paired["eligibility_rule"],
+            "",
+        ]
+    )
+    lines.extend(
+        markdown_table(
+            [
+                "Persona",
+                "Eligible pairs",
+                "Tasks represented",
+                "Completion Δ mean",
+                "W / T / L",
+                "Coverage Δ mean (n)",
+                "Communicated completion Δ mean (n)",
+                "Missing task IDs",
+            ],
+            [
+                [
+                    row["persona"],
+                    row["eligible_pair_n"],
+                    row["tasks_represented"],
+                    format_number(row["completion_delta_mean"]),
+                    f"{row['completion_wins']} / {row['completion_ties']} / "
+                    f"{row['completion_losses']}",
+                    f"{format_number(row['communication_coverage_delta_mean'])} "
+                    f"(n={row['communication_coverage_delta_n']})",
+                    f"{format_number(row['communicated_only_completion_delta_mean'])} "
+                    f"(n={row['communicated_only_completion_delta_n']})",
+                    ", ".join(
+                        f"{task_label_by_id.get(task_id, '?')}:{task_id}"
+                        for task_id in row["missing_task_ids"]
+                    )
+                    or "none",
+                ]
+                for row in keep_paired["aggregate_by_persona"]
             ],
         )
     )
@@ -1593,6 +2120,33 @@ def markdown_report(summary: dict[str, Any]) -> str:
             input_rows,
         )
     )
+    input_integrity = summary["input_integrity"]
+    lines.extend(
+        [
+            "",
+            "### Formal-input integrity",
+            "",
+            f"Status: **{input_integrity['status']}**. {input_integrity['policy']}",
+            "",
+        ]
+    )
+    if input_integrity["issues"]:
+        lines.extend(
+            markdown_table(
+                ["Replicate", "Code", "Detail"],
+                [
+                    [row["replicate"], row["code"], row["detail"]]
+                    for row in input_integrity["issues"]
+                ],
+            )
+        )
+    else:
+        lines.extend(
+            [
+                "All supplied roots contain the formal manifest/runtime/task snapshots, and the "
+                "task/persona grids agree across replicates.",
+            ]
+        )
     counts = summary["counts"]
     lines.extend(
         [
@@ -1666,6 +2220,23 @@ def markdown_report(summary: dict[str, Any]) -> str:
                     format_number(row["rubric_micro_completion"]),
                 ]
                 for row in completion["per_task"]
+            ],
+        )
+    )
+    lines.extend(["", "### Completion by replicate", ""])
+    lines.extend(
+        markdown_table(
+            ["Replicate", "Cells", "Score mean", "Score median", "Rubric met / total", "Rubric micro"],
+            [
+                [
+                    row["experiment_id"],
+                    row["cells"],
+                    format_number(row["score_mean"]),
+                    format_number(row["score_median"]),
+                    f"{row['rubric_met']} / {row['rubric_total']}",
+                    format_number(row["rubric_micro_completion"]),
+                ]
+                for row in completion["per_replicate"]
             ],
         )
     )
@@ -1989,7 +2560,7 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
         "replicate_roots",
         nargs="+",
         type=Path,
-        help="replicate root directories (for example .../food-main-setting1-r1)",
+        help="replicate root directories (for example .../food-main-nocap-setting1-r1)",
     )
     parser.add_argument(
         "--output-prefix",
