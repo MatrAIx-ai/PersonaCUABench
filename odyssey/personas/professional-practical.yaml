@@ -21,7 +21,7 @@ attributes:
     label: Age bracket
     category: 'Demographic: Core'
   region:
-    value: North America
+    value: Oceania
     label: Region
     category: 'Demographic: Core'
   urbanicity:
@@ -81,7 +81,7 @@ attributes:
     label: 'Interest: Technology'
     category: 'Interests: Topics'
   lstyle_travel_freq:
-    value: Rare
+    value: Homebody
     label: Travel frequency
     category: 'Interests: Culture'
   lstyle_planning_horizon:
@@ -101,11 +101,11 @@ attributes:
     label: 'Attitude: New technology'
     category: 'Worldview: Beliefs'
   risk_tolerance:
-    value: Cautious
+    value: Risk-averse
     label: Risk tolerance
     category: Risk & Decision
   dospert_financial_risk_tolerance:
-    value: Low
+    value: Very low
     label: DOSPERT Financial Risk Tolerance
     category: Risk & Decision
   cog_detail_orientation:
@@ -117,7 +117,7 @@ attributes:
     label: Patience
     category: 'Linguistic: Communication'
   cog_attention_span:
-    value: Long
+    value: Average
     label: Attention span
     category: 'Linguistic: Communication'
   cog_big_picture_vs_detail:
@@ -165,6 +165,6 @@ attributes:
     label: Economic motivation
     category: Values & Motivation
   habit_budget_tracking:
-    value: Weekly
+    value: Daily
     label: 'Habit: Budget tracking'
     category: 'Behavior: Habits'

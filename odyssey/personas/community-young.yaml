@@ -25,7 +25,7 @@ attributes:
     label: Region
     category: 'Demographic: Core'
   urbanicity:
-    value: Dense urban
+    value: Small town
     label: Urbanicity
     category: 'Demographic: Core'
   socioeconomic_band:
@@ -37,7 +37,7 @@ attributes:
     label: Driving status
     category: 'Demographic: Core'
   lifex_travel_breadth:
-    value: Never left country
+    value: Well-traveled
     label: Travel breadth
     category: 'Demographic: Life Events'
   lifex_geographic_mobility:
@@ -73,7 +73,7 @@ attributes:
     label: 'Familiarity: Urban planning'
     category: 'Expertise: Domains'
   topic_travel:
-    value: Interested
+    value: Passionate
     label: 'Interest: Travel'
     category: 'Interests: Topics'
   topic_technology:
@@ -81,11 +81,11 @@ attributes:
     label: 'Interest: Technology'
     category: 'Interests: Topics'
   lstyle_travel_freq:
-    value: Rare
+    value: Homebody
     label: Travel frequency
     category: 'Interests: Culture'
   lstyle_planning_horizon:
-    value: Weekly
+    value: Monthly
     label: Planning horizon
     category: 'Interests: Culture'
   lstyle_frugality:
@@ -113,11 +113,11 @@ attributes:
     label: Detail orientation
     category: 'Linguistic: Communication'
   cog_patience:
-    value: Moderate
+    value: High
     label: Patience
     category: 'Linguistic: Communication'
   cog_attention_span:
-    value: Average
+    value: Short
     label: Attention span
     category: 'Linguistic: Communication'
   cog_big_picture_vs_detail:
@@ -125,7 +125,7 @@ attributes:
     label: Big-picture vs detail
     category: 'Linguistic: Communication'
   cog_risk_framing:
-    value: Opportunity-focused
+    value: Balanced
     label: Risk framing
     category: 'Linguistic: Communication'
   health_mobility:
@@ -161,7 +161,7 @@ attributes:
     label: Device context
     category: 'State: Emotional'
   economic_motivation:
-    value: Value-driven
+    value: Cost-sensitive
     label: Economic motivation
     category: Values & Motivation
   habit_budget_tracking:

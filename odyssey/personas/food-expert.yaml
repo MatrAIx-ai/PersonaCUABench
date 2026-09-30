@@ -25,7 +25,7 @@ attributes:
     label: Region
     category: 'Demographic: Core'
   urbanicity:
-    value: Dense urban
+    value: Small town
     label: Urbanicity
     category: 'Demographic: Core'
   socioeconomic_band:
@@ -33,7 +33,7 @@ attributes:
     label: Socioeconomic band
     category: 'Demographic: Core'
   demo_driver_status:
-    value: Non-driver
+    value: Occasional driver
     label: Driving status
     category: 'Demographic: Core'
   lifex_travel_breadth:
@@ -65,7 +65,7 @@ attributes:
     label: 'Skill: Budgeting'
     category: 'Expertise: Skills'
   skill_driving:
-    value: None
+    value: Intermediate
     label: 'Skill: Driving'
     category: 'Expertise: Skills'
   fam_urban_planning:
@@ -85,15 +85,15 @@ attributes:
     label: Travel frequency
     category: 'Interests: Culture'
   lstyle_planning_horizon:
-    value: Weekly
+    value: Day-to-day
     label: Planning horizon
     category: 'Interests: Culture'
   lstyle_frugality:
-    value: Balanced
+    value: Spender
     label: Spending vs saving
     category: 'Interests: Culture'
   att_public_transit:
-    value: Enthusiast
+    value: Positive
     label: 'Attitude: Public transit'
     category: 'Worldview: Beliefs'
   att_new_technology:
@@ -101,7 +101,7 @@ attributes:
     label: 'Attitude: New technology'
     category: 'Worldview: Beliefs'
   risk_tolerance:
-    value: Balanced
+    value: Risk-tolerant
     label: Risk tolerance
     category: Risk & Decision
   dospert_financial_risk_tolerance:
@@ -117,7 +117,7 @@ attributes:
     label: Patience
     category: 'Linguistic: Communication'
   cog_attention_span:
-    value: Very long
+    value: Long
     label: Attention span
     category: 'Linguistic: Communication'
   cog_big_picture_vs_detail:

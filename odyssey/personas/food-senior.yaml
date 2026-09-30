@@ -21,11 +21,11 @@ attributes:
     label: Age bracket
     category: 'Demographic: Core'
   region:
-    value: Western Europe
+    value: Southeast Asia
     label: Region
     category: 'Demographic: Core'
   urbanicity:
-    value: Small town
+    value: Rural
     label: Urbanicity
     category: 'Demographic: Core'
   socioeconomic_band:
@@ -61,7 +61,7 @@ attributes:
     label: Tech savviness
     category: 'Expertise: Domains'
   skill_budgeting:
-    value: Advanced
+    value: Master
     label: 'Skill: Budgeting'
     category: 'Expertise: Skills'
   skill_driving:
@@ -77,7 +77,7 @@ attributes:
     label: 'Interest: Travel'
     category: 'Interests: Topics'
   topic_technology:
-    value: Indifferent
+    value: Averse
     label: 'Interest: Technology'
     category: 'Interests: Topics'
   lstyle_travel_freq:
@@ -85,7 +85,7 @@ attributes:
     label: Travel frequency
     category: 'Interests: Culture'
   lstyle_planning_horizon:
-    value: Monthly
+    value: Weekly
     label: Planning horizon
     category: 'Interests: Culture'
   lstyle_frugality:
@@ -109,7 +109,7 @@ attributes:
     label: DOSPERT Financial Risk Tolerance
     category: Risk & Decision
   cog_detail_orientation:
-    value: High
+    value: Very high
     label: Detail orientation
     category: 'Linguistic: Communication'
   cog_patience:

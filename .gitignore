@@ -45,3 +45,20 @@ logs/
 
 # Working notes kept locally, not pushed.
 notes/
+
+# from the main line
+odyssey/.chrome-profile/
+odyssey/__pycache__/
+odyssey/claw_cases/
+odyssey/results/
+odyssey/.chrome-profile-w*/
+.venv-linux/
+*.log
+odyssey/.chrome-*/
+odyssey/serving_logs/
+results/
+# Personal notes, never pushed
+CONTRIBUTING.md
+PERSONA_PLANNING_ZH.md
+# OSWorld is not run
+osworld/

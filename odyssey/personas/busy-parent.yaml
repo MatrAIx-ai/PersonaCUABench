@@ -1,0 +1,158 @@
+persona_id: odyssey-busy-parent
+version: '2.0'
+source: hand-specified from dimensions.json (MatrAIx 1290-dim schema)
+note: 'Suburban parent juggling work and kids: comfortable but not expert with tech,
+  drives daily, cautious, short on time, wants a clear plan.'
+attributes:
+  age_bracket:
+    value: 45-54
+    label: Age bracket
+    category: 'Demographic: Core'
+  region:
+    value: North America
+    label: Region
+    category: 'Demographic: Core'
+  urbanicity:
+    value: Suburban
+    label: Urbanicity
+    category: 'Demographic: Core'
+  socioeconomic_band:
+    value: Middle
+    label: Socioeconomic band
+    category: 'Demographic: Core'
+  demo_driver_status:
+    value: Daily driver
+    label: Driving status
+    category: 'Demographic: Core'
+  lifex_travel_breadth:
+    value: A few countries
+    label: Travel breadth
+    category: 'Demographic: Life Events'
+  lifex_geographic_mobility:
+    value: Moved within region
+    label: Geographic mobility
+    category: 'Demographic: Life Events'
+  ind_travel_tourism:
+    value: Some exposure
+    label: 'Industry: Travel & tourism'
+    category: 'Professional: Industry'
+  ind_transportation:
+    value: None
+    label: 'Industry: Transportation'
+    category: 'Professional: Industry'
+  seniority:
+    value: Manager
+    label: Seniority
+    category: 'Professional: Career'
+  tech_savviness:
+    value: Comfortable
+    label: Tech savviness
+    category: 'Expertise: Domains'
+  skill_budgeting:
+    value: Intermediate
+    label: 'Skill: Budgeting'
+    category: 'Expertise: Skills'
+  skill_driving:
+    value: Advanced
+    label: 'Skill: Driving'
+    category: 'Expertise: Skills'
+  fam_urban_planning:
+    value: Aware
+    label: 'Familiarity: Urban planning'
+    category: 'Expertise: Domains'
+  topic_travel:
+    value: Interested
+    label: 'Interest: Travel'
+    category: 'Interests: Topics'
+  topic_technology:
+    value: Neutral
+    label: 'Interest: Technology'
+    category: 'Interests: Topics'
+  lstyle_travel_freq:
+    value: A few trips/yr
+    label: Travel frequency
+    category: 'Interests: Culture'
+  lstyle_planning_horizon:
+    value: Weekly
+    label: Planning horizon
+    category: 'Interests: Culture'
+  lstyle_frugality:
+    value: Balanced
+    label: Spending vs saving
+    category: 'Interests: Culture'
+  att_public_transit:
+    value: Skeptical
+    label: 'Attitude: Public transit'
+    category: 'Worldview: Beliefs'
+  att_new_technology:
+    value: Neutral
+    label: 'Attitude: New technology'
+    category: 'Worldview: Beliefs'
+  risk_tolerance:
+    value: Cautious
+    label: Risk tolerance
+    category: Risk & Decision
+  dospert_financial_risk_tolerance:
+    value: Low
+    label: DOSPERT Financial Risk Tolerance
+    category: Risk & Decision
+  cog_detail_orientation:
+    value: Moderate
+    label: Detail orientation
+    category: 'Linguistic: Communication'
+  cog_patience:
+    value: Low
+    label: Patience
+    category: 'Linguistic: Communication'
+  cog_attention_span:
+    value: Average
+    label: Attention span
+    category: 'Linguistic: Communication'
+  cog_big_picture_vs_detail:
+    value: Big-picture
+    label: Big-picture vs detail
+    category: 'Linguistic: Communication'
+  cog_risk_framing:
+    value: Threat-focused
+    label: Risk framing
+    category: 'Linguistic: Communication'
+  health_mobility:
+    value: Full
+    label: Mobility
+    category: 'Health: Physical'
+  health_vision:
+    value: Corrected
+    label: Vision
+    category: 'Health: Physical'
+  health_assistive_tech:
+    value: None
+    label: Assistive technology
+    category: 'Health: Physical'
+  pref_plan_vs_spontaneous:
+    value: Planned
+    label: Planned vs spontaneous
+    category: 'Behavior: Preferences'
+  pref_save_vs_spend:
+    value: Saver-leaning
+    label: Save vs spend
+    category: 'Behavior: Preferences'
+  pref_detail_brief_vs_full:
+    value: Balanced
+    label: Brief vs full detail
+    category: 'Behavior: Preferences'
+  accessibility_needs:
+    value: None
+    label: Accessibility needs
+    category: 'Behavior: Preferences'
+  device_context:
+    value: Mobile, on-the-go
+    label: Device context
+    category: 'State: Emotional'
+  economic_motivation:
+    value: Value-driven
+    label: Economic motivation
+    category: Values & Motivation
+  habit_budget_tracking:
+    value: Monthly
+    label: 'Habit: Budget tracking'
+    category: 'Behavior: Habits'

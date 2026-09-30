@@ -21,15 +21,15 @@ attributes:
     label: Age bracket
     category: 'Demographic: Core'
   region:
-    value: North America
+    value: Eastern Europe
     label: Region
     category: 'Demographic: Core'
   urbanicity:
-    value: Rural
+    value: Small town
     label: Urbanicity
     category: 'Demographic: Core'
   socioeconomic_band:
-    value: Middle
+    value: Lower-middle
     label: Socioeconomic band
     category: 'Demographic: Core'
   demo_driver_status:
@@ -89,11 +89,11 @@ attributes:
     label: Planning horizon
     category: 'Interests: Culture'
   lstyle_frugality:
-    value: Frugal saver
+    value: Balanced
     label: Spending vs saving
     category: 'Interests: Culture'
   att_public_transit:
-    value: Opposed
+    value: Skeptical
     label: 'Attitude: Public transit'
     category: 'Worldview: Beliefs'
   att_new_technology:
@@ -109,7 +109,7 @@ attributes:
     label: DOSPERT Financial Risk Tolerance
     category: Risk & Decision
   cog_detail_orientation:
-    value: High
+    value: Very high
     label: Detail orientation
     category: 'Linguistic: Communication'
   cog_patience:
@@ -125,7 +125,7 @@ attributes:
     label: Big-picture vs detail
     category: 'Linguistic: Communication'
   cog_risk_framing:
-    value: Threat-focused
+    value: Balanced
     label: Risk framing
     category: 'Linguistic: Communication'
   health_mobility:

@@ -25,11 +25,11 @@ attributes:
     label: Region
     category: 'Demographic: Core'
   urbanicity:
-    value: Suburban
+    value: Small town
     label: Urbanicity
     category: 'Demographic: Core'
   socioeconomic_band:
-    value: Upper-middle
+    value: High income
     label: Socioeconomic band
     category: 'Demographic: Core'
   demo_driver_status:
@@ -37,7 +37,7 @@ attributes:
     label: Driving status
     category: 'Demographic: Core'
   lifex_travel_breadth:
-    value: Well-traveled
+    value: A few countries
     label: Travel breadth
     category: 'Demographic: Life Events'
   lifex_geographic_mobility:
@@ -81,7 +81,7 @@ attributes:
     label: 'Interest: Technology'
     category: 'Interests: Topics'
   lstyle_travel_freq:
-    value: Rare
+    value: Occasional
     label: Travel frequency
     category: 'Interests: Culture'
   lstyle_planning_horizon:
@@ -93,11 +93,11 @@ attributes:
     label: Spending vs saving
     category: 'Interests: Culture'
   att_public_transit:
-    value: Positive
+    value: Skeptical
     label: 'Attitude: Public transit'
     category: 'Worldview: Beliefs'
   att_new_technology:
-    value: Positive
+    value: Neutral
     label: 'Attitude: New technology'
     category: 'Worldview: Beliefs'
   risk_tolerance:
@@ -117,7 +117,7 @@ attributes:
     label: Patience
     category: 'Linguistic: Communication'
   cog_attention_span:
-    value: Very long
+    value: Long
     label: Attention span
     category: 'Linguistic: Communication'
   cog_big_picture_vs_detail:
