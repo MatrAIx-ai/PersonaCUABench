@@ -41,7 +41,6 @@ Fill in **two things**:
 | Kimi K3 | Sherry | `kimi-k3` | `KIMI_BASE_URL` + `KIMI_API_KEY` |
 | Grok 4.7 | Defu | `grok-4.7` | `GROK_BASE_URL` + `GROK_API_KEY` |
 | MiniMax M3 | Charles | `minimax-m3` | `MINIMAX_BASE_URL` + `MINIMAX_API_KEY` |
-| GLM 5.3 | Charles | `glm-5.3` | `GLM_BASE_URL` + `GLM_API_KEY` |
 | Qwen 3.8 27B | Xu Hu | `qwen3.8-27b` | `QWEN_BASE_URL` + `QWEN_API_KEY` |
 
 `OPENROUTER_API_KEY` is optional. It buys experience judge **B**, a second

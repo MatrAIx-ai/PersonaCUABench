@@ -132,8 +132,8 @@ never share a directory or a report row:
 | `s2` | matched pairs, one dimension flipped, everything else held | which single dimension causes the difference? |
 
 ```bash
-SETTING=s1 MODELS="glm-5.3" bash src/run_all.sh        # grid, judges, reports
-SETTING=s2 MODELS="glm-5.3 terra" bash src/run_all.sh  # 3 replicates each
+SETTING=s1 MODELS="minimax-m3" bash src/run_all.sh        # grid, judges, reports
+SETTING=s2 MODELS="minimax-m3 terra" bash src/run_all.sh  # 3 replicates each
 DRY_RUN=1 SETTING=s2 MODELS=terra bash src/run_all.sh  # plan only, no spend
 ```
 
@@ -166,7 +166,7 @@ providers cache on their own. A provider that rejects a breakpoint gets one
 plain retry and is never marked again in that process, so a caching optimisation
 cannot lose hours of browsing. Measured second-call cost on a repeated prefix,
 2026-09-26: Opus 5.5 0.10x, GPT 6 Astra 0.09x, Kimi K3 0.12x, Grok 4.7 0.30x;
-Gemini 3.1 Pro, GLM 5.3, MiniMax M3 and Qwen reported no cached tokens at all.
+Gemini 3.1 Pro, MiniMax M3 and Qwen reported no cached tokens at all.
 Those factors live in `models.json` as `cache_read_multiplier` and feed
 `models.py --estimate`, which prices a plan both ways.
 

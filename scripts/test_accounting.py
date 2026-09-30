@@ -40,7 +40,7 @@ def check_registry() -> None:
 
     watched = ("AZURE_OPENAI_BASE_URL", "AZURE_OPENAI_API_KEY",
                "AZURE_OPENAI_API_KEY_FILE", "OPENROUTER_API_KEY",
-               "GLM_BASE_URL", "GLM_API_KEY")
+               "MINIMAX_BASE_URL", "MINIMAX_API_KEY")
     saved = {k: os.environ.get(k) for k in watched}
     try:
         for key in watched:
@@ -49,20 +49,20 @@ def check_registry() -> None:
         assert registry.resolve("qwen/qwen3.8-27b") == ("qwen/qwen3.8-27b", "")
         # With only OpenRouter configured, a key resolves there.
         os.environ["OPENROUTER_API_KEY"] = "k"
-        assert registry.resolve("glm-5.3") == ("z-ai/glm-5.3", "openrouter")
+        assert registry.resolve("minimax-m3") == ("minimax/minimax-m3", "openrouter")
         assert registry.resolve("terra") == ("openai/gpt-5.6-terra", "openrouter")
         # Azure wins for a model deployed there, but only with credentials.
         os.environ["AZURE_OPENAI_BASE_URL"] = "https://example.invalid/openai/v1"
         os.environ["AZURE_OPENAI_API_KEY"] = "x"
         assert registry.resolve("terra") == ("gpt-5.6-terra", "openai")
-        assert registry.resolve("glm-5.3") == ("z-ai/glm-5.3", "openrouter")
+        assert registry.resolve("minimax-m3") == ("minimax/minimax-m3", "openrouter")
     finally:
         for key, value in saved.items():
             os.environ.pop(key, None)
             if value is not None:
                 os.environ[key] = value
     # Prices come from the registry for either of a model's ids.
-    assert registry.cost_of("z-ai/glm-5.3", 1_000_000, 0) == 0.38
+    assert registry.cost_of("minimax/minimax-m3", 1_000_000, 0) == 0.3
     assert registry.cost_of("gpt-5.6-terra", 1_000_000, 1_000_000) == 0.0
     assert registry.cost_of("not/a-model", 1_000_000, 0) is None
 
@@ -84,20 +84,21 @@ def check_model_routes() -> None:
         # Nothing configured: a model must refuse, naming what is missing.
         setenv()
         try:
-            registry.resolve("glm-5.3")
+            registry.resolve("minimax-m3")
         except SystemExit as exc:
-            assert "GLM_BASE_URL" in str(exc) and "OPENROUTER_API_KEY" in str(exc)
+            assert "MINIMAX_BASE_URL" in str(exc) and "OPENROUTER_API_KEY" in str(exc)
         else:
             raise AssertionError("an unroutable model was resolved anyway")
 
         # Only OpenRouter: everything falls back to it.
         setenv(OPENROUTER_API_KEY="k")
-        assert registry.resolve("glm-5.3") == ("z-ai/glm-5.3", "openrouter")
+        assert registry.resolve("minimax-m3") == ("minimax/minimax-m3", "openrouter")
 
         # The owner's own endpoint wins over the aggregator.
-        setenv(OPENROUTER_API_KEY="k", GLM_BASE_URL="https://vendor/v1", GLM_API_KEY="v")
-        assert registry.resolve("glm-5.3") == ("glm-5.3", "glm-5.3")
-        key, base_url = R._provider_config("glm-5.3")
+        setenv(OPENROUTER_API_KEY="k", MINIMAX_BASE_URL="https://vendor/v1",
+               MINIMAX_API_KEY="v")
+        assert registry.resolve("minimax-m3") == ("MiniMax-M3", "minimax-m3")
+        key, base_url = R._provider_config("minimax-m3")
         assert (key, base_url) == ("v", "https://vendor/v1")
 
         # A local server may need no key at all.
@@ -111,7 +112,7 @@ def check_model_routes() -> None:
 
         # An explicit provider is honoured even when unconfigured, so a forced
         # route fails loudly instead of silently using another vendor.
-        assert registry.resolve("glm-5.3", "glm-5.3") == ("glm-5.3", "glm-5.3")
+        assert registry.resolve("minimax-m3", "minimax-m3") == ("MiniMax-M3", "minimax-m3")
     finally:
         for key, value in saved.items():
             os.environ.pop(key, None)
@@ -122,14 +123,14 @@ def check_model_routes() -> None:
 def check_meter() -> None:
     meter = R.Meter()
     # A provider-reported charge wins over the list price.
-    reported = meter.add("agent", "z-ai/glm-5.3", "openrouter",
+    reported = meter.add("agent", "minimax/minimax-m3", "openrouter",
                          fake_response(cost=0.123), ms=1500)
     assert reported["cost_usd"] == 0.123 and reported["cost_source"] == "provider"
     assert reported["cached_prompt_tokens"] == 7
     # Without one, the registry prices it.
-    priced = meter.add("agent", "z-ai/glm-5.3", "openrouter",
+    priced = meter.add("agent", "minimax/minimax-m3", "openrouter",
                        fake_response(prompt=1_000_000, completion=0), ms=500)
-    assert priced["cost_usd"] == 0.38 and priced["cost_source"] == "registry"
+    assert priced["cost_usd"] == 0.3 and priced["cost_source"] == "registry"
     # An unknown model is counted, not silently priced at zero.
     unknown = meter.add("rubric_judge", "mystery/model", "openrouter",
                         fake_response(), ms=10)
@@ -138,14 +139,14 @@ def check_meter() -> None:
     # The shared Azure endpoint is not special: it is priced by the registry
     # like any other provider. It used to be zeroed as somebody else's bill,
     # which meant a whole grid's cost report read $0.00.
-    azure = R.Meter().add("agent", "z-ai/glm-5.3", "openai",
+    azure = R.Meter().add("agent", "minimax/minimax-m3", "openai",
                           fake_response(prompt=1_000_000, completion=0), ms=100)
-    assert azure["cost_usd"] == 0.38, azure
+    assert azure["cost_usd"] == 0.3, azure
     assert azure["cost_source"] == "registry", azure
 
     totals = meter.totals()
     assert totals["calls"] == 3 and totals["unpriced_calls"] == 1
-    assert totals["cost_usd"] == 0.503
+    assert totals["cost_usd"] == 0.423
     assert totals["model_ms"] == 2010
     assert totals["by_role"]["agent"]["calls"] == 2
     assert totals["by_role"]["rubric_judge"]["unpriced_calls"] == 1
@@ -165,7 +166,7 @@ def check_metered_call() -> None:
 
     meter = R.Meter()
     resp, call = R.metered(Client(), meter, "agent", provider="openrouter",
-                           model="z-ai/glm-5.3", messages=[])
+                           model="minimax/minimax-m3", messages=[])
     assert sent["extra_body"] == {"usage": {"include": True}}
     assert call["cost_usd"] == 0.5 and call["ms"] >= 0
     # The openai/Azure provider goes through the Responses API instead, so the
@@ -240,7 +241,7 @@ def check_cache_marking() -> None:
         {"role": "tool", "tool_call_id": "2", "content": "page two"},
     ]
     # A provider that caches on its own is left completely alone.
-    assert R.cache_marked(history, "z-ai/glm-5.3") is history
+    assert R.cache_marked(history, "minimax/minimax-m3") is history
 
     marked = R.cache_marked(history, "anthropic/claude-opus-5.5")
     breaks = [i for i, m in enumerate(marked) if isinstance(m["content"], list)]
@@ -330,7 +331,7 @@ def check_judge_calls() -> None:
     saved = R._client
     R._client = lambda model, provider="": (Fake(), "openrouter")
     try:
-        out = experience_judge.score_once("prompt", "z-ai/glm-5.3")
+        out = experience_judge.score_once("prompt", "minimax/minimax-m3")
         assert out["P5_overall"]["score"] == 4, out
         assert out["accounting"]["calls"] == 1 and out["accounting"]["cost_usd"] > 0
 
@@ -344,7 +345,7 @@ def check_judge_calls() -> None:
 
         R._client = lambda model, provider="": (Broken(), "openrouter")
         try:
-            experience_judge.score_once("prompt", "z-ai/glm-5.3")
+            experience_judge.score_once("prompt", "minimax/minimax-m3")
         except RuntimeError as exc:
             assert "broken" in str(exc)
         else:
@@ -639,8 +640,8 @@ def check_accounting_is_complete() -> None:
     won: every cell's per-call detail was silently replaced by an integer.
     """
     meter = R.Meter()
-    meter.add("agent", "z-ai/glm-5.3", "openrouter", fake_response(cost=0.2), ms=10)
-    meter.add("rubric_judge", "z-ai/glm-5.3", "openrouter", fake_response(cost=0.1), ms=20)
+    meter.add("agent", "minimax/minimax-m3", "openrouter", fake_response(cost=0.2), ms=10)
+    meter.add("rubric_judge", "minimax/minimax-m3", "openrouter", fake_response(cost=0.1), ms=20)
     accounting = {"cell_wall_seconds": 1.0, "per_call": meter.calls, **meter.totals()}
     assert isinstance(accounting["per_call"], list), accounting["per_call"]
     assert len(accounting["per_call"]) == accounting["calls"] == 2
@@ -659,9 +660,9 @@ def check_accounting_is_complete() -> None:
 def check_cost_report() -> None:
     with tempfile.TemporaryDirectory() as tmp:
         root = Path(tmp)
-        plan = [("s1", "z-ai/glm-5.3", "aaaa", 1.0, 0.1, 600.0),
+        plan = [("s1", "minimax/minimax-m3", "aaaa", 1.0, 0.1, 600.0),
                 ("s1", "x-ai/grok-4.7", "aaaa", 2.0, 0.1, 900.0),
-                ("s2", "z-ai/glm-5.3", "bbbb", 0.5, 0.1, 300.0)]
+                ("s2", "minimax/minimax-m3", "bbbb", 0.5, 0.1, 300.0)]
         for i, (setting, model, task, cost, judge, wall) in enumerate(plan):
             cell = root / setting / f"cell{i}"
             cell.mkdir(parents=True)
@@ -672,7 +673,7 @@ def check_cost_report() -> None:
         archived = root / "_v1" / "old"
         archived.mkdir(parents=True)
         (archived / "result.json").write_text(
-            json.dumps(cell_record("s1", "z-ai/glm-5.3", "cccc", 99.0, 9.0, 1.0)),
+            json.dumps(cell_record("s1", "minimax/minimax-m3", "cccc", 99.0, 9.0, 1.0)),
             encoding="utf-8")
         # A pre-accounting run is skipped rather than counted as free.
         legacy = root / "s1" / "legacy"

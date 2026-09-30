@@ -83,13 +83,10 @@ separate them. Three further reasons it is not negotiable here:
   `/finish` in the same session. A vendor harness that runs in the vendor's own
   managed desktop cannot expose that state to us, so those tasks would have no
   score at all.
-- **Only four of ten models have an official harness** (Claude, GPT, Gemini,
+- **Only four of nine models have an official harness** (Claude, GPT, Gemini,
   Qwen-CUA), and those four disagree with each other: pixel-driven, DOM-driven
-  and vendor-sandboxed respectively. "Official where available" means six
+  and vendor-sandboxed respectively. "Official where available" means five
   models on ours plus four mutually incompatible others.
-- **A screenshot harness would exclude a model outright.** GLM 5.3 accepts text
-  only; the other nine accept images. A pixel-driven harness would drop it from
-  the benchmark rather than measure it.
 
 The observation is page **text**, not pixels — `read_page` returns the visible
 text, then the page's interactive fields, then any control whose only name is an
@@ -123,7 +120,6 @@ what it wants, rather than quietly running somewhere else.
 | Kimi K3 | Sherry | `kimi-k3` |
 | Grok 4.7 | Defu | `grok-4.7` |
 | MiniMax M3 | Charles | `minimax-m3` |
-| GLM 5.3 | Charles | `glm-5.3` |
 | Qwen 3.8 27B | Xu Hu | `qwen3.8-27b` |
 
 `python src/models.py` prints what each one resolves to on your machine.

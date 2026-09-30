@@ -146,24 +146,6 @@
       "cache_read_multiplier": 1.0,
       "cache_note": "no cached tokens reported on a repeat call"
     },
-    "glm-5.3": {
-      "label": "GLM 5.3",
-      "owner": "Charles",
-      "endpoint": {
-        "model": "glm-5.3",
-        "base_url_env": "GLM_BASE_URL",
-        "api_key_env": "GLM_API_KEY",
-        "key_required": true
-      },
-      "azure": null,
-      "openrouter": "z-ai/glm-5.3",
-      "price": {
-        "in": 0.38,
-        "out": 1.19
-      },
-      "cache_read_multiplier": 1.0,
-      "cache_note": "no cached tokens reported on a repeat call"
-    },
     "qwen3.8-27b": {
       "label": "Qwen 3.8 27B",
       "owner": "Xu Hu",
