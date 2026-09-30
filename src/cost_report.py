@@ -20,29 +20,18 @@ HERE = Path(__file__).resolve().parent
 JUDGE_ROLES = ("rubric_judge", "experience_judge", "persona_fidelity_judge",
                # the one yes/no question a couple of REAL tasks put to the judge
                "real_boolean_check")
-# The collaborator's endpoint. Calls that went there are their bill, not ours,
-# whatever the record says -- results written before that distinction existed
-# priced Azure at the OpenRouter list price and charged it to us.
-AZURE_PROVIDERS = ("openai",)
-AZURE_BACKENDS = ("azure-openai-compatible",)
 
 
-def is_azure(provider: str | None, backend: str | None = None) -> bool:
-    return (provider or "") in AZURE_PROVIDERS or (backend or "") in AZURE_BACKENDS
+def spend(block: dict) -> float:
+    """What a call or a role bucket cost, in one number.
 
-
-def split_costs(calls: list[dict]) -> tuple[float, float]:
-    """(ours, theirs) over individual model calls."""
-    ours = theirs = 0.0
-    for call in calls or []:
-        amount = call.get("cost_usd")
-        if is_azure(call.get("provider")):
-            # list_cost_usd exists on newer records; on older ones the
-            # mispriced cost_usd is the same estimate under a wrong name.
-            theirs += call.get("list_cost_usd") or amount or 0.0
-        else:
-            ours += amount or 0.0
-    return ours, theirs
+    Every provider is costed the same way -- whose card an endpoint bills is not
+    something this report tracks. `cost_usd` is what the provider actually
+    reported when it reported anything; the registry's list price is the
+    fallback, which is also how records written while Azure calls were zeroed
+    still cost correctly.
+    """
+    return float(block.get("cost_usd") or block.get("list_cost_usd") or 0.0)
 
 
 def cells(results: Path):
@@ -63,36 +52,20 @@ def cells(results: Path):
         calls = acct.get("per_call") or []
         if isinstance(calls, int):       # a record written while the two names collided
             calls = []
-        ours_calls, azure_calls = split_costs(calls)
-        # The post-hoc judges live in their own blocks, each with its own meter
-        # and its own provider, so each block is attributed on its own.
+        # The post-hoc judges live in their own blocks, each with its own meter;
+        # the inline rubric judge and the REAL boolean check bill into the run's
+        # own meter and are already in by_role.
         blocks = [(record.get("experience") or {}).get(side) or {}
                   for side in ("a", "b")]
         blocks.append(record.get("persona_fidelity") or {})
         judge_cost = judge_ms = 0.0
         for block in blocks:
             block_acct = block.get("accounting") or {}
-            amount = block_acct.get("cost_usd") or 0.0
+            judge_cost += spend(block_acct)
             judge_ms += block_acct.get("model_ms", 0)
-            if is_azure(block.get("provider"), block.get("backend")):
-                azure_calls += block_acct.get("list_cost_usd") or amount
-            else:
-                judge_cost += amount
-        # The inline rubric judge bills into the run's own meter, so its share
-        # is already in the call split; count only its visible total here.
-        inline_judge = sum((by_role.get(role) or {}).get("cost_usd", 0.0)
-                           for role in JUDGE_ROLES)
-        if not is_azure(arm.get("provider"), arm.get("backend")):
-            judge_cost += inline_judge
+        judge_cost += sum(spend(by_role.get(role) or {}) for role in JUDGE_ROLES)
         judge_ms += sum((by_role.get(role) or {}).get("ms", 0) for role in JUDGE_ROLES)
-        agent = {**(by_role.get("agent") or {})}
-        agent_ours = 0.0 if is_azure(arm.get("provider"), arm.get("backend")) \
-            else agent.get("cost_usd", 0.0)
-        if is_azure(arm.get("provider"), arm.get("backend")) and not calls:
-            # A record from before per-call attribution: its agent total is the
-            # list-price estimate of what Azure was asked to do.
-            azure_calls += agent.get("list_cost_usd") or agent.get("cost_usd", 0.0)
-        azure_cost = azure_calls
+        agent_cost = spend(by_role.get("agent") or {})
         yield {
             "setting": record.get("setting") or "(none)",
             "suite": record.get("suite_id") or "(none)",
@@ -122,14 +95,13 @@ def cells(results: Path):
             "proactive_nudge": bool((run.get("arm") or {}).get("proactive_nudge")),
             "score": (record.get("judgement") or {}).get("score"),
             "wall_seconds": acct.get("cell_wall_seconds") or 0.0,
-            "agent_ms": agent.get("ms", 0),
+            "agent_ms": (by_role.get("agent") or {}).get("ms", 0),
             "judge_ms": judge_ms,
             "prompt_tokens": acct.get("prompt_tokens", 0),
             "completion_tokens": acct.get("completion_tokens", 0),
-            "agent_cost": round(agent_ours, 6),
+            "agent_cost": round(agent_cost, 6),
             "judge_cost": round(judge_cost, 6),
-            "total_cost": round(agent_ours + judge_cost, 6),
-            "azure_cost": round(azure_cost, 6),
+            "total_cost": round(agent_cost + judge_cost, 6),
             "unpriced_calls": acct.get("unpriced_calls", 0),
             "path": str(path),
         }
@@ -146,13 +118,12 @@ def group(rows: list[dict], key: str) -> dict[str, dict]:
         bucket = out.setdefault(str(name), {
             "cells": 0, "wall_seconds": 0.0, "steps": 0, "prompt_tokens": 0,
             "completion_tokens": 0, "agent_cost": 0.0, "judge_cost": 0.0,
-            "total_cost": 0.0, "azure_cost": 0.0, "retries": 0, "questions": 0,
+            "total_cost": 0.0, "retries": 0, "questions": 0,
             "clicks": 0, "direct": 0, "reads": 0, "click_failures": 0,
             "unpriced_calls": 0})
         bucket["cells"] += 1
         for field in ("wall_seconds", "steps", "prompt_tokens", "completion_tokens",
-                      "agent_cost", "judge_cost", "total_cost", "azure_cost",
-                      "retries", "questions", "clicks", "direct", "reads",
+                      "agent_cost", "judge_cost", "total_cost", "retries", "questions", "clicks", "direct", "reads",
                       "click_failures", "unpriced_calls"):
             bucket[field] += row[field]
     return out
@@ -165,7 +136,7 @@ def table(title: str, grouped: dict[str, dict], label: str) -> None:
     width = max(len(label), max(len(k) for k in grouped)) + 2
     print(f"{label:<{width}}{'cells':>6}{'min/cell':>10}{'steps':>7}{'asks':>6}"
           f"{'retries':>8}{'in tok':>12}{'out tok':>9}{'agent $':>10}{'judge $':>9}"
-          f"{'ours $':>9}{'azure $':>10}")
+          f"{'total $':>9}")
     for name in sorted(grouped):
         b = grouped[name]
         cells_n = b["cells"] or 1
@@ -173,18 +144,14 @@ def table(title: str, grouped: dict[str, dict], label: str) -> None:
               f"{b['steps'] / cells_n:>7.1f}{b['questions']:>6}{b['retries']:>8}"
               f"{b['prompt_tokens']:>12,}"
               f"{b['completion_tokens']:>9,}{b['agent_cost']:>10.2f}"
-              f"{b['judge_cost']:>9.2f}{b['total_cost']:>9.2f}"
-              f"{b['azure_cost']:>10.2f}")
+              f"{b['judge_cost']:>9.2f}{b['total_cost']:>9.2f}")
     totals = {f: sum(b[f] for b in grouped.values())
               for f in ("cells", "wall_seconds", "agent_cost", "judge_cost",
-                        "total_cost", "azure_cost")}
+                        "total_cost")}
     print(f"{'TOTAL':<{width}}{totals['cells']:>6}"
           f"{totals['wall_seconds'] / 3600:>9.1f}h{'':>7}{'':>6}{'':>8}{'':>12}{'':>9}"
           f"{totals['agent_cost']:>10.2f}{totals['judge_cost']:>9.2f}"
-          f"{totals['total_cost']:>9.2f}{totals['azure_cost']:>10.2f}")
-    if totals["azure_cost"]:
-        print("  'azure $' is the collaborator's endpoint at list price, not our "
-              "spend; 'ours $' is what our own keys were charged")
+          f"{totals['total_cost']:>9.2f}")
     unpriced = sum(b["unpriced_calls"] for b in grouped.values())
     if unpriced:
         print(f"  note: {unpriced} model calls had no price (provider reported none "

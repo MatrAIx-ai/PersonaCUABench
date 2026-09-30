@@ -135,6 +135,14 @@ def check_meter() -> None:
                         fake_response(), ms=10)
     assert unknown["cost_usd"] is None and unknown["cost_source"] == "unknown"
 
+    # The shared Azure endpoint is not special: it is priced by the registry
+    # like any other provider. It used to be zeroed as somebody else's bill,
+    # which meant a whole grid's cost report read $0.00.
+    azure = R.Meter().add("agent", "z-ai/glm-5.3", "openai",
+                          fake_response(prompt=1_000_000, completion=0), ms=100)
+    assert azure["cost_usd"] == 0.38, azure
+    assert azure["cost_source"] == "registry", azure
+
     totals = meter.totals()
     assert totals["calls"] == 3 and totals["unpriced_calls"] == 1
     assert totals["cost_usd"] == 0.503

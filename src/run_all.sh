@@ -15,6 +15,7 @@
 #   SETTING=s2 MODELS="glm-5.3 minimax-m3" bash src/run_all.sh
 #   SETTING=s1 MODELS=terra REPLICATES="r1 r2 r3" bash src/run_all.sh
 #   PROMPT_CACHE=off SETTING=s1 MODELS=terra bash src/run_all.sh  # uncached cost
+#   NUDGE=both SETTING=s1 MODELS="<key>" bash src/run_all.sh    # proactivity ablation
 #   DRY_RUN=1 SETTING=s2 MODELS=terra bash src/run_all.sh   # plan only, no spend
 #
 # MODELS takes keys from src/models.json (`python src/models.py` lists
@@ -46,6 +47,19 @@ JOBS="${JOBS:-1}"
 PROMPT_CACHE="${PROMPT_CACHE:-on}"
 CACHE_ARGS=(__sentinel__)
 [[ "$PROMPT_CACHE" == off ]] && CACHE_ARGS+=(--no-prompt-cache)
+# The proactivity ablation. NUDGE=on appends a paragraph to the agent's system
+# prompt telling it to ask the user rather than guess when the request leaves
+# something out; NUDGE=both runs each cell twice, once each way, which is the
+# comparison the arm exists for. The flag is part of every cell's resume
+# fingerprint, so the two arms are separate cells and neither overwrites the
+# other, and cost_report.py --by proactive_nudge splits the results.
+NUDGE="${NUDGE:-off}"
+case "$NUDGE" in
+  off) NUDGE_ARMS=("plain") ;;
+  on) NUDGE_ARMS=("nudge") ;;
+  both) NUDGE_ARMS=("plain" "nudge") ;;
+  *) echo "NUDGE must be off, on or both (got '$NUDGE')" >&2; exit 2 ;;
+esac
 DRY_RUN="${DRY_RUN:-}"
 RESULTS="src/results/$SETTING"
 mkdir -p logs
@@ -67,14 +81,19 @@ for model in $MODELS; do
     # cell, once per replicate, over each suite.
     for r in $REPLICATES; do
       for suite in $SUITES; do
-        say "$SETTING  model=$model  replicate=$r  suite=$suite"
-        if ! PERSONAS="$PERSONAS" TASK_SUITE="$suite" PYTHON_BIN="$PY" JOBS="$JOBS" \
-             run bash src/run_grid.sh --setting "$SETTING" --model "$model" \
-               --replicate-id "$r" --headless "${CACHE_ARGS[@]:1}" \
-               >> "logs/$tag-$r-$suite.log" 2>&1; then
-          failed="$failed $SETTING/$model/$r/$suite"
-          say "$model $r $suite reported failed cells (see logs/$tag-$r-$suite.log)"
-        fi
+        for arm in "${NUDGE_ARMS[@]}"; do
+          NUDGE_ARGS=(__sentinel__)
+          [[ "$arm" == nudge ]] && NUDGE_ARGS+=(--nudge-proactive)
+          say "$SETTING  model=$model  replicate=$r  suite=$suite  arm=$arm"
+          if ! PERSONAS="$PERSONAS" TASK_SUITE="$suite" PYTHON_BIN="$PY" JOBS="$JOBS" \
+               run bash src/run_grid.sh --setting "$SETTING" --model "$model" \
+                 --replicate-id "$r" --headless "${CACHE_ARGS[@]:1}" \
+                 "${NUDGE_ARGS[@]:1}" \
+                 >> "logs/$tag-$r-$suite-$arm.log" 2>&1; then
+            failed="$failed $SETTING/$model/$r/$suite/$arm"
+            say "$model $r $suite $arm reported failed cells (see logs/$tag-$r-$suite-$arm.log)"
+          fi
+        done
       done
     done
   else
@@ -123,5 +142,11 @@ done
 say "cost and time"
 run $PY src/cost_report.py "$RESULTS" --csv "logs/$SETTING-cells.csv" 2>&1 \
   | tee "logs/$SETTING-cost.log"
+
+if [[ "$NUDGE" == both ]]; then
+  say "proactivity ablation: asking versus guessing"
+  run $PY src/cost_report.py "$RESULTS" --by proactive_nudge 2>&1 \
+    | tee "logs/$SETTING-nudge.log"
+fi
 
 say "done${failed:+; failed:$failed}"

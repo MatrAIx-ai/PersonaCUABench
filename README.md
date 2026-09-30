@@ -94,6 +94,10 @@ GPT 5.6 Terra is the shared persona and judge model, not an execution backbone.
 
 ## Running your model
 
+**If you have been assigned a model, read [`RUNNING.md`](RUNNING.md)** — setup,
+the checks to run before spending anything, the grid, the proactivity ablation
+and how to send the results back. The short version:
+
 ```bash
 git clone <this repo> && cd PersonaCUABench
 python3 -m venv .venv && .venv/bin/pip install -r src/requirements.txt
@@ -153,6 +157,8 @@ and navigation style, `src/judge_all.py` re-judges saved runs in parallel.
 | `src/run.py` | persona → CUA → judge, one cell |
 | `src/run_grid.sh`, `run_all.sh` | a model's whole grid, then the judges and reports |
 | `src/real_evals/` | REAL's own state checkers, vendored (Apache-2.0) |
+
+| `RUNNING.md` | what a collaborator does with their assigned model, start to finish |
 
 See [`src/README.md`](src/README.md) for the detail: settings, judges,
 caching, the matched-pair design, and how to add tasks or personas.

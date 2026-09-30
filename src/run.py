@@ -806,14 +806,11 @@ class Meter:
         # that beats a list price: it already accounts for the provider it
         # routed to, cache reads and any discount.
         reported = getattr(usage, "cost", None)
-        # What the registry says these tokens are worth at list price. On Azure
-        # that is not our bill -- the endpoint is the collaborator's -- but it is
-        # the only estimate of what the run cost them, so it is kept separately
-        # instead of being folded into ours or thrown away.
+        # What the registry says these tokens are worth at list price.
         list_cost = model_registry.cost_of(model, prompt_tokens, completion_tokens)
-        if provider == "openai" and model_registry.azure_configured():
-            cost, source = 0.0, "azure_billed_to_collaborator"
-        elif isinstance(reported, (int, float)):
+        # Azure is costed like every other provider: whose card it lands on is
+        # not something the report tracks, so there is one cost per call.
+        if isinstance(reported, (int, float)):
             cost, source = float(reported), "provider"
         else:
             cost = list_cost
