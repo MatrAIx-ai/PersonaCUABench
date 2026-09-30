@@ -223,14 +223,14 @@ def main() -> None:
         return _probe()
     if args.estimate:
         return _estimate(args.estimate)
-    print(f"{'key':<18}{'owner':<14}{'resolves to':<34}{'provider':<12}routes")
+    print(f"{'key':<18}{'resolves to':<34}{'provider':<12}routes")
     for name, entry in MODELS.items():
         try:
             model_id, provider = resolve(name)
         except SystemExit:
             model_id, provider = "-- no route configured --", "-"
         available = ",".join(f"{p}{'' if ok else '(x)'}" for p, _, ok in routes(name))
-        print(f"{name:<18}{entry.get('owner', '?'):<14}{model_id:<34}"
+        print(f"{name:<18}{model_id:<34}"
               f"{provider:<12}{available}")
     print("\n(x) = that route's credentials are not set on this machine. A model "
           "with no route raises rather than silently running somewhere else.")

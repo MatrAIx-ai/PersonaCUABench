@@ -11,7 +11,7 @@ detail of how a cell works is in [`src/README.md`](src/README.md).
 ```bash
 git clone git@github.com:MatrAIx-ai/PersonaCUABench.git
 cd PersonaCUABench
-git checkout haoming-travel-tasks
+git checkout v1
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r src/requirements.txt
 ```
@@ -28,22 +28,22 @@ Fill in **two things**:
 
 1. **The shared Azure endpoint.** This runs the persona simulator, the rubric
    judge and experience judge A — the same for everyone, so your results are
-   comparable with everyone else's. Haoming sends you the key; put it in
+   comparable with everyone else's. The key is shared with you privately; put it in
    `azure_api_key.txt` (gitignored) and leave
    `AZURE_OPENAI_API_KEY_FILE=azure_api_key.txt` as it is.
 2. **Your own model's endpoint and key.**
 
-| model | owner | key to pass | variables to fill |
-|---|---|---|---|
-| Claude Opus 5.5 | Yiyang | `opus-5.5` | `CLAUDE_BASE_URL` + `CLAUDE_API_KEY` |
-| GPT 6 Astra | Haoming | `gpt-6-astra` | `GPT6_BASE_URL` + `GPT6_API_KEY` |
-| Muse Spark 1.1 | Xu Hu | `muse-spark-1.1` | `MUSE_BASE_URL` + `MUSE_API_KEY` |
-| Gemini 3.8 Flash | Sherry | `gemini-3.8-flash` | `GEMINI_BASE_URL` + `GEMINI_API_KEY` |
-| Kimi K3 | Sherry | `kimi-k3` | `KIMI_BASE_URL` + `KIMI_API_KEY` |
-| Grok 4.7 | Defu | `grok-4.7` | `GROK_BASE_URL` + `GROK_API_KEY` |
-| MiniMax M3 | Charles | `minimax-m3` | `MINIMAX_BASE_URL` + `MINIMAX_API_KEY` |
-| Qwen 3.8 27B | Xu Hu | `qwen3.8-27b` | `QWEN_BASE_URL` + `QWEN_API_KEY` |
-| DeepSeek V4.1 Flash | unassigned | `deepseek-v4.1` | `DEEPSEEK_BASE_URL` + `DEEPSEEK_API_KEY` |
+| model | key to pass | variables to fill |
+|---|---|---|
+| Claude Opus 5.5 | `opus-5.5` | `CLAUDE_BASE_URL` + `CLAUDE_API_KEY` |
+| GPT 6 Astra | `gpt-6-astra` | `GPT6_BASE_URL` + `GPT6_API_KEY` |
+| Muse Spark 1.1 | `muse-spark-1.1` | `MUSE_BASE_URL` + `MUSE_API_KEY` |
+| Gemini 3.8 Flash | `gemini-3.8-flash` | `GEMINI_BASE_URL` + `GEMINI_API_KEY` |
+| Kimi K3 | `kimi-k3` | `KIMI_BASE_URL` + `KIMI_API_KEY` |
+| Grok 4.7 | `grok-4.7` | `GROK_BASE_URL` + `GROK_API_KEY` |
+| MiniMax M3 | `minimax-m3` | `MINIMAX_BASE_URL` + `MINIMAX_API_KEY` |
+| Qwen 3.8 27B | `qwen3.8-27b` | `QWEN_BASE_URL` + `QWEN_API_KEY` |
+| DeepSeek V4.1 Flash | `deepseek-v4.1` | `DEEPSEEK_BASE_URL` + `DEEPSEEK_API_KEY` |
 
 **`OPENROUTER_API_KEY` does two jobs, and you probably need it.**
 
@@ -57,7 +57,7 @@ Fill in **two things**:
 
 Your model id must be the one **your provider** uses. Check
 `src/models.json` → your key → `endpoint.model` against your provider's docs
-before a paid run, and tell Haoming if it needs changing.
+before a paid run, and say so on the team channel if it needs changing.
 
 ### If your endpoint is not OpenRouter
 
@@ -108,7 +108,7 @@ everything else, in about a hundred lines.
 
 **Whatever you change, `python scripts/check_models.py <your key>` must pass
 before you start a grid** — it exercises a two-turn tool exchange, which is
-where a not-quite-compatible endpoint fails. And tell Haoming what you changed,
+where a not-quite-compatible endpoint fails. And say what you changed,
 so the run record says which endpoint produced the numbers.
 
 ## 2. Check before you spend
@@ -157,7 +157,7 @@ deterministic checker, not a model. The `travel-senior` one is the real thing: a
 persona model rewrites the task as that person would ask it, and your model only
 ever sees what they said.
 
-If any of these three fails, stop and tell Haoming what it printed. Do not start
+If any of these three fails, stop and post what it printed. Do not start
 the grid.
 
 ## 4. The grid
@@ -189,11 +189,11 @@ measured mean of 4.4 minutes per cell.
   python src/cost_report.py src/results/s1
   ```
 
-  and tell Haoming the mean before starting the rest.
+  and post the mean before starting the rest.
 
 ## 5. The proactivity ablation — optional
 
-**Skip this unless Haoming asks you for it.** Section 4 is the run that matters;
+**Skip this unless you are asked for it.** Section 4 is the run that matters;
 this is an extra arm and it doubles the cells and the money.
 
 The question it answers is whether an agent **asks** when the person left
@@ -215,7 +215,7 @@ python src/cost_report.py src/results/s1 --by proactive_nudge
 ```
 
 **Finish `NUDGE=off` first.** Only start the nudged arm once the plain grid is
-complete and Haoming has asked for it; at roughly $1,100 per arm per model it is
+complete and it has been asked for; at roughly $1,600 per arm per model it is
 not something to kick off on your own.
 
 ## 6. Send the results
@@ -228,8 +228,8 @@ python src/report.py src/results/s1 --suite real
 python src/cost_report.py src/results/s1 --csv cells.csv
 ```
 
-Then upload the whole `src/results/` directory to the Google Drive folder
-Haoming gives you, together with `logs/` and `cells.csv`. Keep the directory
+Then upload the whole `src/results/` directory to the shared Google Drive
+folder, together with `logs/` and `cells.csv`. Keep the directory
 structure as it is — the judges and reports are re-run over it centrally.
 
 Each cell's `result.json` holds the task as it was at run time with its hash,
@@ -245,11 +245,11 @@ re-judgeable months later, so please do not prune it.
 | `models.py` shows `(x)` on your route | that route's `_BASE_URL`/`_API_KEY` is not set in `.env` |
 | a model with no route raises | deliberate: it will not quietly run somewhere else |
 | `UNJUDGED (...)` on a cell | the run is saved and fine; the judge could not score it. The reason is in the line. Re-runnable with `python src/judge_all.py` |
-| `UNSCORED: model returned no output` | your model returned nothing usable three times. Keep the record and tell Haoming |
+| `UNSCORED: model returned no output` | your model returned nothing usable three times. Keep the record and report it |
 | a REAL cell says the state was never read | the sandbox did not answer; re-run that cell |
 | Chrome dies under `JOBS=4` | lower `JOBS`; each worker needs ~1.5 GB |
 | `403 ... 18+ age confirmation` | OpenRouter account gate, not a bad model id. Confirm at <https://openrouter.ai/settings/preferences> |
-| `SCREENSHOTS: n FAILED` after a cell | the run is fine and scored; frames are for auditing. Tell Haoming if it is every cell |
+| `SCREENSHOTS: n FAILED` after a cell | the run is fine and scored; frames are for auditing. Report it if it is every cell |
 | a cell stops at `max_steps` | it ran out of budget rather than finishing. Normal on hard REAL tasks; note it, do not raise the limit yourself |
 | `typing failed: nothing on the page matches` | the model guessed a selector. Expected occasionally; if it is most of a cell, send the log |
 

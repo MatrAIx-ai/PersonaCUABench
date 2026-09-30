@@ -118,17 +118,17 @@ Point it wherever you like: the variable names and the model id live in
 endpoint (no code change), one needing extra headers (one function), and one
 that is not OpenAI-shaped at all (a shim, with a worked example in the repo).
 
-| model | owner | key |
-|---|---|---|
-| Claude Opus 5.5 | Yiyang | `opus-5.5` |
-| GPT 6 Astra | Haoming | `gpt-6-astra` |
-| Muse Spark 1.1 | Xu Hu | `muse-spark-1.1` |
-| Gemini 3.8 Flash | Sherry | `gemini-3.8-flash` |
-| Kimi K3 | Sherry | `kimi-k3` |
-| Grok 4.7 | Defu | `grok-4.7` |
-| MiniMax M3 | Charles | `minimax-m3` |
-| Qwen 3.8 27B | Xu Hu | `qwen3.8-27b` |
-| DeepSeek V4.1 Flash | unassigned | `deepseek-v4.1` |
+| model | key |
+|---|---|
+| Claude Opus 5.5 | `opus-5.5` |
+| GPT 6 Astra | `gpt-6-astra` |
+| Muse Spark 1.1 | `muse-spark-1.1` |
+| Gemini 3.8 Flash | `gemini-3.8-flash` |
+| Kimi K3 | `kimi-k3` |
+| Grok 4.7 | `grok-4.7` |
+| MiniMax M3 | `minimax-m3` |
+| Qwen 3.8 27B | `qwen3.8-27b` |
+| DeepSeek V4.1 Flash | `deepseek-v4.1` |
 
 `python src/models.py` prints what each one resolves to on your machine, and
 `python scripts/check_models.py` puts a real two-turn tool-calling exchange

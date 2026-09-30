@@ -1,6 +1,6 @@
 # Ecommerce & Shopping scenario
 
-This directory is the source of truth for Defu Cao's six Shopping tasks and
+This directory is the source of truth for the six Shopping tasks and
 their controlled persona experiment. The task text and R1–Rn rubrics live in
 `000-core.json`; the persona axes, behavioral rubrics, and applicability matrix
 live in `personas/persona_experiment.json`.
