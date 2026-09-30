@@ -257,7 +257,7 @@ FAMILY_DIMENSIONS: dict[str, tuple[str, ...]] = {
     "travel": TRAVEL_DIMENSIONS,
     "science": ("ind_education", "fam_statistics", "skill_research", "topic_science"),
     "tech": ("ind_consumer_electronics", "fam_computer_networking", "skill_coding",
-             "skill_debugging", "topic_technology"),
+             "skill_debugging", "acad_computer_science"),
     "community": ("ind_nonprofit", "ind_government", "skill_facilitation",
                   "topic_volunteering", "val_community"),
     "art": ("ind_fine_art", "fam_art_history", "skill_drawing",
@@ -295,16 +295,16 @@ FAMILY_DEFAULTS: dict[str, dict[str, dict[str, str]]] = {
     "tech": {
         "expert": {"ind_consumer_electronics": "Veteran",
                    "fam_computer_networking": "Expert", "skill_coding": "Master",
-                   "skill_debugging": "Master", "topic_technology": "Passionate"},
+                   "skill_debugging": "Master", "acad_computer_science": "Passionate"},
         "senior": {"ind_consumer_electronics": "None",
                    "fam_computer_networking": "None", "skill_coding": "None",
-                   "skill_debugging": "None", "topic_technology": "Averse"},
+                   "skill_debugging": "None", "acad_computer_science": "Averse"},
         "young": {"ind_consumer_electronics": "Some exposure",
                   "fam_computer_networking": "Aware", "skill_coding": "Beginner",
-                  "skill_debugging": "Beginner", "topic_technology": "Passionate"},
+                  "skill_debugging": "Beginner", "acad_computer_science": "Passionate"},
         "practical": {"ind_consumer_electronics": "Some exposure",
                       "fam_computer_networking": "Familiar", "skill_coding": "Beginner",
-                      "skill_debugging": "Intermediate", "topic_technology": "Neutral"},
+                      "skill_debugging": "Intermediate", "acad_computer_science": "Neutral"},
     },
     "community": {
         "expert": {"ind_nonprofit": "Veteran", "ind_government": "Experienced",
@@ -450,6 +450,10 @@ def dimensions_for(family: str) -> tuple[str, ...]:
     if family not in FAMILY_DIMENSIONS:
         raise AssertionError(
             f"unknown persona family {family!r}; known: {sorted(FAMILY_DIMENSIONS)}")
+    repeated = [d for d in FAMILY_DIMENSIONS[family] if d in CORE_DIMENSIONS]
+    # A dimension in both places would be rendered twice and would let one
+    # family quietly carry a different value for a shared trait.
+    assert not repeated, f"family {family} repeats core dimension(s): {repeated}"
     return tuple(CORE_DIMENSIONS) + FAMILY_DIMENSIONS[family]
 
 
