@@ -84,12 +84,15 @@ while argv:
         tasks_file = argv.pop(0)
 suite = task_router.load_route(suite_id=suite_id, tasks_file=tasks_file)
 control = "0" not in (str(__import__("os").environ.get("CONTROL", "1")),)
-for index, task in enumerate(suite.tasks, start=1):
+# The task_id, not its 1-based index: TASKS below is a list of task_ids (so a
+# shard stays stable if a task is inserted before it), and the two lists are
+# matched against each other verbatim.
+for task in suite.tasks:
     names = persona_assignments.personas_for(task)
     if control:
         names = ["none"] + names
     for name in names:
-        print(f"{index} {name}")
+        print(f"{task["task_id"]} {name}")
 PYCELLS
   ) || exit $?
 fi

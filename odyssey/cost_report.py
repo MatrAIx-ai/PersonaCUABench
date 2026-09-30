@@ -17,7 +17,9 @@ import json
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-JUDGE_ROLES = ("rubric_judge", "experience_judge", "persona_fidelity_judge")
+JUDGE_ROLES = ("rubric_judge", "experience_judge", "persona_fidelity_judge",
+               # the one yes/no question a couple of REAL tasks put to the judge
+               "real_boolean_check")
 # The collaborator's endpoint. Calls that went there are their bill, not ours,
 # whatever the record says -- results written before that distinction existed
 # priced Azure at the OpenRouter list price and charged it to us.

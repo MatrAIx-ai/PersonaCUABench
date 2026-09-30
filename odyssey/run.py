@@ -39,6 +39,7 @@ HERE = Path(__file__).resolve().parent
 REPO = HERE.parent
 sys.path.insert(0, str(HERE))
 
+import jmespath  # noqa: E402  the query language some REAL checks are written in
 import models as model_registry  # noqa: E402  (odyssey/models.py)
 import responses_shim  # noqa: E402  (odyssey/responses_shim.py)
 import persona as persona_lib  # noqa: E402  (odyssey/persona.py)
@@ -1461,15 +1462,65 @@ def judge_run(task: dict, run: dict, *, judge_model: str, judge_provider: str,
             **score_verdicts(task, verdicts, run["steps"])}
 
 
-def judge_real(task: dict, run: dict) -> dict:
-    """Score a REAL task with its own checkers against the site's final state.
+REAL_BOOLEAN_PROMPT = prompt("real_boolean_check")
 
-    Deterministic and free: no model is called. The task passes only if every
-    checker prints SUCCESS. A checker that cannot run is an error, never a
-    failure -- a missing script and an unfinished task must not look alike.
+
+def real_jmespath(check: dict, state: dict) -> tuple[bool, str]:
+    """(passed, what it found). Raises only if the query itself is malformed."""
+    found = jmespath.search(check["query"], state)
+    passed = found == check["expected_value"]
+    return passed, (f"{check['query']} -> {json.dumps(found, ensure_ascii=False)[:200]} "
+                    f"(wanted {json.dumps(check['expected_value'], ensure_ascii=False)})")
+
+
+def real_llm_boolean(check: dict, task: dict, run: dict, *, judge_model: str,
+                     judge_provider: str, meter: "Meter | None") -> tuple[bool, str]:
+    """(passed, the judge's reason). Raises if the judge never answers usably."""
+    client, resolved_provider = _client(judge_model, judge_provider)
+    text = REAL_BOOLEAN_PROMPT.format(
+        task=task["confirmed_task"], rubric=check["rubric"],
+        answer=run.get("answer") or "(the agent produced no final answer)")
+    last_error = ""
+    for attempt in range(MAX_RETRIES):
+        try:
+            resp, _ = metered(client, meter, "real_boolean_check",
+                              provider=resolved_provider, model=judge_model,
+                              messages=[{"role": "user", "content": text}],
+                              max_completion_tokens=2000)
+            parsed = extract_json(resp.choices[0].message.content or "")
+        except (NameError, TypeError, AttributeError):
+            raise                      # our bug, not the weather
+        except Exception as exc:
+            last_error = f"{type(exc).__name__}: {exc}"
+            parsed = None
+        if isinstance(parsed, dict) and isinstance(parsed.get("answer"), bool):
+            return (parsed["answer"] == check["expected_value"],
+                    f"judge said {parsed['answer']}: {str(parsed.get('reason'))[:200]}")
+        print(f"  [boolean check returned nothing usable] "
+              f"attempt {attempt + 1}/{MAX_RETRIES}", flush=True)
+        time.sleep(3)
+    raise RuntimeError(last_error or "the judge never returned a usable boolean")
+
+
+def judge_real(task: dict, run: dict, *, judge_model: str = "",
+               judge_provider: str = "", meter: "Meter | None" = None) -> dict:
+    """Score a REAL task with its own checks against the site's final state.
+
+    Three kinds, and a task may carry several of each: a vendored agisdk script
+    that prints SUCCESS, a jmespath query on the final state, and an llm_boolean
+    question about the agent's own answer. The first two are deterministic and
+    free; only the last calls a model, and only the tasks that declare one.
+
+    The task passes only if every check passes. A check that cannot run is an
+    error, never a failure -- a missing script and an unfinished task must not
+    look alike.
     """
     real = task["real"]
-    base = {"judge_model": "real-state-checker", "judge_provider": None,
+    checks = real.get("checks") or []
+    needs_model = any(c["type"] == "llm_boolean" for c in checks)
+    base = {"judge_model": f"real-state-checker+{judge_model}" if needs_model
+                           else "real-state-checker",
+            "judge_provider": judge_provider if needs_model else None,
             "total": 1, "communicated": None, "score_communicated": None}
     if run.get("real_state") is None:
         return {**base, "verdicts": {}, "met": None, "score": None,
@@ -1480,6 +1531,12 @@ def judge_real(task: dict, run: dict) -> dict:
         return {**base, "verdicts": {}, "met": None, "score": None,
                 "error": f"checker(s) missing from {REAL_EVALS}: {missing}; "
                          f"run python odyssey/prepare_real.py"}
+    if needs_model and not judge_model:
+        # Scoring it on the other checks alone would report a pass the task never
+        # earned, so the cell is left unscored and says why.
+        return {**base, "verdicts": {}, "met": None, "score": None,
+                "error": f"{real['id']} has an llm_boolean check but no judge model "
+                         f"was passed to judge_real()"}
 
     state_path = None
     outputs, passed, errors = {}, True, []
@@ -1507,6 +1564,26 @@ def judge_real(task: dict, run: dict) -> dict:
     finally:
         if state_path:
             os.unlink(state_path)
+
+    for i, check in enumerate(checks):
+        label = f"{check['type']}[{i}]"
+        try:
+            if check["type"] == "jmespath":
+                ok, detail = real_jmespath(check, run["real_state"])
+            elif check["type"] == "llm_boolean":
+                ok, detail = real_llm_boolean(
+                    check, task, run, judge_model=judge_model,
+                    judge_provider=judge_provider, meter=meter)
+            else:
+                raise RuntimeError(f"unknown check type {check['type']!r}")
+        except (NameError, TypeError, AttributeError):
+            raise
+        except Exception as exc:
+            errors.append(f"{label}: {type(exc).__name__}: {exc}")
+            outputs[label] = f"ERROR: {exc}"[:300]
+            continue
+        outputs[label] = ("PASS " if ok else "FAIL ") + detail
+        passed = passed and ok
 
     if errors:
         # A checker that crashed says nothing about the agent, so the cell is
@@ -2015,7 +2092,9 @@ def main() -> None:
         if not args.no_judge:
             try:
                 record["judgement"] = (
-                    judge_real(task, run) if task.get("real")
+                    judge_real(task, run, judge_model=args.judge_model,
+                               judge_provider=judge_provider, meter=meter)
+                    if task.get("real")
                     else judge_run(task, run, judge_model=args.judge_model,
                                    judge_provider=judge_provider, meter=meter))
             except Exception as exc:  # never lose a completed browse to the judge

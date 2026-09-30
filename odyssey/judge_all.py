@@ -38,7 +38,11 @@ def log(msg: str) -> None:
 
 def needs(record: dict, args) -> tuple[bool, bool]:
     j = record.get("judgement") or {}
-    need_rubric = args.redo or j.get("score") is None or j.get("judge_model") != args.judge_model
+    # A REAL task is scored by its own checkers, so a different rubric-judge
+    # model is no reason to redo it; only a missing score is.
+    by_checker = str(j.get("judge_model") or "").startswith("real-state-checker")
+    need_rubric = args.redo or j.get("score") is None or (
+        not by_checker and j.get("judge_model") != args.judge_model)
     e = record.get("experience") or {}
     a_ok = "error" not in (e.get("a") or {"error": 1}) and (e.get("a") or {}).get("model") == args.judge_model
     b_ok = not args.judge_b or ("error" not in (e.get("b") or {"error": 1}))
@@ -76,8 +80,14 @@ def judge_one(path: Path, args) -> str:
     task, task_integrity = odyssey.task_for_record(record)
 
     if need_rubric and task.get("real"):
-        # REAL tasks are scored by their deterministic state checkers, not an LLM.
-        record["judgement"] = odyssey.judge_real(task, load_real_state(path, run_))
+        # Scored by the task's own checkers; a model is called only for the few
+        # tasks that carry an llm_boolean question about the agent's answer.
+        meter = odyssey.Meter()
+        record["judgement"] = odyssey.judge_real(
+            task, load_real_state(path, run_), judge_model=args.judge_model,
+            judge_provider=args.judge_provider, meter=meter)
+        if meter.calls:
+            record["judgement"]["accounting"] = meter.totals()
     elif need_rubric:
         old = record.get("judgement")
         if old and old.get("judge_model") != args.judge_model:

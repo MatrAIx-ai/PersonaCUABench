@@ -484,6 +484,93 @@ def check_real_judging() -> None:
     assert crashed["score"] is None and "exit 3" in crashed["error"], crashed
 
 
+def check_real_manifest_checks() -> None:
+    """The jmespath and llm_boolean checks the FlyUnified tasks carry.
+
+    They have no vendored script at all, so a bug here would score every one of
+    them as a pass on an empty sandbox.
+    """
+    flight = {"differences": {"bookedFlights": {"added": {"0": {
+        "flight": {"outboundFlight": {
+            "info": {"from": {"destination": {"city": "Orlando"}}},
+            "selectedPrice": {"type": "Basic Economy"}}},
+        "passengersInfo": [{"firstName": "John"}]}}}}}
+    empty = {"differences": {"bookedFlights": {"added": {}}}}
+    checks = [
+        {"type": "jmespath", "expected_value": "Orlando",
+         "query": 'differences.bookedFlights.added."0".flight.outboundFlight'
+                  '.info.from.destination.city'},
+        {"type": "jmespath", "expected_value": "Basic Economy",
+         "query": 'differences.bookedFlights.added."0".flight.outboundFlight'
+                  '.selectedPrice.type'},
+    ]
+    task = {"confirmed_task": "book the cheapest flight",
+            "rubrics": {"R1": {"requirement": "x", "verification": "y"}},
+            "real": {"id": "fly-unified-5", "eval_scripts": [], "checks": checks}}
+
+    booked = R.judge_real(task, {"real_state": flight, "steps": 7, "answer": "done"})
+    assert booked["score"] == 1.0, booked
+    # Nothing booked: every query returns null, which must be a failure and not
+    # an error -- an unbooked flight is exactly what the agent is graded on.
+    nothing = R.judge_real(task, {"real_state": empty, "steps": 7, "answer": ""})
+    assert nothing["score"] == 0.0 and not nothing.get("error"), nothing
+    assert "FAIL" in json.loads(nothing["verdicts"]["R1"]["reason"])["jmespath[0]"]
+
+    # One wrong value out of two is still a failure for the whole task.
+    wrong = R.judge_real(
+        {**task, "real": {**task["real"], "checks": [
+            checks[0], {**checks[1], "expected_value": "Economy"}]}},
+        {"real_state": flight, "steps": 7, "answer": "done"})
+    assert wrong["score"] == 0.0, wrong
+
+    # A malformed query is our bug: unscored with the parse error, never a zero.
+    bad_query = R.judge_real(
+        {**task, "real": {**task["real"],
+                          "checks": [{"type": "jmespath", "query": "a]][",
+                                      "expected_value": 1}]}},
+        {"real_state": flight, "steps": 7, "answer": "done"})
+    assert bad_query["score"] is None and bad_query["error"], bad_query
+
+    # An llm_boolean check with no judge model must not be quietly skipped.
+    llm = {"type": "llm_boolean", "expected_value": True,
+           "rubric": "Did the agent say it booked the flight?"}
+    unasked = R.judge_real({**task, "real": {**task["real"],
+                                             "checks": [*checks, llm]}},
+                           {"real_state": flight, "steps": 7, "answer": "booked it"})
+    assert unasked["score"] is None and "llm_boolean" in unasked["error"], unasked
+
+    # With a judge, the answer decides: the check passes when the judge agrees
+    # with expected_value and fails when it does not, and neither is an error.
+    task_llm = {**task, "real": {**task["real"], "checks": [llm]}}
+    for said, want_score in ((True, 1.0), (False, 0.0)):
+        reply = json.dumps({"answer": said, "reason": "because"})
+
+        class Judge:
+            class chat:
+                class completions:
+                    @staticmethod
+                    def create(**_):
+                        return types.SimpleNamespace(
+                            choices=[types.SimpleNamespace(
+                                message=types.SimpleNamespace(content=reply))],
+                            usage=types.SimpleNamespace(
+                                prompt_tokens=10, completion_tokens=5,
+                                prompt_tokens_details=None,
+                                completion_tokens_details=None))
+
+        saved = R._client
+        R._client = lambda model, provider="": (Judge(), "openrouter")
+        try:
+            got = R.judge_real(task_llm, {"real_state": flight, "steps": 7,
+                                          "answer": "booked it"},
+                               judge_model="stub-judge", judge_provider="stub",
+                               meter=R.Meter())
+        finally:
+            R._client = saved
+        assert got["score"] == want_score and not got.get("error"), (said, got)
+        assert got["judge_model"] == "real-state-checker+stub-judge", got
+
+
 def check_accounting_is_complete() -> None:
     """Every model call must survive into the record, not just its totals.
 
@@ -564,6 +651,7 @@ def main() -> None:
     check_judge_calls()
     check_progress_note_is_not_an_answer()
     check_real_judging()
+    check_real_manifest_checks()
     check_accounting_is_complete()
     check_cost_report()
     print("accounting self-check OK")

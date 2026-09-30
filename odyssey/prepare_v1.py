@@ -3,12 +3,13 @@
 The v1 manifest is the single source of truth for the full experiment: 75 tasks
 from three sources that need three different runtimes.
 
-    Odysseys   37  live web,     rubrics judged by an LLM
-    REAL       34  sandbox site, a deterministic state checker per task
-    ClawBench   4  needs a harness this repo does not have
+    Odysseys   38  live web,     rubrics judged by an LLM
+    REAL       36  sandbox site, its own checkers on the site's final state
 
-This writes one suite per runnable source and refuses to invent anything for the
-source it cannot run: ClawBench tasks are reported, not silently dropped.
+Anything from a source this repo has no runtime for is reported as not prepared
+rather than silently dropped. As of the 2026-09-29 manifest there is none: the
+four ClawBench entries were replaced with one Odysseys and two REAL tasks and
+now sit in the manifest's `dropped` list with their reasons.
 
     python odyssey/prepare_v1.py            # rewrite the suites
     python odyssey/prepare_v1.py --check    # verify they match the manifest
@@ -27,6 +28,9 @@ REAL_TASKS = HERE / "tasks_real.json"
 
 # Which manifest source becomes which suite. ClawBench is absent on purpose.
 SOURCES = {"Odysseys": "odysseys", "REAL": "real"}
+# The manifest check types judge_real() implements, mirrored from prepare_real.py
+# so a --check run fails on an unknown one even without the network.
+CHECK_TYPES = ("jmespath", "llm_boolean")
 # Carried through so a report can group by them; the runner ignores them.
 METADATA = ("domain", "scenario", "level", "action", "platform", "source",
             "source_id", "title")
@@ -79,8 +83,18 @@ def real_tasks() -> list[dict]:
     for task in tasks:
         real = task.get("real") or {}
         scripts = real.get("eval_scripts") or []
-        if not scripts:
-            raise PrepareError(f"{task.get('task_id', '?')[:12]} has no eval script")
+        checks = real.get("checks") or []
+        # A REAL task with neither would be scored by nothing and would look
+        # like a pass, so it is refused here.
+        if not scripts and not checks:
+            raise PrepareError(
+                f"{task.get('task_id', '?')[:12]} has neither an eval script nor a "
+                f"manifest check; rerun python odyssey/prepare_real.py")
+        for check in checks:
+            if check.get("type") not in CHECK_TYPES:
+                raise PrepareError(
+                    f"{task.get('task_id', '?')[:12]} has check type "
+                    f"{check.get('type')!r}, which judge_real() cannot run")
         for script in scripts:
             if not (HERE / "real_evals" / script).is_file():
                 raise PrepareError(
@@ -177,8 +191,10 @@ def main() -> None:
 
     rubrics = sum(len(t["rubrics"]) for t in suites["odysseys"])
     print(f"odysseys: {len(suites['odysseys'])} tasks / {rubrics} rubric items")
-    print(f"real:     {len(suites['real'])} tasks / "
-          f"{sum(len(t['real']['eval_scripts']) for t in suites['real'])} state checkers")
+    scripts = sum(len(t["real"]["eval_scripts"]) for t in suites["real"])
+    checks = sum(len(t["real"].get("checks") or []) for t in suites["real"])
+    print(f"real:     {len(suites['real'])} tasks / {scripts} state checkers "
+          f"/ {checks} manifest checks")
     if unrunnable:
         print(f"\nNOT PREPARED -- {len(unrunnable)} task(s) this repo cannot run:")
         for entry in unrunnable:

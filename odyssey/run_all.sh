@@ -24,14 +24,19 @@ set -u
 cd "$(dirname "$0")/.."
 
 SETTING="${SETTING:-s1}"
-SUITE="${SUITE:-main-original}"
+# Both v1 suites by default: the live-web tasks and the REAL sandbox tasks are
+# the whole run, and main-original is the retired six-task assignment.
+SUITES="${SUITES:-${SUITE:-odysseys real}}"
 MODELS="${MODELS:-terra}"
 # One pass by default. Repeats cost the same again and are only worth it
 # once a difference between models looks real.
 REPLICATES="${REPLICATES:-r1}"
-# Setting 1's personas: one per group of people. Setting 2's are generated from
-# the protocol and selected by run_matched_pairs.py, so PERSONAS is unused there.
-PERSONAS="${PERSONAS:-none travel-expert travel-senior travel-young travel-practical}"
+# Setting 1's personas come from each task's own domain family
+# (odyssey/persona_assignments.py), so this is left empty on purpose: setting it
+# would ask a Gmail task in a travel persona's voice. Export PERSONAS only to
+# run a deliberate subset. Setting 2's are generated from the protocol and
+# selected by run_matched_pairs.py, so it is unused there.
+PERSONAS="${PERSONAS:-}"
 PY="${PY:-python}"
 # Setting 1 fans out: one Chrome per worker, ~1.5 GB of RAM each. Setting 2 stays
 # serial -- a matched pair's two arms must not race for the same profile.
@@ -58,16 +63,19 @@ for model in $MODELS; do
   tag="$SETTING-${model//\//-}"
   say "$SETTING  model=$model"
   if [[ "$SETTING" == s1 ]]; then
-    # Every persona x every task, one process per cell, once per replicate.
+    # Every task with its own four personas plus the control, one process per
+    # cell, once per replicate, over each suite.
     for r in $REPLICATES; do
-      say "$SETTING  model=$model  replicate=$r"
-      if ! PERSONAS="$PERSONAS" TASK_SUITE="$SUITE" PYTHON_BIN="$PY" JOBS="$JOBS" \
-           run bash odyssey/run_grid.sh --setting "$SETTING" --model "$model" \
-             --replicate-id "$r" --headless "${CACHE_ARGS[@]:1}" \
-             >> "logs/$tag-$r.log" 2>&1; then
-        failed="$failed $SETTING/$model/$r"
-        say "$model $r reported failed cells (see logs/$tag-$r.log)"
-      fi
+      for suite in $SUITES; do
+        say "$SETTING  model=$model  replicate=$r  suite=$suite"
+        if ! PERSONAS="$PERSONAS" TASK_SUITE="$suite" PYTHON_BIN="$PY" JOBS="$JOBS" \
+             run bash odyssey/run_grid.sh --setting "$SETTING" --model "$model" \
+               --replicate-id "$r" --headless "${CACHE_ARGS[@]:1}" \
+               >> "logs/$tag-$r-$suite.log" 2>&1; then
+          failed="$failed $SETTING/$model/$r/$suite"
+          say "$model $r $suite reported failed cells (see logs/$tag-$r-$suite.log)"
+        fi
+      done
     done
   else
     for r in $REPLICATES; do
@@ -75,7 +83,7 @@ for model in $MODELS; do
       # Without --execute this only prints the plan, which is what DRY_RUN wants.
       execute=(--execute)
       [[ -n "$DRY_RUN" ]] && execute=()
-      if ! run $PY odyssey/run_matched_pairs.py --suite "$SUITE" \
+      if ! run $PY odyssey/run_matched_pairs.py --suite "${SUITE:-shopping}" \
              --replicate-id "$r" --headless "${execute[@]+"${execute[@]}"}" \
              -- --setting "$SETTING" --model "$model" "${CACHE_ARGS[@]:1}" \
              >> "logs/$tag-$r.log" 2>&1; then
@@ -106,9 +114,11 @@ if [[ "$SETTING" == s2 ]]; then
 fi
 
 say "scores"
-# report.py otherwise falls back to the catalog default suite (shopping).
-run $PY odyssey/report.py "$RESULTS" --suite "$SUITE" 2>&1 \
-  | tee "logs/$SETTING-report.log"
+# report.py otherwise falls back to the catalog default suite.
+for suite in $SUITES; do
+  run $PY odyssey/report.py "$RESULTS" --suite "$suite" 2>&1 \
+    | tee "logs/$SETTING-report-$suite.log"
+done
 
 say "cost and time"
 run $PY odyssey/cost_report.py "$RESULTS" --csv "logs/$SETTING-cells.csv" 2>&1 \

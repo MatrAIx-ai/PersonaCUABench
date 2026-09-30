@@ -17,21 +17,26 @@ did the task get done, was it done for *this* user, and what did it cost.
 
 | | | |
 |---|---|---|
-| **Tasks** | 71 runnable | 37 Odysseys on the live web, 34 REAL sandbox sites |
+| **Tasks** | 74, all runnable | 38 Odysseys on the live web, 36 REAL sandbox sites |
 | **Personas** | 44 | eleven domain families × four roles, plus a `none` control |
 | **Models** | 9 execution backbones | one per collaborator, listed below |
-| **Cells** | 355 per model per replicate | 71 tasks × (4 personas + control) |
+| **Cells** | 370 per model per replicate | 74 tasks × (4 personas + control) |
 
-`benchmark/v1_tasks.json` is the source of truth for tasks: 75 entries, of which
-71 are runnable here. The four ClawBench entries need a harness this repo does
-not have and are reported as not prepared rather than silently dropped.
+`benchmark/v1_tasks.json` is the source of truth for tasks, and every entry in
+it is runnable here. The four ClawBench tasks that needed a harness we have no
+access to were replaced (2026-09-29) by one Odysseys and two REAL tasks; they
+and 25 others sit in the manifest's `dropped` list with the reason for each.
+`prepare_v1.py` still reports anything it cannot prepare rather than dropping it
+quietly.
 
 **Two task runtimes, two ways of scoring.** An Odysseys task runs on the open
 web and is judged against its own rubric by an LLM. A REAL task runs on a
 deterministic replica of a real site (a DoorDash, a Gmail); the runner loads the
 task's starting state, lets the agent work, then reads the site's final state
-and runs the task's own checker — no model, no cost, pass only if the checker
-prints SUCCESS.
+and applies the task's own checks — a vendored agisdk script that must print
+SUCCESS, or a JMESPath query on the final state that must equal an expected
+value. Both are free and deterministic. Two tasks additionally ask one yes/no
+question about what the agent reported back, and only those call a model.
 
 ## Personas
 

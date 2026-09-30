@@ -7,15 +7,16 @@ the tool loop or the rubric scoring breaks.
 """
 from __future__ import annotations
 
-import json
 import copy
 import io
+import json
 import os
 import subprocess
 import sys
 import tempfile
 import time
 import types
+from collections import Counter
 from contextlib import redirect_stdout
 from pathlib import Path
 
@@ -32,8 +33,13 @@ def test_tasks():
     # per-scenario suites held subsets of these same task ids and are retired.
     assert len(R.TASKS) >= 2, len(R.TASKS)
     assert R.TASK_CATALOG.default_suite_id == "odysseys"
-    assert len(R.TASKS) == 37, f"the v1 Odysseys set is 37 tasks, got {len(R.TASKS)}"
-    assert len(R.TASK_CATALOG.get_suite("real").tasks) == 34
+    # Counted from the manifest, not written here: a hard-coded 37 fails the day
+    # a task is added, which says nothing about whether the suites are correct.
+    manifest = json.loads((HERE.parent / "benchmark" / "v1_tasks.json")
+                          .read_text(encoding="utf-8"))
+    wanted = Counter(t["source"] for t in manifest["tasks"])
+    assert len(R.TASKS) == wanted["Odysseys"], (len(R.TASKS), wanted["Odysseys"])
+    assert len(R.TASK_CATALOG.get_suite("real").tasks) == wanted["REAL"]
     assert "Aurora, Illinois" in R.TASKS[0]["confirmed_task"]
     ids = [t["task_id"] for t in R.TASKS]
     assert len(set(ids)) == len(ids), "duplicate task_id in tasks.json"

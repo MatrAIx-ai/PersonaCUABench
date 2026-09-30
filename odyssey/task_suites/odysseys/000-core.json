@@ -1324,5 +1324,35 @@
     "source": "Odysseys",
     "source_id": "18ddad3e0781d4b8fb2e1998ff836a0b07d0cdce",
     "title": "Two Boston dinners on a work trip (Michelin)"
+  },
+  {
+    "task_id": "c8d7c6136ca692eac6d7532e275d5f8d11ec971b",
+    "confirmed_task": "I’m trying to put together a really simple morning routine that starts with a quick math refresher and then shifts into beginner yoga I can actually keep using. Please start on Google and search for a video lesson that clearly teaches both explicit and recursive formulas for arithmetic sequences, then open the actual video page and note the title, creator or channel, and URL so I have a study piece to come back to; if it looks solid, leave that tab open for me. After that, go to YouTube and find a morning yoga video that’s right around 20 minutes long, open the actual video page, and tell me the title and duration so I can see whether it feels short enough for a real weekday routine. If that general option seems reasonable, stay on YouTube and specifically check whether Yoga With Adriene has a morning yoga video under 20 minutes that would fit the same need, and confirm from the video page or description whether it’s actually a vinyasa flow style session; please open that in its own tab too so I can compare the two yoga options side by side. To round this out, use Google to find at least three approachable or funny yoga instructors who post free classes on YouTube, and for each one give me the instructor’s name, a channel or website link, and a short note on why they seem especially beginner-friendly compared with the yoga videos you found earlier. In the end, I just want a concise resource list for this morning routine, with the key links, and please keep the math video plus the two yoga video tabs open so I can look at them myself.",
+    "rubrics": {
+      "R1": {
+        "requirement": "A video lesson found via Google is opened that teaches both explicit and recursive formulas for arithmetic sequences, with the title, creator/channel name, and URL recorded.",
+        "verification": "Grader can confirm a Google search was used and the final open tab is the actual video page showing a relevant title/channel and a valid URL."
+      },
+      "R2": {
+        "requirement": "A YouTube morning yoga video of approximately 20 minutes is opened, with its title and duration provided.",
+        "verification": "Grader can verify the YouTube video page is open and the visible title and runtime are around 20 minutes."
+      },
+      "R3": {
+        "requirement": "A Yoga With Adriene morning yoga video under 20 minutes is opened in its own tab, and the response correctly confirms yes or no whether it is a vinyasa flow style session.",
+        "verification": "Grader can confirm the separate YouTube tab is a Yoga With Adriene video under 20 minutes and that the vinyasa determination is supported by visible page text such as the title or description."
+      },
+      "R4": {
+        "requirement": "At least three approachable or funny yoga instructors who post free YouTube classes are listed, each with instructor name, channel or website link, and a brief beginner-friendly rationale tied to the earlier yoga options.",
+        "verification": "Grader can confirm three distinct instructors were found via Google and that each entry includes instructor name, a valid channel or website link, and a comparative note about why the instructor seems approachable for beginners."
+      }
+    },
+    "domain": "Fitness",
+    "scenario": "life",
+    "level": "easy",
+    "action": "read",
+    "platform": "web-live",
+    "source": "Odysseys",
+    "source_id": "c8d7c6136ca692eac6d7532e275d5f8d11ec971b",
+    "title": "Morning routine: math refresher + beginner yoga"
   }
 ]

@@ -29,13 +29,26 @@ python odyssey/prepare_v1.py --check    # fail if they have drifted
 python odyssey/task_router.py suites    # what is registered
 ```
 
-- `odysseys` — 37 live-web tasks, 202 rubric items, judged by the rubric judge.
-- `real` — 34 sandbox tasks. `prepare_real.py` fetches their checkers from
+- `odysseys` — 38 live-web tasks, 206 rubric items, judged by the rubric judge.
+- `real` — 36 sandbox tasks. `prepare_real.py` fetches their checkers from
   agisdk at a pinned commit; the runner loads the task's starting state through
-  the site's `/config`, reads the final state from `/finish`, and scores it with
-  those checkers.
-- ClawBench's 4 tasks need a harness this repo does not have. They stay in the
-  manifest and are reported as not prepared.
+  the site's `/config`, reads the final state from `/finish`, and applies the
+  task's checks to it. Three kinds, and a task may carry several:
+
+  | check | where it lives | costs |
+  |---|---|---|
+  | vendored agisdk script | `odyssey/real_evals/eval_*.py`, must print SUCCESS | nothing |
+  | `jmespath` | a query and expected value in the manifest, run on the final state | nothing |
+  | `llm_boolean` | a yes/no rubric in the manifest, asked of the judge about the agent's answer | one judge call |
+
+  34 tasks use scripts; the two FlyUnified tasks use manifest checks only (11
+  jmespath queries and one `llm_boolean`). A task passes only if every check
+  passes. A check that cannot run leaves the cell **unscored with the reason**,
+  never at zero, so a broken checker never looks like a failing agent —
+  including an `llm_boolean` task judged with no judge model configured.
+- Nothing in the manifest is unrunnable as of 2026-09-29. Should a later task
+  need a runtime this repo lacks, `prepare_v1.py` reports it as not prepared
+  instead of dropping it.
 
 The per-scenario suites of the earlier assignment (`main-original`, `shopping`,
 `science-education`) are **retired**: v1 owns their task ids and the router
