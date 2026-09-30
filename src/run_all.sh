@@ -10,9 +10,9 @@
 # Safe to re-run: finished cells are skipped and judged runs are not re-judged,
 # so an interrupted night resumes by running this again.
 #
-#   SETTING=s1 MODELS="glm-5.3" bash src/run_all.sh
+#   SETTING=s1 MODELS="minimax-m3" bash src/run_all.sh
 #   SETTING=s1 MODELS=terra JOBS=4 bash src/run_all.sh     # four cells at once
-#   SETTING=s2 MODELS="glm-5.3 minimax-m3" bash src/run_all.sh
+#   SETTING=s2 MODELS="minimax-m3 kimi-k3" bash src/run_all.sh
 #   SETTING=s1 MODELS=terra REPLICATES="r1 r2 r3" bash src/run_all.sh
 #   PROMPT_CACHE=off SETTING=s1 MODELS=terra bash src/run_all.sh  # uncached cost
 #   NUDGE=both SETTING=s1 MODELS="<key>" bash src/run_all.sh    # proactivity ablation

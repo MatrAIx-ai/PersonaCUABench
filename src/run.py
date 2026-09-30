@@ -136,6 +136,34 @@ DEFAULT_TASK_SUITE = TASK_CATALOG.default_suite
 TASKS = DEFAULT_TASK_SUITE.tasks
 REAL_EVALS = HERE / "real_evals"   # deterministic state checkers, vendored
 PAGE_CHARS = 6000          # per read_page slice
+# inner_text carries no element identity, so an agent asked for a CSS selector
+# had to invent one: 45% of type_text calls failed against 12% of text-addressed
+# clicks. Every readable page now ends with its interactive fields, each with a
+# handle type_text accepts, so the model addresses what it was actually shown.
+MAX_FIELDS = 40            # listed after a page's text; forms are rarely larger
+# The same set _FIELDS_JS walks, as a Playwright selector, so handle f<n> and
+# the listing agree on what the nth field is.
+FIELD_CSS = ('input:not([type="hidden"]), textarea, select, '
+             '[contenteditable="true"]')
+
+
+def field_index(selector: str) -> int | None:
+    """The n of an `f<n>` field handle, or None for an ordinary CSS selector."""
+    match = re.fullmatch(r"\s*f(\d+)\s*", selector or "")
+    return int(match.group(1)) if match else None
+
+
+def field_handle(page, selector: str):
+    """The locator an `f<n>` handle names, or None when it is a CSS selector.
+
+    Module level rather than a Browser method so it cannot be shadowed by the
+    tests that replace run.Browser with a stub, and because it is a pure
+    function of the page and the string.
+    """
+    index = field_index(selector)
+    if index is None:
+        return None
+    return page.locator(f"{FIELD_CSS} >> visible=true").nth(index - 1)
 MAX_TABS = 8
 DEFAULT_PROFILE = HERE / ".chrome-profile"   # gitignored; keeps consent cookies
 
@@ -196,13 +224,16 @@ TOOLS = [
             "required": ["tab_id"]}}},
     {"type": "function", "function": {
         "name": "click",
-        "description": "Click the first element in a tab whose visible text contains the given string.",
+        "description": "Click an element by its visible text, by the name of an "
+                       "icon control, or by a field handle such as \"f3\".",
         "parameters": {"type": "object", "properties": {
             "tab_id": {"type": "integer"}, "text": {"type": "string"}},
             "required": ["tab_id", "text"]}}},
     {"type": "function", "function": {
         "name": "type_text",
-        "description": "Type into a tab's input field (CSS selector) and optionally press Enter.",
+        "description": "Type into a tab's input field and optionally press Enter. "
+                       "Pass a field handle from the page's [fields] list, e.g. "
+                       "\"f3\"; a CSS selector also works.",
         "parameters": {"type": "object", "properties": {
             "tab_id": {"type": "integer"}, "selector": {"type": "string"},
             "text": {"type": "string"}, "press_enter": {"type": "boolean"}},
@@ -321,6 +352,93 @@ class Browser:
         # A persistent context opens with one blank page; reuse it as tab 1.
         self._spare = self._ctx.pages[0] if self._ctx.pages else None
 
+    # Everything the agent can type into or choose from, in document order.
+    # Built in one page.evaluate rather than per-element round trips.
+    _FIELDS_JS = r"""() => {
+        const out = [];
+        const sel = 'input, textarea, select, [contenteditable="true"]';
+        for (const el of document.querySelectorAll(sel)) {
+            const type = (el.type || '').toLowerCase();
+            if (type === 'hidden') continue;
+            const r = el.getBoundingClientRect();
+            if (!r.width && !r.height) continue;            // not on screen
+            let name = el.getAttribute('aria-label') || '';
+            if (!name && el.labels && el.labels[0]) name = el.labels[0].innerText || '';
+            if (!name && el.id) {
+                const l = document.querySelector(`label[for="${CSS.escape(el.id)}"]`);
+                if (l) name = l.innerText || '';
+            }
+            if (!name) name = el.getAttribute('placeholder') || el.name || '';
+            out.push({
+                tag: el.tagName.toLowerCase(), type,
+                name: (name || '').trim().replace(/\s+/g, ' ').slice(0, 60),
+                value: (el.value || '').trim().slice(0, 40),
+                ro: el.readOnly || el.disabled || el.getAttribute('aria-readonly') === 'true',
+                opts: el.tagName === 'SELECT'
+                    ? [...el.options].slice(0, 8).map(o => o.text.trim()).join(' | ') : '',
+            });
+        }
+        return out;
+    }"""
+
+    # Buttons and links whose only name is an aria-label or a title: they carry
+    # no inner_text, so a text-addressed agent cannot discover them at all --
+    # the calendar's "Previous Month" among them.
+    _CONTROLS_JS = r"""() => {
+        const out = [];
+        for (const el of document.querySelectorAll('button, a[href], [role="button"]')) {
+            // Empty text, or a bare glyph like a chevron: either way the page
+            // text does not tell an agent what the control does.
+            const shown = (el.innerText || '').trim();
+            if (shown.length > 2) continue;                     // already readable
+            const name = (el.getAttribute('aria-label') || el.title || '').trim();
+            if (!name || name === shown) continue;
+            const r = el.getBoundingClientRect();
+            if (!r.width && !r.height) continue;
+            if (!out.includes(name)) out.push(name.slice(0, 50));
+        }
+        return out;
+    }"""
+
+    def _fields(self, page) -> str:
+        """The page's interactive fields, each with a handle type_text accepts."""
+        try:
+            found = page.evaluate(self._FIELDS_JS)
+        except Exception:
+            return ""                     # a page mid-navigation still has text
+        if not found:
+            return ""
+        lines = []
+        for i, f in enumerate(found[:MAX_FIELDS], 1):
+            kind = f["type"] or f["tag"]
+            bits = [f'f{i}', kind]
+            if f["name"]:
+                bits.append(f'"{f["name"]}"')
+            if f["value"]:
+                bits.append(f'= {f["value"]!r}')
+            if f["opts"]:
+                bits.append(f'options: {f["opts"]}')
+            if f["ro"]:
+                bits.append("READ-ONLY, click it instead of typing")
+            lines.append("  " + " ".join(bits))
+        more = (f"\n  [...{len(found) - MAX_FIELDS} more]"
+                if len(found) > MAX_FIELDS else "")
+        return ("\n\n[fields: pass the handle to type_text or click, "
+                "e.g. \"f1\"]\n" + "\n".join(lines) + more)
+
+    def _controls(self, page) -> str:
+        """Named controls that carry no text, so click can be told they exist."""
+        try:
+            found = page.evaluate(self._CONTROLS_JS)
+        except Exception:
+            return ""
+        if not found:
+            return ""
+        shown = found[:MAX_FIELDS]
+        more = f" [...{len(found) - len(shown)} more]" if len(found) > len(shown) else ""
+        return ("\n\n[icon controls, no visible text -- click by this name]\n  "
+                + " | ".join(f'"{n}"' for n in shown) + more)
+
     def _text(self, page, offset: int = 0) -> str:
         try:
             body = page.inner_text("body")
@@ -331,7 +449,8 @@ class Browser:
         more = "" if offset + PAGE_CHARS >= len(body) else (
             f"\n\n[...{len(body) - offset - PAGE_CHARS} more chars; "
             f"read_page with offset={offset + PAGE_CHARS} for the rest]")
-        return (slice_ or "[no text at this offset]") + more
+        return ((slice_ or "[no text at this offset]") + more
+                + self._fields(page) + self._controls(page))
 
     def shot(self, label: str, tab_id: int | None = None) -> dict | None:
         """A JPEG of what the page looked like, for reading a trajectory later.
@@ -419,6 +538,19 @@ class Browser:
 
     def click(self, tab_id: int, text: str) -> str:
         page = self._page(tab_id)
+        # A field handle is clickable too: the listing tells the model to click
+        # read-only fields, and it tried click("f7") on its own before this.
+        handle = field_handle(page, text)
+        if handle is not None:
+            try:
+                handle.click(timeout=10000)
+                self._settle(page)
+                return (f"clicked {text}; tab {tab_id} now at {page.url}"
+                        f"\n\n{self._text(page)}")
+            except Exception as exc:
+                n = page.locator(f"{FIELD_CSS} >> visible=true").count()
+                return (f"click failed on {text}: "
+                        f"{str(exc).splitlines()[0]} (the page lists f1 to f{n})")
         # Most specific match first, and only visible elements: "Send" must hit
         # the Send button, not a hidden label or a "Sent" folder containing it.
         # (From the main line: the first version clicked the first text match,
@@ -459,10 +591,16 @@ class Browser:
 
     def type_text(self, tab_id: int, selector: str, text: str, press_enter: bool = False) -> str:
         page = self._page(tab_id)
+        target = field_handle(page, selector)
         try:
-            page.fill(selector, text, timeout=self.TYPE_TIMEOUT_MS)
-            if press_enter:
-                page.press(selector, "Enter", timeout=self.TYPE_TIMEOUT_MS)
+            if target is not None:
+                target.fill(text, timeout=self.TYPE_TIMEOUT_MS)
+                if press_enter:
+                    target.press("Enter", timeout=self.TYPE_TIMEOUT_MS)
+            else:
+                page.fill(selector, text, timeout=self.TYPE_TIMEOUT_MS)
+                if press_enter:
+                    page.press(selector, "Enter", timeout=self.TYPE_TIMEOUT_MS)
         except Exception as exc:
             return f"typing failed: {self._why_typing_failed(page, selector, exc)}"
         self._settle(page)
@@ -470,6 +608,26 @@ class Browser:
 
     def _why_typing_failed(self, page, selector: str, exc: Exception) -> str:
         """The reason in terms the model can act on, not a Playwright call log."""
+        handle = field_handle(page, selector)
+        if handle is not None:
+            n = page.locator(f"{FIELD_CSS} >> visible=true").count()
+            index = field_index(selector)
+            if not 1 <= index <= n:
+                return (f"{selector} is not on this page -- it lists f1 to f{n}. "
+                        f"Read the page again; the list changes as the page does.")
+            # The handle is real, so the element is what refused: say which one
+            # and why, because "not a field" would send the model looking for a
+            # different handle that does not exist either.
+            try:
+                kind = handle.evaluate("e => e.type || e.tagName.toLowerCase()")
+            except Exception:
+                kind = "field"
+            if kind in ("radio", "checkbox"):
+                return (f"{selector} is a {kind}, which is chosen rather than typed "
+                        f"into. Use click with its label text.")
+            return (f"{selector} did not accept the text: "
+                    f"{str(exc).split(chr(10))[0]}. If it is marked READ-ONLY, "
+                    f"click it and use whatever it opens.")
         try:
             field = page.locator(selector)
             count = field.count()
@@ -1414,9 +1572,21 @@ def run_agent(task: dict, user: PersonaUser, model: str, *, max_steps: int,
         browser.close()
 
     finished_at = datetime.now(timezone.utc)
+    # A failed capture is swallowed per step so it cannot fail the run, which
+    # means a run where every screenshot failed otherwise looks identical to one
+    # where they all worked. Counting them here is what makes that visible.
+    shots = [t.get("screenshot") for t in trajectory] + list(final_shots)
+    shot_stats = {
+        "requested": shots_dir is not None,
+        "captured": sum(1 for x in shots if isinstance(x, dict) and x.get("file")),
+        "failed": sum(1 for x in shots if isinstance(x, dict) and x.get("error")),
+        "first_error": next((x["error"] for x in shots
+                             if isinstance(x, dict) and x.get("error")), None),
+    }
     return {"answer": answer, "stop_reason": stop_reason, "steps": len(trajectory),
             "max_steps": max_steps, "trajectory": trajectory, "turns": turns,
             "open_tabs": open_tabs, "final_screenshots": final_shots,
+            "screenshots": shot_stats,
             "real_state": real_state, "real_state_error": real_error,
             "conversation": user.transcript, "user": user.info(),
             "timing": {"started_at": started_at.isoformat(),
@@ -2171,6 +2341,17 @@ def main() -> None:
         print(f"   cost ${acct['cost_usd']:.4f}  "
               f"tokens {acct['prompt_tokens']}/{acct['completion_tokens']}  "
               f"wall {acct['cell_wall_seconds']:.0f}s")
+        # A screenshot failure is swallowed so it cannot fail a step; saying
+        # nothing about it is how a run with no frames at all looked normal.
+        shots = run.get("screenshots") or {}
+        if shots.get("requested"):
+            if shots.get("failed"):
+                print(f"   SCREENSHOTS: {shots['captured']} captured, "
+                      f"{shots['failed']} FAILED -- {shots.get('first_error')}")
+            elif not shots.get("captured"):
+                print("   SCREENSHOTS: none captured, though they were requested")
+            else:
+                print(f"   screenshots {shots['captured']}")
         print(f"-> {out_dir / 'result.json'}")
     if had_failures:
         raise SystemExit(1)

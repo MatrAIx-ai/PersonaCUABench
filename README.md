@@ -69,6 +69,40 @@ any persona file that has drifted from the generator (`--check`). Which personas
 domain, not written by hand (`src/persona_assignments.py`), so it cannot go
 stale when the task set changes.
 
+## The harness
+
+Every model runs in **the same harness**: one Chrome, nine tools
+(`open_tab`, `goto`, `read_page`, `click`, `type_text`, `list_tabs`,
+`close_tab`, `ask_user`, `finish`), one observation format. That uniformity is
+the control that makes a cross-model number mean anything — a benchmark where
+the harness varies with the model measures model *and* harness, and cannot
+separate them. Three further reasons it is not negotiable here:
+
+- **Half the benchmark needs our browser.** The 36 REAL tasks load the task's
+  starting state through the sandbox's `/config` and read the final state from
+  `/finish` in the same session. A vendor harness that runs in the vendor's own
+  managed desktop cannot expose that state to us, so those tasks would have no
+  score at all.
+- **Only four of nine models have an official harness** (Claude, GPT, Gemini,
+  Qwen-CUA), and those four disagree with each other: pixel-driven, DOM-driven
+  and vendor-sandboxed respectively. "Official where available" means five
+  models on ours plus four mutually incompatible others.
+
+The observation is page **text**, not pixels — `read_page` returns the visible
+text, then the page's interactive fields, then any control whose only name is an
+`aria-label`. Screenshots are captured every step, but for auditing a
+trajectory, not for the agent: no image enters a model's context.
+
+**The harness's own failure rate is reported, not assumed.** Over the first
+trajectories, `type_text` failed 45% of calls against `click`'s 12%, because
+`read_page` gave the model no element identity while `type_text` demanded a CSS
+selector — the model had to invent one. Fields and handles were added for that
+reason, and the same measurement is the acceptance test for any future change:
+
+```bash
+python src/cost_report.py src/results/s1      # click%, failed clicks, per arm
+```
+
 ## Models
 
 Each model resolves to a provider at run time: **the owner's own endpoint**,
@@ -77,19 +111,30 @@ environment variables and every other model still works for you through
 whatever else is configured. A model with no configured route raises and names
 what it wants, rather than quietly running somewhere else.
 
-| model | owner | key |
-|---|---|---|
-| Claude Opus 5.5 | Yiyang | `opus-5.5` |
-| GPT 6 Astra | Haoming | `gpt-6-astra` |
-| Muse Spark 1.1 | Xu Hu | `muse-spark-1.1` |
-| Gemini 3.8 Flash | Sherry | `gemini-3.8-flash` |
-| Kimi K3 | Sherry | `kimi-k3` |
-| Grok 4.7 | Defu | `grok-4.7` |
-| MiniMax M3 | Charles | `minimax-m3` |
-| GLM 5.3 | Charles | `glm-5.3` |
-| Qwen 3.8 27B | Xu Hu | `qwen3.8-27b` |
+The owner's endpoint is usually an internal gateway, not the public vendor.
+Point it wherever you like: the variable names and the model id live in
+`src/models.json`, `run.py` builds its provider list from that file, and
+[`RUNNING.md`](RUNNING.md) covers the three cases — an OpenAI-compatible
+endpoint (no code change), one needing extra headers (one function), and one
+that is not OpenAI-shaped at all (a shim, with a worked example in the repo).
 
-`python src/models.py` prints what each one resolves to on your machine.
+| model | key |
+|---|---|
+| Claude Opus 5.5 | `opus-5.5` |
+| GPT 6 Astra | `gpt-6-astra` |
+| Muse Spark 1.1 | `muse-spark-1.1` |
+| Gemini 3.8 Flash | `gemini-3.8-flash` |
+| Kimi K3 | `kimi-k3` |
+| Grok 4.7 | `grok-4.7` |
+| MiniMax M3 | `minimax-m3` |
+| Qwen 3.8 27B | `qwen3.8-27b` |
+| DeepSeek V4.1 Flash | `deepseek-v4.1` |
+
+`python src/models.py` prints what each one resolves to on your machine, and
+`python scripts/check_models.py` puts a real two-turn tool-calling exchange
+through each of them — about five cents for all nine, and the only way to know
+a route works before a grid depends on it. All nine were verified on
+2026-09-30.
 GPT 5.6 Terra is the shared persona and judge model, not an execution backbone.
 
 ## Running your model
@@ -148,7 +193,7 @@ and navigation style, `src/judge_all.py` re-judges saved runs in parallel.
 | `benchmark/v1_tasks.json` | the task set, the only source of truth for tasks |
 | `benchmark/tasks.json` | one collaborator's own seven-task working slice; a record, read by nothing |
 | `src/` | everything that runs |
-| `scripts/` | the offline checks: `check_all.sh` and the three `test_*.py` |
+| `scripts/` | the checks: `check_all.sh`, the three `test_*.py`, and `check_models.py` |
 | `src/prepare_v1.py` | turns it into the runnable suites |
 | `src/task_suites/` | `odysseys/` and `real/`, generated |
 | `src/personas/` | generated persona profiles |

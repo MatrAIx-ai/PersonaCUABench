@@ -1107,6 +1107,9 @@ def test_typing_failure_says_why():
         def count(self):
             return self._n
 
+        def nth(self, _index):
+            return self
+
         @property
         def first(self):
             return self
@@ -1118,11 +1121,13 @@ def test_typing_failure_says_why():
             return self._ed
 
     class Page:
-        def __init__(self, locator):
-            self._locator = locator
+        def __init__(self, locator, fields=0):
+            self._locator, self._fields = locator, fields
 
         def locator(self, selector):
-            return self._locator
+            # The f<n> path counts the page's fields through this same call.
+            return Locator(self._fields) if ">> visible=true" in selector \
+                else self._locator
 
     why = REAL_BROWSER._why_typing_failed
     boom = RuntimeError("Timeout 8000ms exceeded.\nCall log:\n  - waiting for ...")
@@ -1145,6 +1150,14 @@ def test_typing_failure_says_why():
     other = why(None, Page(Locator(1)), "#x", boom)
     assert other == "Timeout 8000ms exceeded.", other
     assert REAL_BROWSER.TYPE_TIMEOUT_MS <= 10000, "a wrong selector must not cost 40s"
+
+    # An f<n> handle out of range names the range it could have used, rather
+    # than sending the model to look for another handle that is not there.
+    gone = why(None, Page(Locator(0), fields=9), "f99", boom)
+    assert "f1 to f9" in gone, gone
+    # A handle is not a CSS selector: it must never fall through to the
+    # "nothing on the page matches" branch, which would be a lie.
+    assert "nothing on the page matches" not in gone, gone
 
 
 def test_judge(run):

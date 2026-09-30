@@ -9,8 +9,9 @@ detail of how a cell works is in [`src/README.md`](src/README.md).
 ## 1. Set up
 
 ```bash
-git clone <this repo> && cd PersonaCUABench
-git checkout <this branch>
+git clone git@github.com:MatrAIx-ai/PersonaCUABench.git
+cd PersonaCUABench
+git checkout v1
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r src/requirements.txt
 ```
@@ -27,42 +28,111 @@ Fill in **two things**:
 
 1. **The shared Azure endpoint.** This runs the persona simulator, the rubric
    judge and experience judge A — the same for everyone, so your results are
-   comparable with everyone else's. Haoming sends you the key; put it in
+   comparable with everyone else's. The key is shared with you privately; put it in
    `azure_api_key.txt` (gitignored) and leave
    `AZURE_OPENAI_API_KEY_FILE=azure_api_key.txt` as it is.
 2. **Your own model's endpoint and key.**
 
-| model | owner | key to pass | variables to fill |
-|---|---|---|---|
-| Claude Opus 5.5 | Yiyang | `opus-5.5` | `CLAUDE_BASE_URL` + `CLAUDE_API_KEY` |
-| GPT 6 Astra | Haoming | `gpt-6-astra` | `GPT6_BASE_URL` + `GPT6_API_KEY` |
-| Muse Spark 1.1 | Xu Hu | `muse-spark-1.1` | `MUSE_BASE_URL` + `MUSE_API_KEY` |
-| Gemini 3.8 Flash | Sherry | `gemini-3.8-flash` | `GEMINI_BASE_URL` + `GEMINI_API_KEY` |
-| Kimi K3 | Sherry | `kimi-k3` | `KIMI_BASE_URL` + `KIMI_API_KEY` |
-| Grok 4.7 | Defu | `grok-4.7` | `GROK_BASE_URL` + `GROK_API_KEY` |
-| MiniMax M3 | Charles | `minimax-m3` | `MINIMAX_BASE_URL` + `MINIMAX_API_KEY` |
-| GLM 5.3 | Charles | `glm-5.3` | `GLM_BASE_URL` + `GLM_API_KEY` |
-| Qwen 3.8 27B | Xu Hu | `qwen3.8-27b` | `QWEN_BASE_URL` + `QWEN_API_KEY` |
+| model | key to pass | variables to fill |
+|---|---|---|
+| Claude Opus 5.5 | `opus-5.5` | `CLAUDE_BASE_URL` + `CLAUDE_API_KEY` |
+| GPT 6 Astra | `gpt-6-astra` | `GPT6_BASE_URL` + `GPT6_API_KEY` |
+| Muse Spark 1.1 | `muse-spark-1.1` | `MUSE_BASE_URL` + `MUSE_API_KEY` |
+| Gemini 3.8 Flash | `gemini-3.8-flash` | `GEMINI_BASE_URL` + `GEMINI_API_KEY` |
+| Kimi K3 | `kimi-k3` | `KIMI_BASE_URL` + `KIMI_API_KEY` |
+| Grok 4.7 | `grok-4.7` | `GROK_BASE_URL` + `GROK_API_KEY` |
+| MiniMax M3 | `minimax-m3` | `MINIMAX_BASE_URL` + `MINIMAX_API_KEY` |
+| Qwen 3.8 27B | `qwen3.8-27b` | `QWEN_BASE_URL` + `QWEN_API_KEY` |
+| DeepSeek V4.1 Flash | `deepseek-v4.1` | `DEEPSEEK_BASE_URL` + `DEEPSEEK_API_KEY` |
 
-`OPENROUTER_API_KEY` is optional. It buys experience judge **B**, a second
-vendor whose agreement with judge A is what licenses the P1–P5 numbers. Without
-it the run says so once and judge A still scores every cell; whoever collects
-the results can add the second judge later.
+**`OPENROUTER_API_KEY` does two jobs, and you probably need it.**
+
+- It is the **fallback route** for any model without its own endpoint. If you
+  have no `<VENDOR>_BASE_URL` for your model, OpenRouter is how it runs at all
+  — `python src/models.py` tells you which route yours would take.
+- It buys experience judge **B**, a second vendor whose agreement with judge A
+  is what licenses the P1–P5 numbers. For that job alone it is optional: the
+  run says once that it is skipping judge B, judge A still scores every cell,
+  and whoever collects the results can add the second judge later.
 
 Your model id must be the one **your provider** uses. Check
 `src/models.json` → your key → `endpoint.model` against your provider's docs
-before a paid run, and tell Haoming if it needs changing.
+before a paid run, and say so on the team channel if it needs changing.
+
+### If your endpoint is not OpenRouter
+
+Most of you will call an internal or company endpoint rather than OpenRouter.
+**Change the call to match your setup — that is expected, not a workaround.**
+The only thing that must stay fixed is what the harness needs back.
+
+**The contract.** The runner sends an OpenAI-style
+`POST /chat/completions` with `messages`, `tools` and `max_completion_tokens`,
+and needs the reply to contain `choices[0].message.tool_calls` and a `usage`
+block. Anything that speaks that dialect works unchanged.
+
+**Case 1 — an OpenAI-compatible endpoint** (most internal gateways are).
+No code change.
+Set your two variables and correct the model id:
+
+```bash
+# .env
+YOURVENDOR_BASE_URL=https://llm.yourcompany.internal/v1
+YOURVENDOR_API_KEY=...
+```
+
+```jsonc
+// src/models.json -> your key -> endpoint
+"endpoint": {
+  "model": "the-id-your-gateway-uses",   // what YOUR endpoint calls the model
+  "base_url_env": "YOURVENDOR_BASE_URL",
+  "api_key_env": "YOURVENDOR_API_KEY",
+  "key_required": true                   // false for a local server with no auth
+}
+```
+
+The variable names are yours to choose; `src/run.py` builds the provider list
+from `models.json` at import, so a new pair needs no code. Verify with
+`python src/models.py` then `python scripts/check_models.py <your key>`.
+
+**Case 2 — it needs extra headers, a different auth scheme, or an
+`api-version` parameter.** One place to change: `_client()` in `src/run.py`,
+a six-line function that returns an `OpenAI(...)` object. Add what your gateway
+wants — `default_headers={...}`, a different `base_url`, `AzureOpenAI` instead
+of `OpenAI`. Everything downstream is unchanged.
+
+**Case 3 — it is not OpenAI-shaped at all** (a bespoke REST API, a different
+tool-call format). Write a small shim that translates in both directions and
+hand it back where `_client` is called. `src/responses_shim.py` is a worked
+example: it makes the Azure Responses API look like chat completions to
+everything else, in about a hundred lines.
+
+**Whatever you change, `python scripts/check_models.py <your key>` must pass
+before you start a grid** — it exercises a two-turn tool exchange, which is
+where a not-quite-compatible endpoint fails. And say what you changed,
+so the run record says which endpoint produced the numbers.
 
 ## 2. Check before you spend
 
 ```bash
-bash scripts/check_all.sh     # 8 offline checks: no keys, no network, no browser
-python src/models.py          # does your model have a route on this machine?
+bash scripts/check_all.sh              # 8 offline checks: no keys, no network
+python src/models.py                   # does your model have a route here?
+python scripts/check_models.py <key>   # does it actually answer with a tool call?
 ```
 
 `check_all.sh` must print `all offline checks passed`. `models.py` must show
 your key resolving to your own endpoint (or to Azure/OpenRouter as a fallback);
 `(x)` means that route's credentials are missing here.
+
+`check_models.py` is the one that costs money — about a tenth of a cent. It
+makes one real tool-calling request through the same code path a cell uses, so
+a broken route surfaces here rather than four hours into the grid. **A model
+that answers in prose instead of calling a tool cannot drive the browser**, and
+the check fails it. All nine backbones were verified this way on 2026-09-30.
+
+One known trap: on OpenRouter, `meta/muse-spark-1.1` is gated behind a one-time
+**18+ attestation** on your account. Without it every call is a 403 that reads
+like a dead model id. Confirm at <https://openrouter.ai/settings/preferences>,
+or set `MUSE_BASE_URL` and skip OpenRouter.
 
 ## 3. One cell first
 
@@ -87,7 +157,7 @@ deterministic checker, not a model. The `travel-senior` one is the real thing: a
 persona model rewrites the task as that person would ask it, and your model only
 ever sees what they said.
 
-If any of these three fails, stop and tell Haoming what it printed. Do not start
+If any of these three fails, stop and post what it printed. Do not start
 the grid.
 
 ## 4. The grid
@@ -97,7 +167,8 @@ SETTING=s1 MODELS="<your key>" JOBS=4 bash src/run_all.sh
 ```
 
 **370 cells** — 74 tasks × (4 personas + 1 `none` control), over both suites —
-then the judges and the reports. Expect roughly **8–14 hours at `JOBS=4`**.
+then the judges and the reports. Roughly **7–12 hours at `JOBS=4`**, from a
+measured mean of 4.4 minutes per cell.
 
 - `DRY_RUN=1` in front lists every cell and runs nothing. Do this first.
 - `JOBS=N` runs N cells at once, each in its own Chrome profile. Budget about
@@ -106,14 +177,23 @@ then the judges and the reports. Expect roughly **8–14 hours at `JOBS=4`**.
 - **Safe to re-run.** Finished cells are skipped and judged runs are not
   re-judged, so an interrupted night resumes by running the same command again.
 - Per-cell logs are in `logs/cells/`, the summary in `logs/s1-*.log`.
-- One cell of `gpt-6-astra` averaged **$3.10** over a sample of four (one task
-  read enough live pages to cost $9.68 on its own). Your model's price differs;
-  measure with `python src/cost_report.py src/results/s1` after a handful of
-  cells before committing to the whole grid.
+- **Measure your own cost before committing to the grid.** Six `gpt-6-astra`
+  cells averaged **$4.35**, which puts a full grid near **$1,600** for that
+  model — but the spread is what matters: the cheapest cell was $0.54 and the
+  most expensive **$13.16**. Cost tracks steps, because the transcript is
+  resent every step, and a task the agent *completes* costs far more than one
+  it gives up on: the booking that succeeded took 66 steps and 1.3M input
+  tokens. Your model's price per token differs. After ten or twenty cells run:
+
+  ```bash
+  python src/cost_report.py src/results/s1
+  ```
+
+  and post the mean before starting the rest.
 
 ## 5. The proactivity ablation — optional
 
-**Skip this unless Haoming asks you for it.** Section 4 is the run that matters;
+**Skip this unless you are asked for it.** Section 4 is the run that matters;
 this is an extra arm and it doubles the cells and the money.
 
 The question it answers is whether an agent **asks** when the person left
@@ -135,7 +215,7 @@ python src/cost_report.py src/results/s1 --by proactive_nudge
 ```
 
 **Finish `NUDGE=off` first.** Only start the nudged arm once the plain grid is
-complete and Haoming has asked for it; at roughly $1,100 per arm per model it is
+complete and it has been asked for; at roughly $1,600 per arm per model it is
 not something to kick off on your own.
 
 ## 6. Send the results
@@ -148,8 +228,8 @@ python src/report.py src/results/s1 --suite real
 python src/cost_report.py src/results/s1 --csv cells.csv
 ```
 
-Then upload the whole `src/results/` directory to the Google Drive folder
-Haoming gives you, together with `logs/` and `cells.csv`. Keep the directory
+Then upload the whole `src/results/` directory to the shared Google Drive
+folder, together with `logs/` and `cells.csv`. Keep the directory
 structure as it is — the judges and reports are re-run over it centrally.
 
 Each cell's `result.json` holds the task as it was at run time with its hash,
@@ -165,9 +245,13 @@ re-judgeable months later, so please do not prune it.
 | `models.py` shows `(x)` on your route | that route's `_BASE_URL`/`_API_KEY` is not set in `.env` |
 | a model with no route raises | deliberate: it will not quietly run somewhere else |
 | `UNJUDGED (...)` on a cell | the run is saved and fine; the judge could not score it. The reason is in the line. Re-runnable with `python src/judge_all.py` |
-| `UNSCORED: model returned no output` | your model returned nothing usable three times. Keep the record and tell Haoming |
+| `UNSCORED: model returned no output` | your model returned nothing usable three times. Keep the record and report it |
 | a REAL cell says the state was never read | the sandbox did not answer; re-run that cell |
 | Chrome dies under `JOBS=4` | lower `JOBS`; each worker needs ~1.5 GB |
+| `403 ... 18+ age confirmation` | OpenRouter account gate, not a bad model id. Confirm at <https://openrouter.ai/settings/preferences> |
+| `SCREENSHOTS: n FAILED` after a cell | the run is fine and scored; frames are for auditing. Report it if it is every cell |
+| a cell stops at `max_steps` | it ran out of budget rather than finishing. Normal on hard REAL tasks; note it, do not raise the limit yourself |
+| `typing failed: nothing on the page matches` | the model guessed a selector. Expected occasionally; if it is most of a cell, send the log |
 
 Anything you cannot explain in ten minutes: send the per-cell log from
 `logs/cells/` and the `result.json`. Do not "fix" a cell by editing a result.
