@@ -24,6 +24,10 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 
 import run as R  # noqa: E402
+
+# Three tests below replace R.Browser with a stub and do not put it back, so
+# anything that needs the real class must have taken a reference first.
+REAL_BROWSER = R.Browser
 import persona_experiment  # noqa: E402
 import task_router  # noqa: E402
 
@@ -1087,6 +1091,60 @@ def test_skip_existing_ignores_unscored(tmp: Path = Path("/tmp")):
         )
 
 
+def test_typing_failure_says_why():
+    """A failed type_text must tell the model what to do differently.
+
+    It used to return Playwright's call log after waiting out the context's
+    whole 40s timeout, so a wrong selector cost a minute and taught nothing;
+    a read-only field (a date picker's input) looked the same as a missing one.
+    """
+    class Locator:
+        def __init__(self, n, readonly=None, editable=True):
+            self._n, self._ro, self._ed = n, readonly, editable
+
+        def count(self):
+            return self._n
+
+        @property
+        def first(self):
+            return self
+
+        def get_attribute(self, name):
+            return self._ro if name == "readonly" else None
+
+        def is_editable(self):
+            return self._ed
+
+    class Page:
+        def __init__(self, locator):
+            self._locator = locator
+
+        def locator(self, selector):
+            return self._locator
+
+    why = REAL_BROWSER._why_typing_failed
+    boom = RuntimeError("Timeout 8000ms exceeded.\nCall log:\n  - waiting for ...")
+
+    absent = why(None, Page(Locator(0)), "input#nope", boom)
+    assert "nothing on the page matches" in absent, absent
+    assert "Call log" not in absent, "the call log is not something a model can act on"
+
+    readonly = why(None, Page(Locator(1, readonly="")), "input[readonly]", boom)
+    assert "read-only" in readonly and "Click it" in readonly, readonly
+
+    # Editable but not typable (a React widget) reads the same way.
+    guarded = why(None, Page(Locator(1, editable=False)), "#d", boom)
+    assert "read-only" in guarded, guarded
+
+    many = why(None, Page(Locator(3)), "input", boom)
+    assert "matches 3 elements" in many and "nth=0" in many, many
+
+    # Anything else: the exception's own first line, never the call log.
+    other = why(None, Page(Locator(1)), "#x", boom)
+    assert other == "Timeout 8000ms exceeded.", other
+    assert REAL_BROWSER.TYPE_TIMEOUT_MS <= 10000, "a wrong selector must not cost 40s"
+
+
 def test_judge(run):
     task = R.TASKS[0]
     rids = list(task["rubrics"])
@@ -1124,5 +1182,6 @@ if __name__ == "__main__":
     test_persona_fidelity_contract()
     test_experience_uses_frozen_profile()
     test_skip_existing_ignores_unscored()
+    test_typing_failure_says_why()
     test_judge(run)
     print("odyssey pipeline self-check OK")

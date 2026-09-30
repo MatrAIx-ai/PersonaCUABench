@@ -451,16 +451,45 @@ class Browser:
             return f"click failed on {text!r}: {str(last_error).splitlines()[0]}"
         return f"click failed: no visible element matching {text!r}"
 
+    # A selector that matches nothing otherwise waits out the context's whole
+    # 40s and returns a Playwright call log the model cannot act on. Eight
+    # seconds is long enough for a real field to appear and short enough that a
+    # wrong guess costs a moment instead of a minute.
+    TYPE_TIMEOUT_MS = 8000
+
     def type_text(self, tab_id: int, selector: str, text: str, press_enter: bool = False) -> str:
         page = self._page(tab_id)
         try:
-            page.fill(selector, text)
+            page.fill(selector, text, timeout=self.TYPE_TIMEOUT_MS)
             if press_enter:
-                page.press(selector, "Enter")
+                page.press(selector, "Enter", timeout=self.TYPE_TIMEOUT_MS)
         except Exception as exc:
-            return f"typing failed: {exc}"
+            return f"typing failed: {self._why_typing_failed(page, selector, exc)}"
         self._settle(page)
         return f"typed into {selector}; tab {tab_id} now at {page.url}\n\n{self._text(page)}"
+
+    def _why_typing_failed(self, page, selector: str, exc: Exception) -> str:
+        """The reason in terms the model can act on, not a Playwright call log."""
+        try:
+            field = page.locator(selector)
+            count = field.count()
+        except Exception:
+            return f"{selector!r} is not a usable selector: {exc}"
+        if count == 0:
+            return (f"nothing on the page matches {selector!r}. Read the page and "
+                    f"use a selector that is actually there.")
+        try:
+            first = field.first
+            if first.get_attribute("readonly") is not None or not first.is_editable():
+                return (f"{selector} exists but cannot be typed into -- it is "
+                        f"read-only. Click it and use whatever it opens (a date "
+                        f"picker, a dropdown) instead of typing.")
+        except Exception:
+            pass
+        if count > 1:
+            return (f"{selector!r} matches {count} elements, so it is ambiguous. "
+                    f"Narrow it, e.g. \"{selector} >> nth=0\".")
+        return str(exc).split("\nCall log:")[0]
 
     def list_tabs(self) -> str:
         return json.dumps(self.open_tabs(), indent=2)
