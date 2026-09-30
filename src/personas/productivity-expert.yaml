@@ -1,0 +1,167 @@
+persona_id: odyssey-productivity-expert
+version: '2.1'
+family: productivity
+source: hand-specified from dimensions.json (MatrAIx 1290-dim schema)
+note: 'Chief of staff who lives in someone else''s inbox and calendar: rules, labels,
+  conflicts and time zones, all explicit.'
+evaluation_dimensions:
+- tech_savviness
+- risk_tolerance
+- cog_detail_orientation
+- cog_patience
+- cog_attention_span
+- pref_plan_vs_spontaneous
+- pref_save_vs_spend
+- pref_detail_brief_vs_full
+- accessibility_needs
+- device_context
+- economic_motivation
+attributes:
+  age_bracket:
+    value: 35-44
+    label: Age bracket
+    category: 'Demographic: Core'
+  highest_education:
+    value: Master's
+    label: Highest education
+    category: 'Learning: Academic'
+  demo_household_income:
+    value: $100k-200k
+    label: Household income band
+    category: 'Demographic: Core'
+  time_pressure:
+    value: Moderate
+    label: Time pressure
+    category: 'Behavior: Time'
+  seniority:
+    value: Director
+    label: Seniority
+    category: 'Professional: Career'
+  tech_savviness:
+    value: Digital native
+    label: Tech savviness
+    category: 'Expertise: Domains'
+  region:
+    value: Eastern Europe
+    label: Region
+    category: 'Demographic: Core'
+  urbanicity:
+    value: Suburban
+    label: Urbanicity
+    category: 'Demographic: Core'
+  socioeconomic_band:
+    value: Upper-middle
+    label: Socioeconomic band
+    category: 'Demographic: Core'
+  lifex_geographic_mobility:
+    value: Moved internationally
+    label: Geographic mobility
+    category: 'Demographic: Life Events'
+  skill_budgeting:
+    value: Advanced
+    label: 'Skill: Budgeting'
+    category: 'Expertise: Skills'
+  lstyle_frugality:
+    value: Balanced
+    label: Spending vs saving
+    category: 'Interests: Culture'
+  economic_motivation:
+    value: Value-driven
+    label: Economic motivation
+    category: Values & Motivation
+  habit_budget_tracking:
+    value: Weekly
+    label: 'Habit: Budget tracking'
+    category: 'Behavior: Habits'
+  pref_save_vs_spend:
+    value: Balanced
+    label: Save vs spend
+    category: 'Behavior: Preferences'
+  topic_technology:
+    value: Passionate
+    label: 'Interest: Technology'
+    category: 'Interests: Topics'
+  att_new_technology:
+    value: Enthusiast
+    label: 'Attitude: New technology'
+    category: 'Worldview: Beliefs'
+  device_context:
+    value: Desktop, focused
+    label: Device context
+    category: 'State: Emotional'
+  risk_tolerance:
+    value: Cautious
+    label: Risk tolerance
+    category: Risk & Decision
+  dospert_financial_risk_tolerance:
+    value: Low
+    label: DOSPERT Financial Risk Tolerance
+    category: Risk & Decision
+  cog_risk_framing:
+    value: Balanced
+    label: Risk framing
+    category: 'Linguistic: Communication'
+  cog_detail_orientation:
+    value: Very high
+    label: Detail orientation
+    category: 'Linguistic: Communication'
+  cog_patience:
+    value: Very high
+    label: Patience
+    category: 'Linguistic: Communication'
+  cog_attention_span:
+    value: Very long
+    label: Attention span
+    category: 'Linguistic: Communication'
+  cog_big_picture_vs_detail:
+    value: Detail-obsessed
+    label: Big-picture vs detail
+    category: 'Linguistic: Communication'
+  pref_detail_brief_vs_full:
+    value: Every detail
+    label: Brief vs full detail
+    category: 'Behavior: Preferences'
+  lstyle_planning_horizon:
+    value: Monthly
+    label: Planning horizon
+    category: 'Interests: Culture'
+  pref_plan_vs_spontaneous:
+    value: Highly planned
+    label: Planned vs spontaneous
+    category: 'Behavior: Preferences'
+  health_mobility:
+    value: Full
+    label: Mobility
+    category: 'Health: Physical'
+  health_vision:
+    value: Normal
+    label: Vision
+    category: 'Health: Physical'
+  health_assistive_tech:
+    value: None
+    label: Assistive technology
+    category: 'Health: Physical'
+  accessibility_needs:
+    value: None
+    label: Accessibility needs
+    category: 'Behavior: Preferences'
+  skill_time_management:
+    value: Master
+    label: 'Skill: Time management'
+    category: 'Expertise: Skills'
+  skill_writing:
+    value: Advanced
+    label: 'Skill: Writing'
+    category: 'Expertise: Skills'
+  habit_inbox_zero_discipline:
+    value: Daily
+    label: 'Habit: Inbox-zero discipline'
+    category: 'Behavior: Habits'
+  fam_organizational_psychology:
+    value: Proficient
+    label: 'Familiarity: Organizational psychology'
+    category: 'Expertise: Domains'
+  topic_productivity:
+    value: Passionate
+    label: 'Interest: Productivity'
+    category: 'Interests: Topics'
