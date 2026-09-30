@@ -161,7 +161,11 @@ def main() -> None:
     # skipped out loud and judge A still scores every record.
     if args.judge_b:
         try:
-            pipeline.model_registry.resolve(args.judge_b)
+            # Build the client, not just resolve the name: resolve() returns an
+            # empty provider for a raw vendor id without touching credentials,
+            # so the missing key only surfaced later, inside the first cell.
+            # Constructing the client is free and is what reads the key.
+            pipeline._client(*pipeline.model_registry.resolve(args.judge_b))
         except SystemExit as exc:
             print(f"skipping experience judge B ({args.judge_b}): {exc}\n"
                   f"  judge A alone scores every cell; there is no cross-vendor "
@@ -201,8 +205,10 @@ def main() -> None:
         }
         _write_record(path, record)
         for dim in DIMENSIONS:
-            print(f"  {dim:22} {(a.get(dim) or {}).get('score')!s:>4} "
-                  f"{(b.get(dim) or {}).get('score')!s:>4}")
+            # b is None when judge B has no route here; print one column then.
+            scores = " ".join(f"{(j.get(dim) or {}).get('score')!s:>4}"
+                              for j in (a, b) if j)
+            print(f"  {dim:22} {scores}")
 
 
 if __name__ == "__main__":

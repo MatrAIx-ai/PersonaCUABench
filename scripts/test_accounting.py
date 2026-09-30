@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import csv
 import json
+import os
 import subprocess
 import sys
 import tempfile
@@ -598,6 +599,27 @@ def check_judge_b_is_optional() -> None:
     # A B that ran and failed is still incomplete, so a re-run retries it.
     assert exp.experience_complete({"a": a, "b": {"error": "boom"}}) is False
     assert exp.experience_complete({"a": {"error": "boom"}, "b": None}) is False
+    # The guard must build the client, not just resolve the name: resolve()
+    # hands back a raw vendor id with an empty provider and never touches
+    # credentials, so a machine with only Azure configured used to sail past
+    # this check and die inside the first cell instead.
+    import run as pipeline
+    model, provider = pipeline.model_registry.resolve("anthropic/claude-opus-4.8")
+    assert provider == "", (model, provider)      # resolve alone raises nothing
+    saved = dict(os.environ)
+    try:
+        for name in ("OPENROUTER_API_KEY", "OPENROUTER_API_KEY_FILE"):
+            os.environ.pop(name, None)
+        try:
+            pipeline._client(model, provider)
+        except SystemExit:
+            pass                                   # what the guard relies on
+        else:
+            raise AssertionError("a missing OpenRouter key must raise at _client")
+    finally:
+        os.environ.clear()
+        os.environ.update(saved)
+
     # agreement() is never called with a null B; when it is called it reports
     # per-dimension gaps and never an average.
     agreed = exp.agreement(a, {d: {"score": 5} for d in exp.DIMENSIONS})
