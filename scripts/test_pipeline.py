@@ -1093,6 +1093,43 @@ def test_skip_existing_ignores_unscored(tmp: Path = Path("/tmp")):
         )
 
 
+def test_grid_tasks_selector():
+    """TASKS takes an index or an id, and an empty grid must not report DONE.
+
+    The per-task persona assignment emits task_ids, so TASKS="1 2 3" -- the
+    documented form -- silently matched nothing and run_grid printed GRID DONE
+    and exited 0 without running a cell.
+    """
+    env = {**os.environ, "DRY_RUN": "1", "JOBS": "3", "TASK_SUITE": "odysseys",
+           "PYTHON_BIN": sys.executable}
+    first = R.TASKS[0]["task_id"]
+
+    def cells(tasks):
+        out = subprocess.run(
+            ["bash", str(SRC / "run_grid.sh"), "--setting", "s1",
+             "--model", "gpt-6-sol"],
+            cwd=REPO, env={**env, "TASKS": tasks},
+            capture_output=True, text=True, timeout=180)
+        return out, sum(1 for l in out.stdout.splitlines() if l.startswith("DRY:"))
+
+    # One task is one control plus its family's four personas.
+    _, by_index = cells("1")
+    assert by_index == 5, by_index
+    _, by_id = cells(first)
+    assert by_id == 5, by_id
+    _, by_prefix = cells(first[:8])
+    assert by_prefix == 5, by_prefix
+    # A bare index must not also prefix-match every id starting with that digit.
+    _, two = cells("1 2")
+    assert two == 10, two
+
+    # Matching nothing is an error, not a silent success.
+    out, none = cells("no-such-task")
+    assert none == 0, none
+    assert out.returncode != 0, "an empty grid reported success"
+    assert "matched nothing" in out.stderr, out.stderr[:200]
+
+
 def test_embedded_python_runs_on_older_pythons():
     """run_grid.sh embeds Python; it must parse on the Pythons people have.
 
@@ -1347,6 +1384,7 @@ if __name__ == "__main__":
     test_persona_fidelity_contract()
     test_experience_uses_frozen_profile()
     test_skip_existing_ignores_unscored()
+    test_grid_tasks_selector()
     test_embedded_python_runs_on_older_pythons()
     test_cli_defaults_do_not_override_routing()
     test_typing_failure_says_why()

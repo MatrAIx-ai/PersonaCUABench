@@ -8,7 +8,7 @@
 #
 #   bash src/run_grid.sh                          # suite defaults + all tasks
 #   PERSONAS="none travel-senior" bash src/run_grid.sh
-#   TASKS="1 4" bash src/run_grid.sh             # only your assigned tasks
+#   TASKS="1 4" bash src/run_grid.sh             # by index, id, or id prefix
 #   TASK_SUITE=main-original bash src/run_grid.sh # another registered suite
 #   TASKS_FILE=/tmp/draft.json bash src/run_grid.sh
 #   JOBS=4 bash src/run_grid.sh                   # four cells at a time
@@ -84,15 +84,15 @@ while argv:
         tasks_file = argv.pop(0)
 suite = task_router.load_route(suite_id=suite_id, tasks_file=tasks_file)
 control = "0" not in (str(__import__("os").environ.get("CONTROL", "1")),)
-# The task_id, not its 1-based index: TASKS below is a list of task_ids (so a
-# shard stays stable if a task is inserted before it), and the two lists are
-# matched against each other verbatim.
-for task in suite.tasks:
+# Both the 1-based index and the task_id, because TASKS is written by hand as
+# either: "TASKS=1 2 3" while poking at a few, full ids when sharding a grid so
+# it stays stable if a task is inserted before the shard.
+for index, task in enumerate(suite.tasks, start=1):
     names = persona_assignments.personas_for(task)
     if control:
         names = ["none"] + names
     for name in names:
-        print(f"{task['task_id']} {name}")
+        print(f"{index} {task['task_id']} {name}")
 PYCELLS
   ) || exit $?
 fi
@@ -178,13 +178,31 @@ if [[ -n "${PERSONAS:-}" ]]; then
     for t in $TASKS; do CELLS+="$t $persona"$'\n'; done
   done
 else
-  # Keep only the assigned cells whose task is in this shard's TASKS list.
-  while read -r t persona; do
+  # Keep only the assigned cells this shard's TASKS list names. An entry may be
+  # the 1-based index, the full task_id, or a unique prefix of it -- run.py's
+  # --task accepts all three, and a TASKS list that silently matched nothing is
+  # how a grid once reported DONE without running a single cell.
+  while read -r idx t persona; do
     [[ -z "$t" ]] && continue
     for want in $TASKS; do
-      if [[ "$want" == "$t" ]]; then CELLS+="$t $persona"$'\n'; fi
+      # run.py's own convention: all digits is a 1-based index, anything else
+      # is a task_id or a prefix of one. Without the split a bare "1" also
+      # prefix-matches every id that happens to start with 1.
+      if [[ "$want" =~ ^[0-9]+$ ]]; then
+        [[ "$want" == "$idx" ]] && CELLS+="$t $persona"$'\n'
+      elif [[ "$want" == "$t" || "$t" == "$want"* ]]; then
+        CELLS+="$t $persona"$'\n'
+      fi
     done
   done <<< "$ASSIGNED"
+fi
+
+if [[ -z "${CELLS//[[:space:]]/}" ]]; then
+  echo "no cells to run: TASKS=${TASKS:-<all>} matched nothing in " \
+       "${TASK_SUITE:-the default suite}." >&2
+  echo "  TASKS takes a 1-based index, a full task_id, or a unique prefix." >&2
+  echo "  List them with: $PYTHON_BIN src/task_router.py selectors ${ROUTE_ARGS[*]:1}" >&2
+  exit 2
 fi
 
 while read -r t persona; do
