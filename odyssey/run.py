@@ -1990,7 +1990,9 @@ def main() -> None:
             """
             record["accounting"] = {
                 "cell_wall_seconds": round(time.monotonic() - cell_started, 3),
-                "calls": meter.calls,
+                # per_call, not calls: totals() carries a "calls" count, and the
+                # count silently overwrote this list when they shared a name.
+                "per_call": meter.calls,
                 **meter.totals(),
             }
 

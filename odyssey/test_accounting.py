@@ -210,7 +210,7 @@ def cell_record(setting, model, task, cost, judge_cost, wall, steps=10):
         "judgement": {"score": 0.5},
         "accounting": {
             "cell_wall_seconds": wall, "prompt_tokens": 1000, "completion_tokens": 100,
-            "cost_usd": cost + judge_cost, "unpriced_calls": 0, "calls": [],
+            "cost_usd": cost + judge_cost, "unpriced_calls": 0, "per_call": [],
             "by_role": {"agent": {"cost_usd": cost, "ms": 1000},
                         "rubric_judge": {"cost_usd": judge_cost, "ms": 50}},
         },
@@ -484,6 +484,30 @@ def check_real_judging() -> None:
     assert crashed["score"] is None and "exit 3" in crashed["error"], crashed
 
 
+def check_accounting_is_complete() -> None:
+    """Every model call must survive into the record, not just its totals.
+
+    per_call once shared the name "calls" with the totals' count, and the count
+    won: every cell's per-call detail was silently replaced by an integer.
+    """
+    meter = R.Meter()
+    meter.add("agent", "z-ai/glm-5.3", "openrouter", fake_response(cost=0.2), ms=10)
+    meter.add("rubric_judge", "z-ai/glm-5.3", "openrouter", fake_response(cost=0.1), ms=20)
+    accounting = {"cell_wall_seconds": 1.0, "per_call": meter.calls, **meter.totals()}
+    assert isinstance(accounting["per_call"], list), accounting["per_call"]
+    assert len(accounting["per_call"]) == accounting["calls"] == 2
+    for call in accounting["per_call"]:
+        for field in ("role", "model", "provider", "ms", "prompt_tokens",
+                      "completion_tokens", "cached_prompt_tokens",
+                      "cache_write_tokens", "reasoning_tokens", "cost_usd",
+                      "cost_source", "list_cost_usd"):
+            assert field in call, f"{field} is missing from a recorded call"
+    for field in ("calls", "by_role", "prompt_tokens", "completion_tokens",
+                  "model_ms", "retries", "cost_usd", "list_cost_usd",
+                  "unpriced_calls"):
+        assert field in accounting, f"{field} is missing from the totals"
+
+
 def check_cost_report() -> None:
     with tempfile.TemporaryDirectory() as tmp:
         root = Path(tmp)
@@ -540,6 +564,7 @@ def main() -> None:
     check_judge_calls()
     check_progress_note_is_not_an_answer()
     check_real_judging()
+    check_accounting_is_complete()
     check_cost_report()
     print("accounting self-check OK")
 

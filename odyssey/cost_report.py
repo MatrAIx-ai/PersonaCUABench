@@ -59,7 +59,9 @@ def cells(results: Path):
         by_role = acct.get("by_role") or {}
         run = record.get("run") or {}
         arm = run.get("arm") or {}
-        calls = acct.get("calls") or []
+        calls = acct.get("per_call") or []
+        if isinstance(calls, int):       # a record written while the two names collided
+            calls = []
         ours_calls, azure_calls = split_costs(calls)
         # The post-hoc judges live in their own blocks, each with its own meter
         # and its own provider, so each block is attributed on its own.
