@@ -1093,6 +1093,42 @@ def test_skip_existing_ignores_unscored(tmp: Path = Path("/tmp")):
         )
 
 
+def test_cli_defaults_do_not_override_routing():
+    """--provider must default to empty, or the registry is overruled.
+
+    It defaulted to "openai". resolve() treats a non-empty provider as an
+    explicit override and honours it even when no such route exists, handing
+    back the OpenRouter *id* aimed at the Azure endpoint. That mis-routed 11 of
+    13 registry models; the two it spared, gpt-6-astra and terra, are the only
+    two that had ever been run, so nothing caught it.
+    """
+    parser = R.build_parser() if hasattr(R, "build_parser") else None
+    if parser is None:                      # parser is built inline in main()
+        import re
+        src = (SRC / "run.py").read_text(encoding="utf-8")
+        for flag in ("--provider", "--persona-provider"):
+            m = re.search(rf'add_argument\("{re.escape(flag)}",\s*default=("[^"]*")',
+                          src)
+            assert m, f"{flag} has no literal default any more; check by hand"
+            assert m.group(1) == '""', f"{flag} defaults to {m.group(1)}, not empty"
+
+    # An empty provider must behave exactly as passing none at all, whether or
+    # not this machine has the credentials -- the gate runs without any.
+    def outcome(key, provider):
+        try:
+            return R.model_registry.resolve(key, provider)
+        except SystemExit as exc:
+            return f"unrouted: {exc}"
+
+    for key in R.model_registry.MODELS:
+        assert outcome(key, "") == outcome(key, None or ""), key
+        # "openai" as a default would have been an override: prove it differs,
+        # so this test fails loudly if the default is ever put back.
+        if key not in ("gpt-6-astra", "terra"):
+            assert outcome(key, "openai") != outcome(key, ""), (
+                f"{key}: forcing the openai provider must not look identical")
+
+
 def test_typing_failure_says_why():
     """A failed type_text must tell the model what to do differently.
 
@@ -1197,6 +1233,7 @@ if __name__ == "__main__":
     test_persona_fidelity_contract()
     test_experience_uses_frozen_profile()
     test_skip_existing_ignores_unscored()
+    test_cli_defaults_do_not_override_routing()
     test_typing_failure_says_why()
     test_judge(run)
     print("odyssey pipeline self-check OK")

@@ -1961,12 +1961,19 @@ def main() -> None:
                     help="the CUA doing the work: a key from src/models.json "
                          "(preferring Azure when that model is deployed there) or "
                          "a raw provider id")
-    ap.add_argument("--provider", default="openai",
+    # Empty, not "openai": a non-empty provider is an explicit override, and
+    # resolve() honours it even when no such route exists -- it then hands back
+    # the OpenRouter *id* pointed at the Azure endpoint. With "openai" as the
+    # default that happened to 11 of 13 registry models. Only gpt-6-astra and
+    # terra were unaffected, which is why it survived: they are the only two
+    # anyone had run. Empty lets the registry pick, which is its whole job.
+    ap.add_argument("--provider", default="",
                     help="override routing for --model, e.g. openrouter for a "
-                         "qwen id served somewhere other than DashScope")
+                         "qwen id served somewhere other than DashScope. "
+                         "Empty means the registry chooses.")
     ap.add_argument("--persona-model", default="gpt-5.6-terra",
                     help="the LLM playing the persona user")
-    ap.add_argument("--persona-provider", default="openai")
+    ap.add_argument("--persona-provider", default="")
     # Azure serves gpt-5.6-terra; once AZURE_OPENAI_* is configured every
     # "openai" provider call goes there, and a real OpenAI id such as gpt-5.5
     # would 404 with DeploymentNotFound.

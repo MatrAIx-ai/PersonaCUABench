@@ -193,6 +193,25 @@
       "route_note": "Direct OpenAI. Needs OPENAI_DIRECT_BASE_URL=https://api.openai.com/v1 and OPENAI_API_KEY. Newer than gpt-6-astra and a fifth of its price ($2/$10 per Mtok against $10/$50).",
       "responses_api": true
     },
+    "gpt-6-sol": {
+      "label": "GPT 6 Sol",
+      "endpoint": {
+        "model": "gpt-6-sol",
+        "base_url_env": "OPENAI_DIRECT_BASE_URL",
+        "api_key_env": "OPENAI_API_KEY",
+        "key_required": true
+      },
+      "azure": null,
+      "openrouter": "openai/gpt-6-sol",
+      "price": {
+        "in": 2.0,
+        "out": 10.0
+      },
+      "cache_read_multiplier": 0.25,
+      "cache_note": "OpenAI caches automatically; multiplier is the published cached-input rate, not measured here",
+      "route_note": "Direct OpenAI. Same price as gpt-6.1-sol ($2/$10 per Mtok); kept alongside it so the two can be compared rather than one being assumed better for being newer.",
+      "responses_api": true
+    },
     "gpt-6-luna": {
       "label": "GPT 6 Luna",
       "endpoint": {
