@@ -411,12 +411,37 @@ class Browser:
 
     def click(self, tab_id: int, text: str) -> str:
         page = self._page(tab_id)
-        try:
-            page.get_by_text(text, exact=False).first.click()
-        except Exception as exc:
-            return f"click failed: {exc}"
-        self._settle(page)
-        return f"clicked {text!r}; tab {tab_id} now at {page.url}\n\n{self._text(page)}"
+        # Most specific match first, and only visible elements: "Send" must hit
+        # the Send button, not a hidden label or a "Sent" folder containing it.
+        # (From the main line: the first version clicked the first text match,
+        # which is why agents reported "I clicked the pizza and nothing opened".)
+        candidates = (page.get_by_role("button", name=text, exact=True),
+                      page.get_by_role("link", name=text, exact=True),
+                      page.get_by_text(text, exact=True),
+                      page.get_by_role("button", name=text),
+                      page.get_by_text(text, exact=False))
+        last_error = None
+        for attempt in range(2):          # a page still rendering gets one more look
+            if attempt:
+                time.sleep(1.5)
+            for locator in candidates:
+                try:
+                    for index in range(min(locator.count(), 10)):
+                        element = locator.nth(index)
+                        if element.is_visible():
+                            element.click(timeout=10000)
+                            self._settle(page)
+                            return (f"clicked {text!r}; tab {tab_id} now at {page.url}"
+                                    f"\n\n{self._text(page)}")
+                except Exception as exc:
+                    last_error = exc
+        if last_error and "intercepts pointer events" in str(last_error):
+            return (f"click failed: {text!r} is visible but covered by another "
+                    f"element, such as an open dialog or overlay. Read the page "
+                    f"and deal with that first.")
+        if last_error:
+            return f"click failed on {text!r}: {str(last_error).splitlines()[0]}"
+        return f"click failed: no visible element matching {text!r}"
 
     def type_text(self, tab_id: int, selector: str, text: str, press_enter: bool = False) -> str:
         page = self._page(tab_id)
