@@ -139,6 +139,7 @@ MAX_TABS = 8
 DEFAULT_PROFILE = HERE / ".chrome-profile"   # gitignored; keeps consent cookies
 
 MAX_QUESTIONS = 5          # ask_user calls per run
+MAX_RETRIES = 3            # provider retries per call, and mute turns per run
 # Consecutive tool-free turns before a run is called over. One is a progress
 # note; three in a row is a model that has stopped working.
 MAX_TEXT_TURNS = 3
@@ -648,7 +649,8 @@ _retries_seen = 0          # provider retries this process has done, ever
 RESPONSES_API = True       # use the Responses API on the openai/Azure provider
 
 
-def _create_with_retry(client, *, attempts: int = 5, create=None, **kwargs):
+def _create_with_retry(client, *, attempts: int = MAX_RETRIES + 1, create=None,
+                       **kwargs):
     """One chat call, retrying the transient provider failures.
 
     A shared-pool 429 is the normal weather on an aggregated endpoint, and a
@@ -1285,7 +1287,7 @@ def run_agent(task: dict, user: PersonaUser, model: str, *, max_steps: int,
                 # model stays mute.
                 messages.pop()
                 empty_turns += 1
-                if empty_turns >= 3:
+                if empty_turns >= MAX_RETRIES:
                     stop_reason = "no_model_output"
                     break
                 time.sleep(3)
@@ -1329,11 +1331,10 @@ def run_agent(task: dict, user: PersonaUser, model: str, *, max_steps: int,
                         result = fn(**args) if fn else f"unknown tool {name}"
                     except Exception as exc:
                         result = f"{type(exc).__name__}: {exc}"
-                # Only the tools that can change what a page shows are worth a
-                # frame; list_tabs and ask_user change nothing.
-                shot = (browser.shot(f"{step:02d}-{name}", args.get("tab_id"))
-                        if name in ("open_tab", "goto", "click", "type_text")
-                        else None)
+                # One frame per step, whatever the tool: a read_page that
+                # returned nothing looks identical in a text log whether the
+                # page was empty, still loading or a captcha wall.
+                shot = browser.shot(f"{step:02d}-{name}", args.get("tab_id"))
                 trajectory.append({
                     "step": step, "tool": name, "args": args, "screenshot": shot,
                     # result_preview is what the judge reads; result is the
@@ -1431,7 +1432,7 @@ def judge_run(task: dict, run: dict, *, judge_model: str, judge_provider: str,
     # No temperature: reasoning models such as gpt-5.5 accept only the default,
     # and they take max_completion_tokens, not max_tokens.
     verdicts, last_error = None, ""
-    for attempt in range(3):
+    for attempt in range(MAX_RETRIES):
         try:
             resp, _ = metered(client, meter, "rubric_judge",
                               provider=resolved_provider,

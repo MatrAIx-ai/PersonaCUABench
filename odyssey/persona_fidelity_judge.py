@@ -319,7 +319,7 @@ def score_once(record: dict, model: str, provider: str = "") -> dict:  # noqa: D
     client, resolved_provider = odyssey._client(model, provider)
     meter = odyssey.Meter()          # judging is part of a setting's bill
     last = "unparseable judge output"
-    for attempt in range(3):
+    for attempt in range(odyssey.MAX_RETRIES):
         try:
             response, _ = odyssey.metered(
                 client, meter, "persona_fidelity_judge",

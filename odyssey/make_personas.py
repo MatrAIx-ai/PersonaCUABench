@@ -677,7 +677,7 @@ PROFILES: dict[str, dict] = {
         dospert_financial_risk_tolerance="Very high",
         pref_plan_vs_spontaneous="Highly spontaneous", habit_budget_tracking="Never",
         urbanicity="Small town", health_vision="Normal", ),
-    "science-helper": _p(
+    "science-practical": _p(
         "practical",
         "Parent hunting down free school resources for a child's project: patient, "
         "penny-watching, not a scientist.",
@@ -727,7 +727,7 @@ PROFILES: dict[str, dict] = {
         lifex_geographic_mobility="Never left hometown", skill_budgeting="Intermediate",
         lstyle_planning_horizon="Monthly",
     ),
-    "tech-teacher": _p(
+    "tech-practical": _p(
         "practical",
         "Middle-school teacher vetting classroom software on a district budget: "
         "capable but deliberately slow to adopt anything new.",

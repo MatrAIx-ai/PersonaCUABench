@@ -74,7 +74,7 @@ def score_once(prompt: str, model: str, provider: str = "") -> dict:
     model, provider = odyssey.model_registry.resolve(model, provider)
     client, resolved_provider = odyssey._client(model, provider)
     meter = odyssey.Meter()
-    for attempt in range(3):
+    for attempt in range(odyssey.MAX_RETRIES):
         try:
             resp, _ = odyssey.metered(
                 client, meter, "experience_judge", provider=resolved_provider,

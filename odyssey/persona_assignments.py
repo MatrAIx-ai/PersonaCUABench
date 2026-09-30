@@ -49,14 +49,13 @@ DOMAIN_FAMILY = {
 # the names its personas were first written under; every other family follows
 # "<family>-<role>".
 ROLES = ("expert", "senior", "young", "practical")
+# Every family uses <family>-<role>; only travel keeps the names its four
+# personas were first written under, because results already reference them.
 OVERRIDES = {
     ("travel", "expert"): "travel-expert",
     ("travel", "senior"): "elderly-novice",
     ("travel", "young"): "budget-student",
     ("travel", "practical"): "non-native-speaker",
-    # Where the team's tree names a different fourth role, the key says so.
-    ("science", "practical"): "science-helper",
-    ("tech", "practical"): "tech-teacher",
 }
 
 
