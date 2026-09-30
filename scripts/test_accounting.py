@@ -573,6 +573,29 @@ def check_real_manifest_checks() -> None:
         assert got["judge_model"] == "real-state-checker+stub-judge", got
 
 
+def check_judge_b_is_optional() -> None:
+    """A collaborator with only the shared Azure endpoint must still get scores.
+
+    experience_judge resolved judge B inside score_once, outside its try, so a
+    machine with no OpenRouter route lost the whole pass to a SystemExit on the
+    first cell -- every cell then had no experience score at all.
+    """
+    import experience_judge as exp
+
+    a = {d: {"score": 4, "reason": "ok"} for d in exp.DIMENSIONS}
+    # A null B means "never configured here": complete, so a re-run does not
+    # spend judge A's calls again to get the same null.
+    assert exp.experience_complete({"a": a, "b": None, "agreement": None}) is True
+    # A B that ran and failed is still incomplete, so a re-run retries it.
+    assert exp.experience_complete({"a": a, "b": {"error": "boom"}}) is False
+    assert exp.experience_complete({"a": {"error": "boom"}, "b": None}) is False
+    # agreement() is never called with a null B; when it is called it reports
+    # per-dimension gaps and never an average.
+    agreed = exp.agreement(a, {d: {"score": 5} for d in exp.DIMENSIONS})
+    assert all(v["within_one"] for v in agreed.values()), agreed
+    assert set(agreed) == set(exp.DIMENSIONS)
+
+
 def check_accounting_is_complete() -> None:
     """Every model call must survive into the record, not just its totals.
 
@@ -654,6 +677,7 @@ def main() -> None:
     check_progress_note_is_not_an_answer()
     check_real_judging()
     check_real_manifest_checks()
+    check_judge_b_is_optional()
     check_accounting_is_complete()
     check_cost_report()
     print("accounting self-check OK")

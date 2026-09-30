@@ -118,11 +118,18 @@ def agreement(a: dict, b: dict) -> dict:
 
 
 def experience_complete(value: object) -> bool:
-    """Only successful dual-judge output is resumable as complete."""
+    """Successful judge output is resumable as complete.
+
+    A null judge B means it was never configured on this machine, and re-running
+    would spend the same calls to get the same null. `--redo` is how a record
+    picks up a second judge once one has a route.
+    """
     if not isinstance(value, dict):
         return False
     for slot in ("a", "b"):
         judge = value.get(slot)
+        if slot == "b" and judge is None:
+            continue
         if not isinstance(judge, dict) or judge.get("error"):
             return False
         if any(not isinstance(judge.get(dimension), dict) for dimension in DIMENSIONS):
@@ -148,6 +155,21 @@ def main() -> None:
     args = ap.parse_args()
     pipeline.load_dotenv()
 
+    # Judge B is a second vendor, for the agreement number, and it needs a route
+    # of its own. A collaborator set up with only the shared Azure endpoint used
+    # to lose the whole pass to its SystemExit on the first cell; now it is
+    # skipped out loud and judge A still scores every record.
+    if args.judge_b:
+        try:
+            pipeline.model_registry.resolve(args.judge_b)
+        except SystemExit as exc:
+            print(f"skipping experience judge B ({args.judge_b}): {exc}\n"
+                  f"  judge A alone scores every cell; there is no cross-vendor "
+                  f"agreement without it. Configure that route, or let whoever "
+                  f"collects the results run the second judge over them.",
+                  flush=True)
+            args.judge_b = ""
+
     paths = sorted(Path(args.results).rglob("result.json"))
     for path in paths:
         record = json.loads(path.read_text(encoding="utf-8"))
@@ -161,7 +183,7 @@ def main() -> None:
         print(f"{record['task_id'][:12]} {record['persona']}", flush=True)
         prompt = build_prompt(record)
         a = score_once(prompt, args.judge_a)
-        b = score_once(prompt, args.judge_b)
+        b = score_once(prompt, args.judge_b) if args.judge_b else None
         profile_snapshot = (((record.get("run") or {}).get("user") or {})
                             .get("persona_profile") or {})
         profile_integrity = (
@@ -173,7 +195,7 @@ def main() -> None:
         record["experience"] = {
             "a": a,
             "b": b,
-            "agreement": agreement(a, b),
+            "agreement": agreement(a, b) if b else None,
             "profile_integrity": profile_integrity,
             "task_integrity": task_integrity,
         }

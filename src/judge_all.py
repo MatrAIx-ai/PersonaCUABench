@@ -130,6 +130,14 @@ def main() -> None:
     pipeline.load_dotenv()
     args.judge_model, args.judge_provider = pipeline.model_registry.resolve(
         args.judge_model, args.judge_provider)
+    # Same as experience_judge.py: a second vendor with no route on this machine
+    # is skipped out loud rather than taking the whole pass down with it.
+    if args.judge_b:
+        try:
+            pipeline.model_registry.resolve(args.judge_b, args.judge_b_provider)
+        except SystemExit as exc:
+            log(f"skipping experience judge B ({args.judge_b}): {exc}")
+            args.judge_b = ""
 
     paths = []
     for p in sorted(Path(args.results).rglob("result.json")):
