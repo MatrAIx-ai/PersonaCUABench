@@ -111,12 +111,15 @@ then the judges and the reports. Expect roughly **8–14 hours at `JOBS=4`**.
   measure with `python src/cost_report.py src/results/s1` after a handful of
   cells before committing to the whole grid.
 
-## 5. The proactivity ablation
+## 5. The proactivity ablation — optional
 
-The benchmark's second question is whether an agent **asks** when the person
-left something out, or guesses. `ask_user` is always available to your model (up
-to 5 questions per cell). The ablation adds a paragraph to its system prompt
-telling it to prefer asking:
+**Skip this unless Haoming asks you for it.** Section 4 is the run that matters;
+this is an extra arm and it doubles the cells and the money.
+
+The question it answers is whether an agent **asks** when the person left
+something out, or guesses. `ask_user` is always available to your model in
+either arm (up to 5 questions per cell) — the ablation only adds a paragraph to
+its system prompt telling it to prefer asking:
 
 ```bash
 NUDGE=both SETTING=s1 MODELS="<your key>" JOBS=4 bash src/run_all.sh
@@ -131,8 +134,9 @@ other, and the comparison comes out as:
 python src/cost_report.py src/results/s1 --by proactive_nudge
 ```
 
-**Run `NUDGE=off` first and finish it.** Only start the nudged arm once the
-plain grid is complete and Haoming has confirmed the budget.
+**Finish `NUDGE=off` first.** Only start the nudged arm once the plain grid is
+complete and Haoming has asked for it; at roughly $1,100 per arm per model it is
+not something to kick off on your own.
 
 ## 6. Send the results
 
