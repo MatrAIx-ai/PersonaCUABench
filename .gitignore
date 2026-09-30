@@ -46,16 +46,15 @@ logs/
 # Working notes kept locally, not pushed.
 notes/
 
-# from the main line
-odyssey/.chrome-profile/
-odyssey/__pycache__/
-odyssey/claw_cases/
-odyssey/results/
-odyssey/.chrome-profile-w*/
+# Per-run working state, never pushed: results are uploaded to the shared drive
+# by hand. src/.gitignore covers the same ground from inside src/.
+src/.chrome-*/
+src/__pycache__/
+src/claw_cases/
+src/results/
+src/serving_logs/
 .venv-linux/
 *.log
-odyssey/.chrome-*/
-odyssey/serving_logs/
 results/
 # Personal notes, never pushed
 CONTRIBUTING.md

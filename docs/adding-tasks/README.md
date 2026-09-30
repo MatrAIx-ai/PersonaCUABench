@@ -18,11 +18,11 @@ The short version is:
 
 The complete Shopping implementation is the reference:
 
-- [`odyssey/task_suites/shopping/000-core.json`](../../odyssey/task_suites/shopping/000-core.json)
+- [`src/task_suites/shopping/000-core.json`](../../src/task_suites/shopping/000-core.json)
   for task records;
-- [`odyssey/task_suites/shopping/personas/persona_experiment.json`](../../odyssey/task_suites/shopping/personas/persona_experiment.json)
+- [`src/task_suites/shopping/personas/persona_experiment.json`](../../src/task_suites/shopping/personas/persona_experiment.json)
   for the matched-pair protocol;
-- [`odyssey/task_suites/shopping/README.md`](../../odyssey/task_suites/shopping/README.md)
+- [`src/task_suites/shopping/README.md`](../../src/task_suites/shopping/README.md)
   for its experiment-specific runbook.
 
 ## 1. Know which layer owns what
@@ -41,7 +41,7 @@ underlying Odysseys task.
 
 ### Current runtime boundary
 
-In the tracked implementation described by this README, `odyssey/run.py`
+In the tracked implementation described by this README, `src/run.py`
 drives an installed local Chrome through Playwright. It is a real-web CUA
 benchmark, but it is **not** the OSWorld VM runtime. The path
 `.osworld/OSWorld/.venv/bin/python` used by some repository examples selects a
@@ -77,8 +77,8 @@ do not depend on another developer already having a local OSWorld checkout:
 
 ```bash
 python3 -m venv .venv
-.venv/bin/python -m pip install -r odyssey/requirements.txt
-.venv/bin/python odyssey/test_pipeline.py
+.venv/bin/python -m pip install -r src/requirements.txt
+.venv/bin/python src/test_pipeline.py
 ```
 
 Google Chrome must also be installed for real browser runs. The `.venv/`
@@ -91,7 +91,7 @@ directory is ignored by Git.
 Add a new, predictably sorted top-level shard such as:
 
 ```text
-odyssey/task_suites/<scenario>/010-next-batch.json
+src/task_suites/<scenario>/010-next-batch.json
 ```
 
 If the suite manifest already uses
@@ -104,7 +104,7 @@ it for a task shard.
 Create this layout:
 
 ```text
-odyssey/task_suites/<scenario>/
+src/task_suites/<scenario>/
 ├── README.md
 ├── 000-core.json
 └── personas/
@@ -168,7 +168,7 @@ evidence, not permission to edit the task after seeing a model fail.
 
 ## 4. Register and validate routing
 
-For a new scenario, add an entry to `odyssey/task_suites.json`:
+For a new scenario, add an entry to `src/task_suites.json`:
 
 ```json
 "<scenario>": {
@@ -191,8 +191,8 @@ the nested protocol, so they do not need to be enumerated in
 Validate before any model call:
 
 ```bash
-.venv/bin/python odyssey/run.py --list-suites
-.venv/bin/python odyssey/run.py \
+.venv/bin/python src/run.py --list-suites
+.venv/bin/python src/run.py \
   --suite <scenario> --list-tasks
 ```
 
@@ -210,7 +210,7 @@ extra and does not count toward the 6–12 budget.
 
 For every pair:
 
-- choose one unique dimension from `odyssey/dimensions.json`;
+- choose one unique dimension from `src/dimensions.json`;
 - choose two different values allowed by that dimension;
 - begin from one shared scenario baseline;
 - change exactly that one dimension between the two profiles;
@@ -285,17 +285,17 @@ maps and both declared matrix counts.
 Generate profiles from the protocol:
 
 ```bash
-.venv/bin/python odyssey/make_matched_personas.py \
+.venv/bin/python src/make_matched_personas.py \
   --suite <scenario>
 
-.venv/bin/python odyssey/make_matched_personas.py \
+.venv/bin/python src/make_matched_personas.py \
   --suite <scenario> --check
 ```
 
 The generated location is:
 
 ```text
-odyssey/personas/<scenario>/matched_pairs/
+src/personas/<scenario>/matched_pairs/
   mp_<axis-id>_positive.yaml
   mp_<axis-id>_negative.yaml
 ```
@@ -311,14 +311,14 @@ generated YAML directly.
 Run the offline regression first:
 
 ```bash
-.venv/bin/python -m py_compile odyssey/*.py
-.venv/bin/python odyssey/test_pipeline.py
+.venv/bin/python -m py_compile src/*.py
+.venv/bin/python src/test_pipeline.py
 ```
 
 Dry-run the whole applicability matrix:
 
 ```bash
-.venv/bin/python odyssey/run_matched_pairs.py \
+.venv/bin/python src/run_matched_pairs.py \
   --suite <scenario> --replicate-id r1 --headless
 ```
 
@@ -326,7 +326,7 @@ Check that the header matches the protocol. For each newly added task, verify
 its slice has `2 × mapped_axes(task)` cells:
 
 ```bash
-.venv/bin/python odyssey/run_matched_pairs.py \
+.venv/bin/python src/run_matched_pairs.py \
   --suite <scenario> --replicate-id r1 \
   --task <full-task-id> --headless
 ```
@@ -339,7 +339,7 @@ must reverse the two arm positions used by `r1` for the same task/axis.
 Materialize and inspect a two-arm opening before launching a browser:
 
 ```bash
-.venv/bin/python odyssey/run_matched_pairs.py \
+.venv/bin/python src/run_matched_pairs.py \
   --suite <scenario> --replicate-id smoke \
   --task <full-task-id> --axis <axis-id> \
   --materialize-openings -- \
@@ -355,7 +355,7 @@ Execute only after that review, using the same replicate and persona-model
 configuration:
 
 ```bash
-.venv/bin/python odyssey/run_matched_pairs.py \
+.venv/bin/python src/run_matched_pairs.py \
   --suite <scenario> --replicate-id smoke \
   --task <full-task-id> --axis <axis-id> --headless --execute -- \
   --model gpt-5.6-terra --provider openai \
@@ -461,15 +461,15 @@ For the current Playwright path, add the post-hoc persona-side judges after a
 completed smoke or formal run:
 
 ```bash
-.venv/bin/python odyssey/experience_judge.py \
+.venv/bin/python src/experience_judge.py \
   --results artifacts/<scenario>-results \
   --judge-a gpt-5.6-terra --judge-b gpt-5.6-terra
 
-.venv/bin/python odyssey/persona_fidelity_judge.py \
+.venv/bin/python src/persona_fidelity_judge.py \
   --results artifacts/<scenario>-results \
   --judge-model gpt-5.6-terra --judge-provider openai
 
-.venv/bin/python odyssey/report.py \
+.venv/bin/python src/report.py \
   artifacts/<scenario>-results --suite <scenario>
 ```
 
@@ -510,13 +510,13 @@ is invalid or non-separating; do not conceal that result in an average.
 
 ### Repository hygiene
 
-- [ ] `odyssey/test_pipeline.py` and `git diff --check` pass.
+- [ ] `src/test_pipeline.py` and `git diff --check` pass.
 - [ ] The scenario README documents tasks, axes, commands, and known limits.
 - [ ] No API key, `.env`, browser profile, VM image, opening cache, result,
       screenshot, or trajectory is committed.
 - [ ] The PR contains only one coherent scenario or task batch.
 
 For the protocol field reference, continue with
-[`odyssey/task_suites/README.md`](../../odyssey/task_suites/README.md). For the
+[`src/task_suites/README.md`](../../src/task_suites/README.md). For the
 runner and result schema, see
-[`odyssey/README.md`](../../odyssey/README.md).
+[`src/README.md`](../../src/README.md).

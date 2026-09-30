@@ -62,11 +62,11 @@ starting a career. Within a role the values still differ by family, so travel's
 `practical` is a recent immigrant working around a language barrier while
 science's is a parent hunting down free school resources.
 
-Personas are generated, never hand-edited: `odyssey/make_personas.py` builds
+Personas are generated, never hand-edited: `src/make_personas.py` builds
 them from the MatrAIx 1,290-dimension schema and refuses any value the schema
 does not allow, any family that does not carry exactly five own dimensions, and
 any persona file that has drifted from the generator (`--check`). Which personas ask for which task is derived from the task's
-domain, not written by hand (`odyssey/persona_assignments.py`), so it cannot go
+domain, not written by hand (`src/persona_assignments.py`), so it cannot go
 stale when the task set changes.
 
 ## Models
@@ -89,25 +89,25 @@ what it wants, rather than quietly running somewhere else.
 | GLM 5.3 | Charles | `glm-5.3` |
 | Qwen 3.8 27B | Xu Hu | `qwen3.8-27b` |
 
-`python odyssey/models.py` prints what each one resolves to on your machine.
+`python src/models.py` prints what each one resolves to on your machine.
 GPT 5.6 Terra is the shared persona and judge model, not an execution backbone.
 
 ## Running your model
 
 ```bash
 git clone <this repo> && cd PersonaCUABench
-python3 -m venv .venv && .venv/bin/pip install -r odyssey/requirements.txt
+python3 -m venv .venv && .venv/bin/pip install -r src/requirements.txt
 cp .env.example .env            # fill in your two variables
 
-bash odyssey/check_all.sh       # every offline check, no keys, no network
-python odyssey/models.py        # confirm your model has a route
+bash scripts/check_all.sh   # every offline check, no keys, no network
+python src/models.py        # confirm your model has a route
 
 # one cell first: free if your model is on Azure, cents otherwise
-python odyssey/run.py --suite odysseys --task 1 --persona none \
+python src/run.py --suite odysseys --task 1 --persona none \
   --model <your key> --setting s1 --headless
 
 # then the grid: every task, each with its own four personas and the control
-SETTING=s1 MODELS="<your key>" JOBS=4 bash odyssey/run_all.sh
+SETTING=s1 MODELS="<your key>" JOBS=4 bash src/run_all.sh
 ```
 
 `DRY_RUN=1` in front of either script lists the cells without running them.
@@ -134,22 +134,25 @@ Everything needed to reproduce, re-judge and cost a cell, written per cell:
   reasoning tokens, retries, latency and dollars, split into what we paid and
   what the shared Azure endpoint was asked to do
 
-`odyssey/report.py` prints the scores, `odyssey/cost_report.py` the cost, time
-and navigation style, `odyssey/judge_all.py` re-judges saved runs in parallel.
+`src/report.py` prints the scores, `src/cost_report.py` the cost, time
+and navigation style, `src/judge_all.py` re-judges saved runs in parallel.
 
 ## Where things live
 
 | | |
 |---|---|
 | `benchmark/v1_tasks.json` | the task set, the only source of truth for tasks |
-| `odyssey/prepare_v1.py` | turns it into the runnable suites |
-| `odyssey/task_suites/` | `odysseys/` and `real/`, generated |
-| `odyssey/personas/` | generated persona profiles |
-| `odyssey/models.json` | the nine models, their owners, routes and prices |
-| `odyssey/prompts/` | every prompt, one file each |
-| `odyssey/run.py` | persona → CUA → judge, one cell |
-| `odyssey/run_grid.sh`, `run_all.sh` | a model's whole grid, then the judges and reports |
-| `odyssey/real_evals/` | REAL's own state checkers, vendored (Apache-2.0) |
+| `benchmark/tasks.json` | one collaborator's own seven-task working slice; a record, read by nothing |
+| `src/` | everything that runs |
+| `scripts/` | the offline checks: `check_all.sh` and the three `test_*.py` |
+| `src/prepare_v1.py` | turns it into the runnable suites |
+| `src/task_suites/` | `odysseys/` and `real/`, generated |
+| `src/personas/` | generated persona profiles |
+| `src/models.json` | the nine models, their owners, routes and prices |
+| `src/prompts/` | every prompt, one file each |
+| `src/run.py` | persona → CUA → judge, one cell |
+| `src/run_grid.sh`, `run_all.sh` | a model's whole grid, then the judges and reports |
+| `src/real_evals/` | REAL's own state checkers, vendored (Apache-2.0) |
 
-See [`odyssey/README.md`](odyssey/README.md) for the detail: settings, judges,
+See [`src/README.md`](src/README.md) for the detail: settings, judges,
 caching, the matched-pair design, and how to add tasks or personas.
