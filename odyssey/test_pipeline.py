@@ -28,14 +28,13 @@ import task_router  # noqa: E402
 
 
 def test_tasks():
-    # The branch default remains Shopping even though the shared tasks.json was
-    # restored as its own main-original suite.
+    # benchmark/v1_tasks.json is the source of truth for the full run: the
+    # per-scenario suites held subsets of these same task ids and are retired.
     assert len(R.TASKS) >= 2, len(R.TASKS)
-    assert R.TASK_CATALOG.default_suite_id == "shopping"
-    assert "Kobe Bryant" in R.TASKS[0]["confirmed_task"]
-    assert "Aurora, Illinois" in (
-        R.TASK_CATALOG.get_suite("main-original").tasks[0]["confirmed_task"]
-    )
+    assert R.TASK_CATALOG.default_suite_id == "odysseys"
+    assert len(R.TASKS) == 37, f"the v1 Odysseys set is 37 tasks, got {len(R.TASKS)}"
+    assert len(R.TASK_CATALOG.get_suite("real").tasks) == 34
+    assert "Aurora, Illinois" in R.TASKS[0]["confirmed_task"]
     ids = [t["task_id"] for t in R.TASKS]
     assert len(set(ids)) == len(ids), "duplicate task_id in tasks.json"
     for t in R.TASKS:
@@ -48,12 +47,12 @@ def test_tasks():
 
 def test_task_router():
     catalog = task_router.TaskCatalog.load()
-    shopping = catalog.get_suite("shopping")
+    shopping = catalog.get_suite("odysseys")
     assert [task["task_id"] for task in shopping.tasks] == [
         task["task_id"] for task in R.TASKS
     ]
     assert shopping.task_snapshot(shopping.tasks[0])["task_source"] == (
-        "task_suites/shopping/000-core.json"
+        "task_suites/odysseys/000-core.json"
     )
     assert len(shopping.sha256) == 64
     tampered = {
@@ -68,10 +67,9 @@ def test_task_router():
     else:
         raise AssertionError("tampered task snapshot was accepted")
     assert task_router.load_route(catalog=catalog) is shopping
-    assert task_router.load_route(suite_id="main-original", catalog=catalog).suite_id == (
-        "main-original"
-    )
-    assert shopping.resolve("39255449")[0]["task_id"] == shopping.tasks[0]["task_id"]
+    assert task_router.load_route(suite_id="real", catalog=catalog).suite_id == "real"
+    assert shopping.resolve(shopping.tasks[0]["task_id"][:8])[0]["task_id"] == (
+        shopping.tasks[0]["task_id"])
 
     for invalid in ("0", str(len(shopping.tasks) + 1), "1,1", "does-not-exist"):
         try:
@@ -159,7 +157,7 @@ def test_task_router():
 
         collision = root / "collision.json"
         collision.write_text(json.dumps({
-            "suite_id": "shopping", "tasks": [a]
+            "suite_id": "odysseys", "tasks": [a]
         }), encoding="utf-8")
         try:
             task_router.load_route(tasks_file=collision, catalog=catalog)
@@ -407,7 +405,7 @@ def test_grid_shell_contract():
     )
     assert default_route.returncode == 0 and "GRID DONE" in default_route.stdout
     dry = subprocess.run(
-        ["/bin/bash", str(script), "--suite", "shopping"],
+        ["/bin/bash", str(script), "--suite", "odysseys"],
         cwd=HERE.parent, env=env, capture_output=True, text=True,
     )
     assert dry.returncode == 0 and "GRID DONE" in dry.stdout, dry.stderr
@@ -432,7 +430,10 @@ def test_personas_differ():  # the profiles the persona LLM is given
 
 
 def test_matched_persona_experiment():
-    suite = R.TASK_CATALOG.get_suite("shopping")
+    # Shopping is retired (v1 owns its task ids now) but its protocol, tasks and
+    # generated personas are still on disk, so the matched-pair machinery stays
+    # covered against real data rather than a fixture.
+    suite = task_router.TaskCatalog.load_retired("shopping")
     assert suite.persona_experiment is not None
     catalog = persona_experiment.dimension_catalog()
     protocol = persona_experiment.validate_protocol(
@@ -686,9 +687,12 @@ def test_persona_user():
     matched_path = R.resolve_persona_path(
         "mp_evidence_verification_positive", "shopping"
     )
+    # A matched-pair profile is only applicable to its own suite's tasks, so
+    # this half of the test uses a task from the retired shopping suite.
+    shopping_task = task_router.TaskCatalog.load_retired("shopping").tasks[0]
     matched_client = _TextClient(reply="Please distinguish confirmed dates from rumors.")
     R._client = lambda model, provider="": (matched_client, "stub")
-    matched_user = R.PersonaUser(task, matched_path, "stub")
+    matched_user = R.PersonaUser(shopping_task, matched_path, "stub")
     matched_system = matched_client.sent[0][0]["content"]
     assert "In your INITIAL message" in matched_system
     assert "complete requirement set" in matched_system

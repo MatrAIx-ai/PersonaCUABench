@@ -293,6 +293,34 @@ class TaskCatalog:
         return hits[0]
 
     @classmethod
+    def load_retired(cls, suite_id: str,
+                     manifest_path: Path = MANIFEST) -> "TaskSuite":
+        """One suite from the manifest's `retired_suites`, on its own.
+
+        A retired suite holds task ids that a live suite now owns -- v1 is the
+        source of truth and its Odysseys entries are the same tasks -- so
+        loading it into the catalog would trip the global-uniqueness check.
+        It is still real data with its own protocol and personas, so it stays
+        loadable one at a time, for tests and for reading old results.
+        """
+        manifest_path = Path(manifest_path)
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        retired = manifest.get("retired_suites") or {}
+        spec = retired.get(suite_id)
+        if not isinstance(spec, dict):
+            available = sorted(k for k, v in retired.items() if isinstance(v, dict))
+            raise TaskRoutingError(
+                f"no retired suite {suite_id!r}; available: {available}")
+        single = {"schema_version": manifest.get("schema_version"),
+                  "default_suite": suite_id, "suites": {suite_id: spec}}
+        scratch = manifest_path.parent / f".retired-{suite_id}.json"
+        scratch.write_text(json.dumps(single), encoding="utf-8")
+        try:
+            return cls.load(manifest_path=scratch).get_suite(suite_id)
+        finally:
+            scratch.unlink(missing_ok=True)
+
+    @classmethod
     def load(
         cls,
         manifest_path: Path = MANIFEST,

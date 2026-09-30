@@ -1,7 +1,30 @@
 {
   "schema_version": "personacuabench.task-suites.v1",
-  "default_suite": "shopping",
+  "default_suite": "odysseys",
   "suites": {
+    "odysseys": {
+      "title": "v1 Odysseys - 37 live-web tasks",
+      "version": "1",
+      "task_files": [
+        "task_suites/odysseys/*.json"
+      ],
+      "default_personas": [
+        "none"
+      ]
+    },
+    "real": {
+      "title": "v1 REAL - 34 sandbox tasks with deterministic state checkers",
+      "version": "1",
+      "task_files": [
+        "task_suites/real/*.json"
+      ],
+      "default_personas": [
+        "none"
+      ]
+    }
+  },
+  "retired_suites": {
+    "_note": "Superseded by benchmark/v1_tasks.json, whose Odysseys entries contain these same task ids. Their files are still on disk; re-register one only after removing its tasks from the v1 suites, because task ids must be globally unique.",
     "main-original": {
       "title": "Original main-branch assignments",
       "version": "1",

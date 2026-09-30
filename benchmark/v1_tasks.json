@@ -1,0 +1,2175 @@
+{
+ "version": "v1",
+ "sitecheck_date": "2026-09-29",
+ "tasks": [
+  {
+   "source": "Odysseys",
+   "source_id": "890a6880049a42684ac91a2e1809442846f9394c",
+   "orig_index": 1,
+   "domain": "Travel",
+   "level": "easy",
+   "title": "Chicago → Aurora transit outing",
+   "scenario": "life",
+   "platform": "web-live",
+   "action": "read",
+   "instruction": "I’m thinking about doing a simple public-transit outing from downtown Chicago to Aurora, Illinois soon, and I want a practical snapshot I can actually look at in the browser. On Google, please search for the recommended public-transit route from Chicago to Aurora, Illinois and open the actual transit directions so you can tell me the main mode I’d be taking and the estimated total travel time; leave that directions page open so I can review the route myself. Since I may need a little context for rail connections and fare structure, then go to Metra’s BNSF line page and summarize what the BNSF line is, where it runs, and where on that page or site fare information is listed; if there’s a separate fares link, open that in another tab so I have a visual reference. After that, head to Weather.com and pull up the local 10-day forecast for Aurora, Illinois, then give me the high and low temperatures for the next 3 days so I can judge whether the trip will feel comfortable. Please send everything back as one concise trip-planning summary, and keep the Google transit directions tab and the relevant Metra page open for comparison.",
+   "rubrics": {
+    "R1": {
+     "requirement": "Find a recommended public-transit route from Chicago, Illinois to Aurora, Illinois on Google and report the main mode of transit and estimated total travel time.",
+     "verification": "Grader can confirm a Google transit directions/results page is open and the response includes a specific main mode and travel-time estimate taken from that page."
+    },
+    "R2": {
+     "requirement": "Summarize Metra’s BNSF line by stating what it is and where it runs.",
+     "verification": "Grader can confirm the Metra BNSF line page is open and the response accurately describes the line and its route coverage based on visible page text."
+    },
+    "R3": {
+     "requirement": "Identify where fare information for riding the BNSF line is listed, including any relevant fares link or section.",
+     "verification": "Grader can confirm the response points to a visible fare-information location on the BNSF line page or an opened fares tab/page on metra.com."
+    },
+    "R4": {
+     "requirement": "Report the forecasted high and low temperatures for the next 3 days from Weather.com’s 10-day forecast for Aurora, Illinois.",
+     "verification": "Grader can confirm a Weather.com 10-day forecast page for Aurora is open and the response includes three day-by-day high/low pairs matching the visible forecast."
+    },
+    "R5": {
+     "requirement": "Return all findings as one concise trip-planning summary that combines the Google transit recommendation, BNSF line context, fare-info location, and 3-day weather outlook.",
+     "verification": "Grader can confirm the final response is a single concise integrated summary containing all required elements from steps 1 through 3."
+    }
+   }
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "ada70bfe81da1cd33bec47d79a9d279d7734a686",
+   "orig_index": 2,
+   "domain": "Travel",
+   "level": "easy",
+   "title": "Yorkshire festive family day (Stockeld Park)",
+   "scenario": "life",
+   "platform": "web-live",
+   "action": "read",
+   "instruction": "I’m trying to plan a Yorkshire family day out around Christmas and want to compare two festive options properly before I recommend one. Could you start on the official Stockeld Park site and open their Winter or Christmas ticket page, then the main activities page if needed, and pull together exactly what’s included with a standard festive ticket so I can see whether it feels like a full day out for kids; if there are photos or activity sections on the page, open the main ticket page and the activities/details page in separate tabs and leave them open so I can glance at them later. Then use Google to find the current Harrogate Christmas Funland page or official event listing, open the actual event page, and summarize what’s included there too, along with the location and the event dates, because I want to compare whether it sounds more substantial than Stockeld Park; if you find more than one relevant result, open the most official-looking listing in its own tab and verify it’s live before using it. After that, go to the official York Maze site and pull together the practical visitor details for using it as a backup daytime activity nearby, especially where it is, the opening times or seasonal opening info, and any important ticket or visit-planning notes like booking ahead, age guidance, or whether it’s seasonal, and leave the key visitor info page open as well. In the end, give me a concise side-by-side comparison of Stockeld Park versus Harrogate Christmas Funland, then a short recommendation on which festive option seems better for a family day out and whether York Maze sounds like a realistic backup plan.",
+   "rubrics": {
+    "R1": {
+     "requirement": "Accurately summarize the activities included with Stockeld Park Winter/Christmas tickets using the official Stockeld Park pages.",
+     "verification": "Grader can confirm the summary matches visible included activities on the open Stockeld Park ticket/details tabs."
+    },
+    "R2": {
+     "requirement": "Find and use a live, relevant Harrogate Christmas Funland page or official listing and summarize what is included in the experience.",
+     "verification": "Grader can see an open Harrogate Christmas Funland page reached via Google and verify the included features against the visible listing content."
+    },
+    "R3": {
+     "requirement": "Include Harrogate Christmas Funland’s event location and event dates.",
+     "verification": "Grader can verify the location and dates directly on the open event/listing page."
+    },
+    "R4": {
+     "requirement": "Summarize York Maze visitor details including where it is, opening times or seasonal opening information, and important ticket or visit-planning notes from the official York Maze site.",
+     "verification": "Grader can confirm these details on the open York Maze visitor information page."
+    },
+    "R5": {
+     "requirement": "Present Stockeld Park and Harrogate Christmas Funland as a concise side-by-side comparison focused on what is included and overall suitability for a family festive outing.",
+     "verification": "Final response clearly compares both attractions using findings from Steps 1 and 2 rather than listing them separately."
+    },
+    "R6": {
+     "requirement": "Provide a short recommendation on which festive attraction seems better and whether York Maze works as a backup daytime activity.",
+     "verification": "Final response includes a reasoned recommendation grounded in the gathered details from all three sites."
+    }
+   }
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "b6b8ad71aa3112840790066d7d62b498babdfa5c",
+   "orig_index": 3,
+   "domain": "Travel",
+   "level": "easy",
+   "title": "Weather risk snapshot before driving",
+   "scenario": "life",
+   "platform": "web-live",
+   "action": "read",
+   "instruction": "I’m trying to decide whether driving this week is a bad idea, so can you build me a quick weather risk snapshot that starts with what it feels like right now and then widens out to the bigger trouble spots? First, on Google, search for Baltimore, Maryland weather and grab the current temperature plus the plain-English condition like cloudy, sunny, rain, or whatever it says, just so I have a baseline for home conditions. Then go to Wunderground and look up Syracuse, New York, and check the 10-day/7-day style forecast to find the lowest temperature expected over the next 7 days, including which day it happens, because I want to compare that colder destination against Baltimore. After that, use the National Weather Service forecast page for the Rittman, Ohio area near Marshallville and tell me what the current forecast says and whether there are any active alerts posted there, since that would really affect an Ohio leg of the drive; please open the actual forecast page and leave it visible so I can see the alert area and forecast text myself. Finally, go to the NWS Mount Holly page, find the winter forecast graphic, and report the snowfall amount shown there so I can tell whether the Mid-Atlantic part looks like a nuisance event or something more serious; if the graphic opens separately, leave that tab open too so I can look at the map. In the end, send me a short location-by-location summary with the key weather risk for Baltimore, Syracuse, Rittman/Marshallville, and the Mount Holly region.",
+   "rubrics": {
+    "R1": {
+     "requirement": "Report Baltimore, Maryland’s current temperature and current weather conditions from Google.",
+     "verification": "Grader can confirm the answer against the Google weather module showing Baltimore weather with a numeric temperature and condition label."
+    },
+    "R2": {
+     "requirement": "Report the lowest forecasted temperature in Syracuse, New York over the next 7 days from Wunderground, including the day it occurs.",
+     "verification": "Grader can verify the selected low and day on the Syracuse forecast page in Wunderground’s multi-day forecast view."
+    },
+    "R3": {
+     "requirement": "Report the current National Weather Service forecast for the Rittman, Ohio area near Marshallville.",
+     "verification": "Grader can confirm the forecast wording on the forecast.weather.gov page for the specified area."
+    },
+    "R4": {
+     "requirement": "State whether any active weather alerts are posted for the Rittman, Ohio area near Marshallville.",
+     "verification": "Grader can verify the presence or absence of alert banners, watches, warnings, or advisories on the same NWS forecast page left open by the agent."
+    },
+    "R5": {
+     "requirement": "Report the predicted snowfall amount shown in the winter forecast graphic on the NWS Mount Holly page.",
+     "verification": "Grader can confirm the snowfall amount directly from the winter forecast graphic or image tab left open from the Mount Holly page."
+    },
+    "R6": {
+     "requirement": "Return the findings as a short summary organized by location or region, with a brief key weather risk for each one.",
+     "verification": "Grader can check that the final response includes Baltimore, Syracuse, Rittman/Marshallville, and the Mount Holly region, each with the requested weather detail and a concise risk statement."
+    }
+   }
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "b21a86441ddca8186175bfffcaae0358ed66eec4",
+   "orig_index": 4,
+   "domain": "Travel",
+   "level": "medium",
+   "title": "Short LA trip from Pittsburgh",
+   "scenario": "life",
+   "platform": "web-live",
+   "action": "read",
+   "instruction": "Can you help me plan a short LA trip from Pittsburgh and keep the key pages open so I can actually look at them afterward? Start on Google Flights, Kayak, or Expedia and search a round-trip from PIT to LAX for a simple 2-day trip, making sure the outbound gets into Los Angeles before 6:00 PM and the return lands back in Pittsburgh before midnight. I’d really prefer a nonstop if one exists, but if not, pick the option with the shortest total travel time that still feels like a good value, and open the top few flight options so I can compare before you choose the best one; then leave the selected flight page open in its own tab. After that, use Google Hotels or a hotel booking site to find me a hotel around Koreatown or West Hollywood with at least a 4.5 rating and a nightly rate under $350, and open the actual hotel listing so I can see the price, rating, photos, and map location, then keep that tab open too. Once the stay looks settled, go to Google Maps and pull up Griffith Observatory, The Getty Center, Santa Monica Pier, one well-rated Korean BBQ place in Koreatown, one coffee shop rated 4.5 or better, and somewhere with a great sunset view, because I want a realistic plan instead of a random list. Use the map routes to figure out a 2-day itinerary that avoids driving during LA rush hour as much as possible, especially around 7 to 10 AM and 4 to 7 PM, and try to keep travel between stops under about 40 minutes when that’s realistic, with a little buffer time between activities so the days don’t feel crammed. Open the important map views or route checks in separate tabs if needed so I can visually compare how far apart things are, and then give me a simple trip summary with the flight you chose, the hotel you recommend, and a 2-day schedule showing activity times plus the travel time between each stop.",
+   "rubrics": {
+    "R1": {
+     "requirement": "A round-trip PIT to LAX flight search is completed on a flight site, with top candidate options reviewed and one selected that arrives in Los Angeles before 6:00 PM outbound and returns to Pittsburgh before midnight.",
+     "verification": "Grader can see an open flight search/results or details page showing PIT, LAX, round-trip results, visible candidate options, and the selected itinerary meeting the timing constraints."
+    },
+    "R2": {
+     "requirement": "The chosen flight reasonably reflects the stated preference hierarchy: nonstop if available, otherwise the shortest total travel time, while still balancing price and schedule.",
+     "verification": "Visible comparison among top few flight options supports why the selected itinerary is a reasonable best choice based on stops, duration, and price."
+    },
+    "R3": {
+     "requirement": "A hotel in Koreatown or West Hollywood is identified with rating at least 4.5 and nightly price under $350, and the actual listing page is opened.",
+     "verification": "Open hotel listing visibly shows neighborhood or map placement, nightly price under $350, rating of 4.5 or higher, and listing details/photos."
+    },
+    "R4": {
+     "requirement": "Google Maps is used to identify all required stop types: Griffith Observatory, The Getty Center, Santa Monica Pier, a Korean BBQ spot in Koreatown, a coffee shop rated at least 4.5, and a sunset-view location.",
+     "verification": "Open Google Maps place pages or map tabs show each required destination category and allow visual confirmation of their locations."
+    },
+    "R5": {
+     "requirement": "The itinerary routing is realistic, uses map route checks, avoids LA rush hour driving where practical, keeps travel between stops under about 40 minutes when possible, and includes buffer time.",
+     "verification": "Open route/map tabs and the written plan show travel-time checks, sensible sequencing, reduced rush-hour exposure, and spacing between activities."
+    },
+    "R6": {
+     "requirement": "A final travel plan is produced with the selected flight, hotel recommendation, and a 2-day itinerary including activity timing and travel times, while keeping the key browser pages open.",
+     "verification": "Final summary includes all required trip components, and the flight tab, hotel tab, and relevant map/route tabs remain open for visual review."
+    }
+   }
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "795bfe117e0f58e49ca37ae8e453a507859a2a2b",
+   "orig_index": 5,
+   "domain": "Travel",
+   "level": "medium",
+   "title": "Cheap London trip for two",
+   "scenario": "life",
+   "platform": "web-live",
+   "action": "read",
+   "instruction": "I’m trying to piece together a really cheap trip to London for two, so can you help me build it in a practical order and keep the actual pages open where it matters? Start on Booking.com and search London for 2 adults staying this December, then find me at least one hotel that comes in under £100 total for the 2-night stay, because that ultra-budget option is going to set the tone for everything else. Open the actual property page in its own tab so I can see the photos and location, and note the hotel name, stay dates, total displayed price, and link. Once you’ve got that baseline, stay on Booking.com and look up NOX Hotel for a 1-night stay for 2 adults on any date in 2026, just so I can tell whether my bargain London option is unusually cheap or more normal for the city; open the NOX listing page too and record the date and total displayed price you find. After that, use Google to look for at least two hotels near Washington, DC Union Station that show 4-star-or-higher guest ratings and nightly prices under $200, because I may want a backup benchmark for city lodging in another trip later; please open each hotel result in its own tab or go to the actual hotel posting page so I can verify they’re real options and still look live. Then, because I want the whole trip to stay low-cost overall, go to Amazon and shortlist three mid-to-low-priced headphones or earbuds with active noise cancellation for travel that fit the same budget mindset, and open each product page in a separate tab so I can compare them side by side. In the end, send me one clean summary with the hotel names, prices, dates, ratings where relevant, key headphone features, and links, and leave the Booking.com property tabs and the Amazon product tabs open for me.",
+   "rubrics": {
+    "R1": {
+     "requirement": "Identify at least one Booking.com London hotel for 2 adults in December with a displayed total price under £100 for the 2-night stay, and capture the hotel name, stay dates, total price, and link.",
+     "verification": "Grader can confirm the Booking.com search results or property page shows London, 2 adults December and a total under £100, with the property tab open."
+    },
+    "R2": {
+     "requirement": "Find a Booking.com NOX Hotel result for a 1-night stay in 2026 for 2 adults and record the specific date, displayed total price, and link.",
+     "verification": "Grader can confirm the NOX Hotel listing or property page on Booking.com shows a 1-night stay for 2 adults with a visible total price and the page left open."
+    },
+    "R3": {
+     "requirement": "Find at least two hotels near Washington, DC Union Station via Google that each show a guest rating of 4 stars or higher and a nightly price under $200, and record their names, ratings, prices, and links.",
+     "verification": "Grader can confirm on Google results, hotel panels, or linked hotel pages that two qualifying hotels near Union Station display ratings of 4.0+ and nightly prices below $200, with tabs open for the chosen options."
+    },
+    "R4": {
+     "requirement": "Shortlist at least three Amazon headphones or earbuds with active noise cancellation, including each product name, current price, key features, and link.",
+     "verification": "Grader can confirm three Amazon product pages are open and each page visibly indicates ANC or active noise cancellation, along with product name and current price."
+    },
+    "R5": {
+     "requirement": "Return one consolidated summary covering the London budget hotel, the NOX Hotel comparison, the two Washington, DC Union Station hotel benchmarks, and the three Amazon UK headphone options, with all requested names, dates, prices, ratings where relevant, key features, and links.",
+     "verification": "Grader can compare the final response against the collected browser evidence from the open Booking.com, Google, and Amazon UK tabs and verify all requested fields are included."
+    }
+   }
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "65c9e7d383e015d946572f04512d5aa166a8f015",
+   "orig_index": 7,
+   "domain": "Science",
+   "level": "easy",
+   "title": "Study workflow on latent growth models",
+   "scenario": "life",
+   "platform": "web-live",
+   "action": "read",
+   "instruction": "I’m putting together a quick, accessible study workflow for myself on latent growth models, and I want it to feel grounded in what I’d actually see in a browser rather than just a generic summary. Please start on Bing and search for “Latent Growth Models,” then look only at the main organic web results on the first page and pull out the top three with their titles, source sites, and a one-line note on what each seems to cover, because I want to know which sources are most visible right away. Open those three results in separate tabs and leave the search results page open too so I can compare them afterward. Once you’ve got that context, use Google to find one solid ChatGPT prompt template for turning source material into an outline, ideally from a page that actually shows the full prompt wording, because I want to reuse that structure for my own study note; open the page with the prompt and copy the exact template text. After that, go to 10015.io and use its bionic reading converter on this exact note text: “Latent growth models are statistical methods used to estimate change over time across individuals. They help researchers understand trajectories, differences in growth, and predictors of change.” I want the converted version in bionic reading style so it’s easier for me to scan, and please leave the converter result visible on the page as proof. Then finish by using Bing to find a free plagiarism checker that would work for a short note like this, open the actual tool page so I can verify it’s live, and tell me briefly how I’d paste in that same note and run an originality check before sharing it with classmates.",
+   "rubrics": {
+    "R1": {
+     "requirement": "Identify the top 3 organic Bing results for the query “Latent Growth Models,” including each result’s title, source, and a brief summary of what it covers.",
+     "verification": "Grader confirms the Bing results page shows the query, the response lists three organic results matching visible titles/source labels from the page, and the relevant result tabs were opened."
+    },
+    "R2": {
+     "requirement": "Find one strong ChatGPT prompt template for turning source material into an outline and provide the exact prompt wording from the selected page.",
+     "verification": "Grader confirms a Google search was performed, a source page containing a visible prompt template was opened, and the returned wording matches the prompt shown on that page."
+    },
+    "R3": {
+     "requirement": "Convert the provided latent growth models note into bionic reading format and return the converted text.",
+     "verification": "Grader confirms the 10015.io converter page shows the input note and a visible converted output in bionic reading style, and the response includes the transformed text."
+    },
+    "R4": {
+     "requirement": "Find one free plagiarism checker and explain how to use it to test the same study note for originality.",
+     "verification": "Grader confirms a Bing search for plagiarism checkers was performed, a live tool page was opened, and the response names the tool and gives concise usage instructions tied to the provided note."
+    }
+   }
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "e15345ed27f1933065af403601876e5f6597a943",
+   "orig_index": 8,
+   "domain": "Science",
+   "level": "easy",
+   "title": "Reading-support mini lesson (5th grade)",
+   "scenario": "work",
+   "platform": "web-live",
+   "action": "read",
+   "instruction": "I’m putting together a very simple reading-support mini lesson for a student who does better with easier-to-scan text, and I want you to help me pull the pieces together in the browser. Start on Google and find one online English grammar practice quiz that feels appropriate for about 5th grade, then open the actual quiz page so you can verify it’s really a student-facing practice activity and leave that tab open for me as a reference; I need the quiz title and direct URL. Then use Google again to find a printable worksheet or practice page for an 8th-grade student about basic marketing strategies like product, price, place, and promotion or closely related introductory marketing concepts, because I want it to work as an extension activity after the grammar warm-up; open the real worksheet or resource page in its own tab so I can see that it looks classroom-appropriate and printable, and note the title and URL. After that, go to Slidesgo and pick a fun, classroom-appropriate presentation template that could reasonably hold both the grammar warm-up and the marketing extension in one student lesson deck, and open the template’s actual page so I can see the preview images; please include the template name, URL, and whether it’s available for Google Slides or PowerPoint. Finally, go to 10015.io’s bionic reading converter and convert this exact lesson intro into bionic reading format so I can paste it into the first slide of the template you chose: “Today we will warm up with a short grammar quiz, then practice how people use basic marketing strategies like product, price, place, and promotion. Read each direction carefully and do your best.” Please keep the useful tabs open and send me the quiz, worksheet, template, and the converted text in one clean summary.",
+   "rubrics": {
+    "R1": {
+     "requirement": "A real online English grammar practice quiz appropriate for about 5th grade is found via Google, and the final response includes the quiz title and direct quiz page URL.",
+     "verification": "Grader can confirm there is an open tab showing the actual quiz page, not just search results, and the reported title/URL match the visible page."
+    },
+    "R2": {
+     "requirement": "A printable worksheet or practice page about basic marketing strategies or a closely related introductory marketing topic for about 8th grade is found via Google, and the final response includes the resource title and access URL.",
+     "verification": "Grader can confirm there is an open tab showing the actual worksheet/resource page with printable or classroom-use cues, and the reported title/URL match the visible page."
+    },
+    "R3": {
+     "requirement": "One Slidesgo template that is fun and classroom-appropriate for combining both activities into a single lesson deck is selected, and the final response includes the template name, Slidesgo URL, and use/download option.",
+     "verification": "Grader can confirm the Slidesgo template detail page is open with visible preview images and that the named template, URL, and Google Slides/PowerPoint option match the page."
+    },
+    "R4": {
+     "requirement": "The provided lesson intro is converted on 10015.io into bionic reading format and the full converted text is returned.",
+     "verification": "Grader can confirm the converter page shows transformed output corresponding to the provided passage and that the returned text matches the visible converted result."
+    }
+   }
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "8c30f2f9ceeac75b05c725c5397022bb4f9d32a0",
+   "orig_index": 9,
+   "domain": "Science",
+   "level": "easy",
+   "title": "Beginner AI explainer (IBM → product → hardware)",
+   "scenario": "life",
+   "platform": "web-live",
+   "action": "read",
+   "instruction": "I’m putting together a super short beginner-friendly AI explainer for someone who doesn’t know much about the topic yet, so I want it to move from simple definitions to a recognizable product and then end with a real hardware example. Please start on Google and find IBM’s page that explains the main types of artificial intelligence and machine learning, then pull out at least three categories and rewrite them in plain English with one sentence each so they sound easy to follow. Once you’ve got that foundation, go to Copilot.com and figure out what the site is, then give me exactly one sentence on its purpose as an AI product a beginner would probably recognize; if there’s a landing page or main homepage, leave that open so I can glance at it myself. After that, use Google again to find the Tom’s Hardware article about Intel Granite Rapids WS competing with AMD Threadripper, open the actual Tom’s Hardware article in a new tab so I can see the headline and page for myself, and summarize the key points including the main competitive claims and any specs the article cites like core count or boost clock. Then tie that hardware example back to why strong chips matter for AI or advanced computing, and give me one concise final write-up that combines the IBM basics, the one-sentence Copilot description, and the Tom’s Hardware takeaway in a way a beginner could understand.",
+   "rubrics": {
+    "R1": {
+     "requirement": "Provide at least three IBM-described categories related to artificial intelligence and/or machine learning, each rewritten in plain English with a one-sentence description.",
+     "verification": "Final response includes three or more distinct IBM-based categories with simple one-sentence explanations traceable to the IBM page opened from Google results."
+    },
+    "R2": {
+     "requirement": "Identify what Copilot is and summarize its purpose in exactly one sentence as an AI-related product example a beginner would recognize.",
+     "verification": "Final response contains a single sentence describing Copilot’s purpose, and the Copilot homepage or landing page is visibly open in the browser."
+    },
+    "R3": {
+     "requirement": "Find and summarize the Tom’s Hardware article about Intel Granite Rapids WS competing with AMD Threadripper, including the main competitive claims and any cited specs such as core count and boost clock.",
+     "verification": "A Tom’s Hardware article page is open in a separate tab, and the final response includes the article’s key claims plus cited specs mentioned in the article."
+    },
+    "R4": {
+     "requirement": "Connect the Tom’s Hardware hardware summary back to why powerful hardware matters for AI or advanced computing.",
+     "verification": "Final response explicitly links the hardware comparison to AI workloads, advanced computing, or the need for strong compute performance."
+    },
+    "R5": {
+     "requirement": "Return a concise final write-up that combines the IBM categories, the one-sentence Copilot description, and the Tom’s Hardware summary into a beginner-friendly explainer.",
+     "verification": "Final answer is a unified, concise explainer rather than disconnected notes, and it includes all three required parts in a beginner-friendly flow."
+    },
+    "R6": {
+     "requirement": "Open the Tom’s Hardware article in a new browser tab during the browsing process.",
+     "verification": "Browser state shows the Tom’s Hardware article open in its own tab, separate from the Google search results tab."
+    }
+   }
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "6421b906fe97b3799960af31c77f20ff25f756b1",
+   "orig_index": 10,
+   "domain": "Science",
+   "level": "medium",
+   "title": "Graduate outreach brief for a San Diego student",
+   "scenario": "work",
+   "platform": "web-live",
+   "action": "read",
+   "instruction": "I’m putting together a quick graduate outreach brief for a student in San Diego and want a few very specific examples from different kinds of schools and programs. Please start on Lewis & Clark’s admissions site and find the admissions representative who covers San Diego, California, then open that actual regional contact page and capture the rep’s name, email, phone, and anything else listed, and leave the page open so I can visually confirm how they assign territories. Then go to Hunter College Silberman’s site and find the Fall 2026 application deadline for the MSW program, making sure you’re on the real admissions or application page where the date is shown. After that, use Indiana University Kokomo’s graduate programs page to list all of the graduate programs they show there, and keep that page open in its own tab so I can compare the breadth of options at a smaller campus. Since the student is especially interested in California opportunities, go to the UCSF clinical trials site and find at least two glioblastoma trials in Northern California that are currently recruiting, then open the actual trial pages in separate tabs so you can give me each trial’s recruiting status and study location and I can see that they’re still live. For a student-life example, use Google to get to the official Oral Roberts University page that identifies the student activities director, and pull the person’s name plus email and phone if available, making sure it comes from an ORU page rather than a directory aggregator. Finally, use Google to find the official EDF Energy graduate programme page that mentions whether new hires get salary reviews, and quote the exact wording from the page if it’s there. Please give me everything back as a compact sourced summary, but keep the key pages open in tabs so I can glance at the evidence.",
+   "rubrics": {
+    "R1": {
+     "requirement": "Correctly identify the Lewis & Clark admissions representative covering San Diego, California, including the representative’s name and listed contact details.",
+     "verification": "Grader can confirm the open Lewis & Clark regional contact page shows San Diego, California assigned to the named representative and displays the extracted contact information."
+    },
+    "R2": {
+     "requirement": "Report the Fall 2026 application deadline for Hunter College Silberman’s MSW program from the official page.",
+     "verification": "Grader can confirm the open Hunter Silberman admissions/application page visibly shows the Fall 2026 MSW deadline date reported in the summary."
+    },
+    "R3": {
+     "requirement": "List the graduate programs shown on Indiana University Kokomo’s graduate programs page.",
+     "verification": "Grader can compare the returned program list against the visible program names on the open IU Kokomo graduate programs page."
+    },
+    "R4": {
+     "requirement": "Identify at least two glioblastoma clinical trials in Northern California that are currently recruiting, including each trial’s recruiting status and study location.",
+     "verification": "Grader can inspect the separate open UCSF trial tabs and verify that each named trial is glioblastoma-related, marked currently recruiting, and has the reported Northern California location."
+    },
+    "R5": {
+     "requirement": "Find the Oral Roberts University student activities director’s name and contact information from an official ORU page.",
+     "verification": "Grader can confirm the open ORU page names the student activities director and shows the extracted email and/or phone details."
+    },
+    "R6": {
+     "requirement": "Determine whether EDF Energy’s graduate programme includes salary reviews for new hires and provide the exact confirming wording from the official page.",
+     "verification": "Grader can confirm the open EDF Energy page contains the quoted wording and that the answer matches the page text."
+    },
+    "R7": {
+     "requirement": "Return a compact summary with sources covering all requested items.",
+     "verification": "Grader can verify the final response includes all six requested findings, each paired with a source reference or page title/link, in a concise summary format."
+    }
+   }
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "4614aa083147e45cbc2977cc8634b9d9db25edfe",
+   "orig_index": 11,
+   "domain": "Science",
+   "level": "medium",
+   "title": "Maryland/DC law-school outreach plan",
+   "scenario": "work",
+   "platform": "web-live",
+   "action": "read",
+   "instruction": "I’m trying to narrow down a few law schools in the Maryland/DC area and want a practical outreach plan before I start contacting anyone. On the University of Maryland Carey Law site, please find the actual way I can request admissions materials and also look for at least one upcoming online admissions event with its date and time, because I want to see how easy they make it to get information and whether there’s a virtual event I could realistically attend; open the event details page in its own tab and leave it there so I can look at it later. Then go to the University of Baltimore School of Law site and find the instructions for scheduling an admissions meeting by opening the relevant admissions event or meeting page and pulling the registration link or contact method from the actual details page, and keep that page open too so I can compare the two schools side by side. After that, on American University Washington College of Law’s site, find the PIPS Scholarship page and give me a short plain-English summary of what the scholarship is for, along with the application form link, because funding could change which school I prioritize; if there’s a dedicated scholarship page, leave that open in another tab as proof. Once you’ve gathered all of that, recommend which of these three schools I should contact first based on the best mix of easy admissions outreach and potential funding, and include the specific action or contact details you found for each school so I have a simple next move.",
+   "rubrics": {
+    "R1": {
+     "requirement": "Correctly identify the University of Maryland Carey Law admissions-materials request method and report at least one upcoming online event with its date and time.",
+     "verification": "Grader can confirm the response matches information visible on the Maryland Carey admissions/request page and on an open online event details tab showing the event date/time."
+    },
+    "R2": {
+     "requirement": "Correctly find the University of Baltimore School of Law admissions meeting scheduling instructions, including the registration link or contact method from the relevant event/details page.",
+     "verification": "Grader can confirm the response against the open UBalt admissions meeting or event details page showing how to register or whom to contact."
+    },
+    "R3": {
+     "requirement": "Provide an accurate brief summary of American University Washington College of Law’s PIPS Scholarship and include the application form link.",
+     "verification": "Grader can confirm the summary and link against the open PIPS Scholarship page and the linked application form reference on American’s site."
+    },
+    "R4": {
+     "requirement": "Recommend which school to contact first using the gathered evidence about admissions outreach accessibility and potential funding, and include the specific contact/action details found for all three schools.",
+     "verification": "Grader can verify that the recommendation is supported by the findings from the Maryland Carey, UBalt, and American tabs and that each school’s specific action/contact details are included."
+    }
+   }
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "976970ff5d37116847b8a9351a0922196bee88a2",
+   "orig_index": 12,
+   "domain": "Science",
+   "level": "medium",
+   "title": "Citable evidence pack for a youth mental-health workshop",
+   "scenario": "work",
+   "platform": "web-live",
+   "action": "read",
+   "instruction": "I’m putting together a short youth mental-health workshop and want a tidy evidence pack I can actually cite, so could you do this in the browser and keep the key pages open for me? Start on Google and find one peer-reviewed academic source that clearly says eating disorders commonly begin during adolescence or the early teen years, then open the actual article or abstract page in its own tab and pull the exact supporting quote plus enough citation detail that I could reuse it. From there, use Google again to find one credible source explaining that the human brain keeps growing or developing after childhood, and open the source page itself so I can see it’s a real organization or publication rather than just a search snippet. After that, still using Google, find one credible source saying human cognitive biases are influenced by evolutionary processes, and open that source in a separate tab too because I want to compare the wording across the three sources. Once those evidence tabs are gathered, go to Wikipedia’s page for Lauryn Hill’s The Miseducation of Lauryn Hill, pull at least five song titles from the track listing, and leave that album page open so I can glance at the list myself. Then choose the one song title that would make the best discussion prompt for teens based on the themes from the three sources, and give me a concise workshop brief that ties the evidence together with the citations, the exact quote for the eating-disorders source, the five song titles, and a short explanation of why your chosen title fits.",
+   "rubrics": {
+    "R1": {
+     "requirement": "Provides one peer-reviewed academic source stating that eating disorders commonly begin during adolescence or the early teen years, including a usable citation and the exact supporting quote.",
+     "verification": "Grader can confirm a Google result was opened to an article or abstract page in its own tab and that the final response includes both citation details and a direct quote supporting adolescent onset."
+    },
+    "R2": {
+     "requirement": "Provides one credible source explaining that the human brain continues to grow or develop after childhood, with a usable citation.",
+     "verification": "Grader can confirm the source page itself was opened from Google and that the final response includes a citation tied to the brain-development claim."
+    },
+    "R3": {
+     "requirement": "Provides one credible source supporting the claim that human cognitive biases are influenced by evolutionary processes, including title, publisher, and URL.",
+     "verification": "Grader can confirm the opened source page supports the claim and that the final response includes the source title, publisher, and URL."
+    },
+    "R4": {
+     "requirement": "Uses the opened evidence tabs to extract or summarize support from all three sources in a way that is coherent for the workshop theme.",
+     "verification": "Grader can confirm multiple source tabs were opened and the final brief accurately connects adolescent onset, ongoing brain development, and evolutionary influences on cognitive bias."
+    },
+    "R5": {
+     "requirement": "Lists at least five song titles from Lauryn Hill’s The Miseducation of Lauryn Hill sourced from Wikipedia.",
+     "verification": "Grader can confirm the Wikipedia album page is open and that at least five track titles in the response match the visible track listing."
+    },
+    "R6": {
+     "requirement": "Selects one song title from the album as a teen discussion prompt and explains why it fits the workshop themes drawn from the gathered evidence.",
+     "verification": "Grader can confirm the chosen title appears in the Wikipedia track list and that the explanation meaningfully links to the three evidence themes."
+    },
+    "R7": {
+     "requirement": "Returns the findings as a concise workshop brief including the three requested evidence sources, citations, the exact quote for the eating-disorders source, at least five song titles, and the chosen title with rationale.",
+     "verification": "Grader can confirm all required elements are present in one concise final brief and that the visible pages used match the cited sources."
+    }
+   }
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "10548585c3214aa1a15f7ceef8aa4fde0c2fcdf7",
+   "orig_index": 13,
+   "domain": "Tech",
+   "level": "easy",
+   "title": "Chromebook help notes (Firefox, Apple passwords)",
+   "scenario": "work",
+   "platform": "web-live",
+   "action": "read",
+   "instruction": "I’m putting together a quick set of Chromebook help notes for someone who keeps asking me whether they can use Firefox instead of Chrome and whether they can still get to their saved Apple passwords when they’re in Chrome, so could you check a few things in a real browser for me? Start on Mozilla’s official Firefox site and open the actual Chromebook or ChromeOS instructions so you can confirm whether Firefox can really be installed there and what Mozilla says the install method is; leave that page open because I want the official wording as a reference. Then go to the Chrome Web Store and find the official iCloud Passwords extension from Apple, open the actual listing page, and verify from the page itself that it’s for accessing iCloud passwords in Chrome; keep that tab open too so I can see the publisher and listing URL. Since these notes should also cover a Google Docs issue they run into all the time, use Google Search to look up reliable troubleshooting for images in Google Docs that show an exclamation mark or refuse to load, then open a useful result and pull out the recommended fixes. After that, open the UserTesting contributor sign-in page so I can confirm a normal login screen is reachable for a site where saved credentials might matter, then in another tab open Patreon’s homepage just to verify ordinary browsing works there too and leave both tabs open so I can compare them. Finally, go to YouTube, open the video titled \"Youtube Rewind 2011,\" start playback, and tell me what you see in the first moments so I know media playback works in the browser. At the end, give me a concise summary of what you confirmed on each site, including the Firefox Chromebook answer, the iCloud Passwords extension name and listing URL, the Google Docs image fixes, and whether UserTesting, Patreon, and YouTube all behaved normally.",
+   "rubrics": {
+    "R1": {
+     "requirement": "The Mozilla Firefox Chromebook/ChromeOS instructions page is opened and the agent correctly confirms whether Firefox can be installed on Chromebook, including Mozilla’s stated install/download method.",
+     "verification": "Grader can see an official Mozilla Firefox/Support page about Chromebook or ChromeOS open, and the final answer states the installability outcome plus the method described on that page."
+    },
+    "R2": {
+     "requirement": "The official Apple iCloud Passwords extension listing is opened in the Chrome Web Store, and the agent records the exact extension name and listing URL while confirming its purpose is to access iCloud passwords in Chrome.",
+     "verification": "Grader can see the Chrome Web Store listing page with Apple as publisher or official branding, and the final answer includes the extension name, URL, and purpose."
+    },
+    "R3": {
+     "requirement": "The agent finds troubleshooting guidance for Google Docs images showing an exclamation mark or not loading and summarizes the recommended fixes from a relevant opened result.",
+     "verification": "Grader can see Google Search results and/or an opened troubleshooting page, and the final answer includes concrete recommended fixes rather than a vague statement."
+    },
+    "R4": {
+     "requirement": "The UserTesting contributor sign-in page is opened and the sign-in screen is confirmed as reachable.",
+     "verification": "Grader can see a UserTesting sign-in page with login fields or contributor sign-in UI visible, and the final answer explicitly confirms access."
+    },
+    "R5": {
+     "requirement": "Patreon’s homepage is opened in its own tab and normal homepage access is confirmed from visible branding or title.",
+     "verification": "Grader can see Patreon homepage branding or title in the open tab, and the final answer confirms homepage access worked."
+    },
+    "R6": {
+     "requirement": "The YouTube video titled \"Youtube Rewind 2011\" is opened and playback is started successfully.",
+     "verification": "Grader can see the YouTube watch page with the specified title and a playing state or progressed timestamp, and the final answer describes the first visible moments."
+    },
+    "R7": {
+     "requirement": "A concise final summary covers all six sites and includes the Firefox Chromebook conclusion, iCloud Passwords extension details, Google Docs image troubleshooting, UserTesting sign-in confirmation, Patreon homepage confirmation, and YouTube playback confirmation.",
+     "verification": "Grader checks the final response for all required site-specific findings with no major omissions."
+    }
+   }
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "fbcfa176b2e1aa42200d4f3adb66dcf0a6ca62ee",
+   "orig_index": 15,
+   "domain": "Tech",
+   "level": "easy",
+   "title": "Small subscription budget: Patreon vs ChatGPT",
+   "scenario": "life",
+   "platform": "web-live",
+   "action": "read",
+   "instruction": "I’m trying to put together a very small monthly subscription budget and want to compare a couple of creator memberships against ChatGPT so I can see what actually fits. Please start on Patreon with Matt and Shane’s Secret Podcast and note the membership tier names shown on their page, then also open the Patreon pages for Matt and Shane’s Secret Podcast and Chris Sain in separate tabs so I can visually compare the available tier names and prices side by side. After that, go to ChatGPT’s pricing page on chatgpt.com and capture the current plan names and prices, because I want to know whether adding ChatGPT would still be realistic alongside just one creator membership. To round things out, use Google to get to the actual HellHades membership plans page and check whether any plan specifically mentions interface improvements or automation features, since that kind of perk would make the comparison more meaningful than price alone. Please leave the Patreon tabs and the ChatGPT pricing page open so I can glance at them afterward, and then give me a concise summary that groups the Patreon tiers, ChatGPT pricing, and the HellHades feature note into a simple budget-minded recommendation.",
+   "rubrics": {
+    "R1": {
+     "requirement": "Identify the subscription tier names shown on the Matt and Shane’s Secret Podcast Patreon membership page.",
+     "verification": "Grader can confirm the agent visited the Patreon page for Matt and Shane’s Secret Podcast and extracted the visible tier names from that page."
+    },
+    "R2": {
+     "requirement": "Record the available membership tiers for both Matt and Shane’s Secret Podcast and Chris Sain on Patreon, including each tier’s name and price as shown on their membership/join pages.",
+     "verification": "Grader can confirm two Patreon creator pages were opened in separate tabs and that the reported tier names and prices match what is visible on each page."
+    },
+    "R3": {
+     "requirement": "Capture the ChatGPT plan names and prices from the ChatGPT pricing page.",
+     "verification": "Grader can confirm the chatgpt.com pricing page was opened and that the reported plan names and prices match the visible pricing cards or table."
+    },
+    "R4": {
+     "requirement": "Review the HellHades membership plans page and state whether any plan specifically mentions interface improvements or automation features.",
+     "verification": "Grader can confirm the agent reached the actual HellHades membership page from Google results and checked the visible plan descriptions for those feature mentions."
+    },
+    "R5": {
+     "requirement": "Provide a concise budget-oriented recommendation that combines the Patreon tier comparison, ChatGPT pricing, and the HellHades feature note into a judgment about whether ChatGPT fits alongside one creator membership.",
+     "verification": "Grader can confirm the final response synthesizes findings from Patreon, ChatGPT, and HellHades into a short recommendation rather than listing raw data only."
+    }
+   }
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "0eecee553a8cdda936c2cdd2a9189354a92e00b8",
+   "orig_index": 16,
+   "domain": "Tech",
+   "level": "medium",
+   "title": "One-period digital-literacy lesson pack",
+   "scenario": "work",
+   "platform": "web-live",
+   "action": "read",
+   "instruction": "I’m putting together a one-period digital literacy lesson pack for a middle-school class and want the pieces to feel like they belong together, not like I grabbed them randomly. Could you start on Slidesgo and pick one fun, classroom-appropriate presentation template that would work for a grade 7 or 8 lesson, ideally something bright and student-friendly rather than corporate, because I want to use that visual style as the theme for everything else? Open the actual template page and leave it open so I can see the preview images, and note whether it’s available for Google Slides or PowerPoint. Then use Google to find a printable worksheet or practice page for an 8th-grade student on basic marketing strategies or persuasion techniques, like identifying advertising tricks or persuasive techniques, and open the actual resource page so I can check that it really looks classroom-ready and printable. After that, go to Citation Machine and verify that Harvard style is actually available there by navigating to wherever the citation styles are shown or selectable, because I’ll need to cite the worksheet and any media correctly; leave that proof visible or keep the page open. Finally, on YouTube, find three beginner-friendly videos about online safety or cybersecurity basics that would make sense for students, open each video in its own tab so I can compare them, and play one of them briefly so you can tell me what the opening covers. At the end, send me a short lesson-pack summary with the Slidesgo template name and format option, the worksheet title and where it’s hosted, the evidence that Harvard style can be selected on the citation site, and the three YouTube video titles with their channel names.",
+   "rubrics": {
+    "R1": {
+     "requirement": "Select one Slidesgo presentation template that is fun and classroom-appropriate for a middle-school lesson, and provide the exact template name plus an available use/download option such as Google Slides or PowerPoint.",
+     "verification": "Grader can confirm the chosen Slidesgo template page is open and shows the template title along with a visible Google Slides or PowerPoint option."
+    },
+    "R2": {
+     "requirement": "Find one printable worksheet or practice page for an 8th-grade student on marketing strategies or persuasion techniques, and provide the resource title and the site where it is accessed.",
+     "verification": "Grader can confirm the opened resource page appears to be a worksheet or practice page and that the response includes its title and hosting/access location."
+    },
+    "R3": {
+     "requirement": "Identify Citation Machine as a citation generator that supports Harvard style and provide explicit evidence from the site showing Harvard can be selected.",
+     "verification": "Grader can confirm a Citation Machine page is open with visible citation-style options or text indicating Harvard style is available."
+    },
+    "R4": {
+     "requirement": "Identify three YouTube videos that teach online safety or cybersecurity basics and provide each video’s title and channel name.",
+     "verification": "Grader can confirm three YouTube video tabs or pages are open and that the returned titles and channel names match the visible video pages."
+    },
+    "R5": {
+     "requirement": "Demonstrate browser-only proof by leaving the Slidesgo template page and Citation Machine proof page open, opening the three YouTube videos in separate tabs with one video briefly played, and reporting what the opening of the played video covers.",
+     "verification": "Grader can confirm the relevant tabs remain open, one YouTube video shows playback progress or a changed play state, and the response includes a brief description of what the opening of that video covers."
+    }
+   }
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "e4be2c73dc00107611cd648772a11fb15c18289b",
+   "orig_index": 17,
+   "domain": "Tech",
+   "level": "medium",
+   "title": "Debug the swirl course setup in RStudio",
+   "scenario": "work",
+   "platform": "web-live",
+   "action": "read",
+   "instruction": "I’m trying to get the swirl “Getting and Cleaning Data” course working in RStudio, and the setup seems to be breaking in a few different places, so can you help me trace it in the browser like you would if you were checking this on my machine? Start on GitHub and find the actual repository location for the swirl “Getting and Cleaning Data” course files, then open the real course folder so you can verify the exact folder path I should be pointing to when I install or load that course in R. Please leave that GitHub course page open in its own tab so I can look at the folder structure afterward. Once you’ve confirmed that path, use Google to look up the specific swirl problem people hit when loading Lesson 1, “Manipulating Data with dplyr,” and find a practical fix that makes sense in the context of the course files being in the right place. If the fix mentions checking objects, packages, or column references, then in another tab look up the common reasons R or RStudio throws “object not found” or doesn’t recognize a data frame column name, because I want a short checklist of what to verify next if the lesson still fails. After that, also use Google to find the fix for the Excel import error “libxls error: unable to open file,” and make sure you get the correct R code for opening a .xlsx file with the right package and function, since that happened earlier in the same workflow. In the end, give me a concise troubleshooting note in that exact order — folder path first, then the Lesson 1 fix, then the object or column-name checks, then the Excel import fix — and tie the later fixes back to the earlier setup issue so it reads like one clean diagnosis.",
+   "rubrics": {
+    "R1": {
+     "requirement": "Identify the actual GitHub location of the swirl \"Getting and Cleaning Data\" course files and state the specific folder path the user should point to in R.",
+     "verification": "Grader can confirm the agent opened the GitHub course folder page and reported the exact course folder path consistent with the visible repository structure."
+    },
+    "R2": {
+     "requirement": "Summarize the specific Lesson 1 (\"Manipulating Data with dplyr\") loading issue and provide a practical fix tied to the confirmed course setup context.",
+     "verification": "Grader can confirm the agent visited a relevant Google result page about the swirl Lesson 1 issue and the final note connects the fix to the earlier course-path verification."
+    },
+    "R3": {
+     "requirement": "Explain common reasons R shows \"object not found\" or fails to recognize a data frame column name, with at least three concrete checks or fixes.",
+     "verification": "Grader can confirm the agent opened a relevant source page and the final note includes at least three distinct troubleshooting checks such as spelling/case, df$col or proper column reference, package loading, object existence, or environment scope."
+    },
+    "R4": {
+     "requirement": "Provide a fix for the \"libxls error: unable to open file\" issue and include correct R code to read a .xlsx file using the proper package and function.",
+     "verification": "Grader can confirm the agent opened a source page showing the correct Excel-reading approach and the final answer includes valid .xlsx import code with the appropriate package/function."
+    },
+    "R5": {
+     "requirement": "Return the final answer as a concise troubleshooting note in the requested order, with later fixes tied back to the earlier setup issue.",
+     "verification": "Grader can confirm the response is ordered as folder path, Lesson 1 fix, object/column checks, then Excel import fix, and that it reads as one connected troubleshooting flow rather than isolated notes."
+    }
+   }
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "2cb0ed2a5df6053c6c982a5c5d436d25e006370f",
+   "orig_index": 19,
+   "domain": "Community",
+   "level": "easy",
+   "title": "Baltimore event night from official pages",
+   "scenario": "life",
+   "platform": "web-live",
+   "action": "read",
+   "instruction": "I’m putting together a really simple Baltimore event night plan and just want the official pages open so I know I’m starting from the right places. Please go to the official Please Find Your Seat site and grab the homepage URL for me, because that’s the event platform I want to use as the anchor for the night. Then find the official Pier 5 Hotel Baltimore website URL so I have a nearby hotel option tied to the same outing, and leave that hotel page open in its own tab so I can look at it afterward. After that, open The Capital Grille’s official homepage and note the restaurant brand name exactly as it appears there, since I want a recognizable dinner option to mention alongside the hotel and event plan. Keep the key pages open in separate tabs and give me a short planning summary with the Please Find Your Seat homepage URL, the Pier 5 Hotel Baltimore official URL, and The Capital Grille homepage URL plus the brand name shown on the page.",
+   "rubrics": {
+    "R1": {
+     "requirement": "Provide the official homepage URL for the Please Find Your Seat event platform.",
+     "verification": "Grader confirms the returned URL is the official Please Find Your Seat homepage and matches the page opened in the browser."
+    },
+    "R2": {
+     "requirement": "Provide the official website URL for Pier 5 Hotel Baltimore and keep the hotel page open in its own tab.",
+     "verification": "Grader confirms the returned URL is the official Pier 5 Hotel Baltimore site and that the browser shows the hotel page open."
+    },
+    "R3": {
+     "requirement": "Provide The Capital Grille official homepage URL and identify the restaurant brand name shown on the homepage.",
+     "verification": "Grader confirms the URL is The Capital Grille official homepage and the reported brand name matches visible text on the page."
+    },
+    "R4": {
+     "requirement": "Return all four findings together in a short planning summary covering the event platform, hotel, dinner option.",
+     "verification": "Grader confirms the final response includes the Please Find Your Seat URL, Pier 5 Hotel Baltimore URL, The Capital Grille URL plus brand name."
+    }
+   }
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "140960bb7293bdeeb6bcc60931681cb9b815351b",
+   "orig_index": 20,
+   "domain": "Community",
+   "level": "easy",
+   "title": "Little free pantries around Chapel Hill",
+   "scenario": "life",
+   "platform": "web-live",
+   "action": "read",
+   "instruction": "I'm trying to plan a really simple errand loop around Chapel Hill and Carrboro, so could you start on Google and find at least three public little free pantries or community food boxes in or very close to Chapel Hill/Carrboro, then open the actual map or listing pages for each one in separate tabs so I can visually confirm they're real places and still look active. Once you have those, go to Publix and check the current weekly BOGO deals, and from that ad pick the deals that would work for a carnivore-style dinner, meaning meat, seafood, cheese, eggs, or other animal-based items only, because I want to turn the pantry run into a quick grocery stop too. From those BOGO items, choose one specific dinner pairing made only from the qualifying deals and leave the weekly ad or product pages open so I can look at the prices and packaging myself. After that, go to Bisou Bisou's site and find one cocktail on the menu that is actually green, then open the menu page and tell me the drink name and ingredients so I have an optional treat stop after the errands. Please give me the pantry locations with addresses or clear location descriptions, the exact Publix BOGO items you used and the dinner pairing, plus the green cocktail name and ingredients.",
+   "rubrics": {
+    "R1": {
+     "requirement": "Find at least three public food box or mini pantry locations in or near Chapel Hill/Carrboro and provide an address or clear location description for each.",
+     "verification": "Grader can confirm three distinct pantry or food box locations from Google results or map/listing pages, with separate tabs or visible listing details showing each location."
+    },
+    "R2": {
+     "requirement": "Identify current Publix BOGO items that fit a carnivore diet.",
+     "verification": "Grader can confirm the listed items appear in the current Publix weekly BOGO ad or product pages and that the items are animal-based foods such as meat, seafood, cheese, eggs, or similar."
+    },
+    "R3": {
+     "requirement": "Propose one dinner pairing made only from the carnivore-diet-friendly Publix BOGO items identified.",
+     "verification": "Grader can verify that every component of the proposed dinner pairing comes directly from the qualifying BOGO items found in Step 2."
+    },
+    "R4": {
+     "requirement": "Identify one green cocktail from Bisou Bisou's cocktail menu and provide its name and ingredients.",
+     "verification": "Grader can confirm the cocktail appears on the Bisou Bisou menu page and that the response includes the exact drink name and ingredient list from the site."
+    }
+   }
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "f979f723a3f6f65ea8d75903425f22c67505daf1",
+   "orig_index": 21,
+   "domain": "Community",
+   "level": "easy",
+   "title": "Pokémon-card gift with a backup plan",
+   "scenario": "life",
+   "platform": "web-live",
+   "action": "read",
+   "instruction": "I’m trying to put together a Christmas gift built around Pokémon cards, but I want a realistic backup plan in case the main item is sold out. Please start on Collector Store and look up the Pokémon Phantasmal Flames Booster Elite Trainer Box, then open the actual product page and check whether it says it’s in stock or sold out, and note the listed price so I know if the original idea is still viable. After that, go to Best Buy and search for Pokémon trading cards or Pokémon card gift items and pick one gift option that looks like a reasonable substitute, making sure to open the product page so I can see the listing myself and leaving that tab open as a reference. Then use that same general idea on Walgreens by searching for Pokémon trading cards and finding two available options with prices, opening each Walgreens product in its own tab so I can compare them side by side and verify they’re actually live listings. In the end, give me a short backup-plan summary with the Collector Store stock status and price, the Best Buy product name and price, and the two Walgreens options with their prices.",
+   "rubrics": {
+    "R1": {
+     "requirement": "Find the Collector Store product page for the Pokémon Phantasmal Flames Booster Elite Trainer Box and capture its stock status and listed price.",
+     "verification": "Grader can confirm the browser is on the Collector Store product page showing the product title plus a visible in-stock or sold-out indicator and a price."
+    },
+    "R2": {
+     "requirement": "Identify one Pokémon card gift option on Best Buy and record its product name and price from the product page.",
+     "verification": "Grader can confirm a Best Buy product page is open with a Pokémon card-related item, and the visible page shows the product name and price."
+    },
+    "R3": {
+     "requirement": "Find two available Pokémon trading card options on Walgreens and record the product name and price for each from live product pages.",
+     "verification": "Grader can confirm two Walgreens product tabs are open, each showing a Pokémon trading card listing with visible product names and prices."
+    },
+    "R4": {
+     "requirement": "Provide a short summary that combines the Collector Store stock status and price, the Best Buy backup option with price, and the two Walgreens options with prices as a practical gift backup plan.",
+     "verification": "Grader can compare the final written summary against the visible product pages and confirm all requested items and prices are included accurately."
+    }
+   }
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "e7596a6d6079be82e5219c1ac1c5f40f33d2bce8",
+   "orig_index": 23,
+   "domain": "Community",
+   "level": "medium",
+   "title": "Colorado children's-charity starter pack",
+   "scenario": "life",
+   "platform": "web-live",
+   "action": "read",
+   "instruction": "I’m putting together a quick starter pack for a Colorado outreach idea centered on helping children in need, and I want it to feel grounded before I share it with anyone. Please start on Google and find at least three Colorado charities that specifically help children in need, then open each organization’s official site in its own tab so you can confirm it’s the real organization and leave those tabs open so I can look at them later; I need each charity’s name and official website for the brief. After that, go to Microsoft’s nonprofit resources site and look for at least three software companies listed there along with the exact nonprofit discount or free-program names they offer, because I want to include practical tools these kinds of charities could actually use; if the offer details live on separate pages, open those in separate tabs too and keep the most useful one visible so I have browser proof of what you found. Then go back to Google and look up how lower, middle, and upper class are commonly described in the U.S., including income ranges and the main factors people use beyond income, and do the same specifically for Colorado so I can shape future donor messaging with a little context. Please pull everything together into one organized brief with the charity list, the software offers, and concise U.S. and Colorado class summaries, including a plain-language definition of middle class.",
+   "rubrics": {
+    "R1": {
+     "requirement": "Identify at least three Colorado charities that help children in need and provide each organization’s name plus official website URL.",
+     "verification": "Grader confirms the final brief lists three or more Colorado child-focused charities and that corresponding official organization sites were opened in browser tabs."
+    },
+    "R2": {
+     "requirement": "Use browser verification for the charity research by opening each organization’s official site in its own tab and leaving those tabs available for review.",
+     "verification": "Grader checks that multiple charity website tabs are open and correspond to the organizations named in the brief."
+    },
+    "R3": {
+     "requirement": "List at least three software companies from Microsoft nonprofit resources and include the exact nonprofit discount or free-program name offered by each.",
+     "verification": "Grader confirms the companies and program names match Microsoft nonprofit resources content shown in the browser."
+    },
+    "R4": {
+     "requirement": "Provide a short description of each nonprofit software offer and keep at least one supporting Microsoft offer page visible or open as browser proof.",
+     "verification": "Grader checks the brief includes descriptions and that one or more relevant Microsoft nonprofit resource or offer-detail tabs remain open."
+    },
+    "R5": {
+     "requirement": "Summarize U.S. lower-, middle-, and upper-class income ranges and the key factors commonly used to classify class status, including a plain-language definition of middle class.",
+     "verification": "Grader confirms the brief contains U.S. class ranges, non-income factors, and a clear plain-language middle-class summary."
+    },
+    "R6": {
+     "requirement": "Include the same class-income summary for Colorado, covering lower-, middle-, and upper-class income ranges and key classification factors.",
+     "verification": "Grader confirms the brief separately includes Colorado-specific class ranges and factors, not just national information."
+    },
+    "R7": {
+     "requirement": "Return all findings as one organized brief that combines the charity list, software tools list, and U.S. and Colorado class-income summaries.",
+     "verification": "Grader checks the final response is structured as a single coherent brief with all required sections present."
+    }
+   }
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "8e639395e157ea4df2747a4a873b5f610d70d180",
+   "orig_index": 27,
+   "domain": "Art",
+   "level": "easy",
+   "title": "Beginner sketch reference pack",
+   "scenario": "life",
+   "platform": "web-live",
+   "action": "read",
+   "instruction": "I want to put together a really easy beginner sketch reference pack for a casual drawing session, and I’d like you to grab the pieces in the browser so I can look at them afterward. First, on Pinterest, find one pin with a genuinely useful person drawing reference photo for figure practice—something clear enough that a beginner could sketch from—and open the actual pin page, then keep that tab open and save the pin link for me. Once you’ve got that figure reference, go to Google Images and search for a basic one-room hut from the 1500s in an English style so I can use it as a simple background setting; open the image result or source page that looks most believable and leave that open too so I can see the picture itself. After that, go to Bored Panda and open their collection of angry cat photos as a fun mood reference for the character expression, and tell me the exact page title while keeping that page open as well. In the end, send me the Pinterest pin link, the hut image or source page link, and the Bored Panda page title, plus a short note on how the figure, the hut, and the angry-cat mood could all work together in one simple sketch idea.",
+   "rubrics": {
+    "R1": {
+     "requirement": "Provide one Pinterest pin URL that leads to a useful person drawing reference photo suitable for figure practice.",
+     "verification": "Grader can confirm the browser is on an actual Pinterest pin page showing a person reference image and that the returned link matches that open pin."
+    },
+    "R2": {
+     "requirement": "Provide one Google Images result or source page URL showing a basic one-room hut from the 1500s in an English style.",
+     "verification": "Grader can confirm an image result or source page is open from Google Images and visually depicts a simple hut consistent with the requested historical English-style setting."
+    },
+    "R3": {
+     "requirement": "Provide the exact title of the Bored Panda collection featuring angry cat photos shared by their owners.",
+     "verification": "Grader can confirm the Bored Panda page is open and the reported title matches the visible page title/header."
+    },
+    "R4": {
+     "requirement": "Include a brief note explaining how the person reference, hut reference, and angry cat mood inspiration could fit together into one beginner-friendly sketch concept.",
+     "verification": "Grader can confirm the final note meaningfully references all three selected sources and combines them into a coherent sketch idea."
+    }
+   }
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "3868f9b52e96067b4f55834a3b110e1228b48e65",
+   "orig_index": 28,
+   "domain": "Art",
+   "level": "medium",
+   "title": "Entry path into LA post-production IT",
+   "scenario": "work",
+   "platform": "web-live",
+   "action": "read",
+   "instruction": "I’m thinking about moving into post-production work in Los Angeles and want a realistic sense of the entry path, especially for media/entertainment IT-engineer-type roles. Please start on Google and look up what employers in media and entertainment usually expect for IT engineers, then pull together at least three recurring requirements you keep seeing and at least two concrete training or certification routes, because I want to know whether this is something I could realistically train into. Once you have that baseline, go to the Motion Picture Editors Guild site and find the actual West Coast or Los Angeles path for joining IATSE Local 700, including the steps, eligibility, and anything about applications, rosters, fees, or required experience, so I can compare the union route with the broader training path. If there are separate pages that matter, open the key Local 700 pages in their own tabs and leave the most useful one open so I can look at the exact wording myself. After that, go back to Google and search for current Los Angeles or broader West Coast jobs that actually match the skills and requirements you found earlier, and open at least two relevant live job postings in separate tabs so I can visually compare them; for each one, note the title, company, location, how it connects to the earlier requirements, and whether the posting says anything about visa sponsorship or work authorization. To round it out, use Google one more time to build me a short dated timeline of Rosie O’Donnell’s feud with Donald Trump with at least three dated moments from public sources, just as a quick check of the kind of entertainment-news research context that might overlap with this world. Please give me everything as a concise career brief with clear sections for training paths, Local 700 union entry, relevant current job examples, and the short timeline, and mention which pages you left open for me to review.",
+   "rubrics": {
+    "R1": {
+     "requirement": "Find and summarize at least three typical job requirements for IT engineers in the media and entertainment industry and at least two concrete training or certification options.",
+     "verification": "Final brief includes a training paths section with 3+ recurring requirements and 2+ named training/certification routes sourced from Google results or opened pages."
+    },
+    "R2": {
+     "requirement": "Use the Motion Picture Editors Guild site to summarize the West Coast/Los Angeles joining path for IATSE Local 700, including steps, eligibility, and application/joining details.",
+     "verification": "Final brief includes a union requirements section tied to editorsguild.com, and the browser shows a relevant Local 700 page open with visible guild-specific joining information."
+    },
+    "R3": {
+     "requirement": "Identify at least two current live Los Angeles or West Coast job postings relevant to the earlier requirements and note whether visa sponsorship or work authorization is mentioned.",
+     "verification": "Browser has at least two relevant job postings open in separate tabs, and the final brief lists title, company, location, relevance to prior requirements, and sponsorship/work authorization notes for each."
+    },
+    "R4": {
+     "requirement": "Provide a short Rosie O’Donnell vs. Donald Trump timeline with at least three dated milestones from public sources.",
+     "verification": "Final brief includes a timeline section with 3+ dated events and enough detail to distinguish each milestone."
+    },
+    "R5": {
+     "requirement": "Return everything as a concise career brief with clearly labeled sections and mention which pages were left open for review.",
+     "verification": "Response is organized into the four requested sections and explicitly references the guild page and job-posting tabs left open."
+    }
+   }
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "80257c727b8e8c5426c1b03a2a4493231747e5d7",
+   "orig_index": 30,
+   "domain": "Art",
+   "level": "medium",
+   "title": "Pieces for a small React art prototype",
+   "scenario": "work",
+   "platform": "web-live",
+   "action": "read",
+   "instruction": "I’m mocking up a tiny React art prototype for a web page and want you to help me gather the pieces in a way I can actually look at in the browser. Start on JetBrains and figure out which IDE they specifically position for editing and organizing web code, because I want a sensible default tool before I build anything. Then use Google Images to find one cartoon mouse image with a transparent background that could work as a reference asset, and open the actual source page plus the direct image in separate tabs so I can visually confirm it really has transparency and isn’t just a white background baked in. While you’re in Google Images, also search for “taffy tails stretchy” and pick one result for Stretchy from Taffy Tails, opening the result page too so I can compare whether I want a generic mouse look or that more specific character style. After that, go to react-svgr.com and convert a simple SVG into a React component so I have a vector element to pair with the raster mouse image in the prototype, and keep the conversion result visible. Once the visual side is sorted out, use Google to find the current guidance on whether a project made in CapCut Web can be moved into the CapCut desktop app, because I may reuse these same art assets in a promo clip later, and then find instructions for changing the background color behind an imported photo in CapCut so the background can match whichever mouse style looked better from the earlier image search. Please leave the most useful image/source tabs open for comparison and give me a concise build note with the recommended IDE, both image sources, the React component code, and short CapCut instructions tailored to using those mouse assets.",
+   "rubrics": {
+    "R1": {
+     "requirement": "Correctly identify the JetBrains IDE intended for editing and organizing web code and recommend it by name.",
+     "verification": "Grader confirms the final note names WebStorm and that the JetBrains page viewed corresponds to the web-development IDE."
+    },
+    "R2": {
+     "requirement": "Provide one cartoon mouse image with a transparent background, including a direct image file URL and the source page URL.",
+     "verification": "Grader confirms separate browser tabs were opened for the direct image file and the source page, and the final note includes both URLs."
+    },
+    "R3": {
+     "requirement": "Provide one Google Images result for Stretchy from Taffy Tails with its source/result page for visual comparison.",
+     "verification": "Grader confirms a Google Images search for “taffy tails stretchy” was performed, a result page was opened, and the final note includes the selected result/source."
+    },
+    "R4": {
+     "requirement": "Convert an SVG into a React component using SVGR and provide the resulting React component code snippet.",
+     "verification": "Grader confirms react-svgr.com shows a conversion result and the final note includes a plausible generated React component snippet."
+    },
+    "R5": {
+     "requirement": "Summarize how to move a CapCut Web project into the CapCut desktop app, including the recommended method or a confirmation that direct transfer is not possible, with supporting evidence.",
+     "verification": "Grader confirms the final note includes a clear transfer conclusion and cites or reflects information found from search results/pages opened during browsing."
+    },
+    "R6": {
+     "requirement": "Summarize instructions for changing the background color behind an imported photo in CapCut.",
+     "verification": "Grader confirms the final note includes a usable sequence of CapCut actions for changing the background color behind an imported image."
+    },
+    "R7": {
+     "requirement": "Return a concise build note that combines the recommended IDE, both image sources, the React component code, and CapCut instructions tailored to the compared mouse assets.",
+     "verification": "Grader confirms the final response synthesizes outputs from all prior steps and explicitly tailors the CapCut guidance to the generic mouse versus Stretchy comparison."
+    }
+   }
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "1211fbaa646424ab75869c0379431d5d049d2c9b",
+   "orig_index": 31,
+   "domain": "Lifestyle",
+   "level": "easy",
+   "title": "Gift shortlist: practical tools + outdoor wear",
+   "scenario": "life",
+   "platform": "web-live",
+   "action": "read",
+   "instruction": "I’m trying to build a Father’s Day gift shortlist for someone who likes practical tools but also wears casual, outdoorsy stuff, so can you help me compare a few very different options in the browser and keep the promising pages open in separate tabs so I can look at them afterward? Start on Home Depot and pull up the exact product page for Milwaukee model 48-11-2450, then note the current price because I want to use that battery as the practical baseline gift. After that, go to Tecovas and find one men’s cowboy boot made of real leather that actually looks like it could still work with casual athletic wear, not just full western styling, and open the actual product page so I can see the photos and color choices. Then check Foot Locker for the Nike Ja 3 and tell me the current price and whether it comes in under $60, since I’m trying to see if that’s the budget footwear option compared with the Tecovas boot. Once you’ve seen those prices, go to lululemon’s men’s We Made Too Much section and pick one breathable men’s athletic item that would pair well with whichever footwear option seems more realistic based on the earlier pricing, and leave that product page open too. Finally, on Old Navy, find one men's jogger that looks comfortable and affordable just so I have a separate apparel reference point for overall gift-value shopping, and open the actual listing page. At the end, give me a concise shortlist with each item’s name, price, link, and a quick note on why it fits the overall gift plan.",
+   "rubrics": {
+    "R1": {
+     "requirement": "The exact Home Depot product page for Milwaukee model 48-11-2450 is opened and the current listed price is reported.",
+     "verification": "Grader can confirm the Home Depot tab shows model 48-11-2450 on the product page and that the response includes the matching price and link."
+    },
+    "R2": {
+     "requirement": "A Tecovas men's cowboy boot made of real leather is selected from its actual product page, with the product name, current price, and page link reported.",
+     "verification": "Grader can confirm the Tecovas tab is a men's boot product page indicating leather construction, and that the response includes the boot name, its listed price, and the product page link."
+    },
+    "R3": {
+     "requirement": "The Foot Locker Nike Ja 3 product page is used to report the current price and explicitly state whether it is under $60.",
+     "verification": "Grader can confirm the Foot Locker tab shows a Nike Ja 3 listing and that the response includes the visible price plus a correct under-$60 judgment."
+    },
+    "R4": {
+     "requirement": "One men’s breathable lululemon We Made Too Much item is chosen with its name and sale price, and the choice is aligned with whichever footwear option seems more realistic from earlier pricing.",
+     "verification": "Grader can confirm the lululemon tab is in Men’s We Made Too Much or a product reached from it, shows a sale price, and the final note references the earlier Tecovas vs. Nike Ja 3 price comparison."
+    },
+    "R5": {
+     "requirement": "One Old Navy men's jogger is selected from its product page with the product name and current price reported.",
+     "verification": "Grader can confirm the Old Navy tab is an actual men's jogger product listing and that the response includes the matching name, price, and link."
+    }
+   }
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "d8fe04d1cf29251d68382cde58f4424e80bad07c",
+   "orig_index": 34,
+   "domain": "Lifestyle",
+   "level": "medium",
+   "title": "Private shared-journaling setup and AI access",
+   "scenario": "life",
+   "platform": "web-live",
+   "action": "read",
+   "instruction": "I’m trying to figure out a shared journaling setup for me and my partner, but I’m pretty cautious about privacy and especially about what outside AI tools can get into. To set a baseline first, please go to Oura’s support site and find the guidance around Oura Membership privacy, specifically anything that explains how to stop an AI agent from accessing membership information, and leave that support article open so I can look at the exact wording myself. Once you’ve got that privacy baseline, head over to Journey Cloud and look through its journaling plans and any pages about shared journals, partner or couples use, or collaborative entries, because I want to know whether it would actually work for two people without feeling too exposed; if there are relevant pricing or plan pages, open the main options in separate tabs so I can compare them visually later. After that, check the page about the Huan Dao Meditation app on Formfacade and tell me what the app is and which Eastern spiritual wellness methods it says it uses, since I want one concrete example of the kind of wellness features people sometimes pair with journaling. Then use Google to find Norton Secure VPN’s official product page, open the real Norton page, and pull at least three advertised features from it so I have a simple privacy-tool reference point; please keep the Norton product page open too. In the end, give me a concise recommendation on whether Journey Cloud seems to fit the privacy expectations set by the Oura guidance, while also mentioning Huan Dao as a wellness-feature example and Norton Secure VPN as a privacy comparison point.",
+   "rubrics": {
+    "R1": {
+     "requirement": "Find and summarize Oura support guidance on Oura Membership privacy, including the specific instruction or policy for preventing an AI agent from accessing membership information.",
+     "verification": "Grader can confirm the browser is on a relevant support.ouraring.com article and that the final answer includes the privacy guidance and explicit AI-agent access prevention detail sourced from that page."
+    },
+    "R2": {
+     "requirement": "Summarize Journey Cloud’s shared journaling options, including any couples, partner, friend, or shared-journal capabilities, and include pricing details from Journey Cloud.",
+     "verification": "Grader can confirm relevant journey.cloud pricing and feature pages were opened, ideally in separate tabs, and that the final answer reports both sharing-related features and plan pricing."
+    },
+    "R3": {
+     "requirement": "Identify what the Huan Dao Meditation app is and list the Eastern spiritual wellness methods it claims to use.",
+     "verification": "Grader can confirm the formfacade.com page about Huan Dao Meditation was visited and that the final answer accurately states the app description and named methods from that page."
+    },
+    "R4": {
+     "requirement": "Use Google to locate Norton Secure VPN’s official product page, summarize what the product is, and list at least three advertised features from Norton’s page.",
+     "verification": "Grader can confirm a Google results page was used, the official Norton page was opened and left visible, and the final answer includes at least three features taken from that product page."
+    },
+    "R5": {
+     "requirement": "Provide a final recommendation on whether Journey Cloud fits the user’s privacy expectations, explicitly using Oura’s privacy baseline and incorporating Journey Cloud findings, with Huan Dao as a wellness-feature example and Norton Secure VPN as a privacy comparison point.",
+     "verification": "Grader can confirm the final synthesis references findings from Oura and Journey Cloud directly, and also mentions Huan Dao and Norton in the recommendation rather than listing them separately without comparison."
+    }
+   }
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "46ecc9a5dce920d6c72198b4efb1a46855bac7d0",
+   "orig_index": 36,
+   "domain": "Lifestyle",
+   "level": "medium",
+   "title": "Budget outfit shortlist (Depop + others)",
+   "scenario": "life",
+   "platform": "web-live",
+   "action": "read",
+   "instruction": "I’m trying to put together a budget-conscious outfit shortlist and want it to feel like a real shopping comparison, not just random picks. Start on Depop and go to the seller page for rainbow_bebe to see whether they currently have any prom dress listings under $100, because if there’s a good one there I’d use that as my budget anchor; open at least one qualifying listing in its own tab so I can see the actual photos and price on the live listing page. If that seller doesn’t have a convincing under-$100 option, switch to PrettyLittleThing and find an emerald green dress that’s available in size 12, then open the product page and note the name and price so I have a fallback main dress candidate. After that, on JJ’s House, browse cocktail dresses and find one deep V-neck option that looks like a dressier comparison point, and keep that product page open too so I can compare the styling. Once you’ve seen those dress options, decide which dress feels like the best value based on price and what’s actually available, then go to Old Navy and pick one comfortable-looking, affordable women’s jogger to round out the shortlist as a casual extra, making sure you open the actual product page and capture the name and price. Then check Tecovas for one men’s cowboy boot made of real leather, open the product page, and list the design or color options shown there so I can see how many choices there are. Finally, go to ALS and look up the Nike Phantom 6 Club FG/MG low-top men’s soccer cleat, tell me the current price, and say clearly whether it stays under $60 so I can judge whether this whole shortlist still feels budget-friendly. Please leave the key product tabs open for the dress comparison and give me a final shortlist with the item names, prices, the Tecovas options, and a quick note on which dress you’d personally pick as the best value.",
+   "rubrics": {
+    "R1": {
+     "requirement": "Depop seller rainbow_bebe is checked for prom dress listings under $100, and if a qualifying listing exists, at least one live listing title and price are captured from the opened listing page.",
+     "verification": "Grader can confirm navigation to the rainbow_bebe seller area on Depop and see either a qualifying under-$100 prom dress listing opened in a tab or a clear finding that no such qualifying listing is present."
+    },
+    "R2": {
+     "requirement": "A PrettyLittleThing emerald green dress available in size 12 is found and its product name and price are recorded.",
+     "verification": "Grader can verify the PrettyLittleThing product page shows an emerald green dress with size 12 available and visible name and price."
+    },
+    "R3": {
+     "requirement": "A JJ’s House cocktail dress with a deep V-neck is identified, and its name and price are captured from the product page.",
+     "verification": "Grader can verify the JJ’s House product page shows a cocktail dress with deep V-neck styling and visible product name and price, with the page kept open for comparison."
+    },
+    "R4": {
+     "requirement": "One dress is selected as the best-value pick based on the earlier dress findings, with a brief comparison note explaining the choice.",
+     "verification": "Grader can compare the reported dress options and confirm that the final answer names one chosen dress and includes a short rationale tied to price and/or availability."
+    },
+    "R5": {
+     "requirement": "An Old Navy women’s jogger that appears comfortable and affordable is selected from the product page, with name and price recorded.",
+     "verification": "Grader can verify an Old Navy jogger product page is opened and that the reported name and price match the visible page details."
+    },
+    "R6": {
+     "requirement": "A men’s real leather cowboy boot is found on Tecovas, and the boot name plus visible design or color options are listed.",
+     "verification": "Grader can verify the Tecovas product page indicates real leather and shows the product name along with selectable design or color options."
+    },
+    "R7": {
+     "requirement": "The ALS product page for the Nike Phantom 6 Club FG/MG low-top men’s soccer cleat is found, the current price is recorded, and the answer clearly states whether it is under $60.",
+     "verification": "Grader can verify the ALS product page title matches the cleat and the visible price supports the under-$60 conclusion."
+    },
+    "R8": {
+     "requirement": "The final shortlist consolidates all required items and findings: dress results, chosen best-value dress, Old Navy jogger, Tecovas boot with options, and ALS cleat affordability check.",
+     "verification": "Grader can confirm the final response includes all requested item names, prices where applicable, the Tecovas options, and the cleat budget judgment in one coherent shortlist."
+    }
+   }
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "63d68bb25e279fc22e6e3592d8ca59add33b6eb1",
+   "orig_index": 40,
+   "domain": "Ecommerce",
+   "level": "medium",
+   "title": "Family car ≤ $50k near Minneapolis (Cars.com)",
+   "scenario": "life",
+   "platform": "web-live",
+   "action": "read",
+   "instruction": "I’m trying to buy a family car in the Minneapolis–St. Paul area and want a solid shortlist I can actually look through later, so please use Cars.com to search near Minneapolis, Minnesota for family-friendly vehicles priced at $50,000 or less. I’m shopping for a family of four, so focus on practical options like midsize SUVs, crossovers, minivans, or other vehicles that clearly make sense for everyday family use. As you go through the results, open each promising listing in its own tab and make sure the actual vehicle page shows the price, mileage, model year, and dealership location, because I want every option to be something I can visually inspect afterward. Please gather about 15 listings that are still live and under budget, and if a listing doesn’t make the seating or family suitability obvious, cross-check that exact vehicle on Edmunds so we can confirm the body style or seating before keeping it. Once you’ve got the set, create a CryptPad Sheet called Minneapolis Family Cars with columns for make and model, model year, price, mileage, dealership location, and link to listing, and fill it in so each row matches one of the listing tabs you still have open. After that, give me a short summary of which models show up most often, which ones seem like the best value based on year, mileage, and price, and whether the final mix is mostly SUVs or minivans. Please leave the vehicle tabs and the finished spreadsheet open so I can compare everything on screen.",
+   "rubrics": {
+    "R1": {
+     "requirement": "Cars.com is used to search near Minneapolis, Minnesota with the price constrained to $50,000 or less and the results focused on family-suitable vehicle types.",
+     "verification": "Grader can see a Cars.com results page showing Minneapolis-area search context and a max-price filter at or below $50,000 with relevant family vehicle results visible."
+    },
+    "R2": {
+     "requirement": "About 15 promising family-appropriate vehicle listings are opened in separate browser tabs from the Cars.com results.",
+     "verification": "Grader can see multiple open vehicle listing tabs, approximately 15 in total, each corresponding to a distinct candidate vehicle page."
+    },
+    "R3": {
+     "requirement": "Each selected listing is individually verified for make/model, year, price, mileage, dealership location, and that it is still a live listing under budget and suitable for a family of four.",
+     "verification": "Grader can inspect the open listing pages and confirm the required details are visible and match the final recorded set, with no included vehicle over $50,000 or obviously unsuitable."
+    },
+    "R4": {
+     "requirement": "Any unclear seating or body-style cases are cross-checked on Edmunds before inclusion in the final shortlist.",
+     "verification": "Grader can see Edmunds pages or evidence of cross-checking for ambiguous vehicles, confirming family suitability or body style for those cases."
+    },
+    "R5": {
+     "requirement": "A CryptPad Sheets titled Minneapolis Family Cars is created.",
+     "verification": "Grader can see the CryptPad Sheets title displayed as Minneapolis Family Cars."
+    },
+    "R6": {
+     "requirement": "The spreadsheet contains the required columns: make and model, model year, price, mileage, dealership location, and link to listing.",
+     "verification": "Grader can see the header row in CryptPad Sheets with all required column names present."
+    },
+    "R7": {
+     "requirement": "The spreadsheet is populated with about 15 verified vehicle rows, each matching a currently open listing tab and including a working listing URL.",
+     "verification": "Grader can compare the rows in the sheet against the open tabs and confirm that approximately 15 entries are present with corresponding links and extracted details."
+    },
+    "R8": {
+     "requirement": "A short summary is produced covering the most frequent models, the best-value options, and whether SUVs or minivans dominate the final set, while leaving the sheet and listing tabs open.",
+     "verification": "Grader can review the final written summary and confirm the spreadsheet and vehicle tabs remain open for visual inspection."
+    }
+   }
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "4b9850333bdd7298442df495aff3832c13b119da",
+   "orig_index": 41,
+   "domain": "Ecommerce",
+   "level": "medium",
+   "title": "Monthly beer subscription for a friend in the UK",
+   "scenario": "life",
+   "platform": "web-live",
+   "action": "read",
+   "instruction": "I’m trying to put together a cozy monthly subscription night for a friend in the UK and want one tidy recommendation I can actually look at in the browser afterward. Please start on Beer52 and figure out which of their beer subscription plans are genuine monthly options that deliver within the UK, because I only want plans that would work for a regular monthly treat here rather than anything one-off or unclear. Open the relevant Beer52 plan pages in separate tabs and leave the best evidence visible so I can compare them myself. Once you know the monthly beer choices, go to snackd.co.uk and find at least three snack subscription boxes that also deliver to the UK, then open each actual product or brand page so you can verify from the site itself that UK delivery or shipping is available and leave those tabs open too, since I want to see the boxes and not just a summary. After that, use Google to work out which UK streaming subscription service includes the movie “Wicked” at no extra cost in the base subscription, and please make sure it’s not just a rental, purchase option, add-on channel, or ad-supported loophole because I want something I could actually pair with the subscription night without paying extra for the film. Open the page that proves where it’s included and keep that tab available. Finally, check PrintPigeon and explain, in plain English, how it takes an email or online message and turns it into a posted letter, and tell me the current price for sending one standard UK letter so I can decide whether mailing the invite is worth the extra effort. In the end, give me one coherent summary that pulls together the Beer52 monthly UK options, the three snack alternatives with UK-delivery proof, the streaming service for “Wicked,” and the PrintPigeon explanation and letter price.",
+   "rubrics": {
+    "R1": {
+     "requirement": "Correctly identify the Beer52 subscription plans that are monthly and deliver within the UK.",
+     "verification": "Grader can confirm qualifying Beer52 plans from open tabs showing plan details and visible evidence of monthly cadence and UK delivery availability."
+    },
+    "R2": {
+     "requirement": "Find at least three snack subscription boxes from snackd.co.uk and provide evidence from each box’s own page or linked site that UK delivery or shipping is available.",
+     "verification": "Grader can inspect at least three open listing/brand tabs and see visible UK shipping or delivery wording for each snack subscription option."
+    },
+    "R3": {
+     "requirement": "Correctly determine which UK streaming subscription service includes “Wicked” at no extra cost in the base subscription, excluding rental, purchase, add-ons, and ad-supported access.",
+     "verification": "Grader can confirm from the opened proof page that “Wicked” is included with the named service’s subscription and not presented as a rent/buy/add-on-only option."
+    },
+    "R4": {
+     "requirement": "Accurately explain how PrintPigeon turns an email or online message into a posted letter and state the current price for one standard UK letter.",
+     "verification": "Grader can verify the explanation and price against visible PrintPigeon site content showing the workflow and standard-letter pricing."
+    },
+    "R5": {
+     "requirement": "Produce one coherent final summary combining the Beer52 monthly UK options, three snack alternatives with UK-delivery proof, the qualifying streaming service for “Wicked,” and the PrintPigeon mailing explanation and price.",
+     "verification": "Final response includes all required components in a single integrated summary with no missing category."
+    }
+   }
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "44f1e02116715d5fe313996811b358fe25bc3ee4",
+   "orig_index": 42,
+   "domain": "Ecommerce",
+   "level": "medium",
+   "title": "Accessory shortlist for the household's cars",
+   "scenario": "life",
+   "platform": "web-live",
+   "action": "read",
+   "instruction": "I’m trying to put together a quick accessory shortlist for the different cars in our household, and I want to see real product pages rather than just a text summary. Please start on WeatherTech and use the vehicle selector for a 2020 Toyota Highlander to confirm which floor mat option and which cargo liner or cargo mat option actually fit, because the Highlander is the one I’m most likely to buy for first. When you find the cargo liner page, open the actual product listing and leave that tab open so I can look at the photos and fitment details later. After you’ve confirmed the Highlander cargo setup, go to Temu and find a set of car headrest hooks that would work for a Fiat 500, mainly so I can compare whether a cheap organizer add-on is enough for our smaller car instead of doing a full cargo solution. Open the actual Temu listing and note the product name plus whatever compatibility details on the page make it seem usable with a Fiat 500. Then use Google to find one suitable LED emblem option for a 2023 Honda Civic, open the actual product result in its own tab, and grab the product name and current price so I have one exterior accessory idea to round out the shortlist. In the end, give me a concise comparison covering the Highlander fitment details, the direct WeatherTech cargo liner link, the Fiat 500 hook listing with compatibility notes, and the Civic LED emblem option with price.",
+   "rubrics": {
+    "R1": {
+     "requirement": "Identify the WeatherTech floor mat product that fits a 2020 Toyota Highlander and report the fitment details.",
+     "verification": "Grader can confirm the WeatherTech vehicle-selected results or product page shows 2020 Toyota Highlander fitment for the floor mat option."
+    },
+    "R2": {
+     "requirement": "Identify the WeatherTech cargo liner or cargo mat product that fits a 2020 Toyota Highlander and include the direct product page link.",
+     "verification": "Grader can confirm the open WeatherTech cargo liner tab shows the fitting Highlander cargo product and that a direct link is provided."
+    },
+    "R3": {
+     "requirement": "Find one Temu car headrest hook set that would work with a Fiat 500 and report the product name.",
+     "verification": "Grader can confirm the Temu listing page is open and the reported product name matches the visible listing title."
+    },
+    "R4": {
+     "requirement": "Report compatibility details from the Temu listing that support why the hook set would work with a Fiat 500.",
+     "verification": "Grader can verify the cited listing text or specs mention universal fit, seat headrest mounting, dimensions, or other compatibility cues visible on the Temu page."
+    },
+    "R5": {
+     "requirement": "Find one suitable LED emblem option for a 2023 Honda Civic and report its product name.",
+     "verification": "Grader can confirm the selected Google result or opened product page shows an LED emblem option associated with a 2023 Honda Civic."
+    },
+    "R6": {
+     "requirement": "Include the displayed price for the selected 2023 Honda Civic LED emblem option.",
+     "verification": "Grader can verify the reported price matches the visible price on the Google result or opened product page."
+    },
+    "R7": {
+     "requirement": "Return a concise comparison covering all three vehicles and the requested accessory categories.",
+     "verification": "Grader can confirm the final response includes Highlander floor and cargo fitment details with cargo link, Fiat 500 hook name with compatibility notes, and Civic LED emblem name with price in a compact comparison format."
+    }
+   }
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "69782bfcfdb3311496bc9048bf66915b33e692cd",
+   "orig_index": 43,
+   "domain": "Health",
+   "level": "easy",
+   "title": "Compare Pilates studios in Clovis",
+   "scenario": "life",
+   "platform": "web-live",
+   "action": "read",
+   "instruction": "I’m trying to pick a Pilates place in the Fresno/Clovis area and want something concrete I can actually compare on screen, not just a vague list. Please start on Google and find at least two Pilates studios in Clovis, California that clearly offer classes, then open each studio’s actual schedule or booking page in its own tab and leave those tabs open so I can look at the class calendars myself later. Once you’ve got those Clovis options, broaden it into a short Fresno-area comparison by finding at least three Pilates class options around Fresno or Clovis, with each studio’s real schedule or booking link, because I want to see what nearby choices exist if the Clovis spots don’t fit my schedule. After that, go to Title 29 Fitness’s website and figure out what it offers in Fresno, especially anything relevant to Pilates or group fitness, and capture the class schedule details shown there; if there’s a schedule page or booking flow, open that too so I have visual proof it’s current. In the end, give me one concise comparison that includes the two Clovis studios, the broader Fresno-area list, and where Title 29 seems to fit among them based on what you actually saw in the browser.",
+   "rubrics": {
+    "R1": {
+     "requirement": "Identify at least two Clovis, California Pilates studios that offer classes and provide each studio’s name plus a direct class schedule or booking page link.",
+     "verification": "Grader can confirm two distinct Clovis studios are listed and that their schedule or booking pages are open in separate tabs or directly referenced with valid links."
+    },
+    "R2": {
+     "requirement": "Provide a broader Fresno-area list of at least three Pilates class options, each with the studio name and a direct schedule or booking page link.",
+     "verification": "Grader can verify at least three Fresno-area options are named and each includes a schedule or booking link visible from the opened pages or final response."
+    },
+    "R3": {
+     "requirement": "Look up Title 29 Fitness in Fresno and capture what it offers along with the class schedule details shown on its website.",
+     "verification": "Grader can confirm the response includes offerings described from title29fitness.com and schedule details taken from the visible site pages or booking flow."
+    },
+    "R4": {
+     "requirement": "End with one concise comparison that includes the Clovis options, the wider Fresno-area list, and an explanation of where Title 29 Fitness fits among them.",
+     "verification": "Grader can verify the final response contains a brief synthesis comparing all gathered options and explicitly situating Title 29 relative to the Clovis and Fresno-area choices."
+    }
+   }
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "328ce861b58b2cf2e6da520040193710f95cfe56",
+   "orig_index": 45,
+   "domain": "Health",
+   "level": "easy",
+   "title": "Free at-home yoga plan from YouTube",
+   "scenario": "life",
+   "platform": "web-live",
+   "action": "read",
+   "instruction": "I want to put together a really simple at-home yoga plan using only free YouTube videos because I’m trying to ease into a routine without paying for an app. Could you start on Google and find at least three yoga instructors who seem especially approachable, beginner-friendly, or a little funny and who clearly post free classes on YouTube, so I have a shortlist of personalities that feel welcoming rather than intimidating. For each one, grab the instructor name, the YouTube channel name, and one example video title. Then head over to YouTube and, using that shortlist, pick one morning yoga video that’s around 20 minutes long from one of those instructors so I have an easy option for weekdays; please note the exact title, duration, and link. After that, find a separate Vinyasa flow video on YouTube that’s about 30 minutes long so I have a slightly longer practice option too, and give me its title and link as well. Please open the two chosen videos in separate tabs so I can compare them, and start playing the 30-minute Vinyasa one long enough to confirm it’s the right video before leaving that tab open. In the end, send me the full yoga plan with the instructor shortlist plus both selected videos and their details.",
+   "rubrics": {
+    "R1": {
+     "requirement": "Provide a shortlist of at least 3 yoga instructors who appear approachable, beginner-friendly, or funny and who post free yoga classes on YouTube, including each instructor’s name, YouTube channel name, and one example video title.",
+     "verification": "Grader confirms the final response includes 3 or more instructors with all three required fields and that the information could reasonably be sourced from Google results leading to YouTube channels or videos."
+    },
+    "R2": {
+     "requirement": "Select one morning yoga video on YouTube that is approximately 20 minutes long and is from one of the instructors in the shortlist.",
+     "verification": "Grader confirms the chosen morning video is identified with title, duration, and link, and that the instructor matches one of the shortlist entries."
+    },
+    "R3": {
+     "requirement": "Select one separate YouTube Vinyasa flow video that is approximately 30 minutes long and provide its title and link.",
+     "verification": "Grader confirms the final response includes a distinct Vinyasa flow video with title and URL and that the runtime is about 30 minutes based on the visible YouTube listing or player."
+    },
+    "R4": {
+     "requirement": "Open the chosen morning yoga video and the chosen Vinyasa flow video in separate browser tabs, and start playing the longer Vinyasa video briefly before leaving it open.",
+     "verification": "Grader confirms visible browser state shows both YouTube video tabs open and evidence that the 30-minute Vinyasa video player was started."
+    },
+    "R5": {
+     "requirement": "Present the final output as one combined yoga plan containing the instructor shortlist, the chosen morning video with title, duration, and link, and the separate Vinyasa flow video with title and link.",
+     "verification": "Grader confirms the response combines all requested pieces into a single coherent plan rather than scattered notes."
+    }
+   }
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "e8b73f739732f8aeb3c473d00f6219af5b8dcdb7",
+   "orig_index": 46,
+   "domain": "Health",
+   "level": "medium",
+   "title": "Top 10 LA hospitals for childbirth",
+   "scenario": "life",
+   "platform": "web-live",
+   "action": "read",
+   "instruction": "We’re expecting our first baby and I want a really practical shortlist of the best hospitals in Los Angeles for giving birth, not just a generic list, so could you use Google to research LA-area hospitals that clearly offer maternity, obstetrics, and labor-and-delivery services and then narrow that down to the 10 strongest options for childbirth? I’d like you to lean on a mix of official hospital maternity pages and something like U.S. News or similar quality indicators so I can tell which places are actually recognized, not just nearby. As you find good candidates, open each hospital’s actual maternity or labor-and-delivery page in its own tab and keep those tabs open so I can visually review the pages and photos afterward. For each of the final 10 hospitals, please verify on the official site that labor and delivery is explicitly offered, note the hospital name and Los Angeles-area location, write a short plain-English description of the maternity program, and capture whether it shows up in rankings, recognitions, or other quality signals. Then create a CryptPad Document file titled exactly “Best LA Maternity Hospitals” and put all 10 hospitals in it with the maternity-page links included, because I want one place where I can compare everything. Once that looks complete, add a short comparison section explaining the main differences between the hospitals, any patterns you noticed in the rankings or maternity offerings, and which few seem like the strongest recommendations overall. Please leave the CryptPad Document open at the end along with the 10 hospital maternity tabs so I can click through them myself.",
+   "rubrics": {
+    "R1": {
+     "requirement": "A credible Los Angeles-area candidate pool of hospitals with maternity-related care is identified using Google and reputable sources.",
+     "verification": "Search history and opened results show hospital candidates sourced from Google results leading to official hospital pages or reputable healthcare sources."
+    },
+    "R2": {
+     "requirement": "Exactly 10 hospitals are selected as the strongest childbirth options based on service availability plus reputation, rankings, or recognitions.",
+     "verification": "The final CryptPad Document contains 10 distinct hospitals and the selection is supported by evidence gathered from search and ranking sources."
+    },
+    "R3": {
+     "requirement": "Each of the 10 selected hospitals has its official maternity, obstetrics, or labor-and-delivery page opened in a separate browser tab and left open.",
+     "verification": "Browser tab bar shows 10 hospital-domain tabs corresponding to the 10 hospitals listed in the CryptPad Document."
+    },
+    "R4": {
+     "requirement": "For every listed hospital, labor and delivery services are explicitly verified on the official hospital page.",
+     "verification": "The open hospital pages visibly mention labor and delivery, childbirth, or equivalent maternity inpatient delivery services for each listed hospital."
+    },
+    "R5": {
+     "requirement": "Ranking, recognition, or quality-indicator evidence is gathered for each of the 10 hospitals from U.S. News or similarly reputable sources.",
+     "verification": "The document entries include ranking or recognition notes for each hospital, and browsing shows U.S. News or equivalent reputable source pages used to support those notes."
+    },
+    "R6": {
+     "requirement": "A CryptPad Document titled exactly 'Best LA Maternity Hospitals' is created and includes for each hospital its name, location, maternity program description, ranking/recognition status, and official maternity page link.",
+     "verification": "The CryptPad Document title matches exactly and the body contains complete entries for all 10 hospitals with the required fields and links."
+    },
+    "R7": {
+     "requirement": "The CryptPad Document ends with a comparative summary highlighting key differences, patterns, and top recommendations, and the doc remains open alongside the hospital tabs.",
+     "verification": "The final section of the CryptPad Document contains a written comparison and recommendation summary, and the browser still shows the doc plus the hospital tabs open."
+    }
+   }
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "256342f13c0a03e080f92ee073153fe33a6881c0",
+   "orig_index": 47,
+   "domain": "Health",
+   "level": "medium",
+   "title": "NYC knee-surgeon shortlist (ACL / meniscus)",
+   "scenario": "life",
+   "platform": "web-live",
+   "action": "read",
+   "instruction": "I’m trying to get a realistic shortlist of the best knee surgeons in New York City because I may need ACL reconstruction or meniscus repair, and I want something I can actually look through myself afterward. Please start in Google and research orthopedic surgeons in NYC who are specifically known for knee ligament reconstruction, ACL surgery, and meniscus repair, then create a spreadsheet called Top ACL Surgeons NYC to keep everything organized. As you find strong candidates, open each surgeon’s official hospital or practice profile page in its own tab so I can compare them side by side, and only keep surgeons whose actual profile page clearly says they perform ACL reconstruction, meniscus repair, knee ligament reconstruction, or very closely related sports knee procedures. For each surgeon you keep, put their full name, hospital or practice affiliation, specialty focus, a short note confirming where ACL reconstruction or meniscus repair is mentioned, and the direct profile link into the spreadsheet. Please keep going until there are exactly 10 verified NYC surgeons in the sheet, and make sure every person listed still has their real profile page open in a tab so I can inspect the pages and see the affiliations myself. Once the list is complete, look across the 10 entries and add a short summary of which hospitals, orthopedic groups, or medical centers show up most often, because I want to know which institutions seem to dominate this specialty in the city.",
+   "rubrics": {
+    "R1": {
+     "requirement": "A spreadsheet titled 'Top ACL Surgeons NYC' is created and used as the working document.",
+     "verification": "Grader can see a spreadsheet with the exact title open and populated during the task."
+    },
+    "R2": {
+     "requirement": "Official hospital or practice profile pages for candidate NYC surgeons are opened in separate browser tabs.",
+     "verification": "Grader can see multiple open tabs corresponding to official surgeon profile pages rather than generic search results or directory summaries."
+    },
+    "R3": {
+     "requirement": "Each included surgeon is verified on the actual profile page as performing ACL reconstruction, meniscus repair, knee ligament reconstruction, or a clearly equivalent sports knee procedure.",
+     "verification": "On each selected surgeon tab, the grader can locate visible text or procedure listings that substantiate the inclusion criteria."
+    },
+    "R4": {
+     "requirement": "For every selected surgeon, the spreadsheet records full name, hospital or practice affiliation, specialty focus, confirmation note for ACL reconstruction or meniscus repair, and the direct profile link.",
+     "verification": "Grader can inspect the spreadsheet rows and confirm all required fields are present for each surgeon and correspond to the open profile tabs."
+    },
+    "R5": {
+     "requirement": "Exactly 10 New York City surgeons are included, and each spreadsheet entry corresponds to an official profile page that remains open in a tab.",
+     "verification": "Grader can count exactly 10 completed spreadsheet entries and match each one to an open official profile tab for that surgeon."
+    },
+    "R6": {
+     "requirement": "The spreadsheet includes a short summary of which hospitals, orthopedic groups, or medical centers appear most frequently among the 10 surgeons.",
+     "verification": "Grader can see a written summary in the spreadsheet that synthesizes affiliation frequency across the final 10 entries."
+    }
+   }
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "e1aca0ae8174c6f1847be80c82d8adc63d031b23",
+   "orig_index": 48,
+   "domain": "Health",
+   "level": "medium",
+   "title": "Calm yoga vs high-energy class in Fresno",
+   "scenario": "life",
+   "platform": "web-live",
+   "action": "read",
+   "instruction": "I’m trying to plan a beginner-friendly fitness outing in Fresno sometime this week, and I want to compare a couple of calmer yoga options with something more high-energy before I decide. Please start on toweryogafresno.com and pull up the actual class schedule for Tower Yoga Fresno, then note the days and times when their Tower Yoga classes are offered so I can use that as my baseline for what would fit my week; if there’s a schedule page or calendar view, leave it open so I can glance at it myself. Then go to bluemoonyogastudios.com and figure out what kind of yoga studio Blue Moon Yoga is in Fresno, and list the Fresno studio locations shown on the site, because convenience matters if Tower Yoga’s times don’t work for me; please open the Fresno location information in its own tab so I can visually compare the studio names. After that, check fresnofightgirl.com and see what Fight Girl Fitness offers in Fresno, especially the types of classes they have and how a brand-new person is supposed to get started, like whether there’s a trial, membership, booking flow, or intro option, since I might want something more energetic than yoga. In the end, give me a short recommendation on which of the three seems easiest for a beginner this week based on the schedule details and how straightforward the getting-started process looks, and keep the most useful pages open in separate tabs so I can compare them.",
+   "rubrics": {
+    "R1": {
+     "requirement": "Report the days and times when Tower Yoga classes are offered from the Tower Yoga Fresno schedule.",
+     "verification": "Grader confirms the answer matches the visible schedule or calendar page left open on toweryogafresno.com."
+    },
+    "R2": {
+     "requirement": "Describe what Blue Moon Yoga is in Fresno based on the Blue Moon Yoga Studios website.",
+     "verification": "Grader confirms the description is supported by visible text on the relevant Blue Moon Yoga page."
+    },
+    "R3": {
+     "requirement": "List the names of the Fresno studio locations shown for Blue Moon Yoga on the website.",
+     "verification": "Grader confirms the listed location names match the Fresno location information visible in the opened Blue Moon tab."
+    },
+    "R4": {
+     "requirement": "Summarize the types of classes offered by Fight Girl Fitness in Fresno.",
+     "verification": "Grader confirms the class types are supported by visible class or program information on fresnofightgirl.com."
+    },
+    "R5": {
+     "requirement": "Explain how a new person can get started with Fight Girl Fitness, including any memberships, trial, booking, or participation details available on the website.",
+     "verification": "Grader confirms the getting-started summary matches visible onboarding, membership, booking, or introductory information on the site."
+    },
+    "R6": {
+     "requirement": "Provide a short recommendation comparing Tower Yoga, Blue Moon Yoga, and Fight Girl Fitness, and identify which option seems easiest for a beginner based on schedule convenience and onboarding details.",
+     "verification": "Grader confirms the recommendation references findings from all three sites and is consistent with the extracted schedule, location, and getting-started details."
+    }
+   }
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "082aa17f3e88c3ce10796244e3677c5643dd19c9",
+   "orig_index": 49,
+   "domain": "Food",
+   "level": "easy",
+   "title": "Roasted Brussels sprouts recipe",
+   "scenario": "life",
+   "platform": "web-live",
+   "action": "read",
+   "instruction": "I’m setting up a new kitchen and want one of the first things I make to be roasted Brussels sprouts, so could you start on Google and find me a recipe that clearly uses both Parmesan and balsamic vinegar, then open the actual recipe page and note the title, oven temperature, and cook time because I want to make sure the cookware I buy fits that kind of roasting setup. Once you’ve got that recipe open, head to Le Creuset and look for a light green Dutch oven, and specifically check whether the 5.5 qt size is offered in that color so I can see if it would work for recipes in that range; please open the product page itself and leave it open so I can look at the color and size options on the page. While you’re at it, I’m also sorting out kitchen appliances before I start cooking, so go to YouTube and find a practical video about whether a dishwasher installation needs an air gap, open the video page, start playing it, and tell me the main decision points like when an air gap is required, when a high loop is used instead, and why the air gap exists in the first place. Please keep the recipe tab, the Le Creuset product tab, and the YouTube video tab open in separate tabs so I can compare everything visually afterward.",
+   "rubrics": {
+    "R1": {
+     "requirement": "A roasted Brussels sprouts recipe was found and the actual recipe page shows both Parmesan and balsamic vinegar, along with the recipe title, oven temperature, and cook time.",
+     "verification": "Grader can confirm the open recipe page contains the recipe title and visible recipe details, and the ingredients or recipe text visibly includes Parmesan and balsamic vinegar."
+    },
+    "R2": {
+     "requirement": "A light green Le Creuset Dutch oven product page was opened and the agent correctly confirmed whether the 5.5 qt size is available in that color, including product name and color.",
+     "verification": "Grader can inspect the open Le Creuset product page and see the product name, the selected or referenced light green color, and visible size options or product details indicating whether 5.5 qt is available."
+    },
+    "R3": {
+     "requirement": "A relevant YouTube video about dishwasher air gaps was opened and played, and the summary captures when an air gap is required, the high loop alternative, and why an air gap is used.",
+     "verification": "Grader can confirm the YouTube video page is open with playback started and that the reported summary matches the topic and covers requirement conditions, alternatives, and purpose."
+    },
+    "R4": {
+     "requirement": "The browser state preserves visual proof by keeping the recipe page, Le Creuset product page, and YouTube video page open in separate tabs.",
+     "verification": "Grader can inspect the browser tab bar and confirm all three relevant pages remain open for side-by-side review."
+    }
+   }
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "0ab48db6076089bbcf42047d162009a50eb9ca50",
+   "orig_index": 50,
+   "domain": "Food",
+   "level": "easy",
+   "title": "Semi-healthy weekly meal prep",
+   "scenario": "life",
+   "platform": "web-live",
+   "action": "read",
+   "instruction": "I’m trying to put together a simple, semi-healthy meal prep menu for the week, mostly so I can batch-cook lunches and have a couple of make-ahead desserts ready too. Could you start on Google and search for an easy Instant Pot lentils recipe, then open the actual recipe page and pull out the basics I’d need for meal prep: what type of lentils it uses, the water-to-lentil ratio, and the cook time? Please leave that recipe tab open so I can glance at it later. Then go to Ambitious Kitchen and find a healthy turkey chili recipe that includes extra vegetables, because I want something hearty to pair with the lentils for lunches; open the recipe itself and note the exact recipe title plus at least two added vegetables from the ingredients list, and keep that page open in its own tab too so I can compare the two recipes side by side. After that, on Feel Good Foodie, look up recipes for halva, chia pudding, and pecan bars, open the actual recipe page for each one in separate tabs, and grab the page URLs so I have the real recipe links. Once you’ve seen all three, pick the two dessert options that seem most practical for make-ahead prep and tell me which two you’d choose. At the end, give me one concise meal prep summary that explains the lentil base, the turkey chili pairing, and the two dessert picks with their Feel Good Foodie recipe URLs.",
+   "rubrics": {
+    "R1": {
+     "requirement": "Identify an easy Instant Pot lentils recipe found via Google and capture the lentil type, water ratio, and cook time from the opened recipe page.",
+     "verification": "Grader can confirm a Google search was used, an actual recipe page was opened and left available, and the reported lentil type, ratio, and cook time match visible recipe instructions."
+    },
+    "R2": {
+     "requirement": "Find a healthy turkey chili recipe on Ambitious Kitchen, open the recipe page, and record the exact recipe title plus at least two vegetables from the ingredients list.",
+     "verification": "Grader can verify the browser is on an Ambitious Kitchen recipe page, the title matches the visible page title, and at least two reported vegetables appear in the ingredients list."
+    },
+    "R3": {
+     "requirement": "Locate Feel Good Foodie recipe pages for halva, chia pudding, and pecan bars, open each in its own tab, and capture the correct recipe page URL for each.",
+     "verification": "Grader can confirm three Feel Good Foodie recipe tabs are open for halva, chia pudding, and pecan bars, and the provided URLs correspond to those visible pages."
+    },
+    "R4": {
+     "requirement": "Produce a concise meal prep summary that explains the lentil base, the turkey chili pairing, and selects the two most practical make-ahead dessert options from the Feel Good Foodie results with their URLs.",
+     "verification": "Grader can compare the final summary against the gathered recipe details and confirm that exactly two dessert choices were selected from the three Feel Good Foodie pages and that their URLs are included."
+    }
+   }
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "5944875c7f32a98df978040e4447534f7ba0aadb",
+   "orig_index": 52,
+   "domain": "Food",
+   "level": "medium",
+   "title": "Zelda: BotW themed dessert setup",
+   "scenario": "life",
+   "platform": "web-live",
+   "action": "read",
+   "instruction": "I’m putting together a small Zelda: Breath of the Wild–themed dessert setup for a get-together and want it to feel like it came straight out of the game, but still be practical to make in a real kitchen. Please start on Google and find a genuinely comprehensive BOTW cooking guide or full recipe list that covers the game’s meals and elixirs, then open the actual guide page so I can visually confirm it looks complete and leave that tab open as the inspiration reference. From that, pick a tropical direction that feels like a natural fit for a real dessert—something in the fruit-and-island vibe of the game—and then use Google to find a copycat Disney Dole Whip recipe page with a clear ingredient list and simple prep, because I think that could become the main dessert. Since I may want a richer backup option for people who don’t want pineapple, go to Sally’s Baking Addiction and find the chocolate buttercream frosting recipe that takes 20 minutes or less and uses 6 ingredients, and keep that recipe page open in its own tab too so I can compare the two dessert directions side by side. After that, use Google to find one recommended method for making a custom photo frame with an X-Carve CNC that I could turn into a Zelda-themed sign or menu card, and summarize the materials, software or workflow, and key steps. Then use Google again to find one reliable method for mirroring an iPhone screen to another device so I can show the BOTW inspiration page while assembling everything, and finally find how to switch an iPad keyboard from the floating mini keyboard back to the full-size keyboard in case I end up typing labels on an iPad instead. In the end, give me a concise plan that ties the BOTW cooking inspiration to the tropical dessert choice, the chocolate comparison option, and the presentation setup, and mention which tabs you left open for me to review.",
+   "rubrics": {
+    "R1": {
+     "requirement": "A comprehensive, trustworthy BOTW cooking guide or full recipe list is found via Google, and the actual guide page is opened and left open so it can be visually confirmed as a complete reference covering the game's meals and elixirs.",
+     "verification": "Grader can confirm the open tab displays a BOTW cooking guide or recipe list page that appears comprehensive, covering meals and elixirs from the game."
+    },
+    "R2": {
+     "requirement": "A tropical BOTW-inspired dessert direction is selected based on the game inspiration, and a copycat Disney Dole Whip recipe page is found with ingredients and basic preparation captured.",
+     "verification": "Grader can confirm a Dole Whip recipe page is open and the response includes a clear tropical theme connection plus the recipe’s ingredient list and prep summary."
+    },
+    "R3": {
+     "requirement": "A Sally’s Baking Addiction chocolate buttercream frosting recipe is found that takes 20 minutes or less and uses 6 ingredients, with the ingredient list and total time recorded, and the page left open in its own tab.",
+     "verification": "Grader can confirm the Sally’s Baking Addiction recipe tab is open and the response states the total time and a 6-ingredient list matching the page."
+    },
+    "R4": {
+     "requirement": "One recommended X-Carve CNC custom photo frame method is found and summarized with key steps, materials, and any software or workflow details relevant to making a Zelda-themed sign or menu card.",
+     "verification": "Grader can confirm a source page about making a custom frame with an X-Carve CNC is open and the response includes materials, process steps, and software/workflow notes."
+    },
+    "R5": {
+     "requirement": "One reliable method for mirroring or sharing an iPhone screen to another device is found and summarized with the required steps and destination requirements.",
+     "verification": "Grader can confirm a relevant help or instructional page is open and the response explains a valid mirroring method with actionable steps."
+    },
+    "R6": {
+     "requirement": "At least one valid method is provided for returning the iPad floating mini keyboard to the full-size keyboard.",
+     "verification": "Grader can confirm a relevant help page is open and the response includes a valid method such as dragging from the keyboard control or pinching outward on the mini keyboard."
+    },
+    "R7": {
+     "requirement": "The final response is a concise integrated plan that clearly connects the BOTW recipe inspiration to the tropical dessert choice, the richer chocolate comparison option, and the presentation/display setup, while mentioning which tabs were left open for review.",
+     "verification": "Grader can confirm the final write-up synthesizes all findings into one coherent plan and explicitly references the open tabs for the BOTW guide and dessert comparison pages."
+    }
+   }
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "18ddad3e0781d4b8fb2e1998ff836a0b07d0cdce",
+   "orig_index": 53,
+   "domain": "Food",
+   "level": "medium",
+   "title": "Two Boston dinners on a work trip (Michelin)",
+   "scenario": "work",
+   "platform": "web-live",
+   "action": "read",
+   "instruction": "I’m in Boston for the next two days on a work trip with my wife, and I want to lock in two different dinners that feel right for each occasion. First, on the Michelin Guide site, please find me one Boston restaurant that’s Michelin-starred or clearly in that polished fine-dining tier for a business dinner, and keep it around a $500 per person ceiling so I know it’s appropriate without going overboard. Then switch to OpenTable and look for a separate restaurant in Boston that feels genuinely romantic for an anniversary dinner, ideally Italian seafood or something very Boston-specific, because I want the second night to feel more personal and celebratory. Once you have both, use Google to open the actual restaurant websites or current listing pages in separate tabs and verify that the business-dinner place really looks suitable for client-style dining and that the anniversary place clearly handles special occasions like anniversaries or romantic dinners; while you’re there, check whether each one appears to have availability sometime in the next two days. Please leave the final restaurant pages open so I can look at the photos, ambiance, and booking details myself, and give me a short summary of which place is for the business dinner and which is for the anniversary dinner, why each one fits, the expected price level, the special-occasion evidence you found, and the availability status for the next two days.",
+   "rubrics": {
+    "R1": {
+     "requirement": "Select one Boston restaurant from the Michelin Guide or a clearly equivalent fine-dining listing that is appropriate for a business dinner and plausibly within the stated $500 per person budget.",
+     "verification": "Grader can confirm a Michelin Guide restaurant page or equivalent fine-dining page is open showing the Boston restaurant name, cuisine/style, and price indicators consistent with the budget."
+    },
+    "R2": {
+     "requirement": "Select one separate Boston restaurant from OpenTable that is romantic and suitable for an anniversary dinner, matching the preference for Italian seafood or Boston-specific cuisine.",
+     "verification": "Grader can confirm an OpenTable listing page is open showing the restaurant name, cuisine category, and visual or descriptive cues indicating a romantic/special-occasion setting."
+    },
+    "R3": {
+     "requirement": "Verify that the business-dinner restaurant appears suitable for polished client or business dining, report the expected price level, and report whether it has availability within the next two days.",
+     "verification": "Grader can confirm an official site or current booking/listing page is open for the business restaurant with visible evidence such as fine-dining descriptions, ambiance cues, price indicators, reservation interface, or available time slots/dates within the next two days, and the response states the expected price level."
+    },
+    "R4": {
+     "requirement": "Verify that the anniversary restaurant handles romantic or special-occasion dining, report the expected price level, and report whether it has availability within the next two days.",
+     "verification": "Grader can confirm an official site or current booking/listing page is open for the anniversary restaurant with visible evidence such as anniversary/private dining language, romantic ambiance cues, price indicators, guest photos, or available reservation times/dates within the next two days, and the response states the expected price level."
+    }
+   }
+  },
+  {
+   "source": "REAL",
+   "source_id": "dashdish-3",
+   "domain": "DashDish (DoorDash)",
+   "level": "medium",
+   "title": "DashDish: Its my son’s birthday, please order me a Pizza from anywhere and keep it under $30",
+   "scenario": "life",
+   "platform": "web-sandbox",
+   "action": "write",
+   "instruction": "DashDish: Its my son’s birthday, please order me a Pizza from anywhere and keep it under $30",
+   "url": "https://real-dashdish-1rmq4pjxg-real-sites.vercel.app/",
+   "evals": [
+    {
+     "script": "eval_dashdish_3.py"
+    }
+   ],
+   "version": "v2"
+  },
+  {
+   "source": "REAL",
+   "source_id": "dashdish-12",
+   "domain": "DashDish (DoorDash)",
+   "level": "medium",
+   "title": "DashDish: I really want to eat rice, order me meals which contain rice for less than $30",
+   "scenario": "life",
+   "platform": "web-sandbox",
+   "action": "write",
+   "instruction": "DashDish: I really want to eat rice, order me meals which contain rice for less than $30",
+   "url": "https://real-dashdish-1rmq4pjxg-real-sites.vercel.app/",
+   "evals": [
+    {
+     "script": "eval_dashdish_12.py"
+    }
+   ],
+   "version": "v2"
+  },
+  {
+   "source": "REAL",
+   "source_id": "opendining-5",
+   "domain": "OpenDining (OpenTable)",
+   "level": "medium",
+   "title": "Book me a 4+ star restaurant for my birthday tonight. It is going to be for my girlfriend and I.",
+   "scenario": "life",
+   "platform": "web-sandbox",
+   "action": "write",
+   "instruction": "Book me a 4+ star restaurant for my birthday tonight. It is going to be for my girlfriend and I.",
+   "url": "https://real-opendining-fdcw98zrb-real-sites.vercel.app/",
+   "evals": [
+    {
+     "script": "eval_opendining_5.py"
+    }
+   ],
+   "version": "v2"
+  },
+  {
+   "source": "REAL",
+   "source_id": "staynb-1",
+   "domain": "Staynb (Airbnb)",
+   "level": "medium",
+   "title": "Show me places with 2 bedrooms in Austria. This trip is for my wife and I along with my 3 year old child for the dates of August 1st to 5th.",
+   "scenario": "life",
+   "platform": "web-sandbox",
+   "action": "write",
+   "instruction": "Show me places with 2 bedrooms in Austria. This trip is for my wife and I along with my 3 year old child for the dates of August 1st to 5th.",
+   "url": "https://real-staynb-jbf17z6s2-real-sites.vercel.app/",
+   "evals": [
+    {
+     "script": "eval_staynb_1.py"
+    }
+   ],
+   "version": "v2"
+  },
+  {
+   "source": "REAL",
+   "source_id": "staynb-6",
+   "domain": "Staynb (Airbnb)",
+   "level": "medium",
+   "title": "Find me places in Cape Town for 4 guests for the dates October 1st to 6th. I need 2+ bedrooms and beds along with wifi. Add a place that fits these requirements to my wishlist.",
+   "scenario": "life",
+   "platform": "web-sandbox",
+   "action": "write",
+   "instruction": "Find me places in Cape Town for 4 guests for the dates October 1st to 6th. I need 2+ bedrooms and beds along with wifi. Add a place that fits these requirements to my wishlist.",
+   "url": "https://real-staynb-jbf17z6s2-real-sites.vercel.app/",
+   "evals": [
+    {
+     "script": "eval_staynb_6.py"
+    }
+   ],
+   "version": "v2"
+  },
+  {
+   "source": "REAL",
+   "source_id": "staynb-19",
+   "domain": "Staynb (Airbnb)",
+   "level": "medium",
+   "title": "Find me a place in Vancouver, Canada for the dates November 15th to 18th. I need this place for 5 people. When you find a good place, share it to my text groupchat.",
+   "scenario": "life",
+   "platform": "web-sandbox",
+   "action": "write",
+   "instruction": "Find me a place in Vancouver, Canada for the dates November 15th to 18th. I need this place for 5 people. When you find a good place, share it to my text groupchat.",
+   "url": "https://real-staynb-jbf17z6s2-real-sites.vercel.app/",
+   "evals": [
+    {
+     "script": "eval_staynb_19.py"
+    }
+   ],
+   "version": "v2"
+  },
+  {
+   "source": "REAL",
+   "source_id": "udriver-11",
+   "domain": "Udriver (Uber)",
+   "level": "medium",
+   "title": "Book a ride from Club X to Fox Plaza Apartments. Choose whatever ride I have enough credits for.",
+   "scenario": "life",
+   "platform": "web-sandbox",
+   "action": "write",
+   "instruction": "Book a ride from Club X to Fox Plaza Apartments. Choose whatever ride I have enough credits for.",
+   "url": "https://real-udriver-3ufk0q1v4-real-sites.vercel.app/",
+   "evals": [
+    {
+     "script": "eval_udriver_11.py"
+    }
+   ],
+   "version": "v2"
+  },
+  {
+   "source": "REAL",
+   "source_id": "udriver-15",
+   "domain": "Udriver (Uber)",
+   "level": "medium",
+   "title": "My friends and I need a ride from 388 Beale to Amber Indian Restaurants. We would like the XL option. Please book this ride.",
+   "scenario": "life",
+   "platform": "web-sandbox",
+   "action": "write",
+   "instruction": "My friends and I need a ride from 388 Beale to Amber Indian Restaurants. We would like the XL option. Please book this ride.",
+   "url": "https://real-udriver-3ufk0q1v4-real-sites.vercel.app/",
+   "evals": [
+    {
+     "script": "eval_udriver_15.py"
+    }
+   ],
+   "version": "v2"
+  },
+  {
+   "source": "REAL",
+   "source_id": "zilloft-15",
+   "domain": "Zilloft (Zillow)",
+   "level": "medium",
+   "title": "Request a tour of a home in San Francisco Bay Area that is under $1,000,000 with at least 3 bedrooms. Make the tour any day on the weekend and after 12pm.",
+   "scenario": "life",
+   "platform": "web-sandbox",
+   "action": "write",
+   "instruction": "Request a tour of a home in San Francisco Bay Area that is under $1,000,000 with at least 3 bedrooms. Make the tour any day on the weekend and after 12pm.",
+   "url": "https://real-zilloft-46k595h3n-real-sites.vercel.app/",
+   "evals": [
+    {
+     "script": "eval_zilloft_15.py"
+    }
+   ],
+   "version": "v2"
+  },
+  {
+   "source": "REAL",
+   "source_id": "zilloft-22",
+   "domain": "Zilloft (Zillow)",
+   "level": "medium",
+   "title": "Zilloft: I want to move to SoCal, find me houses in Southern California which are less than 1 million dollars. Book atleast 1 tour.",
+   "scenario": "life",
+   "platform": "web-sandbox",
+   "action": "write",
+   "instruction": "Zilloft: I want to move to SoCal, find me houses in Southern California which are less than 1 million dollars. Book atleast 1 tour.",
+   "url": "https://real-zilloft-46k595h3n-real-sites.vercel.app/",
+   "evals": [
+    {
+     "script": "eval_zilloft_22.py"
+    }
+   ],
+   "version": "v2"
+  },
+  {
+   "source": "REAL",
+   "source_id": "opendining-17",
+   "domain": "OpenDining (OpenTable)",
+   "level": "medium",
+   "title": "Book me a dinner at Haight-Ashbury for anytime between 8pm to 10pm on september 22nd. It is for 6 people and is a business meal.",
+   "scenario": "work",
+   "platform": "web-sandbox",
+   "action": "write",
+   "instruction": "Book me a dinner at Haight-Ashbury for anytime between 8pm to 10pm on september 22nd. It is for 6 people and is a business meal.",
+   "url": "https://real-opendining.vercel.app",
+   "evals": [
+    {
+     "script": "eval_opendining_17.py"
+    }
+   ],
+   "version": "v2"
+  },
+  {
+   "source": "REAL",
+   "source_id": "gomail-5",
+   "domain": "GoMail (Gmail)",
+   "level": "medium",
+   "title": "Clear out all my starred emails and send an email to Alexa Richardson about signing my work permit.",
+   "scenario": "work",
+   "platform": "web-sandbox",
+   "action": "write",
+   "instruction": "Clear out all my starred emails and send an email to Alexa Richardson about signing my work permit.",
+   "url": "https://real-gomail-1glk4rtaf-real-sites.vercel.app/",
+   "evals": [
+    {
+     "script": "eval_gomail_5.py"
+    }
+   ],
+   "version": "v2"
+  },
+  {
+   "source": "REAL",
+   "source_id": "gomail-9",
+   "domain": "GoMail (Gmail)",
+   "level": "medium",
+   "title": "Go Mail: Write an email to Barbara Thomas regarding the project plan",
+   "scenario": "work",
+   "platform": "web-sandbox",
+   "action": "write",
+   "instruction": "Go Mail: Write an email to Barbara Thomas regarding the project plan",
+   "url": "https://real-gomail-1glk4rtaf-real-sites.vercel.app/",
+   "evals": [
+    {
+     "script": "eval_gomail_9.py"
+    }
+   ],
+   "version": "v2"
+  },
+  {
+   "source": "REAL",
+   "source_id": "gomail-13",
+   "domain": "GoMail (Gmail)",
+   "level": "medium",
+   "title": "GoMail: Send an email to Carol notifying her there has been a time change for the meeting and it is now moved to 8:30 AM",
+   "scenario": "work",
+   "platform": "web-sandbox",
+   "action": "write",
+   "instruction": "GoMail: Send an email to Carol notifying her there has been a time change for the meeting and it is now moved to 8:30 AM",
+   "url": "https://real-gomail-1glk4rtaf-real-sites.vercel.app/",
+   "evals": [
+    {
+     "script": "eval_gomail_13.py"
+    }
+   ],
+   "version": "v2"
+  },
+  {
+   "source": "REAL",
+   "source_id": "gomail-15",
+   "domain": "GoMail (Gmail)",
+   "level": "medium",
+   "title": "GoMail: Inform Danielle that the new system update has been launched",
+   "scenario": "work",
+   "platform": "web-sandbox",
+   "action": "write",
+   "instruction": "GoMail: Inform Danielle that the new system update has been launched",
+   "url": "https://real-gomail-1glk4rtaf-real-sites.vercel.app/",
+   "evals": [
+    {
+     "script": "eval_gomail_15.py"
+    }
+   ],
+   "version": "v2"
+  },
+  {
+   "source": "REAL",
+   "source_id": "gomail-23",
+   "domain": "GoMail (Gmail)",
+   "level": "medium",
+   "title": "Can you reply to Jane Smith's email and then delete all emails with support in the title.",
+   "scenario": "work",
+   "platform": "web-sandbox",
+   "action": "write",
+   "instruction": "Can you reply to Jane Smith's email and then delete all emails with support in the title.",
+   "url": "https://real-gomail-1glk4rtaf-real-sites.vercel.app/",
+   "evals": [
+    {
+     "script": "eval_gomail_23.py"
+    }
+   ],
+   "version": "v2"
+  },
+  {
+   "source": "REAL",
+   "source_id": "gocalendar-4",
+   "domain": "GoCalendar (Google Calendar)",
+   "level": "medium",
+   "title": "Starting September 20th, make a reminder for Monday through Friday to remind me to work out at the gym from 7:45pm to 8:45pm.",
+   "scenario": "work",
+   "platform": "web-sandbox",
+   "action": "write",
+   "instruction": "Starting September 20th, make a reminder for Monday through Friday to remind me to work out at the gym from 7:45pm to 8:45pm.",
+   "url": "https://real-gocalendar-n1nw9ran1-real-sites.vercel.app/",
+   "evals": [
+    {
+     "script": "eval_gocalendar_4.py"
+    }
+   ],
+   "version": "v2"
+  },
+  {
+   "source": "REAL",
+   "source_id": "networkin-11",
+   "domain": "NetworkIn (LinkedIn)",
+   "level": "medium",
+   "title": "Create a post talking about my networking event and tell everyone to dm me if interested. Then send the post to a couple people I have connected.",
+   "scenario": "work",
+   "platform": "web-sandbox",
+   "action": "write",
+   "instruction": "Create a post talking about my networking event and tell everyone to dm me if interested. Then send the post to a couple people I have connected.",
+   "url": "https://real-networkin-mtmzp58l6-real-sites.vercel.app/",
+   "evals": [
+    {
+     "script": "eval_networkin_11.py"
+    }
+   ],
+   "version": "v2"
+  },
+  {
+   "source": "REAL",
+   "source_id": "networkin-19",
+   "domain": "NetworkIn (LinkedIn)",
+   "level": "medium",
+   "title": "Post that I finished my internship at AGI INC.",
+   "scenario": "work",
+   "platform": "web-sandbox",
+   "action": "write",
+   "instruction": "Post that I finished my internship at AGI INC.",
+   "url": "https://real-networkin-mtmzp58l6-real-sites.vercel.app/",
+   "evals": [
+    {
+     "script": "eval_networkin_19.py"
+    }
+   ],
+   "version": "v2"
+  },
+  {
+   "source": "REAL",
+   "source_id": "networkin-25",
+   "domain": "NetworkIn (LinkedIn)",
+   "level": "medium",
+   "title": "Network In: Find an event that would be worth attending and click that you will attend",
+   "scenario": "work",
+   "platform": "web-sandbox",
+   "action": "write",
+   "instruction": "Network In: Find an event that would be worth attending and click that you will attend",
+   "url": "https://real-networkin-mtmzp58l6-real-sites.vercel.app/",
+   "evals": [
+    {
+     "script": "eval_networkin_25.py"
+    }
+   ],
+   "version": "v2"
+  },
+  {
+   "source": "REAL",
+   "source_id": "networkin-26",
+   "domain": "NetworkIn (LinkedIn)",
+   "level": "medium",
+   "title": "NetworkIn: Search for a Software Engineer and reach out to them for advice",
+   "scenario": "work",
+   "platform": "web-sandbox",
+   "action": "write",
+   "instruction": "NetworkIn: Search for a Software Engineer and reach out to them for advice",
+   "url": "https://real-networkin-mtmzp58l6-real-sites.vercel.app/",
+   "evals": [
+    {
+     "script": "eval_networkin_26.py"
+    }
+   ],
+   "version": "v2"
+  },
+  {
+   "source": "REAL",
+   "source_id": "topwork-2",
+   "domain": "TopWork (Upwork)",
+   "level": "medium",
+   "title": "Invite a backend or full stack developer asking if they are interested in building a fitness app with me.",
+   "scenario": "work",
+   "platform": "web-sandbox",
+   "action": "write",
+   "instruction": "Invite a backend or full stack developer asking if they are interested in building a fitness app with me.",
+   "url": "https://real-topwork-git-v2-all-real-sites.vercel.app/",
+   "evals": [
+    {
+     "script": "eval_topwork_2.py"
+    }
+   ],
+   "version": "v2"
+  },
+  {
+   "source": "REAL",
+   "source_id": "topwork-7",
+   "domain": "TopWork (Upwork)",
+   "level": "medium",
+   "title": "Topwork: Hire a potential candidate and send them a valid message with the offer",
+   "scenario": "work",
+   "platform": "web-sandbox",
+   "action": "write",
+   "instruction": "Topwork: Hire a potential candidate and send them a valid message with the offer",
+   "url": "https://real-topwork-git-v2-all-real-sites.vercel.app/",
+   "evals": [
+    {
+     "script": "eval_topwork_7.py"
+    }
+   ],
+   "version": "v2"
+  },
+  {
+   "source": "REAL",
+   "source_id": "topwork-9",
+   "domain": "TopWork (Upwork)",
+   "level": "medium",
+   "title": "TopWork: Create a new job opening for a Financial Analyst role which pays between $45 and $65 an hour",
+   "scenario": "work",
+   "platform": "web-sandbox",
+   "action": "write",
+   "instruction": "TopWork: Create a new job opening for a Financial Analyst role which pays between $45 and $65 an hour",
+   "url": "https://real-topwork-git-v2-all-real-sites.vercel.app/",
+   "evals": [
+    {
+     "script": "eval_topwork_9.py"
+    }
+   ],
+   "version": "v2"
+  },
+  {
+   "source": "REAL",
+   "source_id": "topwork-12",
+   "domain": "TopWork (Upwork)",
+   "level": "medium",
+   "title": "I have some unread messages to reply too. If they ask anything about any time frames, tell them tomorrow.",
+   "scenario": "work",
+   "platform": "web-sandbox",
+   "action": "write",
+   "instruction": "I have some unread messages to reply too. If they ask anything about any time frames, tell them tomorrow.",
+   "url": "https://real-topwork-git-v2-all-real-sites.vercel.app/",
+   "evals": [
+    {
+     "script": "eval_topwork_12.py"
+    }
+   ],
+   "version": "v2"
+  },
+  {
+   "source": "REAL",
+   "source_id": "topwork-13",
+   "domain": "TopWork (Upwork)",
+   "level": "medium",
+   "title": "I need a data annotator for my company, Verita AI. It is a small job and is not permanent. Pay is 20-25 an hour. Create a job posting.",
+   "scenario": "work",
+   "platform": "web-sandbox",
+   "action": "write",
+   "instruction": "I need a data annotator for my company, Verita AI. It is a small job and is not permanent. Pay is 20-25 an hour. Create a job posting.",
+   "url": "https://real-topwork-git-v2-all-real-sites.vercel.app/",
+   "evals": [
+    {
+     "script": "eval_topwork_13.py"
+    }
+   ],
+   "version": "v2"
+  },
+  {
+   "source": "ClawBench",
+   "source_id": "794",
+   "domain": "Beauty",
+   "level": null,
+   "title": "Book the earliest haircut with a ≥4.8★ StyleSeat stylist",
+   "scenario": "life",
+   "platform": "web-real-harness",
+   "action": "write",
+   "instruction": "Book the earliest haircut with a ≥4.8★ StyleSeat stylist",
+   "requires": "ClawBench harness (not installed locally)"
+  },
+  {
+   "source": "ClawBench",
+   "source_id": "1102",
+   "domain": "Fitness",
+   "level": null,
+   "title": "Publish 'Great morning ride!' on Strava",
+   "scenario": "life",
+   "platform": "web-real-harness",
+   "action": "write",
+   "instruction": "Publish 'Great morning ride!' on Strava",
+   "requires": "ClawBench harness (not installed locally)"
+  },
+  {
+   "source": "ClawBench",
+   "source_id": "47",
+   "domain": "Daily Life",
+   "level": null,
+   "title": "Book a TaskRabbit moving helper, next Saturday 9am–1pm, 1-bedroom",
+   "scenario": "life",
+   "platform": "web-real-harness",
+   "action": "write",
+   "instruction": "Book a TaskRabbit moving helper, next Saturday 9am–1pm, 1-bedroom",
+   "requires": "ClawBench harness (not installed locally)"
+  },
+  {
+   "source": "ClawBench",
+   "source_id": "86",
+   "domain": "Job Search",
+   "level": null,
+   "title": "Fill the CodePath Senior SWE application on Greenhouse from resume.pdf",
+   "scenario": "work",
+   "platform": "web-real-harness",
+   "action": "write",
+   "instruction": "Fill the CodePath Senior SWE application on Greenhouse from resume.pdf",
+   "requires": "ClawBench harness (not installed locally)"
+  },
+  {
+   "source": "REAL",
+   "source_id": "gomail-4",
+   "domain": "GoMail (Gmail)",
+   "level": "medium",
+   "title": "Write an email to alexa richardson and ask to let me know when the files come in.",
+   "scenario": "work",
+   "platform": "web-sandbox",
+   "action": "write",
+   "instruction": "Write an email to alexa richardson and ask to let me know when the files come in.",
+   "url": "https://real-gomail-1glk4rtaf-real-sites.vercel.app/",
+   "evals": [
+    {
+     "script": "eval_gomail_4.py"
+    }
+   ],
+   "version": "v2"
+  },
+  {
+   "source": "REAL",
+   "source_id": "gocalendar-8",
+   "domain": "GoCalendar (Google Calendar)",
+   "level": "medium",
+   "title": "GoCalendar: Add a task to send an email to Ashley for Monday Morning",
+   "scenario": "work",
+   "platform": "web-sandbox",
+   "action": "write",
+   "instruction": "GoCalendar: Add a task to send an email to Ashley for Monday Morning",
+   "url": "https://real-gocalendar-n1nw9ran1-real-sites.vercel.app/",
+   "evals": [
+    {
+     "script": "eval_gocalendar_8.py"
+    }
+   ],
+   "version": "v2"
+  },
+  {
+   "source": "REAL",
+   "source_id": "gocalendar-23",
+   "domain": "GoCalendar (Google Calendar)",
+   "level": "medium",
+   "title": "GoCalendar: Delete the project sync from the calendar on Wednesday",
+   "scenario": "work",
+   "platform": "web-sandbox",
+   "action": "write",
+   "instruction": "GoCalendar: Delete the project sync from the calendar on Wednesday",
+   "url": "https://real-gocalendar-n1nw9ran1-real-sites.vercel.app/",
+   "evals": [
+    {
+     "script": "eval_gocalendar_23.py"
+    }
+   ],
+   "version": "v2"
+  },
+  {
+   "source": "REAL",
+   "source_id": "networkin-1",
+   "domain": "NetworkIn (LinkedIn)",
+   "level": "medium",
+   "title": "Follow some popular companies and also make sure to follow microsoft.",
+   "scenario": "work",
+   "platform": "web-sandbox",
+   "action": "write",
+   "instruction": "Follow some popular companies and also make sure to follow microsoft.",
+   "url": "https://real-networkin-mtmzp58l6-real-sites.vercel.app/",
+   "evals": [
+    {
+     "script": "eval_networkin_1.py"
+    }
+   ],
+   "version": "v2"
+  },
+  {
+   "source": "REAL",
+   "source_id": "networkin-6",
+   "domain": "NetworkIn (LinkedIn)",
+   "level": "medium",
+   "title": "Invite someone working in the tech industry living in new york to join my new project.",
+   "scenario": "work",
+   "platform": "web-sandbox",
+   "action": "write",
+   "instruction": "Invite someone working in the tech industry living in new york to join my new project.",
+   "url": "https://real-networkin-mtmzp58l6-real-sites.vercel.app/",
+   "evals": [
+    {
+     "script": "eval_networkin_6.py"
+    }
+   ],
+   "version": "v2"
+  },
+  {
+   "source": "REAL",
+   "source_id": "networkin-10",
+   "domain": "NetworkIn (LinkedIn)",
+   "level": "medium",
+   "title": "Connect with 3 new people",
+   "scenario": "work",
+   "platform": "web-sandbox",
+   "action": "write",
+   "instruction": "Connect with 3 new people",
+   "url": "https://real-networkin-mtmzp58l6-real-sites.vercel.app/",
+   "evals": [
+    {
+     "script": "eval_networkin_10.py"
+    }
+   ],
+   "version": "v2"
+  },
+  {
+   "source": "REAL",
+   "source_id": "topwork-11",
+   "domain": "TopWork (Upwork)",
+   "level": "medium",
+   "title": "Rehire someone I've already hired as a project lead.",
+   "scenario": "work",
+   "platform": "web-sandbox",
+   "action": "write",
+   "instruction": "Rehire someone I've already hired as a project lead.",
+   "url": "https://real-topwork-git-v2-all-real-sites.vercel.app/",
+   "evals": [
+    {
+     "script": "eval_topwork_11.py"
+    }
+   ],
+   "version": "v2"
+  },
+  {
+   "source": "REAL",
+   "source_id": "topwork-21",
+   "domain": "TopWork (Upwork)",
+   "level": "medium",
+   "title": "Message a potential new hire if they are free",
+   "scenario": "work",
+   "platform": "web-sandbox",
+   "action": "write",
+   "instruction": "Message a potential new hire if they are free",
+   "url": "https://real-topwork-git-v2-all-real-sites.vercel.app/",
+   "evals": [
+    {
+     "script": "eval_topwork_21.py"
+    }
+   ],
+   "version": "v2"
+  }
+ ],
+ "dropped": [
+  {
+   "source": "Odysseys",
+   "source_id": "73c63095aeed43efb10a74eee7db7459c5ea9f84",
+   "orig_index": 6,
+   "domain": "Travel",
+   "level": "medium",
+   "reason": "blocked: Zillow bot wall (Press & Hold); duplicate of REAL Zilloft",
+   "prompt_head": "I’m trying to sort out a realistic housing plan in Grand Rapids, Michigan and want to compare a normal rental against ch"
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "55bd922b66b05bcf4cbf5383333df59acce2ab32",
+   "orig_index": 14,
+   "domain": "Tech",
+   "level": "easy",
+   "reason": "pure navigation (open one product page); no preference slack",
+   "prompt_head": "I’m putting together a small-form-factor AM5 build and I want to base it on the ASUS ROG Strix B650E-I Gaming WiFi, so p"
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "92cf5ed054aa12e3e99a63bf7ce0e203ea85cee7",
+   "orig_index": 18,
+   "domain": "Tech",
+   "level": "medium",
+   "reason": "not runnable: needs watching/playing a video lecture for timestamps",
+   "prompt_head": "Help me open the Stanford CS231N introduction lecture on YouTube and start playing it. Create a list of 3 of the dataset"
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "d3250da48cc778a40d11683a56fdfca962d6fe19",
+   "orig_index": 22,
+   "domain": "Community",
+   "level": "medium",
+   "reason": "blocked: Kohl's Access Denied; Etsy returns no text",
+   "prompt_head": "I’m putting together a coordinated holiday gift bundle for one family and want it to feel like everything belongs togeth"
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "946321e8a9788f485d360f619127a2e7b7e1693a",
+   "orig_index": 24,
+   "domain": "Community",
+   "level": "medium",
+   "reason": "blocked: Hobbycraft security verification",
+   "prompt_head": "I’m planning a cozy Christmas day at home with my toddler and want ideas for both of us that I can actually look at on s"
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "440ed7f388a2a4528a8d9fb75f83e11f934b5b5d",
+   "orig_index": 25,
+   "domain": "Art",
+   "level": "easy",
+   "reason": "pure navigation (open Hulu show page); no preference slack",
+   "prompt_head": "I’m putting together a small TV watchlist and want to anchor it around The Pitt first, so please go to Hulu and open the"
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "62689a0f29cfc6bd0b4510c240dec4de17a361e5",
+   "orig_index": 26,
+   "domain": "Art",
+   "level": "easy",
+   "reason": "blocked: Reddit JS challenge; exact-title lookup has no preference slack",
+   "prompt_head": "I want to send a friend a quick little roundup that mixes pop-culture, memes, and actual news, so could you start on Red"
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "cbe12703e129832feb5e7b56c4141476fb423338",
+   "orig_index": 29,
+   "domain": "Art",
+   "level": "medium",
+   "reason": "blocked/flaky: Reddit JS challenge on the starting step",
+   "prompt_head": "I’m trying to put together a compact entertainment lineup for this week that gives me a nice mix of short narrative game"
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "0ce94d4e773eff1042a6920232f929a1da98c44d",
+   "orig_index": 32,
+   "domain": "Lifestyle",
+   "level": "easy",
+   "reason": "duplicate of #36 (outfit shortlist); #36 kept as the richer comparison",
+   "prompt_head": "I’m trying to put together an all-black going-out outfit and want you to build it around a dress first so I can see whet"
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "9220309abe6e209dfedc978078c93f79fbd45ef1",
+   "orig_index": 33,
+   "domain": "Lifestyle",
+   "level": "easy",
+   "reason": "blocked: ASOS Access Denied",
+   "prompt_head": "I’m trying to put together a simple men’s outfit shortlist and want a quick mix of accessories, basics, and one resale p"
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "54c07bd8afe7d70cd55b716977d2c29f1b2a91e9",
+   "orig_index": 35,
+   "domain": "Lifestyle",
+   "level": "medium",
+   "reason": "blocked: NYT/Wirecutter returns no text",
+   "prompt_head": "I’m trying to put together a quick but thoughtful Christmas gift shortlist for a few different people, and I want it to "
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "39255449e341c41a589b8a4e17f073be3a4809c9",
+   "orig_index": 37,
+   "domain": "Ecommerce",
+   "level": "easy",
+   "reason": "blocked: Sole Collector does not load",
+   "prompt_head": "I’m trying to buy a pair of Kobe Bryant sneakers for my son’s birthday, so I want a quick but trustworthy read on what’s"
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "7cc602f239775882273921d82e181020f1769b53",
+   "orig_index": 38,
+   "domain": "Ecommerce",
+   "level": "easy",
+   "reason": "blocked: Theory Access Denied",
+   "prompt_head": "I’m trying to put together a simple evening-event outfit that I can actually order in the U.S., so could you start on Th"
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "67ad95421a303ad78cfcd8c3f5a7f6668d2c6a75",
+   "orig_index": 39,
+   "domain": "Ecommerce",
+   "level": "easy",
+   "reason": "blocked: Edmunds 403",
+   "prompt_head": "I’m helping a family member shop for an affordable used Toyota and want a realistic comparison across a couple of car si"
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "5e09c06aa92c1e252db5106a72e8d61e59356c7e",
+   "orig_index": 44,
+   "domain": "Health",
+   "level": "easy",
+   "reason": "duplicate of #45 + #48 (Fresno studio + at-home yoga)",
+   "prompt_head": "I’m trying to ease into a simple yoga routine here in Fresno and want something that combines one local studio option wi"
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "eb8a01554a84cf5d16a84a766d0f6cfb55d33c81",
+   "orig_index": 51,
+   "domain": "Food",
+   "level": "easy",
+   "reason": "blocked: The Knot fails to load",
+   "prompt_head": "I’m planning a holiday party in Minneapolis and want a quick shortlist of bar caterers that actually look local and usab"
+  },
+  {
+   "source": "Odysseys",
+   "source_id": "e20742e26a4d6f9c3d62a9d1cef634297bd4204f",
+   "orig_index": 54,
+   "domain": "Food",
+   "level": "medium",
+   "reason": "blocked: Sainsbury's Access Denied",
+   "prompt_head": "I’m putting together a small Christmas get-together here in the UK and want one tidy plan I can glance at later. Could y"
+  },
+  {
+   "source": "ClawBench",
+   "source_id": "89",
+   "reason": "needs the Simplify Jobs browser extension and account"
+  },
+  {
+   "source": "ClawBench",
+   "source_id": "91",
+   "reason": "Indeed bot wall and login; would submit a real application"
+  },
+  {
+   "source": "REAL",
+   "source_id": "omnizon-13",
+   "domain": "Omnizon (Amazon)",
+   "reason": "unreachable: Omnizon v2 host resets the TLS handshake from our network (v1 host returns 451); restore if reachable elsewhere"
+  },
+  {
+   "source": "REAL",
+   "source_id": "omnizon-17",
+   "domain": "Omnizon (Amazon)",
+   "reason": "unreachable: Omnizon v2 host resets the TLS handshake from our network (v1 host returns 451); restore if reachable elsewhere"
+  },
+  {
+   "source": "REAL",
+   "source_id": "omnizon-29",
+   "domain": "Omnizon (Amazon)",
+   "reason": "unreachable: Omnizon v2 host resets the TLS handshake from our network (v1 host returns 451); restore if reachable elsewhere"
+  }
+ ]
+}
