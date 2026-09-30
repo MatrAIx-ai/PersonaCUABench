@@ -1,45 +1,84 @@
-# Odysseys × MatrAIx Personas
+# odyssey/ — the runner
 
-A MatrAIx persona holds an [Odysseys](https://odysseysbench.com/) task as its own need
-and asks a computer-use agent (CUA) for help in its own words. The CUA does the task
-in a real Chrome on the live web, and a judge grades the result against the task's rubric.
-
-For the formal Ecommerce & Shopping matched-pair protocol and exact execution
-commands, start with [`task_suites/shopping/README.md`](task_suites/shopping/README.md).
-Contributors adding another task or scenario should follow the repository-wide
-[`task/persona/OSWorld guide`](../docs/adding-tasks/README.md).
+How a cell runs, what it records, and how to extend it. The overview, the task
+and persona counts and the model table are in the [root README](../README.md).
 
 ## Pipeline
 
-| Role | Model | Input | Output |
+| role | model | sees | does |
 |---|---|---|---|
-| Persona LLM | `qwen/qwen3.8-27b` (OpenRouter) | persona profile + Odysseys task | the request in character; answers the CUA's questions |
-| CUA | `qwen/qwen3.8-27b` (OpenRouter) | only what the persona says | browses, may `ask_user` ≤ 5 times, final answer |
-| Judge | `gpt-5.6-terra` (Azure) | task, conversation, actions, answer, open tabs | per rubric item: `met`, `communicated` |
+| Persona | `gpt-5.6-terra` (Azure) | its profile + the task as its own need | writes the request in character, answers the agent's questions |
+| CUA | one of the nine | only what the persona said | browses a real Chrome, may ask back (≤ 5), gives a final answer |
+| Rubric judge | `gpt-5.6-terra` (Azure) | task, conversation, actions, answer, open tabs | per rubric item: `met`, `communicated` |
+| Experience judge A | `gpt-5.6-terra` (Azure) | the same, plus who the person is | P1–P5, 1–5 each |
+| Experience judge B | `claude-opus-4.8` (OpenRouter) | the same prompt, independently | P1–P5, never averaged with A |
+| REAL checker | none — a Python script | the sandbox's final state | SUCCESS or FAILURE |
 
-These are the legacy exploratory defaults in `run.py`. Within any comparison,
-pin the models and `--max-steps` (default 50) and do not change them between
-arms. The formal Shopping/Azure commands below intentionally override the
-legacy model defaults with GPT-5.6 Terra.
+Two judges from two vendors is the point of judge B: their agreement is what
+licenses the experience numbers (290 of 300 dimension pairs within one point in
+the first full run).
 
-- **Personas**: legacy examples live in `personas/*.yaml`; formal suite-scoped
-  matched pairs live in `personas/<suite>/matched_pairs/*.yaml` and are generated
-  from the suite protocol by `make_matched_personas.py`. `none` is the control:
-  the Odysseys text is sent verbatim.
-- **Tasks**: routed by `task_suites.json`. This branch defaults to `shopping`;
-  `main-original` preserves the shared `tasks.json`. Tasks are numbered 1..N
-  within their selected suite.
-- **Scores**: `score` = met / all rubric items. `score_communicated` = met / only
-  the items that came up in the conversation.
+## Task suites
+
+`benchmark/v1_tasks.json` is the source of truth. `prepare_v1.py` turns it into
+suites and refuses to invent anything for a source it cannot run:
+
+```bash
+python odyssey/prepare_v1.py            # rewrite the suites from the manifest
+python odyssey/prepare_v1.py --check    # fail if they have drifted
+python odyssey/task_router.py suites    # what is registered
+```
+
+- `odysseys` — 37 live-web tasks, 202 rubric items, judged by the rubric judge.
+- `real` — 34 sandbox tasks. `prepare_real.py` fetches their checkers from
+  agisdk at a pinned commit; the runner loads the task's starting state through
+  the site's `/config`, reads the final state from `/finish`, and scores it with
+  those checkers.
+- ClawBench's 4 tasks need a harness this repo does not have. They stay in the
+  manifest and are reported as not prepared.
+
+The per-scenario suites of the earlier assignment (`main-original`, `shopping`,
+`science-education`) are **retired**: v1 owns their task ids and the router
+requires ids to be globally unique. Their data is still on disk and
+`task_router.TaskCatalog.load_retired("shopping")` still loads one on its own,
+which is how the matched-pair tests keep running against real data.
+
+## Adding tasks
+
+1. Add the entries to `benchmark/v1_tasks.json` — Odysseys entries carry their
+   own `rubrics`, REAL entries a `url` and `evals`.
+2. `python odyssey/prepare_v1.py` (and `prepare_real.py` first, for REAL).
+3. If the new tasks bring a domain no family claims, `persona_assignments.py`
+   will say so by name. Add the domain to `DOMAIN_FAMILY`, and if it needs a new
+   family, add its four personas to `make_personas.py` and its dimensions to
+   `FAMILY_DIMENSIONS`.
+4. `python odyssey/persona_assignments.py --check --write`.
+
+## Adding or changing personas
+
+Never edit a file under `odyssey/personas/`; they are generated.
+
+```bash
+python odyssey/make_personas.py                 # rewrite them from PROFILES
+python odyssey/persona_assignments.py --check   # every task still has four
+```
+
+A persona is the shared 29 dimensions plus its family's own. The family default
+for its role fills what the profile does not say, the profile always wins, and a
+profile that sets another family's dimension is an error rather than a value
+silently dropped.
 
 ## Setup
 
 ```bash
-git clone git@github.com:MatrAIx-ai/PersonaCUABench.git && cd PersonaCUABench
 pip install -r odyssey/requirements.txt   # also needs Google Chrome installed
-cp .env.example .env                     # repo root; both files are explained below
-python3 odyssey/test_pipeline.py          # offline self-check
+cp .env.example .env                      # repo root
+bash odyssey/check_all.sh                 # every offline check, real exit code
 ```
+
+`check_all.sh` runs the self-checks without a key, a browser or the network:
+the pipeline, the accounting and caching, pair separation, the Responses shim,
+the suites against the manifest, and the model routes. Run it before pushing.
 
 `odyssey/run.py` reads `.env` from the **repository root**. For the local Azure
 setup, `.env` contains only `AZURE_OPENAI_API_KEY_FILE=azure_api_key.txt` and
@@ -49,144 +88,17 @@ variables remain supported, but a key file avoids copying a secret into shell
 history. The OpenAI SDK route is used because the Azure project endpoint is
 OpenAI-compatible.
 
-## Task suites and future batches
+## Draft task sets
 
-All task consumers use `task_router.py`: the runner, grid, report, and legacy
-judge fallback therefore agree on which task is being used.
+`--tasks-file /path/to/draft.json` runs an unregistered list without touching
+the manifest: a plain task list, or an object with `suite_id`, `title`,
+`version`, `default_personas` and `tasks`. A plain list gets a content-derived
+ad-hoc id, so renaming the file does not orphan its results, and an explicit
+ad-hoc id may not shadow a registered suite.
 
-```bash
-python odyssey/run.py --list-suites
-python odyssey/run.py --suite shopping --list-tasks
-python odyssey/run.py --suite main-original --list-tasks
-```
-
-The `*` in `--list-suites` marks the default. The manifest currently selects `shopping`,
-so the old `--task 1` shorthand still selects Kobe. Use a full task ID in
-automation; numeric positions are convenient interactively but can move when a
-new shard sorts before an older one.
-
-There are three extension paths:
-
-1. **Add another Shopping batch.** Put an unchanged Odysseys task list in a
-   new file such as `task_suites/shopping/2026-q4.json`. The registered
-   `task_suites/shopping/*.json` glob picks it up automatically, in filename
-   order. No Python or manifest edit is needed.
-2. **Add another domain.** Put its JSON file(s) under `task_suites/<suite>/`
-   and add one suite entry to `task_suites.json`, including a stable ID, title,
-   version, file paths/glob, and default personas.
-3. **Try an unregistered draft.** Pass `--tasks-file /path/to/draft.json`.
-   A plain task list works; an object may also contain `suite_id`, `title`,
-   `version`, `default_personas`, and `tasks`. Plain lists get a content-derived
-   ad-hoc suite ID, so renaming the file does not orphan its results; an explicit
-   ad-hoc ID may not shadow a registered suite.
-
-The router rejects malformed tasks, duplicate IDs (including IDs duplicated
-across registered suites), paths that escape `odyssey/`, invalid ordinals, and
-ambiguous ID prefixes before any model call. Details and the shard schema are
-also in [`task_suites/README.md`](task_suites/README.md).
-
-## Your job
-
-**1. Branch.** Work only on your own branch. Don't push to `main`.
-
-```bash
-git checkout -b <your-name>
-```
-
-**2. Tasks.** Copy assigned entries unchanged, by `task_id`, from
-[`ljang0/Odysseys`](https://github.com/ljang0/Odysseys) `data/odysseys.json`
-into a suite shard. Do not replace the shared `odyssey/tasks.json`; it is kept
-as the `main-original` compatibility suite. For this assignment, add later
-Shopping batches under `odyssey/task_suites/shopping/`.
-
-**3. Personas.** Define 3–6 controlled matched pairs: exactly 6–12 named
-personas per scenario. `none` is extra and is not counted. Put the protocol at
-`task_suites/<suite>/personas/persona_experiment.json`, register it in
-`task_suites.json`, and let the shared generator create the YAML. Within each
-pair only one official MatrAIx dimension may change; the other baseline values,
-display name, task, models, prompts, limits, and replicate must remain fixed.
-
-```bash
-python3 odyssey/make_matched_personas.py --suite shopping --check
-python3 odyssey/run.py --suite shopping --task 1 \
-  --persona mp_evidence_verification_positive --replicate-id preview --preview
-```
-
-Check both arms before running. They must preserve the same task while clearly
-expressing opposite, task-relevant behavior. Full schema and review rules are
-in [`task_suites/README.md`](task_suites/README.md).
-
-**4. Run.** `run_grid.sh` is available for exploratory Cartesian grids using
-legacy/default personas:
-
-```bash
-TASK_SUITE=shopping PERSONAS="none <p1> <p2> <p3>" \
-  nohup bash odyssey/run_grid.sh > grid.log 2>&1 &
-python3 odyssey/report.py --suite shopping                    # tables
-```
-
-If it's interrupted, run the same command again. It picks up where it stopped.
-If `PERSONAS` is omitted, the suite's manifest defaults are used. `TASKS="1 4"`
-still limits a grid; automatic grids use full stable IDs. A different suite can
-be selected with `TASK_SUITE=main-original` or `--suite main-original`. For an
-ad-hoc file, use `TASKS_FILE=/path/to/draft.json`. For a single default-suite
-cell: `python3 odyssey/run.py --task 1 --persona <p1> --headless`.
-
-Do not use that Cartesian grid for a formal matched-pair experiment: it runs
-personas on tasks where their axes are not applicable. Use the protocol-aware
-planner instead. Its default is a dry run:
-
-```bash
-python3 odyssey/run_matched_pairs.py \
-  --suite shopping --replicate-id r1 --headless
-```
-
-Shopping must report 36 applicable cells, not 72. Add `--execute --` followed
-by the normal `run.py` model/provider options only after reviewing the plan.
-
-For the local Azure GPT-5.6 Terra setup, run a real persona arm and its two
-separate persona-side evaluations with:
-
-```bash
-.osworld/OSWorld/.venv/bin/python odyssey/run.py \
-  --suite shopping --task 1 --persona budget-student \
-  --model gpt-5.6-terra --provider openai \
-  --persona-model gpt-5.6-terra --persona-provider openai \
-  --judge-model gpt-5.6-terra --judge-provider openai \
-  --temperature 1 --max-steps 50 --headless \
-  --profile artifacts/chrome-profiles/budget-student \
-  --out artifacts/main-playwright-results
-
-# P1-P5: how well the CUA served this particular person. Pass the new run
-# directory, not the whole results root, if only that run should be scored.
-.osworld/OSWorld/.venv/bin/python odyssey/experience_judge.py \
-  --results <new-run-directory> \
-  --judge-a gpt-5.6-terra --judge-b gpt-5.6-terra
-
-# Fidelity: whether the simulated user clearly expressed each frozen,
-# behaviorally observable persona target (0/1/2 per target).
-.osworld/OSWorld/.venv/bin/python odyssey/persona_fidelity_judge.py \
-  --results <new-run-directory> \
-  --judge-model gpt-5.6-terra --judge-provider openai
-```
-
-Terra requires `--temperature 1` for the agent/persona calls. Using Terra in
-both P1-P5 judge slots makes two independent calls to the same model; a genuine
-cross-model agreement study still requires a second configured provider/model.
-The runner defaults to a separate persistent Chrome profile at
-`artifacts/chrome-profiles/<suite>/<persona>`. This prevents a stale or
-still-locked profile from blocking another arm and keeps consent/captcha
-cookies reproducible within that arm; `--profile` remains available for an
-explicit location.
-
-**5. Push.** Push your tasks and personas to your branch. `results/` stays
-gitignored and local -- send it separately, or push it only when asked:
-
-```bash
-git add odyssey/task_suites.json odyssey/task_suites odyssey/make_personas.py odyssey/personas
-git commit -m "<your-name>: tasks + personas"
-git push -u origin <your-name>
-```
+The router rejects malformed tasks, duplicate ids (including ids duplicated
+across suites), paths that escape `odyssey/`, invalid ordinals and ambiguous id
+prefixes — all before any model call.
 
 ## Two settings, nine models, and the bill
 
@@ -276,10 +188,17 @@ model was given (`result`), next to the short `result_preview` the judge reads.
 
 ## Output
 
-`odyssey/results/<suite>/<full-task-id>/<task-hash>/<persona>__<model>__<resume-hash>__<stamp>/result.json`
-(gitignored; `/` in model IDs is rendered as `-`):
-`run.conversation`, `run.trajectory`, `run.answer`, `run.open_tabs`, `run.stop_reason`,
-`judgement.verdicts`, `judgement.score`, `judgement.score_communicated`.
+`odyssey/results/<setting>/<suite>/<task-id>/<task-hash>/<persona>__<model>__<resume-hash>__<stamp>/`
+(gitignored; `/` in a model id becomes `-`). Each cell holds `result.json`, a
+`shots/` directory with one JPEG per step and per tab left open, and for a REAL
+task `real_state.json` — the site's final state, the evidence its checker read,
+kept beside the record with its hash because it is a quarter of a megabyte.
+
+`result.json` carries `run.conversation`, `run.turns` (every model response,
+reasoning included where the provider returns it), `run.trajectory` (every tool
+call with its arguments, full result and screenshot), `run.answer`,
+`run.open_tabs`, `run.stop_reason`, `run.timing`, `judgement`, `experience`,
+`provenance` and `accounting`.
 
 Version-2 results also store `suite_id`, a `suite_snapshot` (title, version,
 catalog hash, shard source, and task index), `task_sha256`, and the complete

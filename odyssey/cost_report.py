@@ -14,7 +14,6 @@ from __future__ import annotations
 import argparse
 import csv
 import json
-from collections import defaultdict
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -105,6 +104,19 @@ def cells(results: Path):
             "retries": acct.get("retries", 0),
             "questions": sum(1 for t in (run.get("trajectory") or [])
                              if t.get("tool") == "ask_user"),
+            # How the agent moves: clicking through a page, or addressing it
+            # directly by URL. Both are available to it at every step, so the
+            # mix is a choice, not a constraint.
+            "clicks": sum(1 for t in (run.get("trajectory") or [])
+                          if t.get("tool") in ("click", "type_text")),
+            "direct": sum(1 for t in (run.get("trajectory") or [])
+                          if t.get("tool") in ("open_tab", "goto")),
+            "reads": sum(1 for t in (run.get("trajectory") or [])
+                         if t.get("tool") == "read_page"),
+            "click_failures": sum(
+                1 for t in (run.get("trajectory") or [])
+                if t.get("tool") == "click"
+                and str(t.get("result_preview") or "").startswith("click failed")),
             "proactive_nudge": bool((run.get("arm") or {}).get("proactive_nudge")),
             "score": (record.get("judgement") or {}).get("score"),
             "wall_seconds": acct.get("cell_wall_seconds") or 0.0,
@@ -133,11 +145,13 @@ def group(rows: list[dict], key: str) -> dict[str, dict]:
             "cells": 0, "wall_seconds": 0.0, "steps": 0, "prompt_tokens": 0,
             "completion_tokens": 0, "agent_cost": 0.0, "judge_cost": 0.0,
             "total_cost": 0.0, "azure_cost": 0.0, "retries": 0, "questions": 0,
+            "clicks": 0, "direct": 0, "reads": 0, "click_failures": 0,
             "unpriced_calls": 0})
         bucket["cells"] += 1
         for field in ("wall_seconds", "steps", "prompt_tokens", "completion_tokens",
                       "agent_cost", "judge_cost", "total_cost", "azure_cost",
-                      "retries", "questions", "unpriced_calls"):
+                      "retries", "questions", "clicks", "direct", "reads",
+                      "click_failures", "unpriced_calls"):
             bucket[field] += row[field]
     return out
 
@@ -175,6 +189,37 @@ def table(title: str, grouped: dict[str, dict], label: str) -> None:
               f"and the model is not in odyssey/models.json) -- dollars are a floor")
 
 
+def navigation(rows: list[dict], key: str = "model") -> None:
+    """Clicking versus addressing a page directly, and what each is worth.
+
+    The agent can work a page through its controls or go straight to a URL. It
+    chooses freely, so the mix says something about the model -- and the score
+    beside it says whether the choice paid.
+    """
+    grouped = group(rows, key)
+    scored: dict[str, list[float]] = {}
+    for row in rows:
+        if isinstance(row.get("score"), (int, float)):
+            scored.setdefault(str(row[key]), []).append(float(row["score"]))
+    if not grouped:
+        return
+    print(f"\nnavigation style by {key}")
+    width = max(len(key), max(len(k) for k in grouped)) + 2
+    print(f"{key:<{width}}{'cells':>6}{'click':>8}{'direct':>8}{'read':>7}"
+          f"{'click%':>8}{'failed clicks':>15}{'mean score':>12}")
+    for name in sorted(grouped):
+        bucket = grouped[name]
+        cells_n = bucket["cells"] or 1
+        moves = bucket["clicks"] + bucket["direct"]
+        share = bucket["clicks"] / moves if moves else 0.0
+        values = scored.get(name) or []
+        mean = f"{sum(values) / len(values):.2f}" if values else "-"
+        print(f"{name:<{width}}{bucket['cells']:>6}"
+              f"{bucket['clicks'] / cells_n:>8.1f}{bucket['direct'] / cells_n:>8.1f}"
+              f"{bucket['reads'] / cells_n:>7.1f}{share:>8.0%}"
+              f"{bucket['click_failures']:>15}{mean:>12}")
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -197,6 +242,7 @@ def main() -> None:
     table("by task", group(rows, "task"), "task")
     if args.by:
         table(f"by {args.by}", group(rows, args.by), args.by)
+    navigation(rows, args.by or "model")
 
     if args.csv:
         fields = [k for k in rows[0] if k != "path"] + ["path"]
