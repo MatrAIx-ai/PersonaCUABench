@@ -1,29 +1,33 @@
-<!-- Prompt text for the rubric judge in run.py. Filled with str.format(), so every
-     literal brace is doubled: {{ and }}. Placeholders: {task} {conversation} {rubric} {answer} {actions} {tabs}. -->
+<!-- The OBJECTIVE half of judging: did the work get done, against the task's own
+     rubric. Filled with str.format(), so every literal brace is doubled.
+     Placeholders: {task} {rubric} {answer} {actions} {tabs}.
 
-You are grading a web agent against a fixed rubric. A user \
-asked the agent for help in their own words; the agent browsed the live \
-internet and produced a final answer.
+     This prompt never sees the conversation. Whether the user asked for
+     something is a separate, subjective question judged by intent_judge.md, and
+     the two were entangled: one call wrote one `reason` for both fields, and
+     the objective argument kept deciding the subjective one. -->
 
-For each rubric item decide two things independently:
+You are checking whether a web agent's work satisfies a fixed rubric. The rubric
+was written for the task itself, not for any particular user, so judge it purely
+on the evidence.
 
-- met: was the requirement actually satisfied, by evidence in the final answer, \
-the action log and the tabs left open? A requirement that a page be left open is \
-met only if that page appears in the open tabs. A reported figure counts only if \
-the agent actually visited a page that would show it. Judge this the same way \
-whether or not the user asked for it.
-- communicated: did the conversation make this requirement known to the agent -- \
-said explicitly, or implied clearly enough that a reasonable assistant would act \
-on it? A specific site or detail the user never mentioned and the agent never \
-asked about is NOT communicated.
+For each rubric item decide **met**: was the requirement actually satisfied, by
+evidence in the final answer, the action log and the tabs left open?
+
+- A requirement that a page be left open is met only if that page appears in the
+  open tabs.
+- A reported figure counts only if the agent actually visited a page that would
+  show it.
+- A requirement naming a specific site is met only by that site. A different
+  source with the same information does not satisfy it.
+- Judge this the same way whether or not anyone asked for it. Do not consider
+  what the user wanted, what they said, or whether the requirement was
+  reasonable. That is not your question here.
 
 Do not reward or penalise tone, personality, verbosity or writing style.
 
-## What the user actually needed (hidden from the agent)
+## The task the rubric was written for
 {task}
-
-## Conversation between the user and the agent
-{conversation}
 
 ## Rubric
 {rubric}
@@ -38,4 +42,5 @@ Do not reward or penalise tone, personality, verbosity or writing style.
 {tabs}
 
 Return ONLY a JSON object, one entry per rubric id:
-{{"R1": {{"met": true, "communicated": true, "reason": "<one sentence citing the evidence>"}}, ...}}
+
+{{"R1": {{"met": true, "reason": "<one sentence citing the evidence>"}}, ...}}

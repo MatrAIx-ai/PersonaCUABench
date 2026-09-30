@@ -1609,58 +1609,106 @@ def run_agent(task: dict, user: PersonaUser, model: str, *, max_steps: int,
 # Judge
 # --------------------------------------------------------------------------- #
 JUDGE_PROMPT = prompt("rubric_judge")
+INTENT_PROMPT = prompt("intent_judge")
+
+
+def _ask_judge(client, meter, role: str, *, provider: str, model: str,
+               text: str, budget: int = 8000) -> tuple[dict | None, str]:
+    """(parsed JSON, last error). Retried while the judge returns nothing usable.
+
+    A reasoning judge on a long trajectory can spend its whole budget thinking
+    and return an empty string, so the budget is generous and an unusable answer
+    is retried rather than thrown -- the browse it grades cost minutes.
+    No temperature: reasoning models accept only the default, and they take
+    max_completion_tokens rather than max_tokens.
+    """
+    last_error = ""
+    for attempt in range(MAX_RETRIES):
+        try:
+            resp, _ = metered(client, meter, role, provider=provider, model=model,
+                              messages=[{"role": "user", "content": text}],
+                              max_completion_tokens=budget)
+            parsed = extract_json(resp.choices[0].message.content or "")
+        except (NameError, TypeError, AttributeError):
+            raise                          # our bug, not the weather
+        except Exception as exc:
+            last_error = f"{type(exc).__name__}: {exc}"
+            parsed = None
+        if parsed:
+            return parsed, last_error
+        print(f"  [{role} returned nothing usable] attempt {attempt + 1}"
+              f"/{MAX_RETRIES}", flush=True)
+        time.sleep(3)
+    return None, last_error or "empty judge response"
 
 
 def judge_run(task: dict, run: dict, *, judge_model: str, judge_provider: str,
               meter: "Meter | None" = None) -> dict:
+    """Two independent judgements, deliberately not one call.
+
+    `met` is objective -- did the work satisfy the rubric, checkable against the
+    answer, the actions and the tabs. `communicated` is subjective -- did this
+    person raise it and did the agent take it up. Sharing one call and one
+    `reason` let the objective argument decide the subjective field: verdicts
+    like "communicated: false, because the answer lacks the Weather.com
+    forecast" appeared, and the same request landed in different categories for
+    different models. Separate prompts, separate calls, separate reasons.
+    """
     client, resolved_provider = _client(judge_model, judge_provider)
     rubric = "\n".join(
         f"- {rid}: {r['requirement']}\n  verification: {r['verification']}"
         for rid, r in task["rubrics"].items())
+    # The intent judge sees the requirement but not how to verify it: the
+    # verification text is the objective half's business.
+    intent_rubric = "\n".join(f"- {rid}: {r['requirement']}"
+                               for rid, r in task["rubrics"].items())
     actions = "\n".join(
         f"{t['step']}. {t['tool']}({json.dumps(t['args'], ensure_ascii=False)[:200]}) -> "
         f"{t['result_preview'][:160]}" for t in run["trajectory"]) or "(no actions)"
     conversation = "\n".join(
         f"{'USER' if t['role'] == 'user' else 'AGENT'}: {t['text']}"
         for t in run.get("conversation") or []) or "(none)"
+    answer = run["answer"] or "(the agent produced no final answer)"
     prompt = JUDGE_PROMPT.format(
-        task=task["confirmed_task"], conversation=conversation, rubric=rubric,
-        answer=run["answer"] or "(the agent produced no final answer)",
+        task=task["confirmed_task"], rubric=rubric, answer=answer,
         actions=actions, tabs=json.dumps(run["open_tabs"], indent=2))
+    intent_prompt = INTENT_PROMPT.format(
+        rubric=intent_rubric, conversation=conversation, answer=answer,
+        actions=actions)
 
-    # A reasoning judge on a long trajectory can spend its whole budget thinking
-    # and return an empty string, so the budget is generous and an unusable
-    # answer is retried rather than thrown -- the browse it grades cost minutes.
-    # No temperature: reasoning models such as gpt-5.5 accept only the default,
-    # and they take max_completion_tokens, not max_tokens.
-    verdicts, last_error = None, ""
-    for attempt in range(MAX_RETRIES):
-        try:
-            resp, _ = metered(client, meter, "rubric_judge",
-                              provider=resolved_provider,
-                              model=judge_model,
-                              messages=[{"role": "user", "content": prompt}],
-                              max_completion_tokens=8000)
-            parsed = extract_json(resp.choices[0].message.content or "")
-        except Exception as exc:
-            last_error = f"{type(exc).__name__}: {exc}"
-            parsed = None
-        if parsed:
-            verdicts = parsed
-            break
-        print(f"  [judge returned nothing usable] attempt {attempt + 1}/3", flush=True)
-        time.sleep(3)
-
-    if verdicts is None:
+    base = {"judge_model": judge_model, "judge_provider": resolved_provider,
+            "judge_backend": _provider_backend(resolved_provider)}
+    objective, obj_error = _ask_judge(
+        client, meter, "rubric_judge", provider=resolved_provider,
+        model=judge_model, text=prompt)
+    if objective is None:
         # Grading failed; the run itself is still worth keeping.
-        return {"judge_model": judge_model, "judge_provider": resolved_provider,
-                "judge_backend": _provider_backend(resolved_provider),
-                "error": last_error or "empty judge response",
-                "verdicts": {}, "met": None, "total": len(task["rubrics"]),
-                "score": None, "trajectory_efficiency": None}
-    return {"judge_model": judge_model, "judge_provider": resolved_provider,
-            "judge_backend": _provider_backend(resolved_provider), "verdicts": verdicts,
-            **score_verdicts(task, verdicts, run["steps"])}
+        return {**base, "error": obj_error, "verdicts": {}, "met": None,
+                "total": len(task["rubrics"]), "score": None,
+                "trajectory_efficiency": None}
+    subjective, int_error = _ask_judge(
+        client, meter, "intent_judge", provider=resolved_provider,
+        model=judge_model, text=intent_prompt)
+
+    # One verdict per rubric id, each field from the judge that owns it, each
+    # keeping its own reason so a disagreement stays readable afterwards.
+    verdicts = {}
+    for rid in task["rubrics"]:
+        obj = objective.get(rid) or {}
+        sub_ = (subjective or {}).get(rid) or {}
+        verdicts[rid] = {
+            "met": obj.get("met"),
+            "met_reason": obj.get("reason"),
+            "communicated": sub_.get("communicated") if subjective else None,
+            "communicated_reason": sub_.get("reason") if subjective else None,
+        }
+    out = {**base, "verdicts": verdicts,
+           **score_verdicts(task, verdicts, run["steps"])}
+    if subjective is None:
+        # The objective half stands on its own; say the other is missing rather
+        # than let score_communicated read as a real None.
+        out["intent_judge_error"] = int_error
+    return out
 
 
 REAL_BOOLEAN_PROMPT = prompt("real_boolean_check")
