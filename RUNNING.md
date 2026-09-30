@@ -37,6 +37,8 @@ Fill in **two things**:
 |---|---|---|
 | Claude Opus 5.5 | `opus-5.5` | `CLAUDE_BASE_URL` + `CLAUDE_API_KEY` |
 | GPT 6 Astra | `gpt-6-astra` | `GPT6_BASE_URL` + `GPT6_API_KEY` |
+| GPT 6.1 Sol | `gpt-6.1-sol` | `OPENAI_DIRECT_BASE_URL` + `OPENAI_API_KEY` |
+| GPT 6 Sol | `gpt-6-sol` | `OPENAI_DIRECT_BASE_URL` + `OPENAI_API_KEY` |
 | Muse Spark 1.1 | `muse-spark-1.1` | `MUSE_BASE_URL` + `MUSE_API_KEY` |
 | Gemini 3.8 Flash | `gemini-3.8-flash` | `GEMINI_BASE_URL` + `GEMINI_API_KEY` |
 | Kimi K3 | `kimi-k3` | `KIMI_BASE_URL` + `KIMI_API_KEY` |
@@ -207,9 +209,11 @@ measured mean of 4.4 minutes per cell.
 - **Safe to re-run.** Finished cells are skipped and judged runs are not
   re-judged, so an interrupted night resumes by running the same command again.
 - Per-cell logs are in `logs/cells/`, the summary in `logs/s1-*.log`.
-- **Measure your own cost before committing to the grid.** Six `gpt-6-astra`
-  cells averaged **$4.35**, which puts a full grid near **$1,600** for that
-  model — but the spread is what matters: the cheapest cell was $0.54 and the
+- **Measure your own cost before committing to the grid.** Price per token
+  varies by more than an order of magnitude across the registry, so one
+  model's number says little about another's: `gpt-6-astra` lists at $10/$50
+  per Mtok and `gpt-6.1-sol` at $2/$10. Six `gpt-6-astra` cells averaged
+  **$4.35**, which puts a full grid near **$1,600** for that model — but the spread is what matters: the cheapest cell was $0.54 and the
   most expensive **$13.16**. Cost tracks steps, because the transcript is
   resent every step, and a task the agent *completes* costs far more than one
   it gives up on: the booking that succeeded took 66 steps and 1.3M input

@@ -141,8 +141,13 @@ def check_every_route_is_priced() -> None:
     # A model that needs /v1/responses for function tools must be routed to the
     # shim, or chat completions rejects the call and it looks incapable.
     assert registry.wants_responses_api("gpt-6-astra", "openai"), "Azure always"
-    for key in ("gpt-6.1-sol", "gpt-6-luna"):
-        model_id = registry.MODELS[key]["endpoint"]["model"]
+    # Every entry that asks for the Responses API must actually get routed to
+    # it, whichever models those happen to be.
+    flagged = [k for k, e in registry.MODELS.items() if e.get("responses_api")]
+    assert flagged, "no model asks for the Responses API any more; is that right?"
+    for key in flagged:
+        model_id = (registry.MODELS[key].get("endpoint") or {}).get("model")
+        assert model_id, f"{key} wants the Responses API but has no endpoint model"
         assert registry.wants_responses_api(model_id, key), key
     assert not registry.wants_responses_api("z-ai/anything", "openrouter")
 
