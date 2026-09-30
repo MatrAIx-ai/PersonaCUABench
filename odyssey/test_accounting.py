@@ -374,6 +374,57 @@ class _StubUser:
         return {"model": "stub", "provider": "stub"}
 
 
+def check_real_judging() -> None:
+    """A REAL task is scored by its checkers, and a broken checker is an error."""
+    import glob, os, tempfile
+
+    real_suite = None
+    for suite in (R.TASK_CATALOG.suites.values()):
+        if suite.suite_id == "real":
+            real_suite = suite
+    assert real_suite is not None, "the real suite is not registered"
+    task = real_suite.tasks[0]
+    assert task["real"]["eval_scripts"], task
+
+    # A state the checker accepts vs one it rejects: same code path, both ways.
+    passing = {"orderId": "1",
+               "checkoutDetails": {"charges": {"totalAmount": 20.0}},
+               "cartItems": [{"name": "Large Pizza", "price": 12.0}]}
+    failing = {"orderId": "1",
+               "checkoutDetails": {"charges": {"totalAmount": 20.0}},
+               "cartItems": [{"name": "Salad", "price": 12.0}]}
+    good = R.judge_real(task, {"real_state": passing, "steps": 4})
+    bad = R.judge_real(task, {"real_state": failing, "steps": 4})
+    assert good["score"] == 1.0 and good["met"] == 1, good
+    assert bad["score"] == 0.0 and bad["met"] == 0, bad
+    assert good["judge_model"] == "real-state-checker"
+    assert good["communicated"] is None, "a checker cannot judge communication"
+
+    # No state read: unscored with a reason, never a zero.
+    unread = R.judge_real(task, {"real_state": None, "steps": 4,
+                                 "real_state_error": "TimeoutError: /finish"})
+    assert unread["score"] is None and "TimeoutError" in unread["error"], unread
+
+    # A missing checker is an error about the repo, not a failing agent.
+    broken = {**task, "real": {**task["real"], "eval_scripts": ["eval_nope.py"]}}
+    gone = R.judge_real(broken, {"real_state": passing, "steps": 4})
+    assert gone["score"] is None and "missing" in gone["error"], gone
+
+    # A checker that crashes leaves the cell unscored so a resume retries it.
+    with tempfile.TemporaryDirectory() as tmp:
+        crasher = Path(tmp) / "eval_crash.py"
+        crasher.write_text("import sys; sys.exit(3)", encoding="utf-8")
+        saved = R.REAL_EVALS
+        R.REAL_EVALS = Path(tmp)
+        try:
+            crashed = R.judge_real({**task, "real": {**task["real"],
+                                                     "eval_scripts": ["eval_crash.py"]}},
+                                   {"real_state": passing, "steps": 4})
+        finally:
+            R.REAL_EVALS = saved
+    assert crashed["score"] is None and "exit 3" in crashed["error"], crashed
+
+
 def check_cost_report() -> None:
     with tempfile.TemporaryDirectory() as tmp:
         root = Path(tmp)
@@ -428,6 +479,7 @@ def main() -> None:
     check_cache_retry()
     check_judge_calls()
     check_progress_note_is_not_an_answer()
+    check_real_judging()
     check_cost_report()
     print("accounting self-check OK")
 

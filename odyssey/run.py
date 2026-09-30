@@ -30,6 +30,7 @@ import os
 import re
 import subprocess
 import sys
+import tempfile
 import time
 from datetime import datetime, timezone
 from pathlib import Path
@@ -125,6 +126,7 @@ DEFAULT_TASK_SUITE = TASK_CATALOG.default_suite
 # Backward-compatible import surface for tests and notebooks.  It now means
 # "the manifest's default suite", rather than the hard-coded tasks.json file.
 TASKS = DEFAULT_TASK_SUITE.tasks
+REAL_EVALS = HERE / "real_evals"   # deterministic state checkers, vendored
 PAGE_CHARS = 6000          # per read_page slice
 MAX_TABS = 8
 DEFAULT_PROFILE = HERE / ".chrome-profile"   # gitignored; keeps consent cookies
@@ -429,6 +431,30 @@ class Browser:
             return f"no tab {tab_id}"
         page.close()
         return f"closed tab {tab_id}"
+
+    # A REAL sandbox keeps its state in this browser, and exposes two control
+    # pages: /config loads a task's initial state and /finish renders the
+    # current state as JSON. Underscored because the agent must never see them
+    # as tools -- resetting or reading state is the harness's job, not its own.
+    def _real_reset(self, url: str, task_ref: str) -> None:
+        """Load the task's initial state, as agisdk's own harness does."""
+        page = self._ctx.new_page()
+        try:
+            page.goto(f"{url}/config?run_id=0&task_id={task_ref}&latency=0")
+            page.wait_for_load_state("networkidle")
+            page.goto(f"{url}/finish")
+        finally:
+            page.close()
+
+    def _real_state(self, url: str) -> dict:
+        """The site's final state: the JSON its /finish page renders."""
+        page = self._ctx.new_page()
+        try:
+            page.goto(f"{url}/finish")
+            page.wait_for_load_state("networkidle")
+            return json.loads(page.wait_for_selector("pre").inner_text())
+        finally:
+            page.close()
 
     def open_tabs(self) -> list[dict]:
         out = []
@@ -1148,7 +1174,16 @@ def run_agent(task: dict, user: PersonaUser, model: str, *, max_steps: int,
               shots_dir: str | os.PathLike | None = None) -> dict:
     client, provider = _client(model, provider)
     # The CUA carries no persona: it knows the user only through what they say.
-    messages = [{"role": "system", "content": AGENT_RULES},
+    system = AGENT_RULES
+    real = task.get("real")
+    if real:
+        # As in REAL's own harness, the user is already on the site; without
+        # this the agent wastes steps searching the open web for a sandbox.
+        system += (f"\n\n# Where you are\n\nThe user's browser is already open on "
+                   f"{real['site']} in tab 1 ({real['url']}). Do the task on that "
+                   f"site; it is a self-contained replica, so do not look for the "
+                   f"real one.")
+    messages = [{"role": "system", "content": system},
                 {"role": "user", "content": user.opening}]
     questions = 0
 
@@ -1160,9 +1195,15 @@ def run_agent(task: dict, user: PersonaUser, model: str, *, max_steps: int,
     # the tools did; this records what the model did.
     turns: list[dict] = []
     answer, stop_reason, empty_turns, text_turns = "", "max_steps", 0, 0
+    real_state, real_error = None, ""
     started_at = datetime.now(timezone.utc)
     started = time.monotonic()
     try:
+        if real:
+            # Reset before the first step so the run starts from the task's
+            # declared state, not from whatever the previous cell left behind.
+            browser._real_reset(real["url"], f"{real['version']}.{real['id']}")
+            browser.open_tab(real["url"])
         for step in range(max_steps):
             resp, call = metered(
                 client, meter, "agent", provider=provider,
@@ -1271,6 +1312,14 @@ def run_agent(task: dict, user: PersonaUser, model: str, *, max_steps: int,
         # this is the evidence for those items.
         final_shots = [browser.shot(f"final-tab{tab['tab_id']}", tab["tab_id"])
                        for tab in open_tabs]
+        if real:
+            # The state is the only evidence a REAL task has: read it before the
+            # browser closes, and record why if it cannot be read, because an
+            # unread state and a failed task look identical downstream.
+            try:
+                real_state = browser._real_state(real["url"])
+            except Exception as exc:
+                real_error = f"{type(exc).__name__}: {exc}"
     finally:
         browser.close()
 
@@ -1278,6 +1327,7 @@ def run_agent(task: dict, user: PersonaUser, model: str, *, max_steps: int,
     return {"answer": answer, "stop_reason": stop_reason, "steps": len(trajectory),
             "max_steps": max_steps, "trajectory": trajectory, "turns": turns,
             "open_tabs": open_tabs, "final_screenshots": final_shots,
+            "real_state": real_state, "real_state_error": real_error,
             "conversation": user.transcript, "user": user.info(),
             "timing": {"started_at": started_at.isoformat(),
                        "finished_at": finished_at.isoformat(),
@@ -1347,6 +1397,65 @@ def judge_run(task: dict, run: dict, *, judge_model: str, judge_provider: str,
     return {"judge_model": judge_model, "judge_provider": resolved_provider,
             "judge_backend": _provider_backend(resolved_provider), "verdicts": verdicts,
             **score_verdicts(task, verdicts, run["steps"])}
+
+
+def judge_real(task: dict, run: dict) -> dict:
+    """Score a REAL task with its own checkers against the site's final state.
+
+    Deterministic and free: no model is called. The task passes only if every
+    checker prints SUCCESS. A checker that cannot run is an error, never a
+    failure -- a missing script and an unfinished task must not look alike.
+    """
+    real = task["real"]
+    base = {"judge_model": "real-state-checker", "judge_provider": None,
+            "total": 1, "communicated": None, "score_communicated": None}
+    if run.get("real_state") is None:
+        return {**base, "verdicts": {}, "met": None, "score": None,
+                "error": run.get("real_state_error") or
+                "the sandbox's final state was never read"}
+    missing = [s for s in real["eval_scripts"] if not (REAL_EVALS / s).is_file()]
+    if missing:
+        return {**base, "verdicts": {}, "met": None, "score": None,
+                "error": f"checker(s) missing from {REAL_EVALS}: {missing}; "
+                         f"run python odyssey/prepare_real.py"}
+
+    state_path = None
+    outputs, passed, errors = {}, True, []
+    try:
+        with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False,
+                                         encoding="utf-8") as handle:
+            json.dump(run["real_state"], handle)
+            state_path = handle.name
+        for script in real["eval_scripts"]:
+            try:
+                proc = subprocess.run(
+                    [sys.executable, str(REAL_EVALS / script), state_path],
+                    capture_output=True, text=True, timeout=60)
+            except subprocess.TimeoutExpired:
+                errors.append(f"{script}: timed out after 60s")
+                outputs[script] = "TIMEOUT"
+                continue
+            out = (proc.stdout or "").strip()
+            err = (proc.stderr or "").strip()
+            outputs[script] = (out or err)[-500:]
+            if proc.returncode != 0 and not out:
+                errors.append(f"{script}: exit {proc.returncode}: {err[-200:]}")
+                continue
+            passed = passed and "SUCCESS" in out.upper()
+    finally:
+        if state_path:
+            os.unlink(state_path)
+
+    if errors:
+        # A checker that crashed says nothing about the agent, so the cell is
+        # left unscored and a resume retries it.
+        return {**base, "verdicts": {"R1": {"met": None, "reason": json.dumps(outputs)}},
+                "met": None, "score": None, "error": "; ".join(errors)}
+    return {**base,
+            "verdicts": {"R1": {"met": passed, "communicated": None,
+                                "reason": json.dumps(outputs)}},
+            "met": int(passed), "score": float(passed),
+            "trajectory_efficiency": round(float(passed) / max(run["steps"], 1), 4)}
 
 
 def score_verdicts(task: dict, verdicts: dict, steps: int) -> dict:
@@ -1834,9 +1943,10 @@ def main() -> None:
             continue
         if not args.no_judge:
             try:
-                record["judgement"] = judge_run(task, run, judge_model=args.judge_model,
-                                                judge_provider=judge_provider,
-                                                meter=meter)
+                record["judgement"] = (
+                    judge_real(task, run) if task.get("real")
+                    else judge_run(task, run, judge_model=args.judge_model,
+                                   judge_provider=judge_provider, meter=meter))
             except Exception as exc:  # never lose a completed browse to the judge
                 record["judgement"] = {"error": f"{type(exc).__name__}: {exc}",
                                        "verdicts": {}, "met": None,
@@ -1853,6 +1963,18 @@ def main() -> None:
                       f"(steps {run['steps']}, asked {(len(run['conversation']) - 1) // 2}, "
                       f"stop={run['stop_reason']})")
         seal_accounting()
+        # A REAL state dump is a quarter of a megabyte -- the evidence for the
+        # score, but it would bury the record. It goes beside it, with its hash,
+        # so result.json stays readable and the evidence stays verifiable.
+        state = record["run"].get("real_state")
+        if isinstance(state, dict):
+            blob = json.dumps(state, ensure_ascii=False, indent=2)
+            (out_dir / "real_state.json").write_text(blob, encoding="utf-8")
+            record["run"]["real_state"] = {
+                "file": "real_state.json",
+                "sha256": hashlib.sha256(blob.encode("utf-8")).hexdigest(),
+                "bytes": len(blob.encode("utf-8")),
+            }
         (out_dir / "result.json").write_text(
             json.dumps(record, ensure_ascii=False, indent=2), encoding="utf-8")
         acct = record["accounting"]
