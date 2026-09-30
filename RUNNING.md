@@ -55,13 +55,25 @@ before a paid run, and tell Haoming if it needs changing.
 ## 2. Check before you spend
 
 ```bash
-bash scripts/check_all.sh     # 8 offline checks: no keys, no network, no browser
-python src/models.py          # does your model have a route on this machine?
+bash scripts/check_all.sh              # 8 offline checks: no keys, no network
+python src/models.py                   # does your model have a route here?
+python scripts/check_models.py <key>   # does it actually answer with a tool call?
 ```
 
 `check_all.sh` must print `all offline checks passed`. `models.py` must show
 your key resolving to your own endpoint (or to Azure/OpenRouter as a fallback);
 `(x)` means that route's credentials are missing here.
+
+`check_models.py` is the one that costs money — about a tenth of a cent. It
+makes one real tool-calling request through the same code path a cell uses, so
+a broken route surfaces here rather than four hours into the grid. **A model
+that answers in prose instead of calling a tool cannot drive the browser**, and
+the check fails it. All nine backbones were verified this way on 2026-09-30.
+
+One known trap: on OpenRouter, `meta/muse-spark-1.1` is gated behind a one-time
+**18+ attestation** on your account. Without it every call is a 403 that reads
+like a dead model id. Confirm at <https://openrouter.ai/settings/preferences>,
+or set `MUSE_BASE_URL` and skip OpenRouter.
 
 ## 3. One cell first
 

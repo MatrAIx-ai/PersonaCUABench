@@ -122,7 +122,11 @@ what it wants, rather than quietly running somewhere else.
 | MiniMax M3 | Charles | `minimax-m3` |
 | Qwen 3.8 27B | Xu Hu | `qwen3.8-27b` |
 
-`python src/models.py` prints what each one resolves to on your machine.
+`python src/models.py` prints what each one resolves to on your machine, and
+`python scripts/check_models.py` puts a real two-turn tool-calling exchange
+through each of them — about five cents for all nine, and the only way to know
+a route works before a grid depends on it. All nine were verified on
+2026-09-30.
 GPT 5.6 Terra is the shared persona and judge model, not an execution backbone.
 
 ## Running your model
@@ -181,7 +185,7 @@ and navigation style, `src/judge_all.py` re-judges saved runs in parallel.
 | `benchmark/v1_tasks.json` | the task set, the only source of truth for tasks |
 | `benchmark/tasks.json` | one collaborator's own seven-task working slice; a record, read by nothing |
 | `src/` | everything that runs |
-| `scripts/` | the offline checks: `check_all.sh` and the three `test_*.py` |
+| `scripts/` | the checks: `check_all.sh`, the three `test_*.py`, and `check_models.py` |
 | `src/prepare_v1.py` | turns it into the runnable suites |
 | `src/task_suites/` | `odysseys/` and `real/`, generated |
 | `src/personas/` | generated persona profiles |

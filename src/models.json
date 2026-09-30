@@ -72,7 +72,8 @@
         "out": 4.25
       },
       "cache_read_multiplier": null,
-      "cache_note": "not measured: OpenRouter returns 403 until the account completes 18+ verification; OpenRouter answers 403 until the account completes 18+ verification"
+      "cache_note": "not measured: OpenRouter returns 403 until the account completes 18+ verification; OpenRouter answers 403 until the account completes 18+ verification",
+      "route_note": "OpenRouter gates this model behind a one-time 18+ attestation on the account: without it every call is a 403 that reads like a dead model id. Confirm at https://openrouter.ai/settings/preferences, or use MUSE_BASE_URL and skip OpenRouter entirely. Verified 2026-09-30 with python scripts/check_models.py muse-spark-1.1"
     },
     "gemini-3.8-flash": {
       "label": "Gemini 3.8 Flash",
