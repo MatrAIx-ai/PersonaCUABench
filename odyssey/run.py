@@ -165,6 +165,12 @@ def task_for_record(record: dict) -> tuple[dict, str]:
     return task, "unverified_current_tasks"
 
 AGENT_RULES = prompt("agent").format(max_questions=MAX_QUESTIONS)
+# An experimental arm, off by default: the neutral prompt measures how often a
+# model asks on its own, and that number is a finding. Turning this on measures
+# something else -- whether it can ask well when told to -- so the two must
+# never be mixed in one comparison, and the run config records which was used.
+PROACTIVE_NUDGE = prompt("agent_proactive_nudge").format(
+    max_questions=MAX_QUESTIONS)
 
 TOOLS = [
     {"type": "function", "function": {
@@ -808,8 +814,9 @@ class Meter:
             bucket = by_role.setdefault(call["role"], {
                 "calls": 0, "prompt_tokens": 0, "completion_tokens": 0,
                 "ms": 0, "cost_usd": 0.0, "list_cost_usd": 0.0,
-                "unpriced_calls": 0})
+                "retries": 0, "unpriced_calls": 0})
             bucket["calls"] += 1
+            bucket["retries"] += call.get("retries") or 0
             bucket["list_cost_usd"] = round(
                 bucket["list_cost_usd"] + (call.get("list_cost_usd") or 0.0), 6)
             bucket["prompt_tokens"] += call["prompt_tokens"]
@@ -825,6 +832,10 @@ class Meter:
             "prompt_tokens": sum(c["prompt_tokens"] for c in self.calls),
             "completion_tokens": sum(c["completion_tokens"] for c in self.calls),
             "model_ms": sum(c["ms"] for c in self.calls),
+            # Provider retries (429s, 5xx, dropped connections). They cost no
+            # tokens but they are most of the wall clock when a provider is
+            # busy, so a latency number is unreadable without them.
+            "retries": sum(c.get("retries") or 0 for c in self.calls),
             "cost_usd": round(sum(c["cost_usd"] or 0.0 for c in self.calls), 6),
             "list_cost_usd": round(
                 sum(c.get("list_cost_usd") or 0.0 for c in self.calls), 6),
@@ -1219,10 +1230,11 @@ def run_agent(task: dict, user: PersonaUser, model: str, *, max_steps: int,
               headless: bool, temperature: float,
               profile_dir: str | os.PathLike = DEFAULT_PROFILE,
               provider: str = "", meter: "Meter | None" = None,
-              shots_dir: str | os.PathLike | None = None) -> dict:
+              shots_dir: str | os.PathLike | None = None,
+              nudge_proactive: bool = False) -> dict:
     client, provider = _client(model, provider)
     # The CUA carries no persona: it knows the user only through what they say.
-    system = AGENT_RULES
+    system = AGENT_RULES + (f"\n\n{PROACTIVE_NUDGE}" if nudge_proactive else "")
     real = task.get("real")
     if real:
         # As in REAL's own harness, the user is already on the site; without
@@ -1383,6 +1395,7 @@ def run_agent(task: dict, user: PersonaUser, model: str, *, max_steps: int,
                        "model_ms": sum((t["call"] or {}).get("ms", 0) for t in turns)},
             "arm": {"model": model, "provider": provider,
                     "backend": _provider_backend(provider), "temperature": temperature,
+                    "proactive_nudge": nudge_proactive,
                     "prompt_cache": ("explicit_breakpoints"
                                      if needs_explicit_cache(model)
                                      else "provider_automatic_only"
@@ -1677,6 +1690,11 @@ def main() -> None:
     ap.add_argument("--max-steps", type=int, default=50)
     # gpt-5.6-terra accepts only its default temperature; 0.7 is rejected.
     ap.add_argument("--temperature", type=float, default=1.0)
+    ap.add_argument("--nudge-proactive", action="store_true",
+                    help="tell the agent to ask the user when information is "
+                         "missing, instead of leaving it to decide. An arm of "
+                         "its own: the default prompt is neutral, so how often "
+                         "a model asks unprompted stays measurable")
     ap.add_argument("--no-responses-api", action="store_true",
                     help="call Azure/OpenAI through chat completions instead of "
                          "the Responses API. The Responses API is the default "
@@ -1811,6 +1829,7 @@ def main() -> None:
         "prompt_cache": not args.no_prompt_cache,
         "screenshots": not args.no_screenshots,
         "responses_api": not args.no_responses_api,
+        "proactive_nudge": args.nudge_proactive,
         "persona": args.persona,
         "replicate_id": args.replicate_id,
         "pair_order": args.pair_order,
@@ -1935,7 +1954,8 @@ def main() -> None:
                             profile_dir=profile_dir, provider=args.provider,
                             meter=meter,
                             shots_dir=None if args.no_screenshots
-                            else out_dir / "shots")
+                            else out_dir / "shots",
+                            nudge_proactive=args.nudge_proactive)
         except Exception as exc:  # a dead task must not take the grid with it
             had_failures = True
             print(f"FAILED: {type(exc).__name__}: {exc}")
