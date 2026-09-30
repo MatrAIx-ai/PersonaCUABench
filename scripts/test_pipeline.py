@@ -1093,6 +1093,36 @@ def test_skip_existing_ignores_unscored(tmp: Path = Path("/tmp")):
         )
 
 
+def test_embedded_python_runs_on_older_pythons():
+    """run_grid.sh embeds Python; it must parse on the Pythons people have.
+
+    A collaborator's server died on a double-quoted f-string whose replacement
+    field also used double quotes around a dict key. PEP 701 allows that only
+    from 3.12; it ran here because this machine is 3.12, and it broke the grid
+    for everyone else before a single cell was enumerated. ast.parse cannot
+    catch it, because it uses the grammar of whatever Python runs the test, so
+    the shape is matched directly -- including in this file, which is why the
+    offending form is described here rather than written out.
+    """
+    import re
+
+    nested = re.compile(r'f"[^"\n]*\{[^}\n]*"[^"\n]*"[^}\n]*\}')
+    offenders = []
+    for path in list(SRC.rglob("*.py")) + list(SRC.rglob("*.sh")) \
+            + list((REPO / "scripts").rglob("*.py")) \
+            + list((REPO / "scripts").rglob("*.sh")):
+        for i, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+            if nested.search(line):
+                offenders.append(f"{path.name}:{i}")
+    assert not offenders, (
+        f"f-strings with nested same-type quotes need Python 3.12: {offenders}")
+
+    # And the heredoc itself must be valid Python at all.
+    script = (SRC / "run_grid.sh").read_text(encoding="utf-8")
+    for body in re.findall(r"<<'PY[A-Z]*'\n(.*?)\nPY[A-Z]*\n", script, re.S):
+        compile(body, "run_grid.sh:embedded", "exec")
+
+
 def test_cli_defaults_do_not_override_routing():
     """--provider must default to empty, or the registry is overruled.
 
@@ -1317,6 +1347,7 @@ if __name__ == "__main__":
     test_persona_fidelity_contract()
     test_experience_uses_frozen_profile()
     test_skip_existing_ignores_unscored()
+    test_embedded_python_runs_on_older_pythons()
     test_cli_defaults_do_not_override_routing()
     test_typing_failure_says_why()
     test_judge(run)

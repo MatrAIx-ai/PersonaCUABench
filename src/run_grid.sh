@@ -92,7 +92,7 @@ for task in suite.tasks:
     if control:
         names = ["none"] + names
     for name in names:
-        print(f"{task["task_id"]} {name}")
+        print(f"{task['task_id']} {name}")
 PYCELLS
   ) || exit $?
 fi
