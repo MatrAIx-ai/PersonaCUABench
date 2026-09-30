@@ -32,26 +32,33 @@ def fake_response(prompt=1000, completion=100, cost=None):
 
 
 def check_registry() -> None:
-    # A raw id passes through; a key resolves to OpenRouter without Azure.
-    assert registry.resolve("qwen/qwen3.8-27b") == ("qwen/qwen3.8-27b", "")
-    assert registry.resolve("glm-5.3") == ("z-ai/glm-5.3", "openrouter")
-    # Azure wins for a deployed model, but only with credentials present.
+    # Resolution depends on what is configured, so the environment is pinned
+    # here rather than inherited from whoever runs the test.
     import os
 
-    saved = {k: os.environ.get(k) for k in
-             ("AZURE_OPENAI_BASE_URL", "AZURE_OPENAI_API_KEY")}
+    watched = ("AZURE_OPENAI_BASE_URL", "AZURE_OPENAI_API_KEY",
+               "AZURE_OPENAI_API_KEY_FILE", "OPENROUTER_API_KEY",
+               "GLM_BASE_URL", "GLM_API_KEY")
+    saved = {k: os.environ.get(k) for k in watched}
     try:
+        for key in watched:
+            os.environ.pop(key, None)
+        # A raw id passes through untouched, with no route lookup at all.
+        assert registry.resolve("qwen/qwen3.8-27b") == ("qwen/qwen3.8-27b", "")
+        # With only OpenRouter configured, a key resolves there.
+        os.environ["OPENROUTER_API_KEY"] = "k"
+        assert registry.resolve("glm-5.3") == ("z-ai/glm-5.3", "openrouter")
+        assert registry.resolve("terra") == ("openai/gpt-5.6-terra", "openrouter")
+        # Azure wins for a model deployed there, but only with credentials.
         os.environ["AZURE_OPENAI_BASE_URL"] = "https://example.invalid/openai/v1"
         os.environ["AZURE_OPENAI_API_KEY"] = "x"
         assert registry.resolve("terra") == ("gpt-5.6-terra", "openai")
         assert registry.resolve("glm-5.3") == ("z-ai/glm-5.3", "openrouter")
     finally:
         for key, value in saved.items():
-            if value is None:
-                os.environ.pop(key, None)
-            else:
+            os.environ.pop(key, None)
+            if value is not None:
                 os.environ[key] = value
-    assert registry.resolve("terra") == ("openai/gpt-5.6-terra", "openrouter")
     # Prices come from the registry for either of a model's ids.
     assert registry.cost_of("z-ai/glm-5.3", 1_000_000, 0) == 0.38
     assert registry.cost_of("gpt-5.6-terra", 1_000_000, 1_000_000) == 0.0
