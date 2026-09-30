@@ -9,8 +9,9 @@ detail of how a cell works is in [`src/README.md`](src/README.md).
 ## 1. Set up
 
 ```bash
-git clone <this repo> && cd PersonaCUABench
-git checkout <this branch>
+git clone git@github.com:MatrAIx-ai/PersonaCUABench.git
+cd PersonaCUABench
+git checkout haoming-travel-tasks
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r src/requirements.txt
 ```
@@ -44,10 +45,15 @@ Fill in **two things**:
 | Qwen 3.8 27B | Xu Hu | `qwen3.8-27b` | `QWEN_BASE_URL` + `QWEN_API_KEY` |
 | DeepSeek V4.1 Flash | unassigned | `deepseek-v4.1` | `DEEPSEEK_BASE_URL` + `DEEPSEEK_API_KEY` |
 
-`OPENROUTER_API_KEY` is optional. It buys experience judge **B**, a second
-vendor whose agreement with judge A is what licenses the P1–P5 numbers. Without
-it the run says so once and judge A still scores every cell; whoever collects
-the results can add the second judge later.
+**`OPENROUTER_API_KEY` does two jobs, and you probably need it.**
+
+- It is the **fallback route** for any model without its own endpoint. If you
+  have no `<VENDOR>_BASE_URL` for your model, OpenRouter is how it runs at all
+  — `python src/models.py` tells you which route yours would take.
+- It buys experience judge **B**, a second vendor whose agreement with judge A
+  is what licenses the P1–P5 numbers. For that job alone it is optional: the
+  run says once that it is skipping judge B, judge A still scores every cell,
+  and whoever collects the results can add the second judge later.
 
 Your model id must be the one **your provider** uses. Check
 `src/models.json` → your key → `endpoint.model` against your provider's docs
@@ -190,6 +196,10 @@ re-judgeable months later, so please do not prune it.
 | `UNSCORED: model returned no output` | your model returned nothing usable three times. Keep the record and tell Haoming |
 | a REAL cell says the state was never read | the sandbox did not answer; re-run that cell |
 | Chrome dies under `JOBS=4` | lower `JOBS`; each worker needs ~1.5 GB |
+| `403 ... 18+ age confirmation` | OpenRouter account gate, not a bad model id. Confirm at <https://openrouter.ai/settings/preferences> |
+| `SCREENSHOTS: n FAILED` after a cell | the run is fine and scored; frames are for auditing. Tell Haoming if it is every cell |
+| a cell stops at `max_steps` | it ran out of budget rather than finishing. Normal on hard REAL tasks; note it, do not raise the limit yourself |
+| `typing failed: nothing on the page matches` | the model guessed a selector. Expected occasionally; if it is most of a cell, send the log |
 
 Anything you cannot explain in ten minutes: send the per-cell log from
 `logs/cells/` and the `result.json`. Do not "fix" a cell by editing a result.
