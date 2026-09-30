@@ -121,6 +121,7 @@ what it wants, rather than quietly running somewhere else.
 | Grok 4.7 | Defu | `grok-4.7` |
 | MiniMax M3 | Charles | `minimax-m3` |
 | Qwen 3.8 27B | Xu Hu | `qwen3.8-27b` |
+| DeepSeek V4.1 Flash | unassigned | `deepseek-v4.1` |
 
 `python src/models.py` prints what each one resolves to on your machine, and
 `python scripts/check_models.py` puts a real two-turn tool-calling exchange

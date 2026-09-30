@@ -134,6 +134,7 @@ def main() -> None:
         (skipped if not row["route"] else failed).append(row["key"])
 
     print()
+    checked = len(keys) - len(skipped)
     if skipped:
         print(f"{len(skipped)} model(s) have no route on this machine: {', '.join(skipped)}")
         print("  That is expected unless you own them. Fill in .env for the one you run.")
@@ -142,9 +143,19 @@ def main() -> None:
         print("  These have a route but did not return a tool call. A model that "
               "cannot call a tool cannot drive the browser.")
         raise SystemExit(1)
+    # Asking about your own model and being told nothing was wrong is the worst
+    # answer this script could give: naming models means you wanted them tested.
+    if args.models and not checked:
+        print("NOTHING WAS TESTED. You named "
+              f"{'a model' if len(keys) == 1 else 'models'} with no route on this "
+              f"machine, so no call was made. Fill in .env and run this again.")
+        raise SystemExit(1)
     if args.all and skipped:
         raise SystemExit(1)
-    print("every routed model returned a tool call")
+    if not checked:
+        print("no model has a route here, so nothing was tested")
+        raise SystemExit(1)
+    print(f"{checked} model(s) checked: every one returned a tool call")
 
 
 if __name__ == "__main__":

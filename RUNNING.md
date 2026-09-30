@@ -42,6 +42,7 @@ Fill in **two things**:
 | Grok 4.7 | Defu | `grok-4.7` | `GROK_BASE_URL` + `GROK_API_KEY` |
 | MiniMax M3 | Charles | `minimax-m3` | `MINIMAX_BASE_URL` + `MINIMAX_API_KEY` |
 | Qwen 3.8 27B | Xu Hu | `qwen3.8-27b` | `QWEN_BASE_URL` + `QWEN_API_KEY` |
+| DeepSeek V4.1 Flash | unassigned | `deepseek-v4.1` | `DEEPSEEK_BASE_URL` + `DEEPSEEK_API_KEY` |
 
 `OPENROUTER_API_KEY` is optional. It buys experience judge **B**, a second
 vendor whose agreement with judge A is what licenses the P1–P5 numbers. Without
@@ -108,7 +109,8 @@ SETTING=s1 MODELS="<your key>" JOBS=4 bash src/run_all.sh
 ```
 
 **370 cells** — 74 tasks × (4 personas + 1 `none` control), over both suites —
-then the judges and the reports. Expect roughly **8–14 hours at `JOBS=4`**.
+then the judges and the reports. Roughly **7–12 hours at `JOBS=4`**, from a
+measured mean of 4.4 minutes per cell.
 
 - `DRY_RUN=1` in front lists every cell and runs nothing. Do this first.
 - `JOBS=N` runs N cells at once, each in its own Chrome profile. Budget about
@@ -117,10 +119,19 @@ then the judges and the reports. Expect roughly **8–14 hours at `JOBS=4`**.
 - **Safe to re-run.** Finished cells are skipped and judged runs are not
   re-judged, so an interrupted night resumes by running the same command again.
 - Per-cell logs are in `logs/cells/`, the summary in `logs/s1-*.log`.
-- One cell of `gpt-6-astra` averaged **$3.10** over a sample of four (one task
-  read enough live pages to cost $9.68 on its own). Your model's price differs;
-  measure with `python src/cost_report.py src/results/s1` after a handful of
-  cells before committing to the whole grid.
+- **Measure your own cost before committing to the grid.** Six `gpt-6-astra`
+  cells averaged **$4.35**, which puts a full grid near **$1,600** for that
+  model — but the spread is what matters: the cheapest cell was $0.54 and the
+  most expensive **$13.16**. Cost tracks steps, because the transcript is
+  resent every step, and a task the agent *completes* costs far more than one
+  it gives up on: the booking that succeeded took 66 steps and 1.3M input
+  tokens. Your model's price per token differs. After ten or twenty cells run:
+
+  ```bash
+  python src/cost_report.py src/results/s1
+  ```
+
+  and tell Haoming the mean before starting the rest.
 
 ## 5. The proactivity ablation — optional
 
