@@ -88,10 +88,22 @@ def cells(results: Path):
                           if t.get("tool") in ("open_tab", "goto")),
             "reads": sum(1 for t in (run.get("trajectory") or [])
                          if t.get("tool") == "read_page"),
+            # The harness's own failure rate, split by tool. type_text once
+            # failed 45% of calls against click's 12% and nothing reported it,
+            # so a harness defect read as model weakness. This is the acceptance
+            # test for any change to the tool surface.
+            "clicks_tried": sum(1 for t in (run.get("trajectory") or [])
+                                if t.get("tool") == "click"),
+            "typing_tried": sum(1 for t in (run.get("trajectory") or [])
+                                if t.get("tool") == "type_text"),
             "click_failures": sum(
                 1 for t in (run.get("trajectory") or [])
                 if t.get("tool") == "click"
                 and str(t.get("result_preview") or "").startswith("click failed")),
+            "typing_failures": sum(
+                1 for t in (run.get("trajectory") or [])
+                if t.get("tool") == "type_text"
+                and str(t.get("result_preview") or "").startswith("typing failed")),
             "proactive_nudge": bool((run.get("arm") or {}).get("proactive_nudge")),
             "score": (record.get("judgement") or {}).get("score"),
             "wall_seconds": acct.get("cell_wall_seconds") or 0.0,
@@ -120,11 +132,13 @@ def group(rows: list[dict], key: str) -> dict[str, dict]:
             "completion_tokens": 0, "agent_cost": 0.0, "judge_cost": 0.0,
             "total_cost": 0.0, "retries": 0, "questions": 0,
             "clicks": 0, "direct": 0, "reads": 0, "click_failures": 0,
+            "clicks_tried": 0, "typing_tried": 0, "typing_failures": 0,
             "unpriced_calls": 0})
         bucket["cells"] += 1
         for field in ("wall_seconds", "steps", "prompt_tokens", "completion_tokens",
                       "agent_cost", "judge_cost", "total_cost", "retries", "questions", "clicks", "direct", "reads",
-                      "click_failures", "unpriced_calls"):
+                      "click_failures", "clicks_tried", "typing_tried",
+                      "typing_failures", "unpriced_calls"):
             bucket[field] += row[field]
     return out
 
@@ -158,6 +172,11 @@ def table(title: str, grouped: dict[str, dict], label: str) -> None:
               f"and the model is not in src/models.json) -- dollars are a floor")
 
 
+def _rate(failed: int, tried: int) -> str:
+    """"n/m 45%", or "-" when the tool was never used."""
+    return f"{failed}/{tried} {failed / tried:.0%}" if tried else "-"
+
+
 def navigation(rows: list[dict], key: str = "model") -> None:
     """Clicking versus addressing a page directly, and what each is worth.
 
@@ -175,7 +194,7 @@ def navigation(rows: list[dict], key: str = "model") -> None:
     print(f"\nnavigation style by {key}")
     width = max(len(key), max(len(k) for k in grouped)) + 2
     print(f"{key:<{width}}{'cells':>6}{'click':>8}{'direct':>8}{'read':>7}"
-          f"{'click%':>8}{'failed clicks':>15}{'mean score':>12}")
+          f"{'click%':>8}{'click fail':>11}{'type fail':>11}{'mean score':>12}")
     for name in sorted(grouped):
         bucket = grouped[name]
         cells_n = bucket["cells"] or 1
@@ -186,7 +205,9 @@ def navigation(rows: list[dict], key: str = "model") -> None:
         print(f"{name:<{width}}{bucket['cells']:>6}"
               f"{bucket['clicks'] / cells_n:>8.1f}{bucket['direct'] / cells_n:>8.1f}"
               f"{bucket['reads'] / cells_n:>7.1f}{share:>8.0%}"
-              f"{bucket['click_failures']:>15}{mean:>12}")
+              f"{_rate(bucket['click_failures'], bucket['clicks_tried']):>11}"
+              f"{_rate(bucket['typing_failures'], bucket['typing_tried']):>11}"
+              f"{mean:>12}")
 
 
 def main() -> None:

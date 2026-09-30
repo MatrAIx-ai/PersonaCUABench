@@ -69,6 +69,43 @@ any persona file that has drifted from the generator (`--check`). Which personas
 domain, not written by hand (`src/persona_assignments.py`), so it cannot go
 stale when the task set changes.
 
+## The harness
+
+Every model runs in **the same harness**: one Chrome, nine tools
+(`open_tab`, `goto`, `read_page`, `click`, `type_text`, `list_tabs`,
+`close_tab`, `ask_user`, `finish`), one observation format. That uniformity is
+the control that makes a cross-model number mean anything — a benchmark where
+the harness varies with the model measures model *and* harness, and cannot
+separate them. Three further reasons it is not negotiable here:
+
+- **Half the benchmark needs our browser.** The 36 REAL tasks load the task's
+  starting state through the sandbox's `/config` and read the final state from
+  `/finish` in the same session. A vendor harness that runs in the vendor's own
+  managed desktop cannot expose that state to us, so those tasks would have no
+  score at all.
+- **Only four of ten models have an official harness** (Claude, GPT, Gemini,
+  Qwen-CUA), and those four disagree with each other: pixel-driven, DOM-driven
+  and vendor-sandboxed respectively. "Official where available" means six
+  models on ours plus four mutually incompatible others.
+- **A screenshot harness would exclude a model outright.** GLM 5.3 accepts text
+  only; the other nine accept images. A pixel-driven harness would drop it from
+  the benchmark rather than measure it.
+
+The observation is page **text**, not pixels — `read_page` returns the visible
+text, then the page's interactive fields, then any control whose only name is an
+`aria-label`. Screenshots are captured every step, but for auditing a
+trajectory, not for the agent: no image enters a model's context.
+
+**The harness's own failure rate is reported, not assumed.** Over the first
+trajectories, `type_text` failed 45% of calls against `click`'s 12%, because
+`read_page` gave the model no element identity while `type_text` demanded a CSS
+selector — the model had to invent one. Fields and handles were added for that
+reason, and the same measurement is the acceptance test for any future change:
+
+```bash
+python src/cost_report.py src/results/s1      # click%, failed clicks, per arm
+```
+
 ## Models
 
 Each model resolves to a provider at run time: **the owner's own endpoint**,

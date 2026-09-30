@@ -604,6 +604,34 @@ def check_judge_b_is_optional() -> None:
     assert set(agreed) == set(exp.DIMENSIONS)
 
 
+def check_harness_failure_rate() -> None:
+    """The harness's own failure rate, per tool, is what the report must show.
+
+    type_text once failed 45% of calls against click's 12% and nothing counted
+    it, so a defect in our tool surface read as model weakness for weeks.
+    """
+    assert cost_report._rate(9, 20) == "9/20 45%", cost_report._rate(9, 20)
+    assert cost_report._rate(0, 7) == "0/7 0%"
+    # A tool a cell never used must not read as a clean 0%.
+    assert cost_report._rate(0, 0) == "-"
+
+    run = {"trajectory": [
+        {"tool": "type_text", "result_preview": "typing failed: nothing matches"},
+        {"tool": "type_text", "result_preview": "typed into f5; tab 1 now at ..."},
+        {"tool": "click", "result_preview": "click failed: no visible element"},
+        {"tool": "click", "result_preview": "clicked 'Next'; tab 1 now at ..."},
+        {"tool": "read_page", "result_preview": "tab 1 | ..."},
+    ]}
+    record = {"accounting": {"per_call": [], "by_role": {}, "cell_wall_seconds": 1.0},
+              "run": run, "task_id": "t" * 12, "judgement": {"score": 1.0}}
+    with tempfile.TemporaryDirectory() as tmp:
+        path = Path(tmp) / "result.json"
+        path.write_text(json.dumps(record), encoding="utf-8")
+        row = next(iter(cost_report.cells(Path(tmp))))
+    assert (row["typing_tried"], row["typing_failures"]) == (2, 1), row
+    assert (row["clicks_tried"], row["click_failures"]) == (2, 1), row
+
+
 def check_accounting_is_complete() -> None:
     """Every model call must survive into the record, not just its totals.
 
@@ -686,6 +714,7 @@ def main() -> None:
     check_real_judging()
     check_real_manifest_checks()
     check_judge_b_is_optional()
+    check_harness_failure_rate()
     check_accounting_is_complete()
     check_cost_report()
     print("accounting self-check OK")
