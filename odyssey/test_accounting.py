@@ -58,6 +58,58 @@ def check_registry() -> None:
     assert registry.cost_of("not/a-model", 1_000_000, 0) is None
 
 
+def check_model_routes() -> None:
+    """Each model reaches its owner's endpoint first, then Azure, then OpenRouter."""
+    import os
+
+    saved = {k: os.environ.get(k) for k in
+             ("GLM_BASE_URL", "GLM_API_KEY", "QWEN_BASE_URL", "QWEN_API_KEY",
+              "OPENROUTER_API_KEY", "AZURE_OPENAI_BASE_URL", "AZURE_OPENAI_API_KEY")}
+
+    def setenv(**values):
+        for key in saved:
+            os.environ.pop(key, None)
+        os.environ.update({k: v for k, v in values.items() if v})
+
+    try:
+        # Nothing configured: a model must refuse, naming what is missing.
+        setenv()
+        try:
+            registry.resolve("glm-5.3")
+        except SystemExit as exc:
+            assert "GLM_BASE_URL" in str(exc) and "OPENROUTER_API_KEY" in str(exc)
+        else:
+            raise AssertionError("an unroutable model was resolved anyway")
+
+        # Only OpenRouter: everything falls back to it.
+        setenv(OPENROUTER_API_KEY="k")
+        assert registry.resolve("glm-5.3") == ("z-ai/glm-5.3", "openrouter")
+
+        # The owner's own endpoint wins over the aggregator.
+        setenv(OPENROUTER_API_KEY="k", GLM_BASE_URL="https://vendor/v1", GLM_API_KEY="v")
+        assert registry.resolve("glm-5.3") == ("glm-5.3", "glm-5.3")
+        key, base_url = R._provider_config("glm-5.3")
+        assert (key, base_url) == ("v", "https://vendor/v1")
+
+        # A local server may need no key at all.
+        setenv(OPENROUTER_API_KEY="k", QWEN_BASE_URL="http://localhost:8000/v1")
+        assert registry.resolve("qwen3.8-27b")[1] == "qwen3.8-27b"
+
+        # Azure sits between the two for a model deployed there.
+        setenv(OPENROUTER_API_KEY="k", AZURE_OPENAI_BASE_URL="https://azure/v1",
+               AZURE_OPENAI_API_KEY="a")
+        assert registry.resolve("gpt-6-astra") == ("gpt-6-astra", "openai")
+
+        # An explicit provider is honoured even when unconfigured, so a forced
+        # route fails loudly instead of silently using another vendor.
+        assert registry.resolve("glm-5.3", "glm-5.3") == ("glm-5.3", "glm-5.3")
+    finally:
+        for key, value in saved.items():
+            os.environ.pop(key, None)
+            if value is not None:
+                os.environ[key] = value
+
+
 def check_meter() -> None:
     meter = R.Meter()
     # A provider-reported charge wins over the list price.
@@ -472,6 +524,7 @@ def check_cost_report() -> None:
 
 def main() -> None:
     check_registry()
+    check_model_routes()
     check_meter()
     check_metered_call()
     check_cache_marking()

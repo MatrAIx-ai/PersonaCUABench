@@ -50,6 +50,13 @@ PROVIDERS = {
     "openrouter": ("OPENROUTER_API_KEY", "https://openrouter.ai/api/v1"),
     "openai": ("OPENAI_API_KEY", None),          # None = the SDK's default endpoint
 }
+# Each model in the registry that has its owner's own endpoint becomes a
+# provider of its own, named after the model. The base URL is read at call time
+# rather than here, so a .env loaded later still takes effect.
+for _key, _entry in model_registry.MODELS.items():
+    _endpoint = _entry.get("endpoint") or {}
+    if _endpoint.get("base_url_env"):
+        PROVIDERS[_key] = (_endpoint.get("api_key_env", ""), None)
 
 def provenance() -> dict:
     """Which code, browser and machine produced a result.
@@ -504,6 +511,22 @@ def _provider_config(provider: str) -> tuple[str, str | None]:
                 raise SystemExit(f"{name} points to an empty file: {path}")
             return key
         return ""
+
+    endpoint = (model_registry.MODELS.get(provider) or {}).get("endpoint")
+    if endpoint:
+        # A model reached through its owner's own vendor endpoint.
+        base_url = os.environ.get(endpoint.get("base_url_env", ""), "").strip()
+        if not base_url:
+            raise SystemExit(
+                f"provider {provider!r} needs {endpoint.get('base_url_env')} "
+                f"(see .env.example)")
+        key = read_key((endpoint.get("api_key_env", ""),),
+                       (f"{endpoint.get('api_key_env', '')}_FILE",))
+        if not key and endpoint.get("key_required", True):
+            raise SystemExit(
+                f"provider {provider!r} needs {endpoint.get('api_key_env')} "
+                f"(set it, or point *_API_KEY_FILE at a file holding it)")
+        return key or "not-required", base_url
 
     # Keep Azure credentials paired with the Azure endpoint.  Otherwise a stale
     # exported OPENAI_API_KEY could accidentally be sent to an Azure URL (or the
