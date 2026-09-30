@@ -12,6 +12,7 @@
 #   TASK_SUITE=main-original bash odyssey/run_grid.sh # another registered suite
 #   TASKS_FILE=/tmp/draft.json bash odyssey/run_grid.sh
 #   JOBS=4 bash odyssey/run_grid.sh                   # four cells at a time
+#   DRY_RUN=1 bash odyssey/run_grid.sh                # list the cells, run nothing
 #   nohup bash odyssey/run_grid.sh > grid.log 2>&1 &  # detached, survives the terminal
 #
 # JOBS>1 runs that many cells concurrently, each in its own Chrome profile so the
@@ -25,6 +26,9 @@ cd "$(dirname "$0")/.."
 
 PYTHON_BIN="${PYTHON_BIN:-python3}"
 JOBS="${JOBS:-1}"
+# Print each cell's command instead of running it: what would this cost, and is
+# the persona assignment the one I meant?
+DRY_RUN="${DRY_RUN:-}"
 TASK_SUITE="${TASK_SUITE:-}"
 TASKS_FILE="${TASKS_FILE:-}"
 # A sentinel keeps empty-array expansion compatible with macOS Bash 3.2 under
@@ -59,8 +63,35 @@ ROUTE_ARGS=(__sentinel__)
 [[ -z "$TASK_SUITE" ]] || ROUTE_ARGS+=(--suite "$TASK_SUITE")
 [[ -z "$TASKS_FILE" ]] || ROUTE_ARGS+=(--tasks-file "$TASKS_FILE")
 
+# With no PERSONAS given, each task is asked for by its own domain family's four
+# personas (odyssey/persona_assignments.py) plus the `none` control -- a Kobe
+# sneaker task and a Gmail task should not be asked by the same people.
+ASSIGNED=""
 if [[ -z "${PERSONAS:-}" ]]; then
-  PERSONAS=$("$PYTHON_BIN" odyssey/task_router.py personas "${ROUTE_ARGS[@]:1}") || exit $?
+  ASSIGNED=$("$PYTHON_BIN" - "${ROUTE_ARGS[@]:1}" <<'PYCELLS'
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path("odyssey").resolve()))
+import persona_assignments, task_router
+
+argv = sys.argv[1:]
+suite_id = tasks_file = None
+while argv:
+    flag = argv.pop(0)
+    if flag == "--suite":
+        suite_id = argv.pop(0)
+    elif flag == "--tasks-file":
+        tasks_file = argv.pop(0)
+suite = task_router.load_route(suite_id=suite_id, tasks_file=tasks_file)
+control = "0" not in (str(__import__("os").environ.get("CONTROL", "1")),)
+for index, task in enumerate(suite.tasks, start=1):
+    names = persona_assignments.personas_for(task)
+    if control:
+        names = ["none"] + names
+    for name in names:
+        print(f"{index} {name}")
+PYCELLS
+  ) || exit $?
 fi
 if [[ -z "${TASKS:-}" ]]; then
   # Full IDs remain stable if a later shard inserts tasks before this batch.
@@ -78,6 +109,10 @@ cell_profile() {   # one Chrome per worker, or two workers corrupt one profile
 
 run_cell() {
   local persona="$1" task="$2" extra=()
+  if [[ -n "$DRY_RUN" ]]; then
+    echo "DRY: run.py ${ROUTE_ARGS[*]:1} --task $task --persona $persona ${EXTRA_ARGS[*]:1}"
+    return 0
+  fi
   if [[ "$JOBS" -gt 1 ]]; then
     extra=(--profile "$(cell_profile "$persona" "$task")")
     mkdir -p logs/cells
@@ -109,8 +144,25 @@ if [[ "$JOBS" -gt 1 ]]; then
   mkdir -p logs/cells
   rm -f "$FAILED_MARK"
 fi
-for persona in $PERSONAS; do
-  for t in $TASKS; do
+# Either an explicit persona list crossed with the task list, or the per-task
+# assignment computed above.
+CELLS=""
+if [[ -n "${PERSONAS:-}" ]]; then
+  for persona in $PERSONAS; do
+    for t in $TASKS; do CELLS+="$t $persona"$'\n'; done
+  done
+else
+  # Keep only the assigned cells whose task is in this shard's TASKS list.
+  while read -r t persona; do
+    [[ -z "$t" ]] && continue
+    for want in $TASKS; do
+      if [[ "$want" == "$t" ]]; then CELLS+="$t $persona"$'\n'; fi
+    done
+  done <<< "$ASSIGNED"
+fi
+
+while read -r t persona; do
+    [[ -z "$t" ]] && continue
     if [[ "$JOBS" -gt 1 ]]; then
       # Wait for a free slot. Polling rather than `wait -n` keeps this working
       # on the bash 3.2 that macOS still ships.
@@ -119,8 +171,7 @@ for persona in $PERSONAS; do
     else
       run_cell "$persona" "$t" || GRID_STATUS=1
     fi
-  done
-done
+done <<< "$CELLS"
 if [[ "$JOBS" -gt 1 ]]; then
   wait
   [[ -f "$FAILED_MARK" ]] && GRID_STATUS=1
