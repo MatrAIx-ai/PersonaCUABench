@@ -15,6 +15,7 @@
 #   SETTING=s2 MODELS="minimax-m3 kimi-k3" bash src/run_all.sh
 #   SETTING=s1 MODELS=terra REPLICATES="r1 r2 r3" bash src/run_all.sh
 #   PROMPT_CACHE=off SETTING=s1 MODELS=terra bash src/run_all.sh  # uncached cost
+#   JUDGE_B=off SETTING=s1 MODELS="<key>" bash src/run_all.sh    # skip the paid judge
 #   NUDGE=both SETTING=s1 MODELS="<key>" bash src/run_all.sh    # proactivity ablation
 #   DRY_RUN=1 SETTING=s2 MODELS=terra bash src/run_all.sh   # plan only, no spend
 #
@@ -45,6 +46,12 @@ JOBS="${JOBS:-1}"
 # PROMPT_CACHE=off measures what a run costs without our breakpoints; providers
 # that cache by themselves are unaffected either way.
 PROMPT_CACHE="${PROMPT_CACHE:-on}"
+# The second experience judge, on a second vendor, is what the P1-P5 agreement
+# number rests on -- and it is the only part of a run that bills OpenRouter even
+# when the backbone is free. JUDGE_B=off runs judge A alone; whoever collects
+# the results can add the second judge later over the saved records.
+JUDGE_B="${JUDGE_B:-anthropic/claude-opus-4.8}"
+[[ "$JUDGE_B" == off || "$JUDGE_B" == none ]] && JUDGE_B=""
 CACHE_ARGS=(__sentinel__)
 [[ "$PROMPT_CACHE" == off ]] && CACHE_ARGS+=(--no-prompt-cache)
 # The proactivity ablation. NUDGE=on appends a paragraph to the agent's system
@@ -117,7 +124,7 @@ done
 # needs the inline R1-Rn verdicts: its coverage guardrail is computed from
 # judgement.communicated.
 say "experience judge"
-run $PY src/experience_judge.py --results "$RESULTS" \
+run $PY src/experience_judge.py --results "$RESULTS" --judge-b "$JUDGE_B" \
   > "logs/$SETTING-experience_judge.log" 2>&1 \
   || say "experience judge reported errors (see logs/$SETTING-experience_judge.log)"
 
