@@ -59,6 +59,58 @@ Your model id must be the one **your provider** uses. Check
 `src/models.json` → your key → `endpoint.model` against your provider's docs
 before a paid run, and tell Haoming if it needs changing.
 
+### If your endpoint is not OpenRouter
+
+Most of you will call an internal or company endpoint rather than OpenRouter.
+**Change the call to match your setup — that is expected, not a workaround.**
+The only thing that must stay fixed is what the harness needs back.
+
+**The contract.** The runner sends an OpenAI-style
+`POST /chat/completions` with `messages`, `tools` and `max_completion_tokens`,
+and needs the reply to contain `choices[0].message.tool_calls` and a `usage`
+block. Anything that speaks that dialect works unchanged.
+
+**Case 1 — an OpenAI-compatible endpoint** (most internal gateways are).
+No code change.
+Set your two variables and correct the model id:
+
+```bash
+# .env
+YOURVENDOR_BASE_URL=https://llm.yourcompany.internal/v1
+YOURVENDOR_API_KEY=...
+```
+
+```jsonc
+// src/models.json -> your key -> endpoint
+"endpoint": {
+  "model": "the-id-your-gateway-uses",   // what YOUR endpoint calls the model
+  "base_url_env": "YOURVENDOR_BASE_URL",
+  "api_key_env": "YOURVENDOR_API_KEY",
+  "key_required": true                   // false for a local server with no auth
+}
+```
+
+The variable names are yours to choose; `src/run.py` builds the provider list
+from `models.json` at import, so a new pair needs no code. Verify with
+`python src/models.py` then `python scripts/check_models.py <your key>`.
+
+**Case 2 — it needs extra headers, a different auth scheme, or an
+`api-version` parameter.** One place to change: `_client()` in `src/run.py`,
+a six-line function that returns an `OpenAI(...)` object. Add what your gateway
+wants — `default_headers={...}`, a different `base_url`, `AzureOpenAI` instead
+of `OpenAI`. Everything downstream is unchanged.
+
+**Case 3 — it is not OpenAI-shaped at all** (a bespoke REST API, a different
+tool-call format). Write a small shim that translates in both directions and
+hand it back where `_client` is called. `src/responses_shim.py` is a worked
+example: it makes the Azure Responses API look like chat completions to
+everything else, in about a hundred lines.
+
+**Whatever you change, `python scripts/check_models.py <your key>` must pass
+before you start a grid** — it exercises a two-turn tool exchange, which is
+where a not-quite-compatible endpoint fails. And tell Haoming what you changed,
+so the run record says which endpoint produced the numbers.
+
 ## 2. Check before you spend
 
 ```bash

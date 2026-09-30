@@ -111,6 +111,13 @@ environment variables and every other model still works for you through
 whatever else is configured. A model with no configured route raises and names
 what it wants, rather than quietly running somewhere else.
 
+The owner's endpoint is usually an internal gateway, not the public vendor.
+Point it wherever you like: the variable names and the model id live in
+`src/models.json`, `run.py` builds its provider list from that file, and
+[`RUNNING.md`](RUNNING.md) covers the three cases — an OpenAI-compatible
+endpoint (no code change), one needing extra headers (one function), and one
+that is not OpenAI-shaped at all (a shim, with a worked example in the repo).
+
 | model | owner | key |
 |---|---|---|
 | Claude Opus 5.5 | Yiyang | `opus-5.5` |
