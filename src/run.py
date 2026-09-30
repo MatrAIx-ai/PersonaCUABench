@@ -834,7 +834,7 @@ def extract_json(text: str) -> dict | None:
 _retries_seen = 0          # provider retries this process has done, ever
 
 
-RESPONSES_API = True       # use the Responses API on the openai/Azure provider
+RESPONSES_API = True       # use the Responses API where a route needs it
 
 
 def _create_with_retry(client, *, attempts: int = MAX_RETRIES + 1, create=None,
@@ -1048,10 +1048,13 @@ def dump_response(resp) -> dict:
 def metered(client, meter: Meter | None, role: str, *, provider: str, **kwargs):
     """One chat call, timed and billed into the meter. Returns (resp, call)."""
     retries_before = _retries_seen
-    if provider == "openai" and RESPONSES_API:
-        # Chat completions on this deployment return a reasoning token count and
-        # no reasoning; the Responses API returns a summary of it for the same
-        # tokens. The shim keeps the caller in chat-completions terms.
+    if RESPONSES_API and model_registry.wants_responses_api(
+            kwargs.get("model", ""), provider):
+        # Chat completions on these deployments return a reasoning token count
+        # and no reasoning; the Responses API returns a summary of it for the
+        # same tokens -- and for the newer OpenAI models it is the only endpoint
+        # that accepts function tools at all. The shim keeps the caller in
+        # chat-completions terms.
         kwargs["create"] = lambda **call_kwargs: responses_shim.create(
             client, **call_kwargs)
     if provider == "openrouter":
@@ -1606,58 +1609,173 @@ def run_agent(task: dict, user: PersonaUser, model: str, *, max_steps: int,
 # Judge
 # --------------------------------------------------------------------------- #
 JUDGE_PROMPT = prompt("rubric_judge")
+RAISED_PROMPT = prompt("raised_judge")
+ENGAGEMENT_PROMPT = prompt("engagement_judge")
+
+# Whether this person raised something is a property of the conversation alone,
+# so it is judged once and reused by every model that saw the same words.
+# Not an optimisation: without it the answer moves. Four models handed a
+# byte-identical request produced raised counts of 0, 1, 4 and 0, because these
+# rubric items name sources the persona's compressed request never mentions and
+# the call is genuinely borderline. Cached, the borderline is decided once and
+# every model is measured against the same line -- which is the only way a
+# cross-model comparison means anything.
+RAISED_CACHE = HERE / ".judge_cache" / "raised"
+
+
+def raised_cache_key(task: dict, conversation: str, judge_model: str) -> str:
+    payload = json.dumps({
+        "task": task.get("task_id"),
+        "rubrics": {rid: r.get("requirement") for rid, r in task["rubrics"].items()},
+        "conversation": conversation,
+        "judge": judge_model,
+        "prompt": hashlib.sha256(RAISED_PROMPT.encode("utf-8")).hexdigest()[:16],
+    }, sort_keys=True, ensure_ascii=False)
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
+def cached_raised(key: str) -> dict | None:
+    path = RAISED_CACHE / f"{key}.json"
+    if not path.is_file():
+        return None
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None
+
+
+def store_raised(key: str, verdicts: dict) -> None:
+    RAISED_CACHE.mkdir(parents=True, exist_ok=True)
+    tmp = RAISED_CACHE / f"{key}.tmp"
+    tmp.write_text(json.dumps(verdicts, ensure_ascii=False, indent=2),
+                   encoding="utf-8")
+    tmp.replace(RAISED_CACHE / f"{key}.json")
+
+
+def _ask_judge(client, meter, role: str, *, provider: str, model: str,
+               text: str, budget: int = 8000) -> tuple[dict | None, str]:
+    """(parsed JSON, last error). Retried while the judge returns nothing usable.
+
+    A reasoning judge on a long trajectory can spend its whole budget thinking
+    and return an empty string, so the budget is generous and an unusable answer
+    is retried rather than thrown -- the browse it grades cost minutes.
+    No temperature: reasoning models accept only the default, and they take
+    max_completion_tokens rather than max_tokens.
+    """
+    last_error = ""
+    for attempt in range(MAX_RETRIES):
+        try:
+            resp, _ = metered(client, meter, role, provider=provider, model=model,
+                              messages=[{"role": "user", "content": text}],
+                              max_completion_tokens=budget)
+            parsed = extract_json(resp.choices[0].message.content or "")
+        except (NameError, TypeError, AttributeError):
+            raise                          # our bug, not the weather
+        except Exception as exc:
+            last_error = f"{type(exc).__name__}: {exc}"
+            parsed = None
+        if parsed:
+            return parsed, last_error
+        print(f"  [{role} returned nothing usable] attempt {attempt + 1}"
+              f"/{MAX_RETRIES}", flush=True)
+        time.sleep(3)
+    return None, last_error or "empty judge response"
 
 
 def judge_run(task: dict, run: dict, *, judge_model: str, judge_provider: str,
               meter: "Meter | None" = None) -> dict:
+    """Two independent judgements, deliberately not one call.
+
+    `met` is objective -- did the work satisfy the rubric, checkable against the
+    answer, the actions and the tabs. `communicated` is subjective -- did this
+    person raise it and did the agent take it up. Sharing one call and one
+    `reason` let the objective argument decide the subjective field: verdicts
+    like "communicated: false, because the answer lacks the Weather.com
+    forecast" appeared, and the same request landed in different categories for
+    different models. Separate prompts, separate calls, separate reasons.
+    """
     client, resolved_provider = _client(judge_model, judge_provider)
     rubric = "\n".join(
         f"- {rid}: {r['requirement']}\n  verification: {r['verification']}"
         for rid, r in task["rubrics"].items())
+    # The intent judge sees the requirement but not how to verify it: the
+    # verification text is the objective half's business.
+    intent_rubric = "\n".join(f"- {rid}: {r['requirement']}"
+                               for rid, r in task["rubrics"].items())
     actions = "\n".join(
         f"{t['step']}. {t['tool']}({json.dumps(t['args'], ensure_ascii=False)[:200]}) -> "
         f"{t['result_preview'][:160]}" for t in run["trajectory"]) or "(no actions)"
     conversation = "\n".join(
         f"{'USER' if t['role'] == 'user' else 'AGENT'}: {t['text']}"
         for t in run.get("conversation") or []) or "(none)"
+    answer = run["answer"] or "(the agent produced no final answer)"
     prompt = JUDGE_PROMPT.format(
-        task=task["confirmed_task"], conversation=conversation, rubric=rubric,
-        answer=run["answer"] or "(the agent produced no final answer)",
+        task=task["confirmed_task"], rubric=rubric, answer=answer,
         actions=actions, tabs=json.dumps(run["open_tabs"], indent=2))
+    # raised_prompt is given nothing about the agent: the same conversation
+    # must yield the same answer whichever agent was listening, and when the
+    # answer and action log were in this prompt it did not -- four models on a
+    # byte-identical request produced raised counts of 1, 1, 2 and 4.
+    raised_prompt = RAISED_PROMPT.format(
+        rubric=intent_rubric, conversation=conversation)
+    engagement_prompt = ENGAGEMENT_PROMPT.format(
+        rubric=intent_rubric, conversation=conversation, answer=answer,
+        actions=actions)
 
-    # A reasoning judge on a long trajectory can spend its whole budget thinking
-    # and return an empty string, so the budget is generous and an unusable
-    # answer is retried rather than thrown -- the browse it grades cost minutes.
-    # No temperature: reasoning models such as gpt-5.5 accept only the default,
-    # and they take max_completion_tokens, not max_tokens.
-    verdicts, last_error = None, ""
-    for attempt in range(MAX_RETRIES):
-        try:
-            resp, _ = metered(client, meter, "rubric_judge",
-                              provider=resolved_provider,
-                              model=judge_model,
-                              messages=[{"role": "user", "content": prompt}],
-                              max_completion_tokens=8000)
-            parsed = extract_json(resp.choices[0].message.content or "")
-        except Exception as exc:
-            last_error = f"{type(exc).__name__}: {exc}"
-            parsed = None
-        if parsed:
-            verdicts = parsed
-            break
-        print(f"  [judge returned nothing usable] attempt {attempt + 1}/3", flush=True)
-        time.sleep(3)
-
-    if verdicts is None:
+    base = {"judge_model": judge_model, "judge_provider": resolved_provider,
+            "judge_backend": _provider_backend(resolved_provider)}
+    objective, obj_error = _ask_judge(
+        client, meter, "rubric_judge", provider=resolved_provider,
+        model=judge_model, text=prompt)
+    if objective is None:
         # Grading failed; the run itself is still worth keeping.
-        return {"judge_model": judge_model, "judge_provider": resolved_provider,
-                "judge_backend": _provider_backend(resolved_provider),
-                "error": last_error or "empty judge response",
-                "verdicts": {}, "met": None, "total": len(task["rubrics"]),
-                "score": None, "trajectory_efficiency": None}
-    return {"judge_model": judge_model, "judge_provider": resolved_provider,
-            "judge_backend": _provider_backend(resolved_provider), "verdicts": verdicts,
-            **score_verdicts(task, verdicts, run["steps"])}
+        return {**base, "error": obj_error, "verdicts": {}, "met": None,
+                "total": len(task["rubrics"]), "score": None,
+                "trajectory_efficiency": None}
+    cache_key = raised_cache_key(task, conversation, judge_model)
+    raised_v, raised_error = cached_raised(cache_key), ""
+    raised_from_cache = raised_v is not None
+    if not raised_from_cache:
+        raised_v, raised_error = _ask_judge(
+            client, meter, "raised_judge", provider=resolved_provider,
+            model=judge_model, text=raised_prompt)
+        if raised_v is not None:
+            store_raised(cache_key, raised_v)
+    engaged_v, engaged_error = _ask_judge(
+        client, meter, "engagement_judge", provider=resolved_provider,
+        model=judge_model, text=engagement_prompt)
+    # Either subjective half missing means the intent picture is incomplete.
+    int_error = "; ".join(e for e in (
+        f"raised_judge: {raised_error}" if raised_v is None else "",
+        f"engagement_judge: {engaged_error}" if engaged_v is None else "") if e)
+
+    # One verdict per rubric id, each field from the judge that owns it, each
+    # keeping its own reason so a disagreement stays readable afterwards.
+    verdicts = {}
+    for rid in task["rubrics"]:
+        obj = objective.get(rid) or {}
+        r = (raised_v or {}).get(rid) or {}
+        e = (engaged_v or {}).get(rid) or {}
+        raised = r.get("raised") if raised_v is not None else None
+        verdicts[rid] = {
+            "met": obj.get("met"),
+            "met_reason": obj.get("reason"),
+            "raised": raised,
+            "raised_reason": r.get("reason") if raised_v is not None else None,
+            "engaged": e.get("engaged") if engaged_v is not None else None,
+            "engaged_reason": e.get("reason") if engaged_v is not None else None,
+            # Kept so score_communicated and every saved record keep their
+            # meaning: what this person actually asked for.
+            "communicated": raised,
+        }
+    out = {**base, "verdicts": verdicts,
+           "raised_cache": {"key": cache_key[:16], "hit": raised_from_cache},
+           **score_verdicts(task, verdicts, run["steps"])}
+    if int_error:
+        # The objective half stands on its own; say which subjective half is
+        # missing rather than let score_communicated read as a real None.
+        out["intent_judge_error"] = int_error
+    return out
 
 
 REAL_BOOLEAN_PROMPT = prompt("real_boolean_check")
@@ -1803,12 +1921,27 @@ def judge_real(task: dict, run: dict, *, judge_model: str = "",
             "trajectory_efficiency": round(float(passed) / max(run["steps"], 1), 4)}
 
 
-def score_verdicts(task: dict, verdicts: dict, steps: int) -> dict:
-    """score over every rubric item, plus score over only the communicated ones.
+# What (raised, engaged) says happened, in the benchmark's own terms. `met`
+# then says whether the work was right, which is a separate axis.
+INTENT_OUTCOMES = {
+    (True, True): "understood",      # they asked, the agent took it up
+    (True, False): "not_understood",  # they asked, the agent never engaged
+    (False, True): "exceeded",       # they never asked, the agent did it anyway
+    (False, False): "out_of_scope",  # not theirs, not pursued
+}
 
-    The second number is what the agent could fairly be held to: an item the
+
+def score_verdicts(task: dict, verdicts: dict, steps: int) -> dict:
+    """The objective score, the score over what this person raised, and what
+    the agent did with this person's intent.
+
+    score_communicated is what the agent could fairly be held to: an item the
     persona never voiced and the agent never asked about is a gap in the
     conversation, not in the agent's ability to do the work.
+
+    The outcome counts are the other axis. "exceeded" and "not_understood" both
+    used to collapse into communicated=false, so an agent that did more than it
+    was asked and one that ignored what it was asked looked the same.
     """
     ids = list(task["rubrics"])
     v = {rid: verdicts.get(rid) or {} for rid in ids}
@@ -1816,10 +1949,24 @@ def score_verdicts(task: dict, verdicts: dict, steps: int) -> dict:
     said = [r for r in ids if bool(v[r].get("communicated"))]
     met_said = sum(bool(v[r].get("met")) for r in said)
     total = len(ids)
+    outcomes = {name: 0 for name in INTENT_OUTCOMES.values()}
+    graded = 0
+    for r in ids:
+        raised, engaged = v[r].get("raised"), v[r].get("engaged")
+        if raised is None or engaged is None:
+            continue                       # the intent judge did not answer
+        outcomes[INTENT_OUTCOMES[(bool(raised), bool(engaged))]] += 1
+        graded += 1
+    # Of what this person asked for, how much did the agent even take up.
+    asked_for = outcomes["understood"] + outcomes["not_understood"]
     return {"met": met, "total": total,
             "score": round(met / total, 3) if total else 0.0,
             "communicated": len(said),
             "score_communicated": round(met_said / len(said), 3) if said else None,
+            "intent_outcomes": outcomes if graded else None,
+            "intent_graded": graded,
+            "engagement": (round(outcomes["understood"] / asked_for, 3)
+                           if asked_for else None),
             "trajectory_efficiency": round(met / total / max(steps, 1), 4) if total else 0.0}
 
 
@@ -1958,12 +2105,19 @@ def main() -> None:
                     help="the CUA doing the work: a key from src/models.json "
                          "(preferring Azure when that model is deployed there) or "
                          "a raw provider id")
-    ap.add_argument("--provider", default="openai",
+    # Empty, not "openai": a non-empty provider is an explicit override, and
+    # resolve() honours it even when no such route exists -- it then hands back
+    # the OpenRouter *id* pointed at the Azure endpoint. With "openai" as the
+    # default that happened to 11 of 13 registry models. Only gpt-6-astra and
+    # terra were unaffected, which is why it survived: they are the only two
+    # anyone had run. Empty lets the registry pick, which is its whole job.
+    ap.add_argument("--provider", default="",
                     help="override routing for --model, e.g. openrouter for a "
-                         "qwen id served somewhere other than DashScope")
+                         "qwen id served somewhere other than DashScope. "
+                         "Empty means the registry chooses.")
     ap.add_argument("--persona-model", default="gpt-5.6-terra",
                     help="the LLM playing the persona user")
-    ap.add_argument("--persona-provider", default="openai")
+    ap.add_argument("--persona-provider", default="")
     # Azure serves gpt-5.6-terra; once AZURE_OPENAI_* is configured every
     # "openai" provider call goes there, and a real OpenAI id such as gpt-5.5
     # would 404 with DeploymentNotFound.

@@ -134,7 +134,10 @@ def main() -> None:
     # is skipped out loud rather than taking the whole pass down with it.
     if args.judge_b:
         try:
-            pipeline.model_registry.resolve(args.judge_b, args.judge_b_provider)
+            # As in experience_judge: resolving a raw vendor id never touches
+            # credentials, so the client has to be built for the key to be read.
+            pipeline._client(*pipeline.model_registry.resolve(
+                args.judge_b, args.judge_b_provider))
         except SystemExit as exc:
             log(f"skipping experience judge B ({args.judge_b}): {exc}")
             args.judge_b = ""

@@ -7,7 +7,7 @@ would actually make; a **computer-use agent** does the work in a real Chrome
 session, knowing only what that person said; **judges** score it three ways —
 did the task get done, was it done for *this* user, and what did it cost.
 
-    persona (GPT 5.6 Terra) ──"help me…"──▶ CUA (one of nine) ──▶ Chrome
+    persona (GPT 5.6 Terra) ──"help me…"──▶ CUA (one of eleven) ──▶ Chrome
                   ▲                                                │
                   └──────────── ask_user ◀─────────────────────────┤
                                                                    ▼
@@ -19,7 +19,7 @@ did the task get done, was it done for *this* user, and what did it cost.
 |---|---|---|
 | **Tasks** | 74, all runnable | 38 Odysseys on the live web, 36 REAL sandbox sites |
 | **Personas** | 44 | eleven domain families × four roles, plus a `none` control |
-| **Models** | 9 execution backbones | one per collaborator, listed below |
+| **Models** | 11 execution backbones | listed below |
 | **Cells** | 370 per model per replicate | 74 tasks × (4 personas + control) |
 
 `benchmark/v1_tasks.json` is the source of truth for tasks, and every entry in
@@ -83,10 +83,12 @@ separate them. Three further reasons it is not negotiable here:
   `/finish` in the same session. A vendor harness that runs in the vendor's own
   managed desktop cannot expose that state to us, so those tasks would have no
   score at all.
-- **Only four of nine models have an official harness** (Claude, GPT, Gemini,
-  Qwen-CUA), and those four disagree with each other: pixel-driven, DOM-driven
-  and vendor-sandboxed respectively. "Official where available" means five
-  models on ours plus four mutually incompatible others.
+- **Five of eleven models have no official harness at all** (Muse Spark, Kimi,
+  Grok, MiniMax, DeepSeek). The other six are served by four vendor harnesses —
+  Claude's, OpenAI's for the three GPT models, Gemini's and Qwen-CUA — and those
+  four disagree with each other: pixel-driven, DOM-driven and vendor-sandboxed
+  respectively. "Official where available" means writing our own for five models
+  anyway and bolting four incompatible ones beside it.
 
 The observation is page **text**, not pixels — `read_page` returns the visible
 text, then the page's interactive fields, then any control whose only name is an
@@ -122,6 +124,8 @@ that is not OpenAI-shaped at all (a shim, with a worked example in the repo).
 |---|---|
 | Claude Opus 5.5 | `opus-5.5` |
 | GPT 6 Astra | `gpt-6-astra` |
+| GPT 6.1 Sol | `gpt-6.1-sol` |
+| GPT 6 Sol | `gpt-6-sol` |
 | Muse Spark 1.1 | `muse-spark-1.1` |
 | Gemini 3.8 Flash | `gemini-3.8-flash` |
 | Kimi K3 | `kimi-k3` |
@@ -197,7 +201,7 @@ and navigation style, `src/judge_all.py` re-judges saved runs in parallel.
 | `src/prepare_v1.py` | turns it into the runnable suites |
 | `src/task_suites/` | `odysseys/` and `real/`, generated |
 | `src/personas/` | generated persona profiles |
-| `src/models.json` | the nine models, their owners, routes and prices |
+| `src/models.json` | every model, its routes and its price |
 | `src/prompts/` | every prompt, one file each |
 | `src/run.py` | persona → CUA → judge, one cell |
 | `src/run_grid.sh`, `run_all.sh` | a model's whole grid, then the judges and reports |

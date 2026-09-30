@@ -295,12 +295,51 @@ def main() -> None:
         print("\nexperience and persona-fidelity aggregates omitted because task "
               "revisions are mixed; report a single revision/result subtree instead.")
     else:
+        intent_outcomes(best)
         experience(best)
         persona_fidelity(best)
 
 
 DIMENSIONS = ("P1_asked_for", "P2_readable_for_them", "P3_actionable",
               "P4_gap_handling", "P5_overall")
+
+# What the agent did with this person's intent, before asking whether the work
+# was right. Ordered as the benchmark reads them, best to worst.
+OUTCOMES = (("understood", "understood"), ("not_understood", "never engaged"),
+            ("exceeded", "did unasked"), ("out_of_scope", "out of scope"))
+
+
+def intent_outcomes(best: dict) -> None:
+    """Rubric items by what happened to this person's intent, per arm.
+
+    The headline scores cannot show this: "did it though nobody asked" and
+    "was asked and never tried" are both invisible in a met/total ratio, and
+    they are opposite behaviours.
+    """
+    rows: dict[str, dict[str, int]] = {}
+    for key, value in best.items():
+        # ResultKey is (suite, task, version, arm); ResultValue[1] is the
+        # judgement block.
+        counts = (value[1] or {}).get("intent_outcomes")
+        if not counts:
+            continue
+        bucket = rows.setdefault(str(key[3]), {name: 0 for name, _ in OUTCOMES})
+        for name, _ in OUTCOMES:
+            bucket[name] += counts.get(name, 0)
+    if not rows:
+        return
+    width = max(len(a) for a in rows) + 2
+    print(f"\nwhat the agent did with what this person wanted")
+    print(f"{'arm':<{width}}" + "".join(f"{label:>14}" for _, label in OUTCOMES)
+          + f"{'engaged%':>10}")
+    for arm in sorted(rows):
+        b = rows[arm]
+        asked = b["understood"] + b["not_understood"]
+        share = f"{b['understood'] / asked:.0%}" if asked else "-"
+        print(f"{arm:<{width}}" + "".join(f"{b[name]:>14}" for name, _ in OUTCOMES)
+              + f"{share:>10}")
+    print("  'did unasked' is the agent doing more than this person raised; "
+          "'never engaged' is it ignoring what they did raise.")
 
 
 def mixed_revision_groups(best: dict[ResultKey, ResultValue]) -> list[tuple[str, str]]:

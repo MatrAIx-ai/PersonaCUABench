@@ -121,7 +121,7 @@ The router rejects malformed tasks, duplicate ids (including ids duplicated
 across suites), paths that escape `src/`, invalid ordinals and ambiguous id
 prefixes — all before any model call.
 
-## Two settings, nine models, and the bill
+## Two settings, every model, and the bill
 
 `--setting` labels an experiment and namespaces its results, so the two designs
 never share a directory or a report row:

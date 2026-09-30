@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import csv
 import json
+import os
 import subprocess
 import sys
 import tempfile
@@ -118,6 +119,37 @@ def check_model_routes() -> None:
             os.environ.pop(key, None)
             if value is not None:
                 os.environ[key] = value
+
+
+def check_every_route_is_priced() -> None:
+    """Every id a model can resolve to must have a price.
+
+    price_for matched only the azure and openrouter ids, so a model reached
+    through its own vendor endpoint -- the common case for a collaborator on a
+    company gateway -- came back unpriced, and the report showed those cells as
+    free. Qwen resolves to "Qwen/Qwen3.8-27B" and MiniMax to "MiniMax-M3";
+    neither is the registry key or the OpenRouter id.
+    """
+    for key, entry in registry.MODELS.items():
+        ids = {(entry.get("endpoint") or {}).get("model"),
+               entry.get("azure"), entry.get("openrouter")} - {None}
+        assert ids, f"{key} can be reached by no id at all"
+        for model_id in ids:
+            price = registry.price_for(model_id)
+            assert price is not None, f"{key}: {model_id!r} has no price"
+
+    # A model that needs /v1/responses for function tools must be routed to the
+    # shim, or chat completions rejects the call and it looks incapable.
+    assert registry.wants_responses_api("gpt-6-astra", "openai"), "Azure always"
+    # Every entry that asks for the Responses API must actually get routed to
+    # it, whichever models those happen to be.
+    flagged = [k for k, e in registry.MODELS.items() if e.get("responses_api")]
+    assert flagged, "no model asks for the Responses API any more; is that right?"
+    for key in flagged:
+        model_id = (registry.MODELS[key].get("endpoint") or {}).get("model")
+        assert model_id, f"{key} wants the Responses API but has no endpoint model"
+        assert registry.wants_responses_api(model_id, key), key
+    assert not registry.wants_responses_api("z-ai/anything", "openrouter")
 
 
 def check_meter() -> None:
@@ -598,6 +630,27 @@ def check_judge_b_is_optional() -> None:
     # A B that ran and failed is still incomplete, so a re-run retries it.
     assert exp.experience_complete({"a": a, "b": {"error": "boom"}}) is False
     assert exp.experience_complete({"a": {"error": "boom"}, "b": None}) is False
+    # The guard must build the client, not just resolve the name: resolve()
+    # hands back a raw vendor id with an empty provider and never touches
+    # credentials, so a machine with only Azure configured used to sail past
+    # this check and die inside the first cell instead.
+    import run as pipeline
+    model, provider = pipeline.model_registry.resolve("anthropic/claude-opus-4.8")
+    assert provider == "", (model, provider)      # resolve alone raises nothing
+    saved = dict(os.environ)
+    try:
+        for name in ("OPENROUTER_API_KEY", "OPENROUTER_API_KEY_FILE"):
+            os.environ.pop(name, None)
+        try:
+            pipeline._client(model, provider)
+        except SystemExit:
+            pass                                   # what the guard relies on
+        else:
+            raise AssertionError("a missing OpenRouter key must raise at _client")
+    finally:
+        os.environ.clear()
+        os.environ.update(saved)
+
     # agreement() is never called with a null B; when it is called it reports
     # per-dimension gaps and never an average.
     agreed = exp.agreement(a, {d: {"score": 5} for d in exp.DIMENSIONS})
@@ -705,6 +758,7 @@ def check_cost_report() -> None:
 def main() -> None:
     check_registry()
     check_model_routes()
+    check_every_route_is_priced()
     check_meter()
     check_metered_call()
     check_cache_marking()

@@ -37,6 +37,8 @@ Fill in **two things**:
 |---|---|---|
 | Claude Opus 5.5 | `opus-5.5` | `CLAUDE_BASE_URL` + `CLAUDE_API_KEY` |
 | GPT 6 Astra | `gpt-6-astra` | `GPT6_BASE_URL` + `GPT6_API_KEY` |
+| GPT 6.1 Sol | `gpt-6.1-sol` | `OPENAI_DIRECT_BASE_URL` + `OPENAI_API_KEY` |
+| GPT 6 Sol | `gpt-6-sol` | `OPENAI_DIRECT_BASE_URL` + `OPENAI_API_KEY` |
 | Muse Spark 1.1 | `muse-spark-1.1` | `MUSE_BASE_URL` + `MUSE_API_KEY` |
 | Gemini 3.8 Flash | `gemini-3.8-flash` | `GEMINI_BASE_URL` + `GEMINI_API_KEY` |
 | Kimi K3 | `kimi-k3` | `KIMI_BASE_URL` + `KIMI_API_KEY` |
@@ -51,9 +53,17 @@ Fill in **two things**:
   have no `<VENDOR>_BASE_URL` for your model, OpenRouter is how it runs at all
   — `python src/models.py` tells you which route yours would take.
 - It buys experience judge **B**, a second vendor whose agreement with judge A
-  is what licenses the P1–P5 numbers. For that job alone it is optional: the
-  run says once that it is skipping judge B, judge A still scores every cell,
-  and whoever collects the results can add the second judge later.
+  is what licenses the P1–P5 numbers. **This is the only part of a run that
+  bills OpenRouter even when your backbone is free**, so if you are paying out
+  of your own pocket, turn it off:
+
+  ```bash
+  JUDGE_B=off SETTING=s1 MODELS="<your key>" JOBS=4 bash src/run_all.sh
+  ```
+
+  Judge A still scores every cell, the run says once that it skipped B, and
+  whoever collects the results can add the second judge later over the saved
+  records — nothing is lost but the agreement number.
 
 Your model id must be the one **your provider** uses. Check
 `src/models.json` → your key → `endpoint.model` against your provider's docs
@@ -111,7 +121,29 @@ before you start a grid** — it exercises a two-turn tool exchange, which is
 where a not-quite-compatible endpoint fails. And say what you changed,
 so the run record says which endpoint produced the numbers.
 
-## 2. Check before you spend
+## 2. Upgrading an older checkout
+
+If you cloned before this version, `git pull` is not quite enough:
+
+```bash
+git checkout main && git pull
+pip install -r src/requirements.txt   # jmespath is new; REAL checks need it
+```
+
+`odyssey/` is now `src/`. Git moves the tracked files for you, but anything
+untracked stays behind — an old `odyssey/results/`, `odyssey/.chrome-profile/`,
+`odyssey/__pycache__/`. None of it is read any more. Keep the old results if
+you want them, and delete the rest:
+
+```bash
+rm -rf odyssey/.chrome-profile odyssey/__pycache__
+```
+
+Your `.env` lives at the repo root and is unaffected. Then re-run the checks in
+§3 before spending anything — the task set, the persona set and the model list
+all changed.
+
+## 3. Check before you spend
 
 ```bash
 bash scripts/check_all.sh              # 8 offline checks: no keys, no network
@@ -134,7 +166,7 @@ One known trap: on OpenRouter, `meta/muse-spark-1.1` is gated behind a one-time
 like a dead model id. Confirm at <https://openrouter.ai/settings/preferences>,
 or set `MUSE_BASE_URL` and skip OpenRouter.
 
-## 3. One cell first
+## 4. One cell first
 
 ```bash
 python src/run.py --suite odysseys --task 1 --persona none \
@@ -160,7 +192,7 @@ ever sees what they said.
 If any of these three fails, stop and post what it printed. Do not start
 the grid.
 
-## 4. The grid
+## 5. The grid
 
 ```bash
 SETTING=s1 MODELS="<your key>" JOBS=4 bash src/run_all.sh
@@ -177,9 +209,11 @@ measured mean of 4.4 minutes per cell.
 - **Safe to re-run.** Finished cells are skipped and judged runs are not
   re-judged, so an interrupted night resumes by running the same command again.
 - Per-cell logs are in `logs/cells/`, the summary in `logs/s1-*.log`.
-- **Measure your own cost before committing to the grid.** Six `gpt-6-astra`
-  cells averaged **$4.35**, which puts a full grid near **$1,600** for that
-  model — but the spread is what matters: the cheapest cell was $0.54 and the
+- **Measure your own cost before committing to the grid.** Price per token
+  varies by more than an order of magnitude across the registry, so one
+  model's number says little about another's: `gpt-6-astra` lists at $10/$50
+  per Mtok and `gpt-6.1-sol` at $2/$10. Six `gpt-6-astra` cells averaged
+  **$4.35**, which puts a full grid near **$1,600** for that model — but the spread is what matters: the cheapest cell was $0.54 and the
   most expensive **$13.16**. Cost tracks steps, because the transcript is
   resent every step, and a task the agent *completes* costs far more than one
   it gives up on: the booking that succeeded took 66 steps and 1.3M input
@@ -191,9 +225,9 @@ measured mean of 4.4 minutes per cell.
 
   and post the mean before starting the rest.
 
-## 5. The proactivity ablation — optional
+## 6. The proactivity ablation — optional
 
-**Skip this unless you are asked for it.** Section 4 is the run that matters;
+**Skip this unless you are asked for it.** Section 5 is the run that matters;
 this is an extra arm and it doubles the cells and the money.
 
 The question it answers is whether an agent **asks** when the person left
@@ -218,7 +252,7 @@ python src/cost_report.py src/results/s1 --by proactive_nudge
 complete and it has been asked for; at roughly $1,600 per arm per model it is
 not something to kick off on your own.
 
-## 6. Send the results
+## 7. Send the results
 
 Everything is under `src/results/` — **gitignored on purpose**. Never commit it.
 

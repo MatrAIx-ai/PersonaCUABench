@@ -1093,6 +1093,42 @@ def test_skip_existing_ignores_unscored(tmp: Path = Path("/tmp")):
         )
 
 
+def test_cli_defaults_do_not_override_routing():
+    """--provider must default to empty, or the registry is overruled.
+
+    It defaulted to "openai". resolve() treats a non-empty provider as an
+    explicit override and honours it even when no such route exists, handing
+    back the OpenRouter *id* aimed at the Azure endpoint. That mis-routed 11 of
+    13 registry models; the two it spared, gpt-6-astra and terra, are the only
+    two that had ever been run, so nothing caught it.
+    """
+    parser = R.build_parser() if hasattr(R, "build_parser") else None
+    if parser is None:                      # parser is built inline in main()
+        import re
+        src = (SRC / "run.py").read_text(encoding="utf-8")
+        for flag in ("--provider", "--persona-provider"):
+            m = re.search(rf'add_argument\("{re.escape(flag)}",\s*default=("[^"]*")',
+                          src)
+            assert m, f"{flag} has no literal default any more; check by hand"
+            assert m.group(1) == '""', f"{flag} defaults to {m.group(1)}, not empty"
+
+    # An empty provider must behave exactly as passing none at all, whether or
+    # not this machine has the credentials -- the gate runs without any.
+    def outcome(key, provider):
+        try:
+            return R.model_registry.resolve(key, provider)
+        except SystemExit as exc:
+            return f"unrouted: {exc}"
+
+    for key in R.model_registry.MODELS:
+        assert outcome(key, "") == outcome(key, None or ""), key
+        # "openai" as a default would have been an override: prove it differs,
+        # so this test fails loudly if the default is ever put back.
+        if key not in ("gpt-6-astra", "terra"):
+            assert outcome(key, "openai") != outcome(key, ""), (
+                f"{key}: forcing the openai provider must not look identical")
+
+
 def test_typing_failure_says_why():
     """A failed type_text must tell the model what to do differently.
 
@@ -1161,11 +1197,26 @@ def test_typing_failure_says_why():
 
 
 def test_judge(run):
+    """Three fields from two judges, and the four outcomes they encode.
+
+    met is objective and comes from the rubric judge. raised and engaged are
+    subjective and come from the intent judge. One boolean could not hold both
+    of the latter: "did it though nobody asked" and "was asked and never tried"
+    both used to read as communicated=false.
+    """
     task = R.TASKS[0]
     rids = list(task["rubrics"])
-    # met: first two items; communicated: first three
-    fake = {rid: {"met": i < 2, "communicated": i < 3, "reason": "stub"}
-            for i, rid in enumerate(rids)}
+    assert len(rids) >= 4, "this test needs at least four rubric items"
+    # One item per outcome, so every branch of INTENT_OUTCOMES is exercised:
+    #   0 raised+engaged (met)   1 raised+engaged (not met)
+    #   2 raised, not engaged    3 engaged, never raised
+    plan = {rids[0]: (True, True, True), rids[1]: (True, True, False),
+            rids[2]: (True, False, False), rids[3]: (False, True, True)}
+    fake = {rid: {"met": plan.get(rid, (False, False, False))[2],
+                  "raised": plan.get(rid, (False, False, False))[0],
+                  "engaged": plan.get(rid, (False, False, False))[1],
+                  "reason": "stub"}
+            for rid in rids}
     client = _TextClient(reply=json.dumps(fake))
     R._client = lambda model, provider="": (client, "stub")
 
@@ -1173,11 +1224,80 @@ def test_judge(run):
     # reasoning-model call shape: no temperature, max_completion_tokens
     assert client.kwargs["temperature"] is None
     assert client.kwargs["max_completion_tokens"] == 8000
+    # met counts items 0 and 3; total is every rubric item.
     assert j["met"] == 2 and j["total"] == len(rids)
     assert j["score"] == round(2 / len(rids), 3)
     assert j["trajectory_efficiency"] == round(2 / len(rids) / run["steps"], 4)
-    # score over only what the user actually communicated: 2 of those 3
-    assert j["communicated"] == 3 and j["score_communicated"] == round(2 / 3, 3)
+    # communicated still means "this person raised it": items 0, 1, 2. One of
+    # those three was met, so the fair score is 1/3 -- item 3 was met but never
+    # asked for, and must not inflate it.
+    assert j["communicated"] == 3, j["communicated"]
+    assert j["score_communicated"] == round(1 / 3, 3), j["score_communicated"]
+
+    out = j["intent_outcomes"]
+    assert out["understood"] == 2, out          # items 0 and 1
+    assert out["not_understood"] == 1, out      # item 2: asked, never engaged
+    assert out["exceeded"] == 1, out            # item 3: done, never asked
+    assert out["out_of_scope"] == len(rids) - 4, out
+    assert j["intent_graded"] == len(rids)
+    # Of what this person asked for, the agent took up 2 of 3.
+    assert j["engagement"] == round(2 / 3, 3), j["engagement"]
+
+    # Each field keeps its own reason, so a disagreement stays readable.
+    v = j["verdicts"][rids[0]]
+    assert set(v) >= {"met", "met_reason", "raised", "raised_reason",
+                      "engaged", "engaged_reason"}
+
+    # raised is cached per conversation, so every model that saw the same words
+    # is measured against the same line. Without this the answer moves: four
+    # models on a byte-identical request gave raised counts of 0, 1, 4 and 0.
+    import tempfile as _tf
+    saved_cache = R.RAISED_CACHE
+    with _tf.TemporaryDirectory() as tmp:
+        R.RAISED_CACHE = Path(tmp) / "raised"
+        try:
+            calls = []
+            saved_ask2 = R._ask_judge
+
+            def counting(client, meter, role, **kw):
+                calls.append(role)
+                return json.loads(json.dumps(fake)), ""
+
+            R._ask_judge = counting
+            try:
+                first = R.judge_run(task, run, judge_model="stub", judge_provider="stub")
+                second = R.judge_run(task, run, judge_model="stub", judge_provider="stub")
+            finally:
+                R._ask_judge = saved_ask2
+        finally:
+            R.RAISED_CACHE = saved_cache
+    assert first["raised_cache"]["hit"] is False, first["raised_cache"]
+    assert second["raised_cache"]["hit"] is True, second["raised_cache"]
+    # The second run must not have asked the raised judge again.
+    assert calls.count("raised_judge") == 1, calls
+    assert calls.count("rubric_judge") == 2 and calls.count("engagement_judge") == 2, calls
+    # And the cached answer must be the same answer.
+    assert ({r: v["raised"] for r, v in first["verdicts"].items()}
+            == {r: v["raised"] for r, v in second["verdicts"].items()})
+
+    # If the intent judge fails, the objective half must still stand.
+    R._client = lambda model, provider="": (_TextClient(reply=json.dumps(fake)), "stub")
+    saved_ask = R._ask_judge
+    calls = {"n": 0}
+
+    def flaky(*a, **k):
+        calls["n"] += 1
+        return (json.loads(json.dumps(fake)), "") if calls["n"] == 1 else (None, "boom")
+
+    R._ask_judge = flaky
+    try:
+        degraded = R.judge_run(task, run, judge_model="stub", judge_provider="stub")
+    finally:
+        R._ask_judge = saved_ask
+    assert degraded["score"] == round(2 / len(rids), 3), degraded
+    assert degraded["intent_outcomes"] is None
+    assert degraded["score_communicated"] is None
+    assert "boom" in degraded["intent_judge_error"]
 
 
 if __name__ == "__main__":
@@ -1197,6 +1317,7 @@ if __name__ == "__main__":
     test_persona_fidelity_contract()
     test_experience_uses_frozen_profile()
     test_skip_existing_ignores_unscored()
+    test_cli_defaults_do_not_override_routing()
     test_typing_failure_says_why()
     test_judge(run)
     print("odyssey pipeline self-check OK")
