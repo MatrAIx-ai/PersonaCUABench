@@ -1,5 +1,6 @@
 persona_id: odyssey-travel-expert
-version: '2.0'
+version: '2.1'
+family: travel
 source: hand-specified from dimensions.json (MatrAIx 1290-dim schema)
 note: 'Career travel/transit professional: deep domain expertise, high tech fluency,
   plans in detail, no physical or access constraints.'
@@ -32,26 +33,10 @@ attributes:
     value: Upper-middle
     label: Socioeconomic band
     category: 'Demographic: Core'
-  demo_driver_status:
-    value: Occasional driver
-    label: Driving status
-    category: 'Demographic: Core'
-  lifex_travel_breadth:
-    value: Global nomad
-    label: Travel breadth
-    category: 'Demographic: Life Events'
   lifex_geographic_mobility:
     value: Serial relocator
     label: Geographic mobility
     category: 'Demographic: Life Events'
-  ind_travel_tourism:
-    value: Veteran
-    label: 'Industry: Travel & tourism'
-    category: 'Professional: Industry'
-  ind_transportation:
-    value: Experienced
-    label: 'Industry: Transportation'
-    category: 'Professional: Industry'
   seniority:
     value: Lead / Principal
     label: Seniority
@@ -64,26 +49,10 @@ attributes:
     value: Advanced
     label: 'Skill: Budgeting'
     category: 'Expertise: Skills'
-  skill_driving:
-    value: Advanced
-    label: 'Skill: Driving'
-    category: 'Expertise: Skills'
-  fam_urban_planning:
-    value: Proficient
-    label: 'Familiarity: Urban planning'
-    category: 'Expertise: Domains'
-  topic_travel:
-    value: Passionate
-    label: 'Interest: Travel'
-    category: 'Interests: Topics'
   topic_technology:
     value: Passionate
     label: 'Interest: Technology'
     category: 'Interests: Topics'
-  lstyle_travel_freq:
-    value: Frequent flyer
-    label: Travel frequency
-    category: 'Interests: Culture'
   lstyle_planning_horizon:
     value: Monthly
     label: Planning horizon
@@ -92,10 +61,6 @@ attributes:
     value: Balanced
     label: Spending vs saving
     category: 'Interests: Culture'
-  att_public_transit:
-    value: Enthusiast
-    label: 'Attitude: Public transit'
-    category: 'Worldview: Beliefs'
   att_new_technology:
     value: Enthusiast
     label: 'Attitude: New technology'
@@ -168,3 +133,39 @@ attributes:
     value: Weekly
     label: 'Habit: Budget tracking'
     category: 'Behavior: Habits'
+  demo_driver_status:
+    value: Occasional driver
+    label: Driving status
+    category: 'Demographic: Core'
+  lifex_travel_breadth:
+    value: Global nomad
+    label: Travel breadth
+    category: 'Demographic: Life Events'
+  ind_travel_tourism:
+    value: Veteran
+    label: 'Industry: Travel & tourism'
+    category: 'Professional: Industry'
+  ind_transportation:
+    value: Experienced
+    label: 'Industry: Transportation'
+    category: 'Professional: Industry'
+  skill_driving:
+    value: Advanced
+    label: 'Skill: Driving'
+    category: 'Expertise: Skills'
+  fam_urban_planning:
+    value: Proficient
+    label: 'Familiarity: Urban planning'
+    category: 'Expertise: Domains'
+  topic_travel:
+    value: Passionate
+    label: 'Interest: Travel'
+    category: 'Interests: Topics'
+  lstyle_travel_freq:
+    value: Frequent flyer
+    label: Travel frequency
+    category: 'Interests: Culture'
+  att_public_transit:
+    value: Enthusiast
+    label: 'Attitude: Public transit'
+    category: 'Worldview: Beliefs'

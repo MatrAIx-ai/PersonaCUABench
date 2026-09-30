@@ -1,5 +1,6 @@
 persona_id: odyssey-health-practical
-version: '2.0'
+version: '2.1'
+family: health
 source: hand-specified from dimensions.json (MatrAIx 1290-dim schema)
 note: 'Fitting a realistic fitness plan into a manager''s calendar: tell me the three
   sessions a week that work and where.'
@@ -32,26 +33,10 @@ attributes:
     value: Upper-middle
     label: Socioeconomic band
     category: 'Demographic: Core'
-  demo_driver_status:
-    value: Non-driver
-    label: Driving status
-    category: 'Demographic: Core'
-  lifex_travel_breadth:
-    value: A few countries
-    label: Travel breadth
-    category: 'Demographic: Life Events'
   lifex_geographic_mobility:
     value: Moved within region
     label: Geographic mobility
     category: 'Demographic: Life Events'
-  ind_travel_tourism:
-    value: None
-    label: 'Industry: Travel & tourism'
-    category: 'Professional: Industry'
-  ind_transportation:
-    value: None
-    label: 'Industry: Transportation'
-    category: 'Professional: Industry'
   seniority:
     value: Manager
     label: Seniority
@@ -64,26 +49,10 @@ attributes:
     value: Intermediate
     label: 'Skill: Budgeting'
     category: 'Expertise: Skills'
-  skill_driving:
-    value: None
-    label: 'Skill: Driving'
-    category: 'Expertise: Skills'
-  fam_urban_planning:
-    value: Familiar
-    label: 'Familiarity: Urban planning'
-    category: 'Expertise: Domains'
-  topic_travel:
-    value: Neutral
-    label: 'Interest: Travel'
-    category: 'Interests: Topics'
   topic_technology:
     value: Neutral
     label: 'Interest: Technology'
     category: 'Interests: Topics'
-  lstyle_travel_freq:
-    value: A few trips/yr
-    label: Travel frequency
-    category: 'Interests: Culture'
   lstyle_planning_horizon:
     value: Weekly
     label: Planning horizon
@@ -92,10 +61,6 @@ attributes:
     value: Balanced
     label: Spending vs saving
     category: 'Interests: Culture'
-  att_public_transit:
-    value: Positive
-    label: 'Attitude: Public transit'
-    category: 'Worldview: Beliefs'
   att_new_technology:
     value: Positive
     label: 'Attitude: New technology'
@@ -168,3 +133,23 @@ attributes:
     value: Rarely
     label: 'Habit: Budget tracking'
     category: 'Behavior: Habits'
+  ind_healthcare:
+    value: Some exposure
+    label: 'Industry: Healthcare'
+    category: 'Professional: Industry'
+  ind_fitness_wellness:
+    value: Some exposure
+    label: 'Industry: Fitness & wellness'
+    category: 'Professional: Industry'
+  fam_nutrition:
+    value: Familiar
+    label: 'Familiarity: Nutrition'
+    category: 'Expertise: Domains'
+  topic_fitness:
+    value: Interested
+    label: 'Interest: Fitness'
+    category: 'Health: Fitness'
+  lstyle_exercise_freq:
+    value: Weekly
+    label: Exercise frequency
+    category: 'Health: Fitness'

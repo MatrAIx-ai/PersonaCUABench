@@ -1,5 +1,6 @@
 persona_id: odyssey-science-helper
-version: '2.0'
+version: '2.1'
+family: science
 source: hand-specified from dimensions.json (MatrAIx 1290-dim schema)
 note: 'Parent hunting down free school resources for a child''s project: patient,
   penny-watching, not a scientist.'
@@ -32,26 +33,10 @@ attributes:
     value: Lower-middle
     label: Socioeconomic band
     category: 'Demographic: Core'
-  demo_driver_status:
-    value: Daily driver
-    label: Driving status
-    category: 'Demographic: Core'
-  lifex_travel_breadth:
-    value: Never left country
-    label: Travel breadth
-    category: 'Demographic: Life Events'
   lifex_geographic_mobility:
     value: Never left hometown
     label: Geographic mobility
     category: 'Demographic: Life Events'
-  ind_travel_tourism:
-    value: None
-    label: 'Industry: Travel & tourism'
-    category: 'Professional: Industry'
-  ind_transportation:
-    value: None
-    label: 'Industry: Transportation'
-    category: 'Professional: Industry'
   seniority:
     value: Mid
     label: Seniority
@@ -64,26 +49,10 @@ attributes:
     value: Advanced
     label: 'Skill: Budgeting'
     category: 'Expertise: Skills'
-  skill_driving:
-    value: Advanced
-    label: 'Skill: Driving'
-    category: 'Expertise: Skills'
-  fam_urban_planning:
-    value: None
-    label: 'Familiarity: Urban planning'
-    category: 'Expertise: Domains'
-  topic_travel:
-    value: Neutral
-    label: 'Interest: Travel'
-    category: 'Interests: Topics'
   topic_technology:
     value: Neutral
     label: 'Interest: Technology'
     category: 'Interests: Topics'
-  lstyle_travel_freq:
-    value: Rare
-    label: Travel frequency
-    category: 'Interests: Culture'
   lstyle_planning_horizon:
     value: Weekly
     label: Planning horizon
@@ -92,10 +61,6 @@ attributes:
     value: Frugal saver
     label: Spending vs saving
     category: 'Interests: Culture'
-  att_public_transit:
-    value: Neutral
-    label: 'Attitude: Public transit'
-    category: 'Worldview: Beliefs'
   att_new_technology:
     value: Neutral
     label: 'Attitude: New technology'
@@ -168,3 +133,19 @@ attributes:
     value: Weekly
     label: 'Habit: Budget tracking'
     category: 'Behavior: Habits'
+  ind_education:
+    value: Some exposure
+    label: 'Industry: Education'
+    category: 'Learning: Academic'
+  fam_statistics:
+    value: Familiar
+    label: 'Familiarity: Statistics'
+    category: 'Expertise: Domains'
+  skill_research:
+    value: Intermediate
+    label: 'Skill: Research'
+    category: 'Expertise: Skills'
+  topic_science:
+    value: Neutral
+    label: 'Interest: Science'
+    category: 'Interests: Topics'

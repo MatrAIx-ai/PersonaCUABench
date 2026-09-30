@@ -1,5 +1,6 @@
 persona_id: odyssey-professional-expert
-version: '2.0'
+version: '2.1'
+family: professional
 source: hand-specified from dimensions.json (MatrAIx 1290-dim schema)
 note: 'Talent lead who screens dozens of profiles a week: wants titles, dates, comp
   bands and the sourcing rationale.'
@@ -32,26 +33,10 @@ attributes:
     value: Upper-middle
     label: Socioeconomic band
     category: 'Demographic: Core'
-  demo_driver_status:
-    value: Non-driver
-    label: Driving status
-    category: 'Demographic: Core'
-  lifex_travel_breadth:
-    value: Well-traveled
-    label: Travel breadth
-    category: 'Demographic: Life Events'
   lifex_geographic_mobility:
     value: Serial relocator
     label: Geographic mobility
     category: 'Demographic: Life Events'
-  ind_travel_tourism:
-    value: None
-    label: 'Industry: Travel & tourism'
-    category: 'Professional: Industry'
-  ind_transportation:
-    value: None
-    label: 'Industry: Transportation'
-    category: 'Professional: Industry'
   seniority:
     value: Director
     label: Seniority
@@ -64,26 +49,10 @@ attributes:
     value: Master
     label: 'Skill: Budgeting'
     category: 'Expertise: Skills'
-  skill_driving:
-    value: None
-    label: 'Skill: Driving'
-    category: 'Expertise: Skills'
-  fam_urban_planning:
-    value: Aware
-    label: 'Familiarity: Urban planning'
-    category: 'Expertise: Domains'
-  topic_travel:
-    value: Neutral
-    label: 'Interest: Travel'
-    category: 'Interests: Topics'
   topic_technology:
     value: Interested
     label: 'Interest: Technology'
     category: 'Interests: Topics'
-  lstyle_travel_freq:
-    value: A few trips/yr
-    label: Travel frequency
-    category: 'Interests: Culture'
   lstyle_planning_horizon:
     value: Yearly
     label: Planning horizon
@@ -92,10 +61,6 @@ attributes:
     value: Balanced
     label: Spending vs saving
     category: 'Interests: Culture'
-  att_public_transit:
-    value: Enthusiast
-    label: 'Attitude: Public transit'
-    category: 'Worldview: Beliefs'
   att_new_technology:
     value: Positive
     label: 'Attitude: New technology'
@@ -168,3 +133,19 @@ attributes:
     value: Monthly
     label: 'Habit: Budget tracking'
     category: 'Behavior: Habits'
+  ind_consulting:
+    value: Veteran
+    label: 'Industry: Consulting'
+    category: 'Professional: Industry'
+  skill_networking:
+    value: Master
+    label: 'Skill: Networking'
+    category: 'Expertise: Skills'
+  val_career_success:
+    value: Core value
+    label: 'Value: Career success'
+    category: Values & Motivation
+  lifex_career_path_shape:
+    value: Linear climb
+    label: Career path shape
+    category: 'Demographic: Life Events'

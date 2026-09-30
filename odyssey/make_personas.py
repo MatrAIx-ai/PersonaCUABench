@@ -23,6 +23,8 @@ OUT = Path(__file__).resolve().parent / "personas"
 # how much travel/transit expertise they carry, how they handle money and risk,
 # how they read and how much detail they want, and the physical/tech constraints
 # that shape a browsing session.
+# Everyone gets these; a family adds its own below. DIMENSIONS stays as the
+# travel set it always was, so the four travel personas are unchanged.
 DIMENSIONS = (
     "age_bracket", "region", "urbanicity", "socioeconomic_band", "demo_driver_status",
     "lifex_travel_breadth", "lifex_geographic_mobility",
@@ -234,9 +236,235 @@ _ROLE_BASE: dict[str, dict[str, str]] = {
 }
 
 
-def _p(role: str, note: str, **overrides: str) -> dict:
-    """A persona: the role baseline with this person's own values on top."""
-    return {"note": note, "values": {**_ROLE_BASE[role], **overrides}}
+
+# --------------------------------------------------------------------------- #
+# Domain families
+# --------------------------------------------------------------------------- #
+# The shared dimensions above describe anyone. What separates a food expert from
+# a health expert is domain knowledge, and the MatrAIx schema has 50 industry,
+# 143 familiarity, 64 skill and 80 topic dimensions for exactly that. Each family
+# adds a few of its own, so a Gmail persona is not described by its attitude to
+# public transit and a cook is not an expert at nothing in particular.
+#
+# Travel's extension is the nine travel dimensions the first four personas were
+# written with, so those files are unchanged by this split.
+TRAVEL_DIMENSIONS = (
+    "demo_driver_status", "lifex_travel_breadth", "ind_travel_tourism",
+    "ind_transportation", "skill_driving", "fam_urban_planning", "topic_travel",
+    "lstyle_travel_freq", "att_public_transit",
+)
+FAMILY_DIMENSIONS: dict[str, tuple[str, ...]] = {
+    "travel": TRAVEL_DIMENSIONS,
+    "science": ("ind_education", "fam_statistics", "skill_research", "topic_science"),
+    "tech": ("ind_consumer_electronics", "fam_computer_networking", "skill_coding",
+             "skill_debugging", "topic_technology"),
+    "community": ("ind_nonprofit", "ind_government", "skill_facilitation",
+                  "topic_volunteering", "val_community"),
+    "art": ("ind_fine_art", "fam_art_history", "skill_drawing",
+            "trait_appreciation_of_beauty"),
+    "lifestyle": ("ind_apparel", "ind_real_estate", "lstyle_fashion_sense",
+                  "topic_interior_design", "topic_fashion"),
+    "ecommerce": ("ind_e_commerce", "ind_retail", "skill_negotiation",
+                  "lstyle_shopping_style"),
+    "health": ("ind_healthcare", "ind_fitness_wellness", "fam_nutrition",
+               "topic_fitness", "lstyle_exercise_freq"),
+    "food": ("ind_food_beverage", "ind_hospitality", "skill_cooking",
+             "topic_cooking", "lstyle_diet_type"),
+    "productivity": ("skill_time_management", "skill_writing",
+                     "habit_inbox_zero_discipline", "fam_organizational_psychology",
+                     "topic_productivity"),
+    "professional": ("ind_consulting", "skill_networking", "val_career_success",
+                     "lifex_career_path_shape"),
+}
+
+# What each role knows about its own domain. The expert works in it, the senior
+# has lived alongside it without studying it, the young one is enthusiastic and
+# untrained, the practical one is competent and busy. A profile overrides any of
+# these the moment the person is not the default.
+FAMILY_DEFAULTS: dict[str, dict[str, dict[str, str]]] = {
+    "science": {
+        "expert": {"ind_education": "Veteran", "fam_statistics": "Expert",
+                   "skill_research": "Master", "topic_science": "Passionate"},
+        "senior": {"ind_education": "Some exposure", "fam_statistics": "Aware",
+                   "skill_research": "Beginner", "topic_science": "Interested"},
+        "young": {"ind_education": "None", "fam_statistics": "Aware",
+                  "skill_research": "Beginner", "topic_science": "Interested"},
+        "practical": {"ind_education": "Some exposure", "fam_statistics": "Familiar",
+                      "skill_research": "Intermediate", "topic_science": "Neutral"},
+    },
+    "tech": {
+        "expert": {"ind_consumer_electronics": "Veteran",
+                   "fam_computer_networking": "Expert", "skill_coding": "Master",
+                   "skill_debugging": "Master", "topic_technology": "Passionate"},
+        "senior": {"ind_consumer_electronics": "None",
+                   "fam_computer_networking": "None", "skill_coding": "None",
+                   "skill_debugging": "None", "topic_technology": "Averse"},
+        "young": {"ind_consumer_electronics": "Some exposure",
+                  "fam_computer_networking": "Aware", "skill_coding": "Beginner",
+                  "skill_debugging": "Beginner", "topic_technology": "Passionate"},
+        "practical": {"ind_consumer_electronics": "Some exposure",
+                      "fam_computer_networking": "Familiar", "skill_coding": "Beginner",
+                      "skill_debugging": "Intermediate", "topic_technology": "Neutral"},
+    },
+    "community": {
+        "expert": {"ind_nonprofit": "Veteran", "ind_government": "Experienced",
+                   "skill_facilitation": "Master", "topic_volunteering": "Passionate",
+                   "val_community": "Core value"},
+        "senior": {"ind_nonprofit": "Some exposure", "ind_government": "Some exposure",
+                   "skill_facilitation": "Beginner", "topic_volunteering": "Interested",
+                   "val_community": "Important"},
+        "young": {"ind_nonprofit": "Some exposure", "ind_government": "None",
+                  "skill_facilitation": "Beginner", "topic_volunteering": "Passionate",
+                  "val_community": "Important"},
+        "practical": {"ind_nonprofit": "Some exposure", "ind_government": "None",
+                      "skill_facilitation": "Intermediate",
+                      "topic_volunteering": "Neutral", "val_community": "Moderate"},
+    },
+    "art": {
+        "expert": {"ind_fine_art": "Veteran", "fam_art_history": "Expert",
+                   "skill_drawing": "Master",
+                   "trait_appreciation_of_beauty": "Signature"},
+        "senior": {"ind_fine_art": "Some exposure", "fam_art_history": "Familiar",
+                   "skill_drawing": "Beginner",
+                   "trait_appreciation_of_beauty": "Strong"},
+        "young": {"ind_fine_art": "None", "fam_art_history": "Aware",
+                  "skill_drawing": "Intermediate",
+                  "trait_appreciation_of_beauty": "Strong"},
+        "practical": {"ind_fine_art": "None", "fam_art_history": "Aware",
+                      "skill_drawing": "Beginner",
+                      "trait_appreciation_of_beauty": "Moderate"},
+    },
+    "lifestyle": {
+        "expert": {"ind_apparel": "Veteran", "ind_real_estate": "Some exposure",
+                   "lstyle_fashion_sense": "Trend-setter",
+                   "topic_interior_design": "Passionate", "topic_fashion": "Passionate"},
+        "senior": {"ind_apparel": "None", "ind_real_estate": "Some exposure",
+                   "lstyle_fashion_sense": "Classic",
+                   "topic_interior_design": "Neutral", "topic_fashion": "Indifferent"},
+        "young": {"ind_apparel": "Some exposure", "ind_real_estate": "None",
+                  "lstyle_fashion_sense": "Trend-follower",
+                  "topic_interior_design": "Interested", "topic_fashion": "Passionate"},
+        "practical": {"ind_apparel": "None", "ind_real_estate": "Some exposure",
+                      "lstyle_fashion_sense": "Practical",
+                      "topic_interior_design": "Interested", "topic_fashion": "Neutral"},
+    },
+    "ecommerce": {
+        "expert": {"ind_e_commerce": "Veteran", "ind_retail": "Experienced",
+                   "skill_negotiation": "Advanced",
+                   "lstyle_shopping_style": "Researcher"},
+        "senior": {"ind_e_commerce": "None", "ind_retail": "Some exposure",
+                   "skill_negotiation": "Intermediate",
+                   "lstyle_shopping_style": "Brand loyal"},
+        "young": {"ind_e_commerce": "Some exposure", "ind_retail": "Some exposure",
+                  "skill_negotiation": "Beginner",
+                  "lstyle_shopping_style": "Bargain hunter"},
+        "practical": {"ind_e_commerce": "Some exposure", "ind_retail": "None",
+                      "skill_negotiation": "Intermediate",
+                      "lstyle_shopping_style": "Minimalist"},
+    },
+    "health": {
+        "expert": {"ind_healthcare": "Veteran", "ind_fitness_wellness": "Experienced",
+                   "fam_nutrition": "Expert", "topic_fitness": "Passionate",
+                   "lstyle_exercise_freq": "Daily"},
+        "senior": {"ind_healthcare": "Some exposure", "ind_fitness_wellness": "None",
+                   "fam_nutrition": "Aware", "topic_fitness": "Neutral",
+                   "lstyle_exercise_freq": "Rarely"},
+        "young": {"ind_healthcare": "None", "ind_fitness_wellness": "Some exposure",
+                  "fam_nutrition": "Familiar", "topic_fitness": "Passionate",
+                  "lstyle_exercise_freq": "Weekly"},
+        "practical": {"ind_healthcare": "Some exposure",
+                      "ind_fitness_wellness": "Some exposure",
+                      "fam_nutrition": "Familiar", "topic_fitness": "Interested",
+                      "lstyle_exercise_freq": "Weekly"},
+    },
+    "food": {
+        "expert": {"ind_food_beverage": "Veteran", "ind_hospitality": "Experienced",
+                   "skill_cooking": "Master", "topic_cooking": "Passionate",
+                   "lstyle_diet_type": "Omnivore"},
+        "senior": {"ind_food_beverage": "Some exposure", "ind_hospitality": "None",
+                   "skill_cooking": "Advanced", "topic_cooking": "Interested",
+                   "lstyle_diet_type": "Flexitarian"},
+        "young": {"ind_food_beverage": "Some exposure", "ind_hospitality": "None",
+                  "skill_cooking": "Beginner", "topic_cooking": "Interested",
+                  "lstyle_diet_type": "Vegetarian"},
+        "practical": {"ind_food_beverage": "None", "ind_hospitality": "None",
+                      "skill_cooking": "Intermediate", "topic_cooking": "Neutral",
+                      "lstyle_diet_type": "Omnivore"},
+    },
+    "productivity": {
+        "expert": {"skill_time_management": "Master", "skill_writing": "Advanced",
+                   "habit_inbox_zero_discipline": "Daily",
+                   "fam_organizational_psychology": "Proficient",
+                   "topic_productivity": "Passionate"},
+        "senior": {"skill_time_management": "Intermediate", "skill_writing": "Intermediate",
+                   "habit_inbox_zero_discipline": "Rarely",
+                   "fam_organizational_psychology": "None",
+                   "topic_productivity": "Indifferent"},
+        "young": {"skill_time_management": "Beginner", "skill_writing": "Intermediate",
+                  "habit_inbox_zero_discipline": "Never",
+                  "fam_organizational_psychology": "Aware",
+                  "topic_productivity": "Interested"},
+        "practical": {"skill_time_management": "Advanced", "skill_writing": "Intermediate",
+                      "habit_inbox_zero_discipline": "Weekly",
+                      "fam_organizational_psychology": "Familiar",
+                      "topic_productivity": "Interested"},
+    },
+    "professional": {
+        "expert": {"ind_consulting": "Veteran", "skill_networking": "Master",
+                   "val_career_success": "Core value",
+                   "lifex_career_path_shape": "Linear climb"},
+        "senior": {"ind_consulting": "Some exposure", "skill_networking": "Intermediate",
+                   "val_career_success": "Moderate",
+                   "lifex_career_path_shape": "Linear climb"},
+        "young": {"ind_consulting": "None", "skill_networking": "Beginner",
+                  "val_career_success": "Important",
+                  "lifex_career_path_shape": "Just starting"},
+        "practical": {"ind_consulting": "Some exposure", "skill_networking": "Advanced",
+                      "val_career_success": "Important",
+                      "lifex_career_path_shape": "Pivoted once"},
+    },
+}
+
+
+CORE_DIMENSIONS = tuple(d for d in DIMENSIONS if d not in TRAVEL_DIMENSIONS)
+
+
+TRAVEL_KEYS = ("travel-expert", "elderly-novice", "budget-student",
+               "non-native-speaker")
+
+
+def family_of_key(name: str) -> str:
+    """The family a persona key belongs to: its prefix, or travel by name."""
+    if name in TRAVEL_KEYS:
+        return "travel"
+    family = name.split("-", 1)[0]
+    if family not in FAMILY_DIMENSIONS:
+        raise AssertionError(
+            f"persona {name!r} names family {family!r}, which is not in "
+            f"FAMILY_DIMENSIONS ({sorted(FAMILY_DIMENSIONS)})")
+    return family
+
+
+def dimensions_for(family: str) -> tuple[str, ...]:
+    """Everyone's dimensions, plus this family's own."""
+    if family not in FAMILY_DIMENSIONS:
+        raise AssertionError(
+            f"unknown persona family {family!r}; known: {sorted(FAMILY_DIMENSIONS)}")
+    return tuple(CORE_DIMENSIONS) + FAMILY_DIMENSIONS[family]
+
+
+def _p(role: str, note: str, family: str = "", **overrides: str) -> dict:
+    """A persona: the role baseline, the family's defaults, this person on top.
+
+    `family` defaults to the one the persona key names (see PROFILES below); the
+    role's domain defaults fill in what the profile does not say itself.
+    """
+    values = {**_ROLE_BASE[role], **overrides}
+    # `overrides` is what this author actually asked for; the baseline is shared
+    # across families and is filtered to the family's dimensions later, while an
+    # override outside them is a mistake that must be reported.
+    return {"note": note, "role": role, "family": family, "values": values,
+            "explicit": tuple(overrides)}
 
 
 PROFILES: dict[str, dict] = {
@@ -422,43 +650,33 @@ PROFILES: dict[str, dict] = {
         "Tenured researcher who reads the methods section first and wants every "
         "citation, deadline and eligibility clause spelled out.",
         age_bracket="45-54", region="Western Europe", urbanicity="Small town",
-        seniority="Lead / Principal", lifex_travel_breadth="Lived abroad",
-        lifex_geographic_mobility="Serial relocator",
-        lstyle_travel_freq="Frequent flyer", lstyle_planning_horizon="Yearly",
+        seniority="Lead / Principal", lifex_geographic_mobility="Serial relocator",
+        lstyle_planning_horizon="Yearly",
         topic_technology="Passionate", skill_budgeting="Master",
         cog_patience="Very high", cog_big_picture_vs_detail="Detail-obsessed",
-        habit_budget_tracking="Weekly", fam_urban_planning="Familiar",
-        health_vision="Normal", cog_risk_framing="Balanced",
-        att_public_transit="Enthusiast",
+        habit_budget_tracking="Weekly", health_vision="Normal", cog_risk_framing="Balanced",
     ),
     "science-senior": _p(
         "senior",
         "Retired schoolteacher auditing a continuing-education course: careful and "
         "well-read, but wants the gist in large type.",
         urbanicity="Small town", socioeconomic_band="Middle",
-        lifex_travel_breadth="Never left country", topic_travel="Indifferent",
-        skill_budgeting="Advanced", fam_urban_planning="Aware", health_mobility="Full",
+        skill_budgeting="Advanced", health_mobility="Full",
         lstyle_planning_horizon="Monthly", cog_detail_orientation="High",
         cog_patience="High", habit_budget_tracking="Weekly",
-        cog_big_picture_vs_detail="Both", lstyle_travel_freq="Occasional",
-        region="Western Europe",
+        cog_big_picture_vs_detail="Both", region="Western Europe",
     ),
     "science-young": _p(
         "young",
         "Undergraduate cramming the night before: wants the answer, not the reading "
         "list.",
         age_bracket="18-24", seniority="Student / intern",
-        lifex_travel_breadth="Never left country",
         lifex_geographic_mobility="Moved within region", topic_technology="Interested",
         skill_budgeting="None", cog_attention_span="Very short",
         cog_detail_orientation="None", risk_tolerance="Risk-seeking",
         dospert_financial_risk_tolerance="Very high",
         pref_plan_vs_spontaneous="Highly spontaneous", habit_budget_tracking="Never",
-        urbanicity="Small town", fam_urban_planning="None",
-        att_public_transit="Neutral", health_vision="Normal", lstyle_travel_freq="Rare",
-        demo_driver_status="Licensed, rarely drives", skill_driving="Beginner",
-        topic_travel="Indifferent",
-    ),
+        urbanicity="Small town", health_vision="Normal", ),
     "science-helper": _p(
         "practical",
         "Parent hunting down free school resources for a child's project: patient, "
@@ -470,9 +688,7 @@ PROFILES: dict[str, dict] = {
         economic_motivation="Cost-sensitive", cog_detail_orientation="Moderate",
         cog_patience="High", pref_detail_brief_vs_full="Balanced",
         habit_budget_tracking="Weekly", region="Latin America",
-        lifex_travel_breadth="Never left country", fam_urban_planning="None",
-        health_vision="Normal", lstyle_travel_freq="Rare",
-        lifex_geographic_mobility="Never left hometown",
+        health_vision="Normal", lifex_geographic_mobility="Never left hometown",
     ),
     # --- tech: consumer hardware, software troubleshooting, subscriptions, literacy
     "tech-expert": _p(
@@ -481,14 +697,12 @@ PROFILES: dict[str, dict] = {
         "expects exact model numbers and version caveats.",
         age_bracket="25-34", seniority="Lead / Principal",
         socioeconomic_band="High income", topic_technology="Passionate",
-        topic_travel="Neutral", att_new_technology="Enthusiast",
-        lstyle_travel_freq="Occasional", risk_tolerance="Risk-tolerant",
+        att_new_technology="Enthusiast",
+        risk_tolerance="Risk-tolerant",
         dospert_financial_risk_tolerance="High",
-        cog_big_picture_vs_detail="Detail-obsessed", demo_driver_status="Non-driver",
-        skill_driving="None", habit_budget_tracking="Daily", region="East Asia",
-        lifex_geographic_mobility="Moved internationally", fam_urban_planning="None",
-        cog_risk_framing="Opportunity-focused", lstyle_planning_horizon="Weekly",
-        att_public_transit="Enthusiast", lstyle_frugality="Spender",
+        cog_big_picture_vs_detail="Detail-obsessed", habit_budget_tracking="Daily", region="East Asia",
+        lifex_geographic_mobility="Moved internationally", cog_risk_framing="Opportunity-focused", lstyle_planning_horizon="Weekly",
+        lstyle_frugality="Spender",
         pref_save_vs_spend="Spender-leaning",
     ),
     "tech-senior": _p(
@@ -497,27 +711,20 @@ PROFILES: dict[str, dict] = {
         "charges on the phone bill explained plainly.",
         age_bracket="75-84", urbanicity="Small town", tech_savviness="Avoidant",
         att_new_technology="Opposed", topic_technology="Averse",
-        demo_driver_status="Cannot drive", skill_driving="None",
         health_mobility="Moderate limitation", cog_patience="Low",
-        cog_attention_span="Very short", lifex_travel_breadth="Never left country",
-        habit_budget_tracking="Daily", region="North America",
-        lifex_geographic_mobility="Never left hometown", fam_urban_planning="None",
-        skill_budgeting="Beginner", cog_big_picture_vs_detail="Big-picture",
-        lstyle_travel_freq="Homebody",
+        cog_attention_span="Very short", habit_budget_tracking="Daily", region="North America",
+        lifex_geographic_mobility="Never left hometown", skill_budgeting="Beginner", cog_big_picture_vs_detail="Big-picture",
     ),
     "tech-young": _p(
         "young",
         "Nineteen-year-old PC builder and gamer: knows the hardware, blows the "
         "budget, reads only the benchmark number.",
         age_bracket="18-24", seniority="Student / intern", urbanicity="Rural",
-        lifex_travel_breadth="Never left country", topic_travel="Indifferent",
-        lstyle_travel_freq="Homebody", lstyle_frugality="Spender",
+        lstyle_frugality="Spender",
         pref_save_vs_spend="Spender-leaning", risk_tolerance="Risk-seeking",
         dospert_financial_risk_tolerance="Very high", cog_attention_span="Very short",
         habit_budget_tracking="Never", region="Western Europe",
-        lifex_geographic_mobility="Never left hometown", att_public_transit="Neutral",
-        fam_urban_planning="None", demo_driver_status="Licensed, rarely drives",
-        skill_driving="Beginner", skill_budgeting="Intermediate",
+        lifex_geographic_mobility="Never left hometown", skill_budgeting="Intermediate",
         lstyle_planning_horizon="Monthly",
     ),
     "tech-teacher": _p(
@@ -530,9 +737,8 @@ PROFILES: dict[str, dict] = {
         cog_attention_span="Long", cog_risk_framing="Threat-focused",
         pref_detail_brief_vs_full="Detail-leaning", device_context="Desktop, focused",
         economic_motivation="Cost-sensitive", habit_budget_tracking="Weekly",
-        region="North America", fam_urban_planning="None", health_vision="Normal",
-        lifex_travel_breadth="Never left country", lstyle_travel_freq="Rare",
-    ),
+        region="North America", health_vision="Normal",
+        ),
     # --- community: local events, food pantries, donations, holidays, volunteering
     "community-expert": _p(
         "expert",
@@ -540,12 +746,9 @@ PROFILES: dict[str, dict] = {
         "every hour, dollar and eligibility rule.",
         age_bracket="45-54", seniority="Director", socioeconomic_band="Middle",
         lifex_geographic_mobility="Never left hometown",
-        lifex_travel_breadth="A few countries", lstyle_travel_freq="Rare",
-        lstyle_planning_horizon="Yearly", fam_urban_planning="Expert",
-        att_public_transit="Enthusiast", skill_budgeting="Master",
+        lstyle_planning_horizon="Yearly", skill_budgeting="Master",
         cog_patience="Very high", habit_budget_tracking="Weekly",
         health_vision="Normal", cog_attention_span="Long",
-        demo_driver_status="Non-driver", skill_driving="None",
         cog_risk_framing="Opportunity-focused",
     ),
     "community-senior": _p(
@@ -554,12 +757,10 @@ PROFILES: dict[str, dict] = {
         "a ride to everything she signs up for.",
         age_bracket="75-84", urbanicity="Small town", socioeconomic_band="Low income",
         lifex_geographic_mobility="Never left hometown",
-        lifex_travel_breadth="Never left country", demo_driver_status="Cannot drive",
-        skill_driving="None", health_mobility="Uses mobility aid",
-        att_public_transit="Positive", topic_travel="Indifferent", cog_patience="High",
+        health_mobility="Uses mobility aid",
+        cog_patience="High",
         habit_budget_tracking="Weekly", cog_attention_span="Average",
         skill_budgeting="Advanced", cog_big_picture_vs_detail="Detail",
-        lstyle_travel_freq="Homebody",
     ),
     "community-young": _p(
         "young",
@@ -567,41 +768,33 @@ PROFILES: dict[str, dict] = {
         "chat and cares who the money reaches.",
         age_bracket="18-24", seniority="Student / intern",
         lifex_geographic_mobility="Never left hometown",
-        lifex_travel_breadth="Well-traveled", topic_technology="Interested",
-        fam_urban_planning="Familiar", att_public_transit="Enthusiast",
+        topic_technology="Interested",
         cog_detail_orientation="Moderate", cog_patience="High",
         economic_motivation="Cost-sensitive", habit_budget_tracking="Weekly",
         region="Sub-Saharan Africa", health_vision="Normal",
-        lstyle_travel_freq="Homebody", lstyle_planning_horizon="Monthly",
+        lstyle_planning_horizon="Monthly",
         cog_attention_span="Short", urbanicity="Small town",
-        cog_risk_framing="Balanced", topic_travel="Passionate",
-    ),
+        cog_risk_framing="Balanced", ),
     "community-practical": _p(
         "practical",
         "Suburban parent organising the block's holiday potluck around two jobs and "
         "a school run: wants the shortest workable plan.",
-        age_bracket="35-44", seniority="Mid", skill_driving="Master",
-        topic_travel="Interested", lstyle_planning_horizon="Monthly",
+        age_bracket="35-44", seniority="Mid", lstyle_planning_horizon="Monthly",
         pref_plan_vs_spontaneous="Highly planned", cog_patience="Moderate",
-        cog_attention_span="Short", fam_urban_planning="Familiar",
-        att_public_transit="Skeptical", habit_budget_tracking="Weekly",
+        cog_attention_span="Short", habit_budget_tracking="Weekly",
         region="North America", health_vision="Normal",
-        lifex_travel_breadth="Never left country",
-        cog_risk_framing="Opportunity-focused", lstyle_travel_freq="Rare",
-    ),
+        cog_risk_framing="Opportunity-focused", ),
     # --- art: crafts, decoration, creative projects
     "art-expert": _p(
         "expert",
         "Working studio artist and gallery exhibitor: exacting about materials and "
         "willing to pay for the right pigment.",
         region="Western Europe", seniority="Founder", socioeconomic_band="Lower-middle",
-        lifex_travel_breadth="Lived abroad", topic_travel="Passionate",
         tech_savviness="Comfortable", topic_technology="Neutral",
         lstyle_frugality="Spender", pref_save_vs_spend="Spender-leaning",
         economic_motivation="Premium-seeking",
         cog_big_picture_vs_detail="Detail-obsessed", habit_budget_tracking="Weekly",
-        urbanicity="Small town", fam_urban_planning="None",
-        demo_driver_status="Occasional driver", cog_risk_framing="Opportunity-focused",
+        urbanicity="Small town", cog_risk_framing="Opportunity-focused",
         health_vision="Normal", lstyle_planning_horizon="Yearly",
     ),
     "art-senior": _p(
@@ -609,30 +802,22 @@ PROFILES: dict[str, dict] = {
         "Rural quilter with arthritic hands and a magnifier: decades of craft "
         "skill, no patience for a website.",
         urbanicity="Small town", socioeconomic_band="Lower-middle",
-        demo_driver_status="Occasional driver", skill_driving="Intermediate",
-        health_mobility="Moderate limitation", topic_travel="Indifferent",
-        att_public_transit="Skeptical", skill_budgeting="Advanced",
+        health_mobility="Moderate limitation", skill_budgeting="Advanced",
         cog_detail_orientation="Very high", cog_patience="Very high",
         lstyle_planning_horizon="Monthly", habit_budget_tracking="Weekly",
         lifex_geographic_mobility="Never left hometown", cog_attention_span="Average",
-        cog_big_picture_vs_detail="Detail", lstyle_travel_freq="Homebody",
-        lstyle_frugality="Balanced", cog_risk_framing="Balanced",
+        cog_big_picture_vs_detail="Detail", lstyle_frugality="Balanced", cog_risk_framing="Balanced",
         region="Eastern Europe",
     ),
     "art-young": _p(
         "young",
         "Makes small craft goods to resell online, shops from a phone, chases "
         "whatever is trending this week.",
-        urbanicity="Suburban", lifex_travel_breadth="Never left country",
-        topic_technology="Interested", lstyle_frugality="Spender",
+        urbanicity="Suburban", topic_technology="Interested", lstyle_frugality="Spender",
         pref_save_vs_spend="Spender-leaning", risk_tolerance="Risk-seeking",
         dospert_financial_risk_tolerance="Very high", cog_detail_orientation="Moderate",
-        pref_plan_vs_spontaneous="Highly spontaneous", att_public_transit="Enthusiast",
-        habit_budget_tracking="Never", lifex_geographic_mobility="Moved within region",
-        demo_driver_status="Occasional driver", skill_driving="Intermediate",
-        health_vision="Normal", lstyle_travel_freq="Rare",
-        lstyle_planning_horizon="Day-to-day", fam_urban_planning="None",
-    ),
+        pref_plan_vs_spontaneous="Highly spontaneous", habit_budget_tracking="Never", lifex_geographic_mobility="Moved within region",
+        health_vision="Normal", lstyle_planning_horizon="Day-to-day", ),
     "art-practical": _p(
         "practical",
         "Redecorating one room over a weekend: has the budget, not the time, wants "
@@ -649,12 +834,9 @@ PROFILES: dict[str, dict] = {
         "expert",
         "Personal stylist and professional organiser: knows fit, fabric and brand "
         "tiers cold and itemises everything.",
-        region="Western Europe", seniority="Founder", topic_travel="Passionate",
-        lstyle_travel_freq="Frequent flyer", lifex_travel_breadth="Global nomad",
-        skill_budgeting="Master", demo_driver_status="Non-driver", skill_driving="None",
-        att_public_transit="Enthusiast", economic_motivation="Premium-seeking",
+        region="Western Europe", seniority="Founder", skill_budgeting="Master", economic_motivation="Premium-seeking",
         cog_big_picture_vs_detail="Detail-obsessed", habit_budget_tracking="Daily",
-        fam_urban_planning="Familiar", health_vision="Normal",
+        health_vision="Normal",
         cog_risk_framing="Opportunity-focused", lstyle_planning_horizon="Weekly",
     ),
     "lifestyle-senior": _p(
@@ -662,13 +844,10 @@ PROFILES: dict[str, dict] = {
         "Widower in his late seventies downsizing to a one-bedroom: anxious about "
         "the move, counts every dollar of it.",
         age_bracket="75-84", socioeconomic_band="Middle",
-        demo_driver_status="Cannot drive", skill_driving="None",
-        health_mobility="Uses mobility aid", att_public_transit="Skeptical",
-        topic_travel="Neutral", cog_patience="High", lstyle_planning_horizon="Monthly",
+        health_mobility="Uses mobility aid", cog_patience="High", lstyle_planning_horizon="Monthly",
         pref_plan_vs_spontaneous="Highly planned", habit_budget_tracking="Daily",
         region="Southeast Asia", lifex_geographic_mobility="Moved nationally",
-        cog_attention_span="Average", fam_urban_planning="Aware",
-        cog_big_picture_vs_detail="Both",
+        cog_attention_span="Average", cog_big_picture_vs_detail="Both",
     ),
     "lifestyle-young": _p(
         "young",
@@ -676,25 +855,21 @@ PROFILES: dict[str, dict] = {
         "and walks away from anything over the number.",
         seniority="Entry", socioeconomic_band="Low income",
         skill_budgeting="Intermediate", pref_save_vs_spend="Hard saver",
-        att_public_transit="Enthusiast", topic_technology="Interested",
+        topic_technology="Interested",
         cog_detail_orientation="Moderate", cog_patience="Moderate",
         pref_plan_vs_spontaneous="Balanced", lstyle_planning_horizon="Weekly",
         habit_budget_tracking="Weekly", region="East Asia",
-        lifex_travel_breadth="Never left country", fam_urban_planning="Familiar",
-        health_vision="Normal", lstyle_travel_freq="Rare",
-        cog_big_picture_vs_detail="Detail",
+        health_vision="Normal", cog_big_picture_vs_detail="Detail",
     ),
     "lifestyle-practical": _p(
         "practical",
         "Buying birthday gifts and household replacements between meetings: decide "
         "it now, one link, done.",
-        seniority="Manager", skill_driving="Master", cog_detail_orientation="Moderate",
+        seniority="Manager", cog_detail_orientation="Moderate",
         cog_attention_span="Short", cog_big_picture_vs_detail="Big-picture",
         pref_detail_brief_vs_full="Just the gist", pref_plan_vs_spontaneous="Balanced",
         lstyle_planning_horizon="Day-to-day", habit_budget_tracking="Weekly",
-        region="Western Europe", fam_urban_planning="None",
-        lstyle_travel_freq="A few trips/yr",
-        lifex_geographic_mobility="Moved nationally",
+        region="Western Europe", lifex_geographic_mobility="Moved nationally",
         cog_risk_framing="Opportunity-focused",
     ),
     # --- ecommerce: product comparison, sneakers, cars, deals
@@ -702,14 +877,10 @@ PROFILES: dict[str, dict] = {
         "expert",
         "Retail category buyer: compares unit prices, return windows and warranty "
         "terms before anything else.",
-        seniority="Senior", topic_technology="Passionate", topic_travel="Neutral",
-        demo_driver_status="Daily driver", skill_driving="Advanced",
-        skill_budgeting="Master", risk_tolerance="Risk-tolerant",
+        seniority="Senior", topic_technology="Passionate", skill_budgeting="Master", risk_tolerance="Risk-tolerant",
         dospert_financial_risk_tolerance="High",
-        cog_big_picture_vs_detail="Detail-obsessed", lstyle_travel_freq="Rare",
-        habit_budget_tracking="Daily", urbanicity="Suburban",
-        lifex_geographic_mobility="Moved within region", fam_urban_planning="None",
-        cog_risk_framing="Threat-focused", health_vision="Normal",
+        cog_big_picture_vs_detail="Detail-obsessed", habit_budget_tracking="Daily", urbanicity="Suburban",
+        lifex_geographic_mobility="Moved within region", cog_risk_framing="Threat-focused", health_vision="Normal",
         lstyle_planning_horizon="Weekly",
     ),
     "ecommerce-senior": _p(
@@ -717,57 +888,48 @@ PROFILES: dict[str, dict] = {
         "Retired mechanic replacing a truck: sure he will be upsold, so every "
         "number gets checked twice.",
         urbanicity="Rural", socioeconomic_band="Middle",
-        demo_driver_status="Daily driver", skill_driving="Master",
-        health_mobility="Full", att_public_transit="Opposed",
-        cog_detail_orientation="High", cog_patience="High",
+        health_mobility="Full", cog_detail_orientation="High", cog_patience="High",
         pref_detail_brief_vs_full="Just the gist",
-        lifex_travel_breadth="Never left country", habit_budget_tracking="Daily",
+        habit_budget_tracking="Daily",
         region="North America", lifex_geographic_mobility="Never left hometown",
-        fam_urban_planning="None", cog_big_picture_vs_detail="Detail",
-        cog_attention_span="Long", lstyle_travel_freq="Homebody",
-    ),
+        cog_big_picture_vs_detail="Detail",
+        cog_attention_span="Long", ),
     "ecommerce-young": _p(
         "young",
         "Sneaker resale hunter: drop times, stock alerts and resale margins, "
         "decided in seconds on a phone.",
         age_bracket="18-24", seniority="Student / intern",
-        lifex_travel_breadth="Never left country", lstyle_frugality="Spender",
+        lstyle_frugality="Spender",
         pref_save_vs_spend="Spender-leaning", risk_tolerance="Risk-seeking",
         dospert_financial_risk_tolerance="Very high", cog_patience="None",
         cog_attention_span="Very short", cog_detail_orientation="None",
         pref_plan_vs_spontaneous="Highly spontaneous", habit_budget_tracking="Never",
         region="MENA", lifex_geographic_mobility="Moved internationally",
-        fam_urban_planning="Aware", health_vision="Corrected",
-        lstyle_planning_horizon="Day-to-day", lstyle_travel_freq="Occasional",
-    ),
+        health_vision="Corrected",
+        lstyle_planning_horizon="Day-to-day", ),
     "ecommerce-practical": _p(
         "practical",
         "Comparing family SUVs with a firm ceiling and a trade-in: wants the three- "
         "row, safety-rated shortlist and the total cost.",
-        skill_driving="Master", socioeconomic_band="Middle",
-        att_public_transit="Skeptical", skill_budgeting="Advanced",
+        socioeconomic_band="Middle",
+        skill_budgeting="Advanced",
         cog_detail_orientation="Very high", cog_attention_span="Long",
         lstyle_planning_horizon="Monthly", pref_save_vs_spend="Saver-leaning",
         device_context="Desktop, focused", habit_budget_tracking="Weekly",
-        urbanicity="Rural", fam_urban_planning="None",
-        lifex_travel_breadth="Never left country", health_vision="Normal",
-        cog_risk_framing="Threat-focused", lstyle_travel_freq="Rare",
-    ),
+        urbanicity="Rural", health_vision="Normal",
+        cog_risk_framing="Threat-focused", ),
     # --- health: gyms, yoga, clinics, surgeons, fitness plans
     "health-expert": _p(
         "expert",
         "Physiotherapist who screens credentials and contraindications before "
         "recommending anything and cites the evidence.",
-        seniority="Senior", topic_travel="Neutral", lstyle_travel_freq="Occasional",
-        lstyle_planning_horizon="Yearly", risk_tolerance="Cautious",
+        seniority="Senior", lstyle_planning_horizon="Yearly", risk_tolerance="Cautious",
         dospert_financial_risk_tolerance="Low", cog_risk_framing="Threat-focused",
         cog_patience="Very high", economic_motivation="Premium-seeking",
         health_vision="Normal", habit_budget_tracking="Rarely", region="Oceania",
-        urbanicity="Small town", fam_urban_planning="None",
-        lifex_geographic_mobility="Moved within region",
-        demo_driver_status="Daily driver", skill_driving="Advanced",
-        lifex_travel_breadth="A few countries", cog_attention_span="Long",
-        att_public_transit="Skeptical", att_new_technology="Neutral",
+        urbanicity="Small town", lifex_geographic_mobility="Moved within region",
+        cog_attention_span="Long",
+        att_new_technology="Neutral",
         socioeconomic_band="High income",
     ),
     "health-senior": _p(
@@ -775,28 +937,22 @@ PROFILES: dict[str, dict] = {
         "Eighty-one, six weeks after a hip replacement: needs low-impact classes "
         "she can actually get to, and no surprises.",
         age_bracket="75-84", socioeconomic_band="Middle",
-        demo_driver_status="Non-driver", skill_driving="None",
         health_mobility="Uses mobility aid", tech_savviness="Avoidant",
-        topic_technology="Averse", att_public_transit="Positive", cog_patience="High",
-        lifex_travel_breadth="Never left country", lstyle_travel_freq="Homebody",
+        topic_technology="Averse", cog_patience="High",
         region="Oceania", cog_detail_orientation="Low",
         cog_big_picture_vs_detail="Big-picture only", cog_attention_span="Very short",
-        lstyle_planning_horizon="Day-to-day", fam_urban_planning="Aware",
-        skill_budgeting="Beginner",
+        lstyle_planning_horizon="Day-to-day", skill_budgeting="Beginner",
     ),
     "health-young": _p(
         "young",
         "Trains six days a week on the cheapest membership in town and pushes past "
         "what a coach would advise.",
-        health_vision="Normal", risk_tolerance="Risk-seeking", topic_travel="Neutral",
-        lstyle_travel_freq="Rare", topic_technology="Interested",
+        health_vision="Normal", risk_tolerance="Risk-seeking", topic_technology="Interested",
         cog_detail_orientation="Moderate", cog_attention_span="Short",
         pref_plan_vs_spontaneous="Planned", lstyle_planning_horizon="Weekly",
         habit_budget_tracking="Monthly", region="Western Europe", urbanicity="Suburban",
-        demo_driver_status="Occasional driver", skill_driving="Intermediate",
-        fam_urban_planning="None", lifex_geographic_mobility="Moved within region",
-        cog_big_picture_vs_detail="Detail", att_public_transit="Skeptical",
-    ),
+        lifex_geographic_mobility="Moved within region",
+        cog_big_picture_vs_detail="Detail", ),
     "health-practical": _p(
         "practical",
         "Fitting a realistic fitness plan into a manager's calendar: tell me the "
@@ -806,25 +962,18 @@ PROFILES: dict[str, dict] = {
         cog_attention_span="Short", dospert_financial_risk_tolerance="Average",
         pref_plan_vs_spontaneous="Highly planned", lstyle_planning_horizon="Weekly",
         economic_motivation="Value-driven", habit_budget_tracking="Rarely",
-        region="East Asia", urbanicity="Dense urban", demo_driver_status="Non-driver",
-        skill_driving="None", att_public_transit="Positive",
-        fam_urban_planning="Familiar", lstyle_travel_freq="A few trips/yr",
-    ),
+        region="East Asia", urbanicity="Dense urban", ),
     # --- food: recipes, meal prep, catering, restaurant booking, delivery
     "food-expert": _p(
         "expert",
         "Line-cook-turned-caterer: thinks in yields, substitutions and allergen "
         "handling, and wants grams, not cups.",
         age_bracket="25-34", region="Western Europe", seniority="Lead / Principal",
-        socioeconomic_band="Middle", topic_travel="Passionate",
-        lifex_travel_breadth="Lived abroad", skill_budgeting="Master",
+        socioeconomic_band="Middle", skill_budgeting="Master",
         lstyle_planning_horizon="Day-to-day", cog_patience="Very high",
         cog_big_picture_vs_detail="Detail-obsessed",
         economic_motivation="Premium-seeking", habit_budget_tracking="Daily",
-        urbanicity="Small town", fam_urban_planning="None",
-        cog_risk_framing="Opportunity-focused", demo_driver_status="Occasional driver",
-        skill_driving="Intermediate", att_public_transit="Positive",
-        lstyle_frugality="Spender", cog_attention_span="Long",
+        urbanicity="Small town", cog_risk_framing="Opportunity-focused", lstyle_frugality="Spender", cog_attention_span="Long",
         risk_tolerance="Risk-tolerant",
     ),
     "food-senior": _p(
@@ -832,13 +981,10 @@ PROFILES: dict[str, dict] = {
         "Cooks for two on a fixed income with a low-sodium restriction: wants "
         "simple swaps, not a new cuisine.",
         urbanicity="Rural", socioeconomic_band="Low income",
-        demo_driver_status="Occasional driver", skill_driving="Intermediate",
-        att_public_transit="Skeptical", topic_travel="Indifferent",
         skill_budgeting="Master", cog_detail_orientation="Very high",
         cog_patience="High", lstyle_planning_horizon="Weekly",
         habit_budget_tracking="Daily", region="Southeast Asia",
         lifex_geographic_mobility="Moved nationally",
-        lifex_travel_breadth="Never left country", lstyle_travel_freq="Homebody",
         cog_attention_span="Average", cog_big_picture_vs_detail="Both",
         topic_technology="Averse",
     ),
@@ -850,12 +996,9 @@ PROFILES: dict[str, dict] = {
         pref_save_vs_spend="Spender-leaning", cog_detail_orientation="None",
         cog_attention_span="Very short", cog_patience="None",
         dospert_financial_risk_tolerance="Very high",
-        pref_plan_vs_spontaneous="Highly spontaneous", topic_travel="Neutral",
-        habit_budget_tracking="Never", urbanicity="Suburban",
+        pref_plan_vs_spontaneous="Highly spontaneous", habit_budget_tracking="Never", urbanicity="Suburban",
         lifex_geographic_mobility="Never left hometown",
-        demo_driver_status="Licensed, rarely drives", skill_driving="Beginner",
-        att_public_transit="Neutral", fam_urban_planning="None", health_vision="Normal",
-        lstyle_travel_freq="Homebody",
+        health_vision="Normal",
     ),
     "food-practical": _p(
         "practical",
@@ -866,9 +1009,7 @@ PROFILES: dict[str, dict] = {
         economic_motivation="Cost-sensitive", pref_plan_vs_spontaneous="Highly planned",
         cog_detail_orientation="Very high", lstyle_planning_horizon="Weekly",
         habit_budget_tracking="Weekly", region="Latin America",
-        lifex_geographic_mobility="Moved nationally", fam_urban_planning="None",
-        health_vision="Normal", cog_risk_framing="Threat-focused",
-        lstyle_travel_freq="Rare",
+        lifex_geographic_mobility="Moved nationally", health_vision="Normal", cog_risk_framing="Threat-focused",
     ),
     # --- productivity: GoMail / GoCalendar inbox triage and scheduling
     "productivity-expert": _p(
@@ -876,24 +1017,21 @@ PROFILES: dict[str, dict] = {
         "Chief of staff who lives in someone else's inbox and calendar: rules, "
         "labels, conflicts and time zones, all explicit.",
         seniority="Director", topic_technology="Passionate",
-        att_new_technology="Enthusiast", topic_travel="Neutral",
-        lstyle_travel_freq="Occasional", risk_tolerance="Cautious",
+        att_new_technology="Enthusiast", risk_tolerance="Cautious",
         dospert_financial_risk_tolerance="Low", cog_patience="Very high",
         cog_big_picture_vs_detail="Detail-obsessed", skill_budgeting="Advanced",
         habit_budget_tracking="Weekly", region="Eastern Europe", urbanicity="Suburban",
-        fam_urban_planning="None", lifex_geographic_mobility="Moved internationally",
-        health_vision="Normal", att_public_transit="Neutral",
-    ),
+        lifex_geographic_mobility="Moved internationally",
+        health_vision="Normal", ),
     "productivity-senior": _p(
         "senior",
         "Semi-retired consultant with four thousand unread messages: comfortable "
         "money, no interest in learning the interface.",
-        socioeconomic_band="Upper-middle", lifex_travel_breadth="Well-traveled",
-        lstyle_travel_freq="Occasional", lstyle_frugality="Balanced",
+        socioeconomic_band="Upper-middle", lstyle_frugality="Balanced",
         pref_save_vs_spend="Balanced", economic_motivation="Indifferent",
         dospert_financial_risk_tolerance="Low", cog_detail_orientation="Low",
         cog_patience="Low", habit_budget_tracking="Rarely", region="Western Europe",
-        fam_urban_planning="Aware", cog_big_picture_vs_detail="Big-picture only",
+        cog_big_picture_vs_detail="Big-picture only",
         cog_attention_span="Average", lifex_geographic_mobility="Moved internationally",
         skill_budgeting="Advanced",
     ),
@@ -902,27 +1040,23 @@ PROFILES: dict[str, dict] = {
         "First office job, runs the whole inbox from a phone between other tabs and "
         "misses half the calendar invites.",
         socioeconomic_band="Lower-middle", urbanicity="Suburban",
-        lifex_travel_breadth="Never left country", topic_travel="Neutral",
-        lstyle_travel_freq="Rare", fam_urban_planning="None", health_vision="Normal",
+        health_vision="Normal",
         cog_attention_span="Very short", pref_plan_vs_spontaneous="Highly spontaneous",
         habit_budget_tracking="Never", region="Eastern Europe",
-        demo_driver_status="Occasional driver", skill_driving="Intermediate",
         lstyle_frugality="Balanced", pref_save_vs_spend="Spender-leaning",
-        att_public_transit="Neutral",
     ),
     "productivity-practical": _p(
         "practical",
         "Triages the inbox in the ten minutes between meetings: what needs an "
         "answer today, and nothing else.",
         socioeconomic_band="Upper-middle", urbanicity="Dense urban",
-        lstyle_travel_freq="A few trips/yr", skill_budgeting="Advanced",
+        skill_budgeting="Advanced",
         cog_patience="None", cog_attention_span="Short",
         cog_big_picture_vs_detail="Big-picture",
         pref_detail_brief_vs_full="Just the gist", lstyle_planning_horizon="Day-to-day",
         economic_motivation="Indifferent", habit_budget_tracking="Rarely",
-        fam_urban_planning="Familiar", health_vision="Normal",
-        att_public_transit="Positive", demo_driver_status="Occasional driver",
-        skill_driving="Intermediate", cog_risk_framing="Opportunity-focused",
+        health_vision="Normal",
+        cog_risk_framing="Opportunity-focused",
     ),
     # --- professional: job search, hiring, networking, freelance marketplaces
     "professional-expert": _p(
@@ -930,14 +1064,11 @@ PROFILES: dict[str, dict] = {
         "Talent lead who screens dozens of profiles a week: wants titles, dates, "
         "comp bands and the sourcing rationale.",
         seniority="Director", lifex_geographic_mobility="Serial relocator",
-        topic_travel="Neutral", risk_tolerance="Risk-tolerant",
+        risk_tolerance="Risk-tolerant",
         dospert_financial_risk_tolerance="High", lstyle_planning_horizon="Yearly",
         skill_budgeting="Master", cog_patience="High",
         cog_risk_framing="Opportunity-focused", health_vision="Normal",
-        habit_budget_tracking="Monthly", demo_driver_status="Non-driver",
-        skill_driving="None", region="South Asia", fam_urban_planning="Aware",
-        urbanicity="Dense urban", att_public_transit="Enthusiast",
-        cog_attention_span="Long",
+        habit_budget_tracking="Monthly", region="South Asia", urbanicity="Dense urban", cog_attention_span="Long",
     ),
     "professional-senior": _p(
         "senior",
@@ -945,11 +1076,9 @@ PROFILES: dict[str, dict] = {
         "idea how modern job sites behave.",
         urbanicity="Small town", lifex_geographic_mobility="Never left hometown",
         topic_technology="Averse", att_new_technology="Opposed",
-        lifex_travel_breadth="A few countries", lstyle_travel_freq="Rare",
         cog_detail_orientation="High", cog_attention_span="Average",
         skill_budgeting="Advanced", habit_budget_tracking="Daily",
-        region="North America", fam_urban_planning="None",
-        cog_big_picture_vs_detail="Both", lstyle_planning_horizon="Monthly",
+        region="North America", cog_big_picture_vs_detail="Both", lstyle_planning_horizon="Monthly",
     ),
     "professional-young": _p(
         "young",
@@ -957,12 +1086,10 @@ PROFILES: dict[str, dict] = {
         "tailoring, checks nothing twice.",
         age_bracket="18-24", seniority="Student / intern", urbanicity="Suburban",
         lifex_geographic_mobility="Never left hometown",
-        lifex_travel_breadth="Never left country", topic_travel="Neutral",
-        att_public_transit="Enthusiast", risk_tolerance="Risk-seeking",
+        risk_tolerance="Risk-seeking",
         dospert_financial_risk_tolerance="Very high", cog_patience="None",
         cog_attention_span="Very short", habit_budget_tracking="Never",
-        health_vision="Normal", fam_urban_planning="None",
-        skill_budgeting="Intermediate", lstyle_planning_horizon="Weekly",
+        health_vision="Normal", skill_budgeting="Intermediate", lstyle_planning_horizon="Weekly",
         cog_big_picture_vs_detail="Big-picture only", region="Latin America",
     ),
     "professional-practical": _p(
@@ -975,9 +1102,7 @@ PROFILES: dict[str, dict] = {
         cog_attention_span="Average", cog_risk_framing="Threat-focused",
         lstyle_planning_horizon="Monthly", device_context="Desktop, focused",
         habit_budget_tracking="Daily", region="Oceania", urbanicity="Small town",
-        fam_urban_planning="None", lifex_travel_breadth="Never left country",
-        health_vision="Normal", lstyle_travel_freq="Homebody",
-        lifex_geographic_mobility="Moved nationally",
+        health_vision="Normal", lifex_geographic_mobility="Moved nationally",
         dospert_financial_risk_tolerance="Very low", risk_tolerance="Risk-averse",
     ),
 }
@@ -997,21 +1122,49 @@ def main() -> None:
 
     # Two personas with identical values are one persona wearing two names, and any
     # difference the benchmark reports between them is noise.
+    # A family's own dimensions must exist too, or a persona would claim
+    # expertise the schema has no word for.
+    for family, dims in FAMILY_DIMENSIONS.items():
+        unknown = [d for d in dims if d not in schema]
+        assert not unknown, f"family {family}: not in dimensions.json: {unknown}"
+        for role, values in FAMILY_DEFAULTS.get(family, {}).items():
+            extra = set(values) - set(dims)
+            assert not extra, f"{family}/{role} sets dimensions outside the family: {extra}"
+            for dim_id, value in values.items():
+                assert value in schema[dim_id]["values"], (
+                    f"{family}/{role}.{dim_id}: {value!r} not allowed; "
+                    f"options: {schema[dim_id]['values']}")
+
     seen: dict[str, str] = {}
     for name, profile in PROFILES.items():
+        family = profile.get("family") or family_of_key(name)
+        role = profile.get("role")
+        defaults = FAMILY_DEFAULTS.get(family, {}).get(role, {}) if role else {}
+        wanted = dimensions_for(family)
+        stray = [d for d in profile.get("explicit", ()) if d not in wanted]
+        assert not stray, (
+            f"{name} sets {stray}, which belong to another family; "
+            f"{family} has {sorted(set(wanted) - set(CORE_DIMENSIONS))}")
+        # The profile wins over the family default, the default fills the gaps,
+        # and the shared role baseline contributes only what this family uses.
+        profile["values"] = {k: v for k, v in
+                             {**defaults, **profile["values"]}.items() if k in wanted}
+        profile["family"] = family
         key = json.dumps(profile["values"], sort_keys=True)
         assert key not in seen, f"{name} has the same values as {seen[key]}"
         seen[key] = name
 
     OUT.mkdir(parents=True, exist_ok=True)
     for name, profile in PROFILES.items():
-        assert set(profile["values"]) == set(DIMENSIONS), (
-            f"{name} must set exactly the shared dimension set; "
-            f"missing={set(DIMENSIONS) - set(profile['values'])} "
-            f"extra={set(profile['values']) - set(DIMENSIONS)}"
+        wanted = dimensions_for(profile["family"])
+        assert set(profile["values"]) == set(wanted), (
+            f"{name} must set exactly its family's dimension set "
+            f"({profile['family']}); "
+            f"missing={set(wanted) - set(profile['values'])} "
+            f"extra={set(profile['values']) - set(wanted)}"
         )
         attributes = {}
-        for dim_id in DIMENSIONS:
+        for dim_id in wanted:
             spec, value = schema[dim_id], profile["values"][dim_id]
             assert value in spec["values"], (
                 f"{name}.{dim_id}: {value!r} not allowed; options: {spec['values']}"
@@ -1023,7 +1176,8 @@ def main() -> None:
             }
         doc = {
             "persona_id": f"odyssey-{name}",
-            "version": "2.0",
+            "version": "2.1",
+            "family": profile["family"],
             "source": "hand-specified from dimensions.json (MatrAIx 1290-dim schema)",
             "note": profile["note"],
             "evaluation_dimensions": list(EVALUATION_DIMENSIONS),

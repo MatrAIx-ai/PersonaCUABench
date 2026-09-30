@@ -1,5 +1,6 @@
 persona_id: odyssey-ecommerce-expert
-version: '2.0'
+version: '2.1'
+family: ecommerce
 source: hand-specified from dimensions.json (MatrAIx 1290-dim schema)
 note: 'Retail category buyer: compares unit prices, return windows and warranty terms
   before anything else.'
@@ -32,26 +33,10 @@ attributes:
     value: Upper-middle
     label: Socioeconomic band
     category: 'Demographic: Core'
-  demo_driver_status:
-    value: Daily driver
-    label: Driving status
-    category: 'Demographic: Core'
-  lifex_travel_breadth:
-    value: Well-traveled
-    label: Travel breadth
-    category: 'Demographic: Life Events'
   lifex_geographic_mobility:
     value: Moved within region
     label: Geographic mobility
     category: 'Demographic: Life Events'
-  ind_travel_tourism:
-    value: None
-    label: 'Industry: Travel & tourism'
-    category: 'Professional: Industry'
-  ind_transportation:
-    value: None
-    label: 'Industry: Transportation'
-    category: 'Professional: Industry'
   seniority:
     value: Senior
     label: Seniority
@@ -64,26 +49,10 @@ attributes:
     value: Master
     label: 'Skill: Budgeting'
     category: 'Expertise: Skills'
-  skill_driving:
-    value: Advanced
-    label: 'Skill: Driving'
-    category: 'Expertise: Skills'
-  fam_urban_planning:
-    value: None
-    label: 'Familiarity: Urban planning'
-    category: 'Expertise: Domains'
-  topic_travel:
-    value: Neutral
-    label: 'Interest: Travel'
-    category: 'Interests: Topics'
   topic_technology:
     value: Passionate
     label: 'Interest: Technology'
     category: 'Interests: Topics'
-  lstyle_travel_freq:
-    value: Rare
-    label: Travel frequency
-    category: 'Interests: Culture'
   lstyle_planning_horizon:
     value: Weekly
     label: Planning horizon
@@ -92,10 +61,6 @@ attributes:
     value: Balanced
     label: Spending vs saving
     category: 'Interests: Culture'
-  att_public_transit:
-    value: Positive
-    label: 'Attitude: Public transit'
-    category: 'Worldview: Beliefs'
   att_new_technology:
     value: Positive
     label: 'Attitude: New technology'
@@ -168,3 +133,19 @@ attributes:
     value: Daily
     label: 'Habit: Budget tracking'
     category: 'Behavior: Habits'
+  ind_e_commerce:
+    value: Veteran
+    label: 'Industry: E-commerce'
+    category: 'Professional: Industry'
+  ind_retail:
+    value: Experienced
+    label: 'Industry: Retail'
+    category: 'Professional: Industry'
+  skill_negotiation:
+    value: Advanced
+    label: 'Skill: Negotiation'
+    category: 'Expertise: Skills'
+  lstyle_shopping_style:
+    value: Researcher
+    label: Shopping style
+    category: 'Interests: Culture'

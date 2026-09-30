@@ -1,5 +1,6 @@
 persona_id: odyssey-professional-senior
-version: '2.0'
+version: '2.1'
+family: professional
 source: hand-specified from dimensions.json (MatrAIx 1290-dim schema)
 note: 'Retired at sixty-eight, now wants part-time work: strong track record, no idea
   how modern job sites behave.'
@@ -32,26 +33,10 @@ attributes:
     value: Lower-middle
     label: Socioeconomic band
     category: 'Demographic: Core'
-  demo_driver_status:
-    value: Licensed, rarely drives
-    label: Driving status
-    category: 'Demographic: Core'
-  lifex_travel_breadth:
-    value: A few countries
-    label: Travel breadth
-    category: 'Demographic: Life Events'
   lifex_geographic_mobility:
     value: Never left hometown
     label: Geographic mobility
     category: 'Demographic: Life Events'
-  ind_travel_tourism:
-    value: None
-    label: 'Industry: Travel & tourism'
-    category: 'Professional: Industry'
-  ind_transportation:
-    value: None
-    label: 'Industry: Transportation'
-    category: 'Professional: Industry'
   seniority:
     value: Retired
     label: Seniority
@@ -64,26 +49,10 @@ attributes:
     value: Advanced
     label: 'Skill: Budgeting'
     category: 'Expertise: Skills'
-  skill_driving:
-    value: Beginner
-    label: 'Skill: Driving'
-    category: 'Expertise: Skills'
-  fam_urban_planning:
-    value: None
-    label: 'Familiarity: Urban planning'
-    category: 'Expertise: Domains'
-  topic_travel:
-    value: Neutral
-    label: 'Interest: Travel'
-    category: 'Interests: Topics'
   topic_technology:
     value: Averse
     label: 'Interest: Technology'
     category: 'Interests: Topics'
-  lstyle_travel_freq:
-    value: Rare
-    label: Travel frequency
-    category: 'Interests: Culture'
   lstyle_planning_horizon:
     value: Monthly
     label: Planning horizon
@@ -92,10 +61,6 @@ attributes:
     value: Frugal saver
     label: Spending vs saving
     category: 'Interests: Culture'
-  att_public_transit:
-    value: Neutral
-    label: 'Attitude: Public transit'
-    category: 'Worldview: Beliefs'
   att_new_technology:
     value: Opposed
     label: 'Attitude: New technology'
@@ -168,3 +133,19 @@ attributes:
     value: Daily
     label: 'Habit: Budget tracking'
     category: 'Behavior: Habits'
+  ind_consulting:
+    value: Some exposure
+    label: 'Industry: Consulting'
+    category: 'Professional: Industry'
+  skill_networking:
+    value: Intermediate
+    label: 'Skill: Networking'
+    category: 'Expertise: Skills'
+  val_career_success:
+    value: Moderate
+    label: 'Value: Career success'
+    category: Values & Motivation
+  lifex_career_path_shape:
+    value: Linear climb
+    label: Career path shape
+    category: 'Demographic: Life Events'

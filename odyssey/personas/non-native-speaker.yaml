@@ -1,5 +1,6 @@
 persona_id: odyssey-non-native-speaker
-version: '2.0'
+version: '2.1'
+family: travel
 source: hand-specified from dimensions.json (MatrAIx 1290-dim schema)
 note: 'Recent immigrant with limited English: capable adult, uses a phone translator,
   unfamiliar with local websites and customs, careful with money.'
@@ -32,26 +33,10 @@ attributes:
     value: Lower-middle
     label: Socioeconomic band
     category: 'Demographic: Core'
-  demo_driver_status:
-    value: Non-driver
-    label: Driving status
-    category: 'Demographic: Core'
-  lifex_travel_breadth:
-    value: A few countries
-    label: Travel breadth
-    category: 'Demographic: Life Events'
   lifex_geographic_mobility:
     value: Moved internationally
     label: Geographic mobility
     category: 'Demographic: Life Events'
-  ind_travel_tourism:
-    value: None
-    label: 'Industry: Travel & tourism'
-    category: 'Professional: Industry'
-  ind_transportation:
-    value: None
-    label: 'Industry: Transportation'
-    category: 'Professional: Industry'
   seniority:
     value: Entry
     label: Seniority
@@ -64,26 +49,10 @@ attributes:
     value: Intermediate
     label: 'Skill: Budgeting'
     category: 'Expertise: Skills'
-  skill_driving:
-    value: None
-    label: 'Skill: Driving'
-    category: 'Expertise: Skills'
-  fam_urban_planning:
-    value: None
-    label: 'Familiarity: Urban planning'
-    category: 'Expertise: Domains'
-  topic_travel:
-    value: Interested
-    label: 'Interest: Travel'
-    category: 'Interests: Topics'
   topic_technology:
     value: Neutral
     label: 'Interest: Technology'
     category: 'Interests: Topics'
-  lstyle_travel_freq:
-    value: Occasional
-    label: Travel frequency
-    category: 'Interests: Culture'
   lstyle_planning_horizon:
     value: Weekly
     label: Planning horizon
@@ -92,10 +61,6 @@ attributes:
     value: Frugal saver
     label: Spending vs saving
     category: 'Interests: Culture'
-  att_public_transit:
-    value: Positive
-    label: 'Attitude: Public transit'
-    category: 'Worldview: Beliefs'
   att_new_technology:
     value: Neutral
     label: 'Attitude: New technology'
@@ -168,3 +133,39 @@ attributes:
     value: Weekly
     label: 'Habit: Budget tracking'
     category: 'Behavior: Habits'
+  demo_driver_status:
+    value: Non-driver
+    label: Driving status
+    category: 'Demographic: Core'
+  lifex_travel_breadth:
+    value: A few countries
+    label: Travel breadth
+    category: 'Demographic: Life Events'
+  ind_travel_tourism:
+    value: None
+    label: 'Industry: Travel & tourism'
+    category: 'Professional: Industry'
+  ind_transportation:
+    value: None
+    label: 'Industry: Transportation'
+    category: 'Professional: Industry'
+  skill_driving:
+    value: None
+    label: 'Skill: Driving'
+    category: 'Expertise: Skills'
+  fam_urban_planning:
+    value: None
+    label: 'Familiarity: Urban planning'
+    category: 'Expertise: Domains'
+  topic_travel:
+    value: Interested
+    label: 'Interest: Travel'
+    category: 'Interests: Topics'
+  lstyle_travel_freq:
+    value: Occasional
+    label: Travel frequency
+    category: 'Interests: Culture'
+  att_public_transit:
+    value: Positive
+    label: 'Attitude: Public transit'
+    category: 'Worldview: Beliefs'

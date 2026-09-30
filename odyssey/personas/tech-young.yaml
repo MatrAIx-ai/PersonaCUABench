@@ -1,5 +1,6 @@
 persona_id: odyssey-tech-young
-version: '2.0'
+version: '2.1'
+family: tech
 source: hand-specified from dimensions.json (MatrAIx 1290-dim schema)
 note: 'Nineteen-year-old PC builder and gamer: knows the hardware, blows the budget,
   reads only the benchmark number.'
@@ -32,26 +33,10 @@ attributes:
     value: Low income
     label: Socioeconomic band
     category: 'Demographic: Core'
-  demo_driver_status:
-    value: Licensed, rarely drives
-    label: Driving status
-    category: 'Demographic: Core'
-  lifex_travel_breadth:
-    value: Never left country
-    label: Travel breadth
-    category: 'Demographic: Life Events'
   lifex_geographic_mobility:
     value: Never left hometown
     label: Geographic mobility
     category: 'Demographic: Life Events'
-  ind_travel_tourism:
-    value: None
-    label: 'Industry: Travel & tourism'
-    category: 'Professional: Industry'
-  ind_transportation:
-    value: None
-    label: 'Industry: Transportation'
-    category: 'Professional: Industry'
   seniority:
     value: Student / intern
     label: Seniority
@@ -64,26 +49,10 @@ attributes:
     value: Intermediate
     label: 'Skill: Budgeting'
     category: 'Expertise: Skills'
-  skill_driving:
-    value: Beginner
-    label: 'Skill: Driving'
-    category: 'Expertise: Skills'
-  fam_urban_planning:
-    value: None
-    label: 'Familiarity: Urban planning'
-    category: 'Expertise: Domains'
-  topic_travel:
-    value: Indifferent
-    label: 'Interest: Travel'
-    category: 'Interests: Topics'
   topic_technology:
     value: Passionate
     label: 'Interest: Technology'
     category: 'Interests: Topics'
-  lstyle_travel_freq:
-    value: Homebody
-    label: Travel frequency
-    category: 'Interests: Culture'
   lstyle_planning_horizon:
     value: Monthly
     label: Planning horizon
@@ -92,10 +61,6 @@ attributes:
     value: Spender
     label: Spending vs saving
     category: 'Interests: Culture'
-  att_public_transit:
-    value: Neutral
-    label: 'Attitude: Public transit'
-    category: 'Worldview: Beliefs'
   att_new_technology:
     value: Enthusiast
     label: 'Attitude: New technology'
@@ -168,3 +133,19 @@ attributes:
     value: Never
     label: 'Habit: Budget tracking'
     category: 'Behavior: Habits'
+  ind_consumer_electronics:
+    value: Some exposure
+    label: 'Industry: Consumer electronics'
+    category: 'Professional: Industry'
+  fam_computer_networking:
+    value: Aware
+    label: 'Familiarity: Computer networking'
+    category: 'Expertise: Domains'
+  skill_coding:
+    value: Beginner
+    label: 'Skill: Coding'
+    category: 'Expertise: Skills'
+  skill_debugging:
+    value: Beginner
+    label: 'Skill: Debugging'
+    category: 'Expertise: Skills'

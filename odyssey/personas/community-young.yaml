@@ -1,5 +1,6 @@
 persona_id: odyssey-community-young
-version: '2.0'
+version: '2.1'
+family: community
 source: hand-specified from dimensions.json (MatrAIx 1290-dim schema)
 note: 'Student mutual-aid organiser: coordinates a donation drive from a group chat
   and cares who the money reaches.'
@@ -32,26 +33,10 @@ attributes:
     value: Low income
     label: Socioeconomic band
     category: 'Demographic: Core'
-  demo_driver_status:
-    value: Non-driver
-    label: Driving status
-    category: 'Demographic: Core'
-  lifex_travel_breadth:
-    value: Well-traveled
-    label: Travel breadth
-    category: 'Demographic: Life Events'
   lifex_geographic_mobility:
     value: Never left hometown
     label: Geographic mobility
     category: 'Demographic: Life Events'
-  ind_travel_tourism:
-    value: None
-    label: 'Industry: Travel & tourism'
-    category: 'Professional: Industry'
-  ind_transportation:
-    value: None
-    label: 'Industry: Transportation'
-    category: 'Professional: Industry'
   seniority:
     value: Student / intern
     label: Seniority
@@ -64,26 +49,10 @@ attributes:
     value: Beginner
     label: 'Skill: Budgeting'
     category: 'Expertise: Skills'
-  skill_driving:
-    value: None
-    label: 'Skill: Driving'
-    category: 'Expertise: Skills'
-  fam_urban_planning:
-    value: Familiar
-    label: 'Familiarity: Urban planning'
-    category: 'Expertise: Domains'
-  topic_travel:
-    value: Passionate
-    label: 'Interest: Travel'
-    category: 'Interests: Topics'
   topic_technology:
     value: Interested
     label: 'Interest: Technology'
     category: 'Interests: Topics'
-  lstyle_travel_freq:
-    value: Homebody
-    label: Travel frequency
-    category: 'Interests: Culture'
   lstyle_planning_horizon:
     value: Monthly
     label: Planning horizon
@@ -92,10 +61,6 @@ attributes:
     value: Frugal saver
     label: Spending vs saving
     category: 'Interests: Culture'
-  att_public_transit:
-    value: Enthusiast
-    label: 'Attitude: Public transit'
-    category: 'Worldview: Beliefs'
   att_new_technology:
     value: Enthusiast
     label: 'Attitude: New technology'
@@ -168,3 +133,23 @@ attributes:
     value: Weekly
     label: 'Habit: Budget tracking'
     category: 'Behavior: Habits'
+  ind_nonprofit:
+    value: Some exposure
+    label: 'Industry: Nonprofit'
+    category: 'Professional: Industry'
+  ind_government:
+    value: None
+    label: 'Industry: Government'
+    category: 'Professional: Industry'
+  skill_facilitation:
+    value: Beginner
+    label: 'Skill: Facilitation'
+    category: 'Expertise: Skills'
+  topic_volunteering:
+    value: Passionate
+    label: 'Interest: Volunteering'
+    category: 'Interests: Topics'
+  val_community:
+    value: Important
+    label: 'Value: Community'
+    category: Values & Motivation

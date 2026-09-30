@@ -1,5 +1,6 @@
 persona_id: odyssey-productivity-practical
-version: '2.0'
+version: '2.1'
+family: productivity
 source: hand-specified from dimensions.json (MatrAIx 1290-dim schema)
 note: 'Triages the inbox in the ten minutes between meetings: what needs an answer
   today, and nothing else.'
@@ -32,26 +33,10 @@ attributes:
     value: Upper-middle
     label: Socioeconomic band
     category: 'Demographic: Core'
-  demo_driver_status:
-    value: Occasional driver
-    label: Driving status
-    category: 'Demographic: Core'
-  lifex_travel_breadth:
-    value: A few countries
-    label: Travel breadth
-    category: 'Demographic: Life Events'
   lifex_geographic_mobility:
     value: Moved within region
     label: Geographic mobility
     category: 'Demographic: Life Events'
-  ind_travel_tourism:
-    value: None
-    label: 'Industry: Travel & tourism'
-    category: 'Professional: Industry'
-  ind_transportation:
-    value: None
-    label: 'Industry: Transportation'
-    category: 'Professional: Industry'
   seniority:
     value: Manager
     label: Seniority
@@ -64,26 +49,10 @@ attributes:
     value: Advanced
     label: 'Skill: Budgeting'
     category: 'Expertise: Skills'
-  skill_driving:
-    value: Intermediate
-    label: 'Skill: Driving'
-    category: 'Expertise: Skills'
-  fam_urban_planning:
-    value: Familiar
-    label: 'Familiarity: Urban planning'
-    category: 'Expertise: Domains'
-  topic_travel:
-    value: Neutral
-    label: 'Interest: Travel'
-    category: 'Interests: Topics'
   topic_technology:
     value: Neutral
     label: 'Interest: Technology'
     category: 'Interests: Topics'
-  lstyle_travel_freq:
-    value: A few trips/yr
-    label: Travel frequency
-    category: 'Interests: Culture'
   lstyle_planning_horizon:
     value: Day-to-day
     label: Planning horizon
@@ -92,10 +61,6 @@ attributes:
     value: Balanced
     label: Spending vs saving
     category: 'Interests: Culture'
-  att_public_transit:
-    value: Positive
-    label: 'Attitude: Public transit'
-    category: 'Worldview: Beliefs'
   att_new_technology:
     value: Positive
     label: 'Attitude: New technology'
@@ -168,3 +133,23 @@ attributes:
     value: Rarely
     label: 'Habit: Budget tracking'
     category: 'Behavior: Habits'
+  skill_time_management:
+    value: Advanced
+    label: 'Skill: Time management'
+    category: 'Expertise: Skills'
+  skill_writing:
+    value: Intermediate
+    label: 'Skill: Writing'
+    category: 'Expertise: Skills'
+  habit_inbox_zero_discipline:
+    value: Weekly
+    label: 'Habit: Inbox-zero discipline'
+    category: 'Behavior: Habits'
+  fam_organizational_psychology:
+    value: Familiar
+    label: 'Familiarity: Organizational psychology'
+    category: 'Expertise: Domains'
+  topic_productivity:
+    value: Interested
+    label: 'Interest: Productivity'
+    category: 'Interests: Topics'

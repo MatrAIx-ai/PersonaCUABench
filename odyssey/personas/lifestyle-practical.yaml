@@ -1,5 +1,6 @@
 persona_id: odyssey-lifestyle-practical
-version: '2.0'
+version: '2.1'
+family: lifestyle
 source: hand-specified from dimensions.json (MatrAIx 1290-dim schema)
 note: 'Buying birthday gifts and household replacements between meetings: decide it
   now, one link, done.'
@@ -32,26 +33,10 @@ attributes:
     value: Middle
     label: Socioeconomic band
     category: 'Demographic: Core'
-  demo_driver_status:
-    value: Daily driver
-    label: Driving status
-    category: 'Demographic: Core'
-  lifex_travel_breadth:
-    value: A few countries
-    label: Travel breadth
-    category: 'Demographic: Life Events'
   lifex_geographic_mobility:
     value: Moved nationally
     label: Geographic mobility
     category: 'Demographic: Life Events'
-  ind_travel_tourism:
-    value: None
-    label: 'Industry: Travel & tourism'
-    category: 'Professional: Industry'
-  ind_transportation:
-    value: None
-    label: 'Industry: Transportation'
-    category: 'Professional: Industry'
   seniority:
     value: Manager
     label: Seniority
@@ -64,26 +49,10 @@ attributes:
     value: Intermediate
     label: 'Skill: Budgeting'
     category: 'Expertise: Skills'
-  skill_driving:
-    value: Master
-    label: 'Skill: Driving'
-    category: 'Expertise: Skills'
-  fam_urban_planning:
-    value: None
-    label: 'Familiarity: Urban planning'
-    category: 'Expertise: Domains'
-  topic_travel:
-    value: Neutral
-    label: 'Interest: Travel'
-    category: 'Interests: Topics'
   topic_technology:
     value: Neutral
     label: 'Interest: Technology'
     category: 'Interests: Topics'
-  lstyle_travel_freq:
-    value: A few trips/yr
-    label: Travel frequency
-    category: 'Interests: Culture'
   lstyle_planning_horizon:
     value: Day-to-day
     label: Planning horizon
@@ -92,10 +61,6 @@ attributes:
     value: Balanced
     label: Spending vs saving
     category: 'Interests: Culture'
-  att_public_transit:
-    value: Neutral
-    label: 'Attitude: Public transit'
-    category: 'Worldview: Beliefs'
   att_new_technology:
     value: Positive
     label: 'Attitude: New technology'
@@ -168,3 +133,23 @@ attributes:
     value: Weekly
     label: 'Habit: Budget tracking'
     category: 'Behavior: Habits'
+  ind_apparel:
+    value: None
+    label: 'Industry: Apparel'
+    category: 'Professional: Industry'
+  ind_real_estate:
+    value: Some exposure
+    label: 'Industry: Real estate'
+    category: 'Professional: Industry'
+  lstyle_fashion_sense:
+    value: Practical
+    label: Fashion sense
+    category: 'Interests: Culture'
+  topic_interior_design:
+    value: Interested
+    label: 'Interest: Interior design'
+    category: 'Interests: Topics'
+  topic_fashion:
+    value: Neutral
+    label: 'Interest: Fashion'
+    category: 'Interests: Topics'

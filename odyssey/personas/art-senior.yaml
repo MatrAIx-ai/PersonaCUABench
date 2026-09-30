@@ -1,5 +1,6 @@
 persona_id: odyssey-art-senior
-version: '2.0'
+version: '2.1'
+family: art
 source: hand-specified from dimensions.json (MatrAIx 1290-dim schema)
 note: 'Rural quilter with arthritic hands and a magnifier: decades of craft skill,
   no patience for a website.'
@@ -32,26 +33,10 @@ attributes:
     value: Lower-middle
     label: Socioeconomic band
     category: 'Demographic: Core'
-  demo_driver_status:
-    value: Occasional driver
-    label: Driving status
-    category: 'Demographic: Core'
-  lifex_travel_breadth:
-    value: A few countries
-    label: Travel breadth
-    category: 'Demographic: Life Events'
   lifex_geographic_mobility:
     value: Never left hometown
     label: Geographic mobility
     category: 'Demographic: Life Events'
-  ind_travel_tourism:
-    value: None
-    label: 'Industry: Travel & tourism'
-    category: 'Professional: Industry'
-  ind_transportation:
-    value: None
-    label: 'Industry: Transportation'
-    category: 'Professional: Industry'
   seniority:
     value: Retired
     label: Seniority
@@ -64,26 +49,10 @@ attributes:
     value: Advanced
     label: 'Skill: Budgeting'
     category: 'Expertise: Skills'
-  skill_driving:
-    value: Intermediate
-    label: 'Skill: Driving'
-    category: 'Expertise: Skills'
-  fam_urban_planning:
-    value: None
-    label: 'Familiarity: Urban planning'
-    category: 'Expertise: Domains'
-  topic_travel:
-    value: Indifferent
-    label: 'Interest: Travel'
-    category: 'Interests: Topics'
   topic_technology:
     value: Indifferent
     label: 'Interest: Technology'
     category: 'Interests: Topics'
-  lstyle_travel_freq:
-    value: Homebody
-    label: Travel frequency
-    category: 'Interests: Culture'
   lstyle_planning_horizon:
     value: Monthly
     label: Planning horizon
@@ -92,10 +61,6 @@ attributes:
     value: Balanced
     label: Spending vs saving
     category: 'Interests: Culture'
-  att_public_transit:
-    value: Skeptical
-    label: 'Attitude: Public transit'
-    category: 'Worldview: Beliefs'
   att_new_technology:
     value: Skeptical
     label: 'Attitude: New technology'
@@ -168,3 +133,19 @@ attributes:
     value: Weekly
     label: 'Habit: Budget tracking'
     category: 'Behavior: Habits'
+  ind_fine_art:
+    value: Some exposure
+    label: 'Industry: Fine art'
+    category: 'Professional: Industry'
+  fam_art_history:
+    value: Familiar
+    label: 'Familiarity: Art history'
+    category: 'Expertise: Domains'
+  skill_drawing:
+    value: Beginner
+    label: 'Skill: Drawing'
+    category: 'Expertise: Skills'
+  trait_appreciation_of_beauty:
+    value: Strong
+    label: 'Character: Appreciation of beauty'
+    category: 'Personality: Character'
