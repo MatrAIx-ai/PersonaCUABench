@@ -105,15 +105,38 @@ TASKS="${TASKS//,/ }"
 
 GRID_STATUS=0
 FAILED_MARK="logs/cells/.failed"
+
+# The profile path must separate models as well as cells. Two grids running at
+# once -- one per model, in separate terminals -- reach the same (persona, task)
+# sooner or later, and without this they point two Chromes at one profile
+# directory and corrupt it. Taken from --model so it needs no extra flag;
+# PROFILE_TAG overrides it, and "shared" is the old behaviour for a run that
+# names no model.
+MODEL_TAG="${PROFILE_TAG:-}"
+if [[ -z "$MODEL_TAG" ]]; then
+  prev=""
+  for arg in "${EXTRA_ARGS[@]:1}"; do
+    case "$arg" in
+      --model=*) MODEL_TAG="${arg#--model=}" ;;
+      *) [[ "$prev" == "--model" ]] && MODEL_TAG="$arg" ;;
+    esac
+    prev="$arg"
+  done
+fi
+MODEL_TAG="${MODEL_TAG//[^A-Za-z0-9._-]/}"
+MODEL_TAG="${MODEL_TAG:-shared}"
+
 cell_profile() {   # one Chrome per worker, or two workers corrupt one profile
-  printf 'artifacts/chrome-profiles/parallel/%s/%s/%s' \
-    "${TASK_SUITE:-adhoc}" "$1" "$2"
+  printf 'artifacts/chrome-profiles/parallel/%s/%s/%s/%s' \
+    "${TASK_SUITE:-adhoc}" "$MODEL_TAG" "$1" "$2"
 }
 
 run_cell() {
   local persona="$1" task="$2" extra=()
   if [[ -n "$DRY_RUN" ]]; then
-    echo "DRY: run.py ${ROUTE_ARGS[*]:1} --task $task --persona $persona ${EXTRA_ARGS[*]:1}"
+    local shown=""
+    [[ "$JOBS" -gt 1 ]] && shown="  [profile $(cell_profile "$persona" "$task")]"
+    echo "DRY: run.py ${ROUTE_ARGS[*]:1} --task $task --persona $persona ${EXTRA_ARGS[*]:1}$shown"
     return 0
   fi
   if [[ "$JOBS" -gt 1 ]]; then
