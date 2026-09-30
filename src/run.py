@@ -224,7 +224,8 @@ TOOLS = [
             "required": ["tab_id"]}}},
     {"type": "function", "function": {
         "name": "click",
-        "description": "Click the first element in a tab whose visible text contains the given string.",
+        "description": "Click an element by its visible text, by the name of an "
+                       "icon control, or by a field handle such as \"f3\".",
         "parameters": {"type": "object", "properties": {
             "tab_id": {"type": "integer"}, "text": {"type": "string"}},
             "required": ["tab_id", "text"]}}},
@@ -380,6 +381,25 @@ class Browser:
         return out;
     }"""
 
+    # Buttons and links whose only name is an aria-label or a title: they carry
+    # no inner_text, so a text-addressed agent cannot discover them at all --
+    # the calendar's "Previous Month" among them.
+    _CONTROLS_JS = r"""() => {
+        const out = [];
+        for (const el of document.querySelectorAll('button, a[href], [role="button"]')) {
+            // Empty text, or a bare glyph like a chevron: either way the page
+            // text does not tell an agent what the control does.
+            const shown = (el.innerText || '').trim();
+            if (shown.length > 2) continue;                     // already readable
+            const name = (el.getAttribute('aria-label') || el.title || '').trim();
+            if (!name || name === shown) continue;
+            const r = el.getBoundingClientRect();
+            if (!r.width && !r.height) continue;
+            if (!out.includes(name)) out.push(name.slice(0, 50));
+        }
+        return out;
+    }"""
+
     def _fields(self, page) -> str:
         """The page's interactive fields, each with a handle type_text accepts."""
         try:
@@ -403,8 +423,21 @@ class Browser:
             lines.append("  " + " ".join(bits))
         more = (f"\n  [...{len(found) - MAX_FIELDS} more]"
                 if len(found) > MAX_FIELDS else "")
-        return ("\n\n[fields you can type into: pass the handle as `selector`, "
-                "e.g. selector=\"f1\"]\n" + "\n".join(lines) + more)
+        return ("\n\n[fields: pass the handle to type_text or click, "
+                "e.g. \"f1\"]\n" + "\n".join(lines) + more)
+
+    def _controls(self, page) -> str:
+        """Named controls that carry no text, so click can be told they exist."""
+        try:
+            found = page.evaluate(self._CONTROLS_JS)
+        except Exception:
+            return ""
+        if not found:
+            return ""
+        shown = found[:MAX_FIELDS]
+        more = f" [...{len(found) - len(shown)} more]" if len(found) > len(shown) else ""
+        return ("\n\n[icon controls, no visible text -- click by this name]\n  "
+                + " | ".join(f'"{n}"' for n in shown) + more)
 
     def _text(self, page, offset: int = 0) -> str:
         try:
@@ -416,7 +449,8 @@ class Browser:
         more = "" if offset + PAGE_CHARS >= len(body) else (
             f"\n\n[...{len(body) - offset - PAGE_CHARS} more chars; "
             f"read_page with offset={offset + PAGE_CHARS} for the rest]")
-        return (slice_ or "[no text at this offset]") + more + self._fields(page)
+        return ((slice_ or "[no text at this offset]") + more
+                + self._fields(page) + self._controls(page))
 
     def shot(self, label: str, tab_id: int | None = None) -> dict | None:
         """A JPEG of what the page looked like, for reading a trajectory later.
@@ -504,6 +538,19 @@ class Browser:
 
     def click(self, tab_id: int, text: str) -> str:
         page = self._page(tab_id)
+        # A field handle is clickable too: the listing tells the model to click
+        # read-only fields, and it tried click("f7") on its own before this.
+        handle = field_handle(page, text)
+        if handle is not None:
+            try:
+                handle.click(timeout=10000)
+                self._settle(page)
+                return (f"clicked {text}; tab {tab_id} now at {page.url}"
+                        f"\n\n{self._text(page)}")
+            except Exception as exc:
+                n = page.locator(f"{FIELD_CSS} >> visible=true").count()
+                return (f"click failed on {text}: "
+                        f"{str(exc).splitlines()[0]} (the page lists f1 to f{n})")
         # Most specific match first, and only visible elements: "Send" must hit
         # the Send button, not a hidden label or a "Sent" folder containing it.
         # (From the main line: the first version clicked the first text match,
