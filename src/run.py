@@ -834,7 +834,7 @@ def extract_json(text: str) -> dict | None:
 _retries_seen = 0          # provider retries this process has done, ever
 
 
-RESPONSES_API = True       # use the Responses API on the openai/Azure provider
+RESPONSES_API = True       # use the Responses API where a route needs it
 
 
 def _create_with_retry(client, *, attempts: int = MAX_RETRIES + 1, create=None,
@@ -1048,10 +1048,13 @@ def dump_response(resp) -> dict:
 def metered(client, meter: Meter | None, role: str, *, provider: str, **kwargs):
     """One chat call, timed and billed into the meter. Returns (resp, call)."""
     retries_before = _retries_seen
-    if provider == "openai" and RESPONSES_API:
-        # Chat completions on this deployment return a reasoning token count and
-        # no reasoning; the Responses API returns a summary of it for the same
-        # tokens. The shim keeps the caller in chat-completions terms.
+    if RESPONSES_API and model_registry.wants_responses_api(
+            kwargs.get("model", ""), provider):
+        # Chat completions on these deployments return a reasoning token count
+        # and no reasoning; the Responses API returns a summary of it for the
+        # same tokens -- and for the newer OpenAI models it is the only endpoint
+        # that accepts function tools at all. The shim keeps the caller in
+        # chat-completions terms.
         kwargs["create"] = lambda **call_kwargs: responses_shim.create(
             client, **call_kwargs)
     if provider == "openrouter":

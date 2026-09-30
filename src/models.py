@@ -47,6 +47,27 @@ def endpoint_configured(entry: dict) -> bool:
     return True
 
 
+def wants_responses_api(model_id: str, provider: str) -> bool:
+    """True when this route needs /v1/responses rather than chat completions.
+
+    The shared Azure deployment always has, for the reasoning summary. Newer
+    OpenAI models need it for a harder reason: chat completions refuses
+    function tools outright -- "Function tools with reasoning_effort are not
+    supported ... use /v1/responses" -- so without this a model that is
+    perfectly capable looks like one that cannot call a tool.
+    """
+    if provider == "openai":
+        return True
+    for entry in MODELS.values():
+        if not entry.get("responses_api"):
+            continue
+        endpoint = entry.get("endpoint") or {}
+        if model_id in (endpoint.get("model"), entry.get("azure"),
+                        entry.get("openrouter")):
+            return True
+    return False
+
+
 def routes(key: str) -> list[tuple[str, str, bool]]:
     """Every way this model could be reached: (provider, model id, available)."""
     entry = MODELS.get(key)
@@ -105,9 +126,18 @@ def _route_requirement(key: str, provider: str) -> str:
 
 
 def price_for(model_id: str) -> dict | None:
-    """USD per million tokens for a resolved id, or None when unknown."""
+    """USD per million tokens for a resolved id, or None when unknown.
+
+    endpoint.model counts too. A model reached through its own vendor endpoint
+    resolves to that id, and matching only the azure and openrouter ids left
+    every such cell unpriced -- which the report reads as free, the same trap
+    that zeroing Azure was. It is the common case for a collaborator running
+    their own gateway, so it was silently true for most of the grid.
+    """
     for entry in MODELS.values():
-        if model_id in (entry.get("azure"), entry.get("openrouter")):
+        endpoint = entry.get("endpoint") or {}
+        if model_id in (entry.get("azure"), entry.get("openrouter"),
+                        endpoint.get("model")):
             return entry["price"]
     return None
 
