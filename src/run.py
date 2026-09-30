@@ -1414,9 +1414,21 @@ def run_agent(task: dict, user: PersonaUser, model: str, *, max_steps: int,
         browser.close()
 
     finished_at = datetime.now(timezone.utc)
+    # A failed capture is swallowed per step so it cannot fail the run, which
+    # means a run where every screenshot failed otherwise looks identical to one
+    # where they all worked. Counting them here is what makes that visible.
+    shots = [t.get("screenshot") for t in trajectory] + list(final_shots)
+    shot_stats = {
+        "requested": shots_dir is not None,
+        "captured": sum(1 for x in shots if isinstance(x, dict) and x.get("file")),
+        "failed": sum(1 for x in shots if isinstance(x, dict) and x.get("error")),
+        "first_error": next((x["error"] for x in shots
+                             if isinstance(x, dict) and x.get("error")), None),
+    }
     return {"answer": answer, "stop_reason": stop_reason, "steps": len(trajectory),
             "max_steps": max_steps, "trajectory": trajectory, "turns": turns,
             "open_tabs": open_tabs, "final_screenshots": final_shots,
+            "screenshots": shot_stats,
             "real_state": real_state, "real_state_error": real_error,
             "conversation": user.transcript, "user": user.info(),
             "timing": {"started_at": started_at.isoformat(),
@@ -2171,6 +2183,17 @@ def main() -> None:
         print(f"   cost ${acct['cost_usd']:.4f}  "
               f"tokens {acct['prompt_tokens']}/{acct['completion_tokens']}  "
               f"wall {acct['cell_wall_seconds']:.0f}s")
+        # A screenshot failure is swallowed so it cannot fail a step; saying
+        # nothing about it is how a run with no frames at all looked normal.
+        shots = run.get("screenshots") or {}
+        if shots.get("requested"):
+            if shots.get("failed"):
+                print(f"   SCREENSHOTS: {shots['captured']} captured, "
+                      f"{shots['failed']} FAILED -- {shots.get('first_error')}")
+            elif not shots.get("captured"):
+                print("   SCREENSHOTS: none captured, though they were requested")
+            else:
+                print(f"   screenshots {shots['captured']}")
         print(f"-> {out_dir / 'result.json'}")
     if had_failures:
         raise SystemExit(1)
