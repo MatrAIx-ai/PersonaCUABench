@@ -1609,7 +1609,47 @@ def run_agent(task: dict, user: PersonaUser, model: str, *, max_steps: int,
 # Judge
 # --------------------------------------------------------------------------- #
 JUDGE_PROMPT = prompt("rubric_judge")
-INTENT_PROMPT = prompt("intent_judge")
+RAISED_PROMPT = prompt("raised_judge")
+ENGAGEMENT_PROMPT = prompt("engagement_judge")
+
+# Whether this person raised something is a property of the conversation alone,
+# so it is judged once and reused by every model that saw the same words.
+# Not an optimisation: without it the answer moves. Four models handed a
+# byte-identical request produced raised counts of 0, 1, 4 and 0, because these
+# rubric items name sources the persona's compressed request never mentions and
+# the call is genuinely borderline. Cached, the borderline is decided once and
+# every model is measured against the same line -- which is the only way a
+# cross-model comparison means anything.
+RAISED_CACHE = HERE / ".judge_cache" / "raised"
+
+
+def raised_cache_key(task: dict, conversation: str, judge_model: str) -> str:
+    payload = json.dumps({
+        "task": task.get("task_id"),
+        "rubrics": {rid: r.get("requirement") for rid, r in task["rubrics"].items()},
+        "conversation": conversation,
+        "judge": judge_model,
+        "prompt": hashlib.sha256(RAISED_PROMPT.encode("utf-8")).hexdigest()[:16],
+    }, sort_keys=True, ensure_ascii=False)
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
+def cached_raised(key: str) -> dict | None:
+    path = RAISED_CACHE / f"{key}.json"
+    if not path.is_file():
+        return None
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None
+
+
+def store_raised(key: str, verdicts: dict) -> None:
+    RAISED_CACHE.mkdir(parents=True, exist_ok=True)
+    tmp = RAISED_CACHE / f"{key}.tmp"
+    tmp.write_text(json.dumps(verdicts, ensure_ascii=False, indent=2),
+                   encoding="utf-8")
+    tmp.replace(RAISED_CACHE / f"{key}.json")
 
 
 def _ask_judge(client, meter, role: str, *, provider: str, model: str,
@@ -1672,7 +1712,13 @@ def judge_run(task: dict, run: dict, *, judge_model: str, judge_provider: str,
     prompt = JUDGE_PROMPT.format(
         task=task["confirmed_task"], rubric=rubric, answer=answer,
         actions=actions, tabs=json.dumps(run["open_tabs"], indent=2))
-    intent_prompt = INTENT_PROMPT.format(
+    # raised_prompt is given nothing about the agent: the same conversation
+    # must yield the same answer whichever agent was listening, and when the
+    # answer and action log were in this prompt it did not -- four models on a
+    # byte-identical request produced raised counts of 1, 1, 2 and 4.
+    raised_prompt = RAISED_PROMPT.format(
+        rubric=intent_rubric, conversation=conversation)
+    engagement_prompt = ENGAGEMENT_PROMPT.format(
         rubric=intent_rubric, conversation=conversation, answer=answer,
         actions=actions)
 
@@ -1686,27 +1732,48 @@ def judge_run(task: dict, run: dict, *, judge_model: str, judge_provider: str,
         return {**base, "error": obj_error, "verdicts": {}, "met": None,
                 "total": len(task["rubrics"]), "score": None,
                 "trajectory_efficiency": None}
-    subjective, int_error = _ask_judge(
-        client, meter, "intent_judge", provider=resolved_provider,
-        model=judge_model, text=intent_prompt)
+    cache_key = raised_cache_key(task, conversation, judge_model)
+    raised_v, raised_error = cached_raised(cache_key), ""
+    raised_from_cache = raised_v is not None
+    if not raised_from_cache:
+        raised_v, raised_error = _ask_judge(
+            client, meter, "raised_judge", provider=resolved_provider,
+            model=judge_model, text=raised_prompt)
+        if raised_v is not None:
+            store_raised(cache_key, raised_v)
+    engaged_v, engaged_error = _ask_judge(
+        client, meter, "engagement_judge", provider=resolved_provider,
+        model=judge_model, text=engagement_prompt)
+    # Either subjective half missing means the intent picture is incomplete.
+    int_error = "; ".join(e for e in (
+        f"raised_judge: {raised_error}" if raised_v is None else "",
+        f"engagement_judge: {engaged_error}" if engaged_v is None else "") if e)
 
     # One verdict per rubric id, each field from the judge that owns it, each
     # keeping its own reason so a disagreement stays readable afterwards.
     verdicts = {}
     for rid in task["rubrics"]:
         obj = objective.get(rid) or {}
-        sub_ = (subjective or {}).get(rid) or {}
+        r = (raised_v or {}).get(rid) or {}
+        e = (engaged_v or {}).get(rid) or {}
+        raised = r.get("raised") if raised_v is not None else None
         verdicts[rid] = {
             "met": obj.get("met"),
             "met_reason": obj.get("reason"),
-            "communicated": sub_.get("communicated") if subjective else None,
-            "communicated_reason": sub_.get("reason") if subjective else None,
+            "raised": raised,
+            "raised_reason": r.get("reason") if raised_v is not None else None,
+            "engaged": e.get("engaged") if engaged_v is not None else None,
+            "engaged_reason": e.get("reason") if engaged_v is not None else None,
+            # Kept so score_communicated and every saved record keep their
+            # meaning: what this person actually asked for.
+            "communicated": raised,
         }
     out = {**base, "verdicts": verdicts,
+           "raised_cache": {"key": cache_key[:16], "hit": raised_from_cache},
            **score_verdicts(task, verdicts, run["steps"])}
-    if subjective is None:
-        # The objective half stands on its own; say the other is missing rather
-        # than let score_communicated read as a real None.
+    if int_error:
+        # The objective half stands on its own; say which subjective half is
+        # missing rather than let score_communicated read as a real None.
         out["intent_judge_error"] = int_error
     return out
 
@@ -1854,12 +1921,27 @@ def judge_real(task: dict, run: dict, *, judge_model: str = "",
             "trajectory_efficiency": round(float(passed) / max(run["steps"], 1), 4)}
 
 
-def score_verdicts(task: dict, verdicts: dict, steps: int) -> dict:
-    """score over every rubric item, plus score over only the communicated ones.
+# What (raised, engaged) says happened, in the benchmark's own terms. `met`
+# then says whether the work was right, which is a separate axis.
+INTENT_OUTCOMES = {
+    (True, True): "understood",      # they asked, the agent took it up
+    (True, False): "not_understood",  # they asked, the agent never engaged
+    (False, True): "exceeded",       # they never asked, the agent did it anyway
+    (False, False): "out_of_scope",  # not theirs, not pursued
+}
 
-    The second number is what the agent could fairly be held to: an item the
+
+def score_verdicts(task: dict, verdicts: dict, steps: int) -> dict:
+    """The objective score, the score over what this person raised, and what
+    the agent did with this person's intent.
+
+    score_communicated is what the agent could fairly be held to: an item the
     persona never voiced and the agent never asked about is a gap in the
     conversation, not in the agent's ability to do the work.
+
+    The outcome counts are the other axis. "exceeded" and "not_understood" both
+    used to collapse into communicated=false, so an agent that did more than it
+    was asked and one that ignored what it was asked looked the same.
     """
     ids = list(task["rubrics"])
     v = {rid: verdicts.get(rid) or {} for rid in ids}
@@ -1867,10 +1949,24 @@ def score_verdicts(task: dict, verdicts: dict, steps: int) -> dict:
     said = [r for r in ids if bool(v[r].get("communicated"))]
     met_said = sum(bool(v[r].get("met")) for r in said)
     total = len(ids)
+    outcomes = {name: 0 for name in INTENT_OUTCOMES.values()}
+    graded = 0
+    for r in ids:
+        raised, engaged = v[r].get("raised"), v[r].get("engaged")
+        if raised is None or engaged is None:
+            continue                       # the intent judge did not answer
+        outcomes[INTENT_OUTCOMES[(bool(raised), bool(engaged))]] += 1
+        graded += 1
+    # Of what this person asked for, how much did the agent even take up.
+    asked_for = outcomes["understood"] + outcomes["not_understood"]
     return {"met": met, "total": total,
             "score": round(met / total, 3) if total else 0.0,
             "communicated": len(said),
             "score_communicated": round(met_said / len(said), 3) if said else None,
+            "intent_outcomes": outcomes if graded else None,
+            "intent_graded": graded,
+            "engagement": (round(outcomes["understood"] / asked_for, 3)
+                           if asked_for else None),
             "trajectory_efficiency": round(met / total / max(steps, 1), 4) if total else 0.0}
 
 
