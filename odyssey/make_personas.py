@@ -7,7 +7,8 @@ persona simply having more attributes rendered into its prompt.
 Every value is checked against the schema's allowed values -- a typo fails here
 rather than silently rendering a dimension the schema never defined.
 
-    python odyssey/make_personas.py
+    python odyssey/make_personas.py             # write odyssey/personas/*.yaml
+    python odyssey/make_personas.py --check     # fail if they no longer match
 """
 from __future__ import annotations
 
@@ -19,27 +20,47 @@ import yaml
 SCHEMA = Path(__file__).resolve().parent / "dimensions.json"   # MatrAIx persona schema
 OUT = Path(__file__).resolve().parent / "personas"
 
-# 38 travel-relevant dimensions, picked from the 1290-dim space: who they are,
-# how much travel/transit expertise they carry, how they handle money and risk,
-# how they read and how much detail they want, and the physical/tech constraints
-# that shape a browsing session.
-# Everyone gets these; a family adds its own below. DIMENSIONS stays as the
-# travel set it always was, so the four travel personas are unchanged.
-DIMENSIONS = (
-    "age_bracket", "region", "urbanicity", "socioeconomic_band", "demo_driver_status",
-    "lifex_travel_breadth", "lifex_geographic_mobility",
-    "ind_travel_tourism", "ind_transportation", "seniority",
-    "tech_savviness", "skill_budgeting", "skill_driving", "fam_urban_planning",
-    "topic_travel", "topic_technology",
-    "lstyle_travel_freq", "lstyle_planning_horizon", "lstyle_frugality",
-    "att_public_transit", "att_new_technology",
-    "risk_tolerance", "dospert_financial_risk_tolerance",
+# The 32 dimensions every persona in every domain carries, picked from the
+# 1290-dim space. The five the team agreed no persona may be silent on come
+# first, because the persona tree branches on exactly them:
+#
+#   age            age_bracket
+#   education      highest_education
+#   income         demo_household_income      (socioeconomic_band is the coarse band)
+#   expertise      seniority + tech_savviness + the family's own skill dimensions
+#   time pressure  time_pressure
+#
+# The rest say how they handle money and risk, how they read and how much detail
+# they want, and the physical and device constraints that shape a session.
+# Everyone gets these; a family adds four or five of its own below.
+CORE_DIMENSIONS = (
+    # the five branching dimensions (expertise is per-family, plus these two)
+    "age_bracket", "highest_education", "demo_household_income", "time_pressure",
+    "seniority", "tech_savviness",
+    # who else they are
+    "region", "urbanicity", "socioeconomic_band", "lifex_geographic_mobility",
+    # money
+    "skill_budgeting", "lstyle_frugality", "economic_motivation",
+    "habit_budget_tracking", "pref_save_vs_spend",
+    # technology
+    "topic_technology", "att_new_technology", "device_context",
+    # risk
+    "risk_tolerance", "dospert_financial_risk_tolerance", "cog_risk_framing",
+    # how they read and decide
     "cog_detail_orientation", "cog_patience", "cog_attention_span",
-    "cog_big_picture_vs_detail", "cog_risk_framing",
+    "cog_big_picture_vs_detail", "pref_detail_brief_vs_full",
+    "lstyle_planning_horizon", "pref_plan_vs_spontaneous",
+    # what the session has to accommodate
     "health_mobility", "health_vision", "health_assistive_tech",
-    "pref_plan_vs_spontaneous", "pref_save_vs_spend", "pref_detail_brief_vs_full",
-    "accessibility_needs", "device_context", "economic_motivation",
-    "habit_budget_tracking",
+    "accessibility_needs",
+)
+
+# The axes the team agreed every persona must carry a value for, because the
+# persona tree branches on them. Expertise is the family's own skill dimensions
+# plus seniority, so it appears here as seniority and is checked per family.
+BRANCHING_DIMENSIONS = (
+    "age_bracket", "highest_education", "demo_household_income", "seniority",
+    "time_pressure",
 )
 
 # Only behaviorally observable dimensions belong in the fidelity judge.  The
@@ -69,169 +90,145 @@ EVALUATION_DIMENSIONS = (
 #   C "young"     18-34, low income, phone-first, impatient, cost-sensitive
 #   D "practical" 35-54, time-pressured, wants concise actionable answers
 #
-# Three families replace D with the role the persona tree names instead:
-# travel -> non-native-speaker, science -> school-resource parent helper,
-# tech -> technology-cautious middle-school teacher.
+# Every family keeps all four roles; what each family changes is the values, so
+# D is a non-native speaker in travel, a parent hunting school resources in
+# science, and a technology-cautious teacher in tech.
 _ROLE_BASE: dict[str, dict[str, str]] = {
     "expert": {
         "age_bracket": "35-44",
+        "highest_education": "Master's",
+        "demo_household_income": "$100k-200k",
+        "time_pressure": "Moderate",
+        "seniority": "Senior",
+        "tech_savviness": "Digital native",
         "region": "North America",
         "urbanicity": "Dense urban",
         "socioeconomic_band": "Upper-middle",
-        "demo_driver_status": "Occasional driver",
-        "lifex_travel_breadth": "Well-traveled",
         "lifex_geographic_mobility": "Moved nationally",
-        "ind_travel_tourism": "None",
-        "ind_transportation": "None",
-        "seniority": "Senior",
-        "tech_savviness": "Digital native",
         "skill_budgeting": "Advanced",
-        "skill_driving": "Intermediate",
-        "fam_urban_planning": "Aware",
-        "topic_travel": "Interested",
-        "topic_technology": "Interested",
-        "lstyle_travel_freq": "A few trips/yr",
-        "lstyle_planning_horizon": "Monthly",
         "lstyle_frugality": "Balanced",
-        "att_public_transit": "Positive",
+        "economic_motivation": "Value-driven",
+        "habit_budget_tracking": "Monthly",
+        "pref_save_vs_spend": "Balanced",
+        "topic_technology": "Interested",
         "att_new_technology": "Positive",
+        "device_context": "Desktop, focused",
         "risk_tolerance": "Balanced",
         "dospert_financial_risk_tolerance": "Average",
+        "cog_risk_framing": "Balanced",
         "cog_detail_orientation": "Very high",
         "cog_patience": "High",
         "cog_attention_span": "Very long",
         "cog_big_picture_vs_detail": "Detail",
-        "cog_risk_framing": "Balanced",
+        "pref_detail_brief_vs_full": "Every detail",
+        "lstyle_planning_horizon": "Monthly",
+        "pref_plan_vs_spontaneous": "Highly planned",
         "health_mobility": "Full",
         "health_vision": "Corrected",
         "health_assistive_tech": "None",
-        "pref_plan_vs_spontaneous": "Highly planned",
-        "pref_save_vs_spend": "Balanced",
-        "pref_detail_brief_vs_full": "Every detail",
         "accessibility_needs": "None",
-        "device_context": "Desktop, focused",
-        "economic_motivation": "Value-driven",
-        "habit_budget_tracking": "Monthly",
     },
     "senior": {
         "age_bracket": "65-74",
+        "highest_education": "Secondary",
+        "demo_household_income": "$25k-50k",
+        "time_pressure": "No rush",
+        "seniority": "Retired",
+        "tech_savviness": "Reluctant",
         "region": "North America",
         "urbanicity": "Suburban",
         "socioeconomic_band": "Lower-middle",
-        "demo_driver_status": "Licensed, rarely drives",
-        "lifex_travel_breadth": "A few countries",
         "lifex_geographic_mobility": "Moved within region",
-        "ind_travel_tourism": "None",
-        "ind_transportation": "None",
-        "seniority": "Retired",
-        "tech_savviness": "Reluctant",
         "skill_budgeting": "Intermediate",
-        "skill_driving": "Beginner",
-        "fam_urban_planning": "None",
-        "topic_travel": "Neutral",
-        "topic_technology": "Indifferent",
-        "lstyle_travel_freq": "Rare",
-        "lstyle_planning_horizon": "Weekly",
         "lstyle_frugality": "Frugal saver",
-        "att_public_transit": "Neutral",
+        "economic_motivation": "Cost-sensitive",
+        "habit_budget_tracking": "Monthly",
+        "pref_save_vs_spend": "Hard saver",
+        "topic_technology": "Indifferent",
         "att_new_technology": "Skeptical",
+        "device_context": "Accessibility tool",
         "risk_tolerance": "Risk-averse",
         "dospert_financial_risk_tolerance": "Very low",
+        "cog_risk_framing": "Threat-focused",
         "cog_detail_orientation": "Moderate",
         "cog_patience": "Moderate",
         "cog_attention_span": "Short",
         "cog_big_picture_vs_detail": "Big-picture",
-        "cog_risk_framing": "Threat-focused",
+        "pref_detail_brief_vs_full": "Just the gist",
+        "lstyle_planning_horizon": "Weekly",
+        "pref_plan_vs_spontaneous": "Planned",
         "health_mobility": "Mild limitation",
         "health_vision": "Low vision",
         "health_assistive_tech": "Magnifier",
-        "pref_plan_vs_spontaneous": "Planned",
-        "pref_save_vs_spend": "Hard saver",
-        "pref_detail_brief_vs_full": "Just the gist",
         "accessibility_needs": "Visual",
-        "device_context": "Accessibility tool",
-        "economic_motivation": "Cost-sensitive",
-        "habit_budget_tracking": "Monthly",
     },
     "young": {
         "age_bracket": "25-34",
+        "highest_education": "Some college",
+        "demo_household_income": "<$25k",
+        "time_pressure": "Moderate",
+        "seniority": "Entry",
+        "tech_savviness": "Digital native",
         "region": "North America",
         "urbanicity": "Dense urban",
         "socioeconomic_band": "Low income",
-        "demo_driver_status": "Non-driver",
-        "lifex_travel_breadth": "A few countries",
         "lifex_geographic_mobility": "Moved nationally",
-        "ind_travel_tourism": "None",
-        "ind_transportation": "None",
-        "seniority": "Entry",
-        "tech_savviness": "Digital native",
         "skill_budgeting": "Beginner",
-        "skill_driving": "None",
-        "fam_urban_planning": "Aware",
-        "topic_travel": "Interested",
-        "topic_technology": "Passionate",
-        "lstyle_travel_freq": "Occasional",
-        "lstyle_planning_horizon": "Day-to-day",
         "lstyle_frugality": "Frugal saver",
-        "att_public_transit": "Positive",
+        "economic_motivation": "Cost-sensitive",
+        "habit_budget_tracking": "Rarely",
+        "pref_save_vs_spend": "Saver-leaning",
+        "topic_technology": "Passionate",
         "att_new_technology": "Enthusiast",
+        "device_context": "Mobile, on-the-go",
         "risk_tolerance": "Risk-tolerant",
         "dospert_financial_risk_tolerance": "High",
+        "cog_risk_framing": "Opportunity-focused",
         "cog_detail_orientation": "Low",
         "cog_patience": "Low",
         "cog_attention_span": "Short",
         "cog_big_picture_vs_detail": "Big-picture",
-        "cog_risk_framing": "Opportunity-focused",
+        "pref_detail_brief_vs_full": "Brief-leaning",
+        "lstyle_planning_horizon": "Day-to-day",
+        "pref_plan_vs_spontaneous": "Spontaneous",
         "health_mobility": "Full",
         "health_vision": "Corrected",
         "health_assistive_tech": "None",
-        "pref_plan_vs_spontaneous": "Spontaneous",
-        "pref_save_vs_spend": "Saver-leaning",
-        "pref_detail_brief_vs_full": "Brief-leaning",
         "accessibility_needs": "None",
-        "device_context": "Mobile, on-the-go",
-        "economic_motivation": "Cost-sensitive",
-        "habit_budget_tracking": "Rarely",
     },
     "practical": {
         "age_bracket": "45-54",
+        "highest_education": "Bachelor's",
+        "demo_household_income": "$50k-100k",
+        "time_pressure": "Deadline",
+        "seniority": "Manager",
+        "tech_savviness": "Comfortable",
         "region": "North America",
         "urbanicity": "Suburban",
         "socioeconomic_band": "Middle",
-        "demo_driver_status": "Daily driver",
-        "lifex_travel_breadth": "A few countries",
         "lifex_geographic_mobility": "Moved within region",
-        "ind_travel_tourism": "None",
-        "ind_transportation": "None",
-        "seniority": "Manager",
-        "tech_savviness": "Comfortable",
         "skill_budgeting": "Intermediate",
-        "skill_driving": "Advanced",
-        "fam_urban_planning": "Aware",
-        "topic_travel": "Neutral",
-        "topic_technology": "Neutral",
-        "lstyle_travel_freq": "Occasional",
-        "lstyle_planning_horizon": "Weekly",
         "lstyle_frugality": "Balanced",
-        "att_public_transit": "Neutral",
+        "economic_motivation": "Value-driven",
+        "habit_budget_tracking": "Monthly",
+        "pref_save_vs_spend": "Balanced",
+        "topic_technology": "Neutral",
         "att_new_technology": "Positive",
+        "device_context": "Mobile, on-the-go",
         "risk_tolerance": "Cautious",
         "dospert_financial_risk_tolerance": "Low",
+        "cog_risk_framing": "Balanced",
         "cog_detail_orientation": "High",
         "cog_patience": "Low",
         "cog_attention_span": "Average",
         "cog_big_picture_vs_detail": "Both",
-        "cog_risk_framing": "Balanced",
+        "pref_detail_brief_vs_full": "Brief-leaning",
+        "lstyle_planning_horizon": "Weekly",
+        "pref_plan_vs_spontaneous": "Planned",
         "health_mobility": "Full",
         "health_vision": "Corrected",
         "health_assistive_tech": "None",
-        "pref_plan_vs_spontaneous": "Planned",
-        "pref_save_vs_spend": "Balanced",
-        "pref_detail_brief_vs_full": "Brief-leaning",
         "accessibility_needs": "None",
-        "device_context": "Mobile, on-the-go",
-        "economic_motivation": "Value-driven",
-        "habit_budget_tracking": "Monthly",
     },
 }
 
@@ -246,26 +243,23 @@ _ROLE_BASE: dict[str, dict[str, str]] = {
 # adds a few of its own, so a Gmail persona is not described by its attitude to
 # public transit and a cook is not an expert at nothing in particular.
 #
-# Travel's extension is the nine travel dimensions the first four personas were
-# written with, so those files are unchanged by this split.
-TRAVEL_DIMENSIONS = (
-    "demo_driver_status", "lifex_travel_breadth", "ind_travel_tourism",
-    "ind_transportation", "skill_driving", "fam_urban_planning", "topic_travel",
-    "lstyle_travel_freq", "att_public_transit",
-)
+# Every family gets exactly five, so every persona is described by the same
+# number of dimensions and a travel persona is as richly drawn as a food one.
 FAMILY_DIMENSIONS: dict[str, tuple[str, ...]] = {
-    "travel": TRAVEL_DIMENSIONS,
-    "science": ("ind_education", "fam_statistics", "skill_research", "topic_science"),
+    "travel": ("ind_travel_tourism", "ind_transportation", "lifex_travel_breadth",
+               "topic_travel", "lstyle_travel_freq"),
+    "science": ("ind_education", "fam_statistics", "skill_research", "topic_science",
+                "skill_mathematics"),
     "tech": ("ind_consumer_electronics", "fam_computer_networking", "skill_coding",
              "skill_debugging", "acad_computer_science"),
     "community": ("ind_nonprofit", "ind_government", "skill_facilitation",
                   "topic_volunteering", "val_community"),
     "art": ("ind_fine_art", "fam_art_history", "skill_drawing",
-            "trait_appreciation_of_beauty"),
+            "trait_appreciation_of_beauty", "skill_design_thinking"),
     "lifestyle": ("ind_apparel", "ind_real_estate", "lstyle_fashion_sense",
                   "topic_interior_design", "topic_fashion"),
     "ecommerce": ("ind_e_commerce", "ind_retail", "skill_negotiation",
-                  "lstyle_shopping_style"),
+                  "lstyle_shopping_style", "att_brand_loyalty"),
     "health": ("ind_healthcare", "ind_fitness_wellness", "fam_nutrition",
                "topic_fitness", "lstyle_exercise_freq"),
     "food": ("ind_food_beverage", "ind_hospitality", "skill_cooking",
@@ -274,7 +268,7 @@ FAMILY_DIMENSIONS: dict[str, tuple[str, ...]] = {
                      "habit_inbox_zero_discipline", "fam_organizational_psychology",
                      "topic_productivity"),
     "professional": ("ind_consulting", "skill_networking", "val_career_success",
-                     "lifex_career_path_shape"),
+                     "lifex_career_path_shape", "skill_leadership"),
 }
 
 # What each role knows about its own domain. The expert works in it, the senior
@@ -282,15 +276,34 @@ FAMILY_DIMENSIONS: dict[str, tuple[str, ...]] = {
 # untrained, the practical one is competent and busy. A profile overrides any of
 # these the moment the person is not the default.
 FAMILY_DEFAULTS: dict[str, dict[str, dict[str, str]]] = {
+    "travel": {
+        "expert": {"ind_travel_tourism": "Veteran", "ind_transportation": "Experienced",
+                   "lifex_travel_breadth": "Global nomad", "topic_travel": "Passionate",
+                   "lstyle_travel_freq": "Frequent flyer"},
+        "senior": {"ind_travel_tourism": "None", "ind_transportation": "None",
+                   "lifex_travel_breadth": "Never left country",
+                   "topic_travel": "Neutral", "lstyle_travel_freq": "Rare"},
+        "young": {"ind_travel_tourism": "None", "ind_transportation": "None",
+                  "lifex_travel_breadth": "A few countries",
+                  "topic_travel": "Interested", "lstyle_travel_freq": "Occasional"},
+        "practical": {"ind_travel_tourism": "Some exposure",
+                      "ind_transportation": "Some exposure",
+                      "lifex_travel_breadth": "A few countries",
+                      "topic_travel": "Neutral", "lstyle_travel_freq": "Occasional"},
+    },
     "science": {
         "expert": {"ind_education": "Veteran", "fam_statistics": "Expert",
-                   "skill_research": "Master", "topic_science": "Passionate"},
+                   "skill_research": "Master", "topic_science": "Passionate",
+                   "skill_mathematics": "Master"},
         "senior": {"ind_education": "Some exposure", "fam_statistics": "Aware",
-                   "skill_research": "Beginner", "topic_science": "Interested"},
+                   "skill_research": "Beginner", "topic_science": "Interested",
+                   "skill_mathematics": "Beginner"},
         "young": {"ind_education": "None", "fam_statistics": "Aware",
-                  "skill_research": "Beginner", "topic_science": "Interested"},
+                  "skill_research": "Beginner", "topic_science": "Interested",
+                  "skill_mathematics": "Intermediate"},
         "practical": {"ind_education": "Some exposure", "fam_statistics": "Familiar",
-                      "skill_research": "Intermediate", "topic_science": "Neutral"},
+                      "skill_research": "Intermediate", "topic_science": "Neutral",
+                      "skill_mathematics": "Intermediate"},
     },
     "tech": {
         "expert": {"ind_consumer_electronics": "Veteran",
@@ -323,16 +336,20 @@ FAMILY_DEFAULTS: dict[str, dict[str, dict[str, str]]] = {
     "art": {
         "expert": {"ind_fine_art": "Veteran", "fam_art_history": "Expert",
                    "skill_drawing": "Master",
-                   "trait_appreciation_of_beauty": "Signature"},
+                   "trait_appreciation_of_beauty": "Signature",
+                   "skill_design_thinking": "Master"},
         "senior": {"ind_fine_art": "Some exposure", "fam_art_history": "Familiar",
                    "skill_drawing": "Beginner",
-                   "trait_appreciation_of_beauty": "Strong"},
+                   "trait_appreciation_of_beauty": "Strong",
+                   "skill_design_thinking": "Beginner"},
         "young": {"ind_fine_art": "None", "fam_art_history": "Aware",
                   "skill_drawing": "Intermediate",
-                  "trait_appreciation_of_beauty": "Strong"},
+                  "trait_appreciation_of_beauty": "Strong",
+                  "skill_design_thinking": "Intermediate"},
         "practical": {"ind_fine_art": "None", "fam_art_history": "Aware",
                       "skill_drawing": "Beginner",
-                      "trait_appreciation_of_beauty": "Moderate"},
+                      "trait_appreciation_of_beauty": "Moderate",
+                      "skill_design_thinking": "Intermediate"},
     },
     "lifestyle": {
         "expert": {"ind_apparel": "Veteran", "ind_real_estate": "Some exposure",
@@ -351,16 +368,16 @@ FAMILY_DEFAULTS: dict[str, dict[str, dict[str, str]]] = {
     "ecommerce": {
         "expert": {"ind_e_commerce": "Veteran", "ind_retail": "Experienced",
                    "skill_negotiation": "Advanced",
-                   "lstyle_shopping_style": "Researcher"},
+                   "lstyle_shopping_style": "Researcher", "att_brand_loyalty": "Neutral"},
         "senior": {"ind_e_commerce": "None", "ind_retail": "Some exposure",
                    "skill_negotiation": "Intermediate",
-                   "lstyle_shopping_style": "Brand loyal"},
+                   "lstyle_shopping_style": "Brand loyal", "att_brand_loyalty": "Enthusiast"},
         "young": {"ind_e_commerce": "Some exposure", "ind_retail": "Some exposure",
                   "skill_negotiation": "Beginner",
-                  "lstyle_shopping_style": "Bargain hunter"},
+                  "lstyle_shopping_style": "Bargain hunter", "att_brand_loyalty": "Skeptical"},
         "practical": {"ind_e_commerce": "Some exposure", "ind_retail": "None",
                       "skill_negotiation": "Intermediate",
-                      "lstyle_shopping_style": "Minimalist"},
+                      "lstyle_shopping_style": "Minimalist", "att_brand_loyalty": "Positive"},
     },
     "health": {
         "expert": {"ind_healthcare": "Veteran", "ind_fitness_wellness": "Experienced",
@@ -412,31 +429,22 @@ FAMILY_DEFAULTS: dict[str, dict[str, dict[str, str]]] = {
     "professional": {
         "expert": {"ind_consulting": "Veteran", "skill_networking": "Master",
                    "val_career_success": "Core value",
-                   "lifex_career_path_shape": "Linear climb"},
+                   "lifex_career_path_shape": "Linear climb", "skill_leadership": "Master"},
         "senior": {"ind_consulting": "Some exposure", "skill_networking": "Intermediate",
                    "val_career_success": "Moderate",
-                   "lifex_career_path_shape": "Linear climb"},
+                   "lifex_career_path_shape": "Linear climb", "skill_leadership": "Advanced"},
         "young": {"ind_consulting": "None", "skill_networking": "Beginner",
                   "val_career_success": "Important",
-                  "lifex_career_path_shape": "Just starting"},
+                  "lifex_career_path_shape": "Just starting", "skill_leadership": "Beginner"},
         "practical": {"ind_consulting": "Some exposure", "skill_networking": "Advanced",
                       "val_career_success": "Important",
-                      "lifex_career_path_shape": "Pivoted once"},
+                      "lifex_career_path_shape": "Pivoted once", "skill_leadership": "Advanced"},
     },
 }
 
 
-CORE_DIMENSIONS = tuple(d for d in DIMENSIONS if d not in TRAVEL_DIMENSIONS)
-
-
-TRAVEL_KEYS = ("travel-expert", "elderly-novice", "budget-student",
-               "non-native-speaker")
-
-
 def family_of_key(name: str) -> str:
-    """The family a persona key belongs to: its prefix, or travel by name."""
-    if name in TRAVEL_KEYS:
-        return "travel"
+    """The family a persona key belongs to: the part before its role."""
     family = name.split("-", 1)[0]
     if family not in FAMILY_DIMENSIONS:
         raise AssertionError(
@@ -472,182 +480,43 @@ def _p(role: str, note: str, family: str = "", **overrides: str) -> dict:
 
 
 PROFILES: dict[str, dict] = {
-    "travel-expert": {
-        "note": "Career travel/transit professional: deep domain expertise, high "
-                "tech fluency, plans in detail, no physical or access constraints.",
-        "values": {
-            "age_bracket": "35-44",
-            "region": "North America",
-            "urbanicity": "Dense urban",
-            "socioeconomic_band": "Upper-middle",
-            "demo_driver_status": "Occasional driver",
-            "lifex_travel_breadth": "Global nomad",
-            "lifex_geographic_mobility": "Serial relocator",
-            "ind_travel_tourism": "Veteran",
-            "ind_transportation": "Experienced",
-            "seniority": "Lead / Principal",
-            "tech_savviness": "Digital native",
-            "skill_budgeting": "Advanced",
-            "skill_driving": "Advanced",
-            "fam_urban_planning": "Proficient",
-            "topic_travel": "Passionate",
-            "topic_technology": "Passionate",
-            "lstyle_travel_freq": "Frequent flyer",
-            "lstyle_planning_horizon": "Monthly",
-            "lstyle_frugality": "Balanced",
-            "att_public_transit": "Enthusiast",
-            "att_new_technology": "Enthusiast",
-            "risk_tolerance": "Balanced",
-            "dospert_financial_risk_tolerance": "Average",
-            "cog_detail_orientation": "Very high",
-            "cog_patience": "High",
-            "cog_attention_span": "Very long",
-            "cog_big_picture_vs_detail": "Both",
-            "cog_risk_framing": "Balanced",
-            "health_mobility": "Full",
-            "health_vision": "Normal",
-            "health_assistive_tech": "None",
-            "pref_plan_vs_spontaneous": "Highly planned",
-            "pref_save_vs_spend": "Balanced",
-            "pref_detail_brief_vs_full": "Every detail",
-            "accessibility_needs": "None",
-            "device_context": "Desktop, focused",
-            "economic_motivation": "Value-driven",
-            "habit_budget_tracking": "Weekly",
-        },
-    },
-    "elderly-novice": {
-        "note": "Retired, rarely travels, cautious with money and with new "
-                "technology, mild mobility and vision limits, wants the gist.",
-        "values": {
-            "age_bracket": "75-84",
-            "region": "North America",
-            "urbanicity": "Suburban",
-            "socioeconomic_band": "Low income",
-            "demo_driver_status": "Licensed, rarely drives",
-            "lifex_travel_breadth": "Never left country",
-            "lifex_geographic_mobility": "Moved within region",
-            "ind_travel_tourism": "None",
-            "ind_transportation": "None",
-            "seniority": "Retired",
-            "tech_savviness": "Reluctant",
-            "skill_budgeting": "Intermediate",
-            "skill_driving": "Beginner",
-            "fam_urban_planning": "None",
-            "topic_travel": "Neutral",
-            "topic_technology": "Indifferent",
-            "lstyle_travel_freq": "Rare",
-            "lstyle_planning_horizon": "Day-to-day",
-            "lstyle_frugality": "Frugal saver",
-            "att_public_transit": "Neutral",
-            "att_new_technology": "Skeptical",
-            "risk_tolerance": "Risk-averse",
-            "dospert_financial_risk_tolerance": "Very low",
-            "cog_detail_orientation": "Moderate",
-            "cog_patience": "Moderate",
-            "cog_attention_span": "Short",
-            "cog_big_picture_vs_detail": "Big-picture",
-            "cog_risk_framing": "Threat-focused",
-            "health_mobility": "Mild limitation",
-            "health_vision": "Low vision",
-            "health_assistive_tech": "Magnifier",
-            "pref_plan_vs_spontaneous": "Planned",
-            "pref_save_vs_spend": "Hard saver",
-            "pref_detail_brief_vs_full": "Just the gist",
-            "accessibility_needs": "Visual",
-            "device_context": "Accessibility tool",
-            "economic_motivation": "Cost-sensitive",
-            "habit_budget_tracking": "Monthly",
-        },
-    },
-    "budget-student": {
-        "note": "College student on a tight budget: phone-first, fluent with apps "
-                "but no travel expertise, spontaneous, wants it quick and cheap.",
-        "values": {
-            "age_bracket": "18-24",
-            "region": "North America",
-            "urbanicity": "Dense urban",
-            "socioeconomic_band": "Low income",
-            "demo_driver_status": "Non-driver",
-            "lifex_travel_breadth": "A few countries",
-            "lifex_geographic_mobility": "Moved nationally",
-            "ind_travel_tourism": "None",
-            "ind_transportation": "None",
-            "seniority": "Student / intern",
-            "tech_savviness": "Digital native",
-            "skill_budgeting": "Beginner",
-            "skill_driving": "None",
-            "fam_urban_planning": "Aware",
-            "topic_travel": "Interested",
-            "topic_technology": "Interested",
-            "lstyle_travel_freq": "Occasional",
-            "lstyle_planning_horizon": "Day-to-day",
-            "lstyle_frugality": "Frugal saver",
-            "att_public_transit": "Positive",
-            "att_new_technology": "Enthusiast",
-            "risk_tolerance": "Risk-tolerant",
-            "dospert_financial_risk_tolerance": "High",
-            "cog_detail_orientation": "Low",
-            "cog_patience": "Low",
-            "cog_attention_span": "Short",
-            "cog_big_picture_vs_detail": "Big-picture",
-            "cog_risk_framing": "Opportunity-focused",
-            "health_mobility": "Full",
-            "health_vision": "Corrected",
-            "health_assistive_tech": "None",
-            "pref_plan_vs_spontaneous": "Spontaneous",
-            "pref_save_vs_spend": "Hard saver",
-            "pref_detail_brief_vs_full": "Brief-leaning",
-            "accessibility_needs": "None",
-            "device_context": "Mobile, on-the-go",
-            "economic_motivation": "Cost-sensitive",
-            "habit_budget_tracking": "Rarely",
-        },
-    },
-    "non-native-speaker": {
-        "note": "Recent immigrant with limited English: capable adult, uses a phone "
-                "translator, unfamiliar with local websites and customs, careful with money.",
-        "values": {
-            "age_bracket": "25-34",
-            "region": "East Asia",
-            "urbanicity": "Dense urban",
-            "socioeconomic_band": "Lower-middle",
-            "demo_driver_status": "Non-driver",
-            "lifex_travel_breadth": "A few countries",
-            "lifex_geographic_mobility": "Moved internationally",
-            "ind_travel_tourism": "None",
-            "ind_transportation": "None",
-            "seniority": "Entry",
-            "tech_savviness": "Comfortable",
-            "skill_budgeting": "Intermediate",
-            "skill_driving": "None",
-            "fam_urban_planning": "None",
-            "topic_travel": "Interested",
-            "topic_technology": "Neutral",
-            "lstyle_travel_freq": "Occasional",
-            "lstyle_planning_horizon": "Weekly",
-            "lstyle_frugality": "Frugal saver",
-            "att_public_transit": "Positive",
-            "att_new_technology": "Neutral",
-            "risk_tolerance": "Cautious",
-            "dospert_financial_risk_tolerance": "Low",
-            "cog_detail_orientation": "Moderate",
-            "cog_patience": "High",
-            "cog_attention_span": "Average",
-            "cog_big_picture_vs_detail": "Big-picture",
-            "cog_risk_framing": "Threat-focused",
-            "health_mobility": "Full",
-            "health_vision": "Normal",
-            "health_assistive_tech": "None",
-            "pref_plan_vs_spontaneous": "Planned",
-            "pref_save_vs_spend": "Saver-leaning",
-            "pref_detail_brief_vs_full": "Brief-leaning",
-            "accessibility_needs": "Language barrier",
-            "device_context": "Mobile, on-the-go",
-            "economic_motivation": "Cost-sensitive",
-            "habit_budget_tracking": "Weekly",
-        },
-    },
+    # --- travel: flights, stays, rides, itineraries (Staynb, Udriver)
+    "travel-expert": _p(
+        "expert",
+        "Career travel and transit professional: deep domain expertise, high tech "
+        "fluency, plans in detail, no physical or access constraints.",
+        seniority="Lead / Principal", lifex_geographic_mobility="Serial relocator",
+        topic_technology="Passionate", att_new_technology="Enthusiast",
+        cog_big_picture_vs_detail="Both", health_vision="Normal",
+        habit_budget_tracking="Weekly",
+    ),
+    "travel-senior": _p(
+        "senior",
+        "Retired and rarely travels, cautious with money and with new technology, "
+        "mild mobility and vision limits, wants the gist.",
+        age_bracket="75-84", socioeconomic_band="Low income",
+        demo_household_income="<$25k", lstyle_planning_horizon="Day-to-day",
+    ),
+    "travel-young": _p(
+        "young",
+        "College student on a tight budget: phone-first, fluent with apps but no "
+        "travel expertise, spontaneous, wants it quick and cheap.",
+        age_bracket="18-24", seniority="Student / intern",
+        pref_save_vs_spend="Hard saver", topic_technology="Interested",
+    ),
+    "travel-practical": _p(
+        "practical",
+        "Recent immigrant with limited English: capable adult on a schedule, uses a "
+        "phone translator, unfamiliar with local booking sites and customs.",
+        age_bracket="25-34", region="East Asia", seniority="Entry",
+        socioeconomic_band="Lower-middle", demo_household_income="$25k-50k",
+        accessibility_needs="Language barrier", att_new_technology="Neutral",
+        cog_patience="High", cog_detail_orientation="Moderate",
+        cog_risk_framing="Threat-focused", lstyle_frugality="Frugal saver",
+        pref_save_vs_spend="Saver-leaning", economic_motivation="Cost-sensitive",
+        habit_budget_tracking="Weekly", health_vision="Normal",
+        lifex_geographic_mobility="Moved internationally",
+    ),
     # --- science: study help, degree programmes, research methods, teaching material
     "science-expert": _p(
         "expert",
@@ -1112,13 +981,13 @@ PROFILES: dict[str, dict] = {
 }
 
 
-def main() -> None:
+def main(check: bool = False) -> None:
     schema = {d["id"]: d for d in json.loads(SCHEMA.read_text(encoding="utf-8"))["dimensions"]}
-    missing = [d for d in DIMENSIONS if d not in schema]
+    missing = [d for d in CORE_DIMENSIONS if d not in schema]
     assert not missing, f"not in dimensions.json: {missing}"
-    evaluation_unknown = [d for d in EVALUATION_DIMENSIONS if d not in DIMENSIONS]
+    evaluation_unknown = [d for d in EVALUATION_DIMENSIONS if d not in CORE_DIMENSIONS]
     assert not evaluation_unknown, (
-        f"evaluation dimensions absent from DIMENSIONS: {evaluation_unknown}"
+        f"evaluation dimensions absent from CORE_DIMENSIONS: {evaluation_unknown}"
     )
     assert len(set(EVALUATION_DIMENSIONS)) == len(EVALUATION_DIMENSIONS), (
         "duplicate EVALUATION_DIMENSIONS"
@@ -1128,9 +997,18 @@ def main() -> None:
     # difference the benchmark reports between them is noise.
     # A family's own dimensions must exist too, or a persona would claim
     # expertise the schema has no word for.
+    absent = [d for d in BRANCHING_DIMENSIONS if d not in CORE_DIMENSIONS]
+    assert not absent, (
+        f"the persona tree branches on {absent}, so every persona needs them; "
+        f"add them to CORE_DIMENSIONS")
     for family, dims in FAMILY_DIMENSIONS.items():
         unknown = [d for d in dims if d not in schema]
         assert not unknown, f"family {family}: not in dimensions.json: {unknown}"
+        # Same count everywhere, or a persona in one domain is drawn in more
+        # detail than one in another and the two cannot be compared.
+        assert len(dims) == 5, (
+            f"family {family} has {len(dims)} own dimensions, not 5: {dims}")
+        assert len(set(dims)) == 5, f"family {family} repeats a dimension: {dims}"
         for role, values in FAMILY_DEFAULTS.get(family, {}).items():
             extra = set(values) - set(dims)
             assert not extra, f"{family}/{role} sets dimensions outside the family: {extra}"
@@ -1159,6 +1037,7 @@ def main() -> None:
         seen[key] = name
 
     OUT.mkdir(parents=True, exist_ok=True)
+    stale: list[str] = []
     for name, profile in PROFILES.items():
         wanted = dimensions_for(profile["family"])
         assert set(profile["values"]) == set(wanted), (
@@ -1188,9 +1067,30 @@ def main() -> None:
             "attributes": attributes,
         }
         path = OUT / f"{name}.yaml"
-        path.write_text(yaml.safe_dump(doc, sort_keys=False, allow_unicode=True), encoding="utf-8")
+        text = yaml.safe_dump(doc, sort_keys=False, allow_unicode=True)
+        if check:
+            if not path.is_file():
+                stale.append(f"{path.name} is missing")
+            elif path.read_text(encoding="utf-8") != text:
+                stale.append(f"{path.name} differs from what this file would write")
+            continue
+        path.write_text(text, encoding="utf-8")
         print(f"wrote {path} ({len(attributes)} dimensions)")
+
+    if check:
+        # Only the top level: the matched-pair suites live in subdirectories and
+        # are generated by make_matched_personas.py, not here.
+        extra = sorted(f.name for f in OUT.glob("*.yaml") if f.stem not in PROFILES)
+        for name in extra:
+            stale.append(f"{name} has no profile and is left over from an older set")
+        if stale:
+            raise SystemExit("personas are stale; rerun python odyssey/make_personas.py\n  "
+                             + "\n  ".join(stale))
+        print(f"{len(PROFILES)} personas match make_personas.py, "
+              f"{len(CORE_DIMENSIONS)} shared + 5 family dimensions each")
 
 
 if __name__ == "__main__":
-    main()
+    import sys
+
+    main(check="--check" in sys.argv[1:])

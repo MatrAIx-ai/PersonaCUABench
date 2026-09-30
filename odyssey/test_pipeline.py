@@ -359,7 +359,7 @@ def test_report_task_routing():
         changed = copy.deepcopy(record)
         changed["task_snapshot"] = changed_task
         changed["task_sha256"] = changed_digest
-        changed["persona"] = "elderly-novice"
+        changed["persona"] = "travel-senior"
         changed["judgement"] = {"score": 0.5, "score_communicated": None}
         (changed_dir / "result.json").write_text(json.dumps(changed), encoding="utf-8")
         best, order, levels = report.collect_results(
@@ -368,7 +368,7 @@ def test_report_task_routing():
         assert ("later", "future-task", digest) in order
         assert ("later", "future-task", changed_digest) in order
         assert ("later", "future-task", changed_digest,
-                "elderly-novice/stub@stub#legacy") in best
+                "travel-senior/stub@stub#legacy") in best
         assert report.mixed_revision_groups(best) == [("later", "future-task")]
 
         # Unknown pre-router records are kept under 'unrouted' for an all-suite
@@ -420,10 +420,10 @@ def test_grid_shell_contract():
 
 def test_personas_differ():  # the profiles the persona LLM is given
     prompts = {name: R.persona_lib.persona_system_prompt(HERE / "personas" / f"{name}.yaml")
-               for name in ("travel-expert", "elderly-novice")}
-    assert "75-84" in prompts["elderly-novice"]
+               for name in ("travel-expert", "travel-senior")}
+    assert "75-84" in prompts["travel-senior"]
     assert "Frequent flyer" in prompts["travel-expert"]
-    assert prompts["travel-expert"] != prompts["elderly-novice"]
+    assert prompts["travel-expert"] != prompts["travel-senior"]
     # The profile carries no task: the need is added separately, per task.
     for p in prompts.values():
         assert "Aurora" not in p
@@ -614,13 +614,13 @@ def test_persona_user():
     client = _TextClient()
     R._client = lambda model, provider="": (client, "stub")
 
-    user = R.PersonaUser(task, HERE / "personas" / "elderly-novice.yaml", "stub")
+    user = R.PersonaUser(task, HERE / "personas" / "travel-senior.yaml", "stub")
     system = client.sent[0][0]["content"]
     assert "75-84" in system                      # persona profile
     assert task["confirmed_task"] in system       # hidden need
     assert user.opening == client.reply           # said in its own words
     snapshot = user.info()["persona_profile"]
-    assert snapshot["persona_id"] == "odyssey-elderly-novice"
+    assert snapshot["persona_id"] == "odyssey-travel-senior"
     assert snapshot["evaluation_dimensions"]
     assert set(snapshot["evaluation_dimensions"]) == set(snapshot["evaluation_values"])
     assert len(snapshot["profile_sha256"]) == 64
@@ -631,9 +631,9 @@ def test_persona_user():
     cache_r1 = R.persona_opening_cache(
         task,
         suite_id="shopping",
-        persona="elderly-novice",
+        persona="travel-senior",
         replicate_id="r1",
-        persona_path=HERE / "personas" / "elderly-novice.yaml",
+        persona_path=HERE / "personas" / "travel-senior.yaml",
         model="stub",
         provider="stub",
         temperature=0.7,
@@ -641,9 +641,9 @@ def test_persona_user():
     cache_r2 = R.persona_opening_cache(
         task,
         suite_id="shopping",
-        persona="elderly-novice",
+        persona="travel-senior",
         replicate_id="r2",
-        persona_path=HERE / "personas" / "elderly-novice.yaml",
+        persona_path=HERE / "personas" / "travel-senior.yaml",
         model="stub",
         provider="stub",
         temperature=0.7,
@@ -661,7 +661,7 @@ def test_persona_user():
         R._client = lambda model, provider="": (cache_client, "stub")
         first = R.PersonaUser(
             task,
-            HERE / "personas" / "elderly-novice.yaml",
+            HERE / "personas" / "travel-senior.yaml",
             "stub",
             opening_cache=cache_spec,
         )
@@ -672,7 +672,7 @@ def test_persona_user():
         R._client = lambda model, provider="": (cache_client_2, "stub")
         second = R.PersonaUser(
             task,
-            HERE / "personas" / "elderly-novice.yaml",
+            HERE / "personas" / "travel-senior.yaml",
             "stub",
             opening_cache={
                 "path": cache_path,
@@ -837,7 +837,7 @@ def test_persona_fidelity_contract():
     import persona_fidelity_judge as fidelity
 
     snapshot = {
-        "persona_id": "odyssey-budget-student",
+        "persona_id": "odyssey-travel-young",
         "version": "2.0",
         "profile_sha256": "a" * 64,
         "evaluation_dimensions": ["tech_savviness", "economic_motivation"],
@@ -852,7 +852,7 @@ def test_persona_fidelity_contract():
             **R.TASKS[0],
             "confirmed_task": "FROZEN KOBE TASK",
         },
-        "persona": "budget-student",
+        "persona": "travel-young",
         "run": {
             "answer": "stub",
             "user": {"model": "stub", "provider": "stub", "persona_profile": snapshot},
@@ -997,7 +997,7 @@ def test_experience_uses_frozen_profile():
             **R.TASKS[0],
             "confirmed_task": "FROZEN EXPERIENCE TASK",
         },
-        "persona": "budget-student",
+        "persona": "travel-young",
         "run": {
             "answer": "stub",
             "trajectory": [],

@@ -50,8 +50,8 @@ which is how the matched-pair tests keep running against real data.
 2. `python odyssey/prepare_v1.py` (and `prepare_real.py` first, for REAL).
 3. If the new tasks bring a domain no family claims, `persona_assignments.py`
    will say so by name. Add the domain to `DOMAIN_FAMILY`, and if it needs a new
-   family, add its four personas to `make_personas.py` and its dimensions to
-   `FAMILY_DIMENSIONS`.
+   family, add its four personas to `make_personas.py`, its five dimensions to
+   `FAMILY_DIMENSIONS` and their per-role values to `FAMILY_DEFAULTS`.
 4. `python odyssey/persona_assignments.py --check --write`.
 
 ## Adding or changing personas
@@ -60,13 +60,18 @@ Never edit a file under `odyssey/personas/`; they are generated.
 
 ```bash
 python odyssey/make_personas.py                 # rewrite them from PROFILES
+python odyssey/make_personas.py --check         # fail if a file has drifted
 python odyssey/persona_assignments.py --check   # every task still has four
 ```
 
-A persona is the shared 29 dimensions plus its family's own. The family default
-for its role fills what the profile does not say, the profile always wins, and a
-profile that sets another family's dimension is an error rather than a value
-silently dropped.
+A persona is the shared 32 dimensions plus its family's five, always 37. The
+family default for its role fills what the profile does not say and the profile
+always wins. `make_personas.py` refuses, rather than quietly accepting: a value
+the schema does not allow, a family with anything but five own dimensions, a
+family dimension that duplicates a shared one, a profile that sets another
+family's dimension, two personas with identical values, and a persona missing
+one of the five branching dimensions (`BRANCHING_DIMENSIONS`: age, education,
+income, seniority, time pressure).
 
 ## Setup
 

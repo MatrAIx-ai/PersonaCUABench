@@ -35,26 +35,32 @@ prints SUCCESS.
 
 ## Personas
 
-Every domain family has the same four roles, so the comparison across domains is
-like for like, and every role is described in that domain's own dimensions:
+Every domain family has the same four roles and every persona is described by
+exactly 37 dimensions — 32 shared plus five of its family's own — so no persona
+is drawn in more detail than another and the comparison across domains is like
+for like. Five of the 32 are the axes the persona tree branches on, and no
+persona may be silent on any of them: **age**, **education**, **income**,
+**expertise** (seniority plus the family's own skills) and **time pressure**.
 
 | role | who they are | what changes per family |
 |---|---|---|
 | `expert` | works in the field, wants every detail, no accessibility needs, desktop | the family's industry, skill and familiarity dimensions at their highest |
 | `senior` | 65–84, cautious, reluctant with technology, low vision and a magnifier, wants the gist | the same dimensions low, plus their own health and history |
 | `young` | 18–34, low income, phone-first, impatient, cost-sensitive | domain interest high, domain skill low |
-| `practical` | 35–54, middle income, short on time, wants a decision | domain competence in the middle |
+| `practical` | 45–54, middle income, working to a deadline, wants a decision | domain competence in the middle |
 
 The eleven families are `travel`, `science`, `tech`, `community`, `art`,
 `lifestyle`, `ecommerce`, `health`, `food`, `productivity`, `professional`. A
 food expert is a food-and-hospitality veteran who cooks at master level; a
 productivity senior reaches inbox zero rarely; a professional young one is just
-starting a career. Travel keeps the four names its personas were first written
-under (`travel-expert`, `elderly-novice`, `budget-student`, `non-native-speaker`).
+starting a career. Within a role the values still differ by family, so travel's
+`practical` is a recent immigrant working around a language barrier while
+science's is a parent hunting down free school resources.
 
 Personas are generated, never hand-edited: `odyssey/make_personas.py` builds
 them from the MatrAIx 1,290-dimension schema and refuses any value the schema
-does not allow. Which personas ask for which task is derived from the task's
+does not allow, any family that does not carry exactly five own dimensions, and
+any persona file that has drifted from the generator (`--check`). Which personas ask for which task is derived from the task's
 domain, not written by hand (`odyssey/persona_assignments.py`), so it cannot go
 stale when the task set changes.
 

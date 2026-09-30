@@ -45,22 +45,12 @@ DOMAIN_FAMILY = {
     "TopWork (Upwork)": "professional",
 }
 
-# The four roles, and the persona key each family uses for them. Travel keeps
-# the names its personas were first written under; every other family follows
-# "<family>-<role>".
+# The four roles every family carries, and the persona key that names one.
 ROLES = ("expert", "senior", "young", "practical")
-# Every family uses <family>-<role>; only travel keeps the names its four
-# personas were first written under, because results already reference them.
-OVERRIDES = {
-    ("travel", "expert"): "travel-expert",
-    ("travel", "senior"): "elderly-novice",
-    ("travel", "young"): "budget-student",
-    ("travel", "practical"): "non-native-speaker",
-}
 
 
 def persona_key(family: str, role: str) -> str:
-    return OVERRIDES.get((family, role), f"{family}-{role}")
+    return f"{family}-{role}"
 
 
 def family_of(task: dict) -> str:

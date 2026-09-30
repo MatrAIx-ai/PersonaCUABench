@@ -335,7 +335,7 @@ class TaskCatalog:
                 suite_id="legacy",
                 title="Legacy tasks.json",
                 version="legacy",
-                default_personas=["none", "travel-expert", "elderly-novice"],
+                default_personas=["none", "travel-expert", "travel-senior"],
                 tasks=tasks,
                 sources=[source],
                 task_sources={task["task_id"]: source for task in tasks},
@@ -369,7 +369,7 @@ class TaskCatalog:
             title = spec.get("title", suite_id)
             version = spec.get("version", "1")
             personas = spec.get("default_personas", [
-                "none", "travel-expert", "elderly-novice"
+                "none", "travel-expert", "travel-senior"
             ])
             experiment_path = None
             raw_experiment = spec.get("persona_experiment")
@@ -441,7 +441,7 @@ def suite_from_file(path: Path) -> TaskSuite:
     title = metadata.get("title", f"Ad hoc: {path.name}")
     version = metadata.get("version", "adhoc")
     personas = metadata.get(
-        "default_personas", ["none", "travel-expert", "elderly-novice"]
+        "default_personas", ["none", "travel-expert", "travel-senior"]
     )
     if not isinstance(title, str) or not title.strip():
         raise TaskRoutingError(f"{path}: title must be a non-empty string")

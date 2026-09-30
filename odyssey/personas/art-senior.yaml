@@ -21,6 +21,26 @@ attributes:
     value: 65-74
     label: Age bracket
     category: 'Demographic: Core'
+  highest_education:
+    value: Secondary
+    label: Highest education
+    category: 'Learning: Academic'
+  demo_household_income:
+    value: $25k-50k
+    label: Household income band
+    category: 'Demographic: Core'
+  time_pressure:
+    value: No rush
+    label: Time pressure
+    category: 'Behavior: Time'
+  seniority:
+    value: Retired
+    label: Seniority
+    category: 'Professional: Career'
+  tech_savviness:
+    value: Reluctant
+    label: Tech savviness
+    category: 'Expertise: Domains'
   region:
     value: Eastern Europe
     label: Region
@@ -37,34 +57,38 @@ attributes:
     value: Never left hometown
     label: Geographic mobility
     category: 'Demographic: Life Events'
-  seniority:
-    value: Retired
-    label: Seniority
-    category: 'Professional: Career'
-  tech_savviness:
-    value: Reluctant
-    label: Tech savviness
-    category: 'Expertise: Domains'
   skill_budgeting:
     value: Advanced
     label: 'Skill: Budgeting'
     category: 'Expertise: Skills'
-  topic_technology:
-    value: Indifferent
-    label: 'Interest: Technology'
-    category: 'Interests: Topics'
-  lstyle_planning_horizon:
-    value: Monthly
-    label: Planning horizon
-    category: 'Interests: Culture'
   lstyle_frugality:
     value: Balanced
     label: Spending vs saving
     category: 'Interests: Culture'
+  economic_motivation:
+    value: Cost-sensitive
+    label: Economic motivation
+    category: Values & Motivation
+  habit_budget_tracking:
+    value: Weekly
+    label: 'Habit: Budget tracking'
+    category: 'Behavior: Habits'
+  pref_save_vs_spend:
+    value: Hard saver
+    label: Save vs spend
+    category: 'Behavior: Preferences'
+  topic_technology:
+    value: Indifferent
+    label: 'Interest: Technology'
+    category: 'Interests: Topics'
   att_new_technology:
     value: Skeptical
     label: 'Attitude: New technology'
     category: 'Worldview: Beliefs'
+  device_context:
+    value: Accessibility tool
+    label: Device context
+    category: 'State: Emotional'
   risk_tolerance:
     value: Risk-averse
     label: Risk tolerance
@@ -73,6 +97,10 @@ attributes:
     value: Very low
     label: DOSPERT Financial Risk Tolerance
     category: Risk & Decision
+  cog_risk_framing:
+    value: Balanced
+    label: Risk framing
+    category: 'Linguistic: Communication'
   cog_detail_orientation:
     value: Very high
     label: Detail orientation
@@ -89,10 +117,18 @@ attributes:
     value: Detail
     label: Big-picture vs detail
     category: 'Linguistic: Communication'
-  cog_risk_framing:
-    value: Balanced
-    label: Risk framing
-    category: 'Linguistic: Communication'
+  pref_detail_brief_vs_full:
+    value: Just the gist
+    label: Brief vs full detail
+    category: 'Behavior: Preferences'
+  lstyle_planning_horizon:
+    value: Monthly
+    label: Planning horizon
+    category: 'Interests: Culture'
+  pref_plan_vs_spontaneous:
+    value: Planned
+    label: Planned vs spontaneous
+    category: 'Behavior: Preferences'
   health_mobility:
     value: Moderate limitation
     label: Mobility
@@ -105,34 +141,10 @@ attributes:
     value: Magnifier
     label: Assistive technology
     category: 'Health: Physical'
-  pref_plan_vs_spontaneous:
-    value: Planned
-    label: Planned vs spontaneous
-    category: 'Behavior: Preferences'
-  pref_save_vs_spend:
-    value: Hard saver
-    label: Save vs spend
-    category: 'Behavior: Preferences'
-  pref_detail_brief_vs_full:
-    value: Just the gist
-    label: Brief vs full detail
-    category: 'Behavior: Preferences'
   accessibility_needs:
     value: Visual
     label: Accessibility needs
     category: 'Behavior: Preferences'
-  device_context:
-    value: Accessibility tool
-    label: Device context
-    category: 'State: Emotional'
-  economic_motivation:
-    value: Cost-sensitive
-    label: Economic motivation
-    category: Values & Motivation
-  habit_budget_tracking:
-    value: Weekly
-    label: 'Habit: Budget tracking'
-    category: 'Behavior: Habits'
   ind_fine_art:
     value: Some exposure
     label: 'Industry: Fine art'
@@ -149,3 +161,7 @@ attributes:
     value: Strong
     label: 'Character: Appreciation of beauty'
     category: 'Personality: Character'
+  skill_design_thinking:
+    value: Beginner
+    label: 'Skill: Design thinking'
+    category: 'Expertise: Skills'

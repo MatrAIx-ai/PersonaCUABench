@@ -31,7 +31,7 @@ MODELS="${MODELS:-terra}"
 REPLICATES="${REPLICATES:-r1}"
 # Setting 1's personas: one per group of people. Setting 2's are generated from
 # the protocol and selected by run_matched_pairs.py, so PERSONAS is unused there.
-PERSONAS="${PERSONAS:-none travel-expert elderly-novice budget-student non-native-speaker}"
+PERSONAS="${PERSONAS:-none travel-expert travel-senior travel-young travel-practical}"
 PY="${PY:-python}"
 # Setting 1 fans out: one Chrome per worker, ~1.5 GB of RAM each. Setting 2 stays
 # serial -- a matched pair's two arms must not race for the same profile.

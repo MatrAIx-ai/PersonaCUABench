@@ -27,7 +27,8 @@ for check in \
   fi
 done
 
-for check in "odyssey/prepare_v1.py --check" "odyssey/models.py"; do
+for check in "odyssey/prepare_v1.py --check" "odyssey/make_personas.py --check" \
+  "odyssey/persona_assignments.py --check" "odyssey/models.py"; do
   printf '%-40s' "$check"
   if out=$("$PY" $check 2>&1); then
     printf 'ok\n'

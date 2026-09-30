@@ -7,7 +7,7 @@
 # this script again and only unfinished cells run.
 #
 #   bash odyssey/run_grid.sh                          # suite defaults + all tasks
-#   PERSONAS="none elderly-novice" bash odyssey/run_grid.sh
+#   PERSONAS="none travel-senior" bash odyssey/run_grid.sh
 #   TASKS="1 4" bash odyssey/run_grid.sh             # only your assigned tasks
 #   TASK_SUITE=main-original bash odyssey/run_grid.sh # another registered suite
 #   TASKS_FILE=/tmp/draft.json bash odyssey/run_grid.sh

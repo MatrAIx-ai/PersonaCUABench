@@ -2,7 +2,7 @@ persona_id: odyssey-travel-expert
 version: '2.1'
 family: travel
 source: hand-specified from dimensions.json (MatrAIx 1290-dim schema)
-note: 'Career travel/transit professional: deep domain expertise, high tech fluency,
+note: 'Career travel and transit professional: deep domain expertise, high tech fluency,
   plans in detail, no physical or access constraints.'
 evaluation_dimensions:
 - tech_savviness
@@ -21,6 +21,26 @@ attributes:
     value: 35-44
     label: Age bracket
     category: 'Demographic: Core'
+  highest_education:
+    value: Master's
+    label: Highest education
+    category: 'Learning: Academic'
+  demo_household_income:
+    value: $100k-200k
+    label: Household income band
+    category: 'Demographic: Core'
+  time_pressure:
+    value: Moderate
+    label: Time pressure
+    category: 'Behavior: Time'
+  seniority:
+    value: Lead / Principal
+    label: Seniority
+    category: 'Professional: Career'
+  tech_savviness:
+    value: Digital native
+    label: Tech savviness
+    category: 'Expertise: Domains'
   region:
     value: North America
     label: Region
@@ -37,34 +57,38 @@ attributes:
     value: Serial relocator
     label: Geographic mobility
     category: 'Demographic: Life Events'
-  seniority:
-    value: Lead / Principal
-    label: Seniority
-    category: 'Professional: Career'
-  tech_savviness:
-    value: Digital native
-    label: Tech savviness
-    category: 'Expertise: Domains'
   skill_budgeting:
     value: Advanced
     label: 'Skill: Budgeting'
     category: 'Expertise: Skills'
-  topic_technology:
-    value: Passionate
-    label: 'Interest: Technology'
-    category: 'Interests: Topics'
-  lstyle_planning_horizon:
-    value: Monthly
-    label: Planning horizon
-    category: 'Interests: Culture'
   lstyle_frugality:
     value: Balanced
     label: Spending vs saving
     category: 'Interests: Culture'
+  economic_motivation:
+    value: Value-driven
+    label: Economic motivation
+    category: Values & Motivation
+  habit_budget_tracking:
+    value: Weekly
+    label: 'Habit: Budget tracking'
+    category: 'Behavior: Habits'
+  pref_save_vs_spend:
+    value: Balanced
+    label: Save vs spend
+    category: 'Behavior: Preferences'
+  topic_technology:
+    value: Passionate
+    label: 'Interest: Technology'
+    category: 'Interests: Topics'
   att_new_technology:
     value: Enthusiast
     label: 'Attitude: New technology'
     category: 'Worldview: Beliefs'
+  device_context:
+    value: Desktop, focused
+    label: Device context
+    category: 'State: Emotional'
   risk_tolerance:
     value: Balanced
     label: Risk tolerance
@@ -73,6 +97,10 @@ attributes:
     value: Average
     label: DOSPERT Financial Risk Tolerance
     category: Risk & Decision
+  cog_risk_framing:
+    value: Balanced
+    label: Risk framing
+    category: 'Linguistic: Communication'
   cog_detail_orientation:
     value: Very high
     label: Detail orientation
@@ -89,10 +117,18 @@ attributes:
     value: Both
     label: Big-picture vs detail
     category: 'Linguistic: Communication'
-  cog_risk_framing:
-    value: Balanced
-    label: Risk framing
-    category: 'Linguistic: Communication'
+  pref_detail_brief_vs_full:
+    value: Every detail
+    label: Brief vs full detail
+    category: 'Behavior: Preferences'
+  lstyle_planning_horizon:
+    value: Monthly
+    label: Planning horizon
+    category: 'Interests: Culture'
+  pref_plan_vs_spontaneous:
+    value: Highly planned
+    label: Planned vs spontaneous
+    category: 'Behavior: Preferences'
   health_mobility:
     value: Full
     label: Mobility
@@ -105,42 +141,10 @@ attributes:
     value: None
     label: Assistive technology
     category: 'Health: Physical'
-  pref_plan_vs_spontaneous:
-    value: Highly planned
-    label: Planned vs spontaneous
-    category: 'Behavior: Preferences'
-  pref_save_vs_spend:
-    value: Balanced
-    label: Save vs spend
-    category: 'Behavior: Preferences'
-  pref_detail_brief_vs_full:
-    value: Every detail
-    label: Brief vs full detail
-    category: 'Behavior: Preferences'
   accessibility_needs:
     value: None
     label: Accessibility needs
     category: 'Behavior: Preferences'
-  device_context:
-    value: Desktop, focused
-    label: Device context
-    category: 'State: Emotional'
-  economic_motivation:
-    value: Value-driven
-    label: Economic motivation
-    category: Values & Motivation
-  habit_budget_tracking:
-    value: Weekly
-    label: 'Habit: Budget tracking'
-    category: 'Behavior: Habits'
-  demo_driver_status:
-    value: Occasional driver
-    label: Driving status
-    category: 'Demographic: Core'
-  lifex_travel_breadth:
-    value: Global nomad
-    label: Travel breadth
-    category: 'Demographic: Life Events'
   ind_travel_tourism:
     value: Veteran
     label: 'Industry: Travel & tourism'
@@ -149,14 +153,10 @@ attributes:
     value: Experienced
     label: 'Industry: Transportation'
     category: 'Professional: Industry'
-  skill_driving:
-    value: Advanced
-    label: 'Skill: Driving'
-    category: 'Expertise: Skills'
-  fam_urban_planning:
-    value: Proficient
-    label: 'Familiarity: Urban planning'
-    category: 'Expertise: Domains'
+  lifex_travel_breadth:
+    value: Global nomad
+    label: Travel breadth
+    category: 'Demographic: Life Events'
   topic_travel:
     value: Passionate
     label: 'Interest: Travel'
@@ -165,7 +165,3 @@ attributes:
     value: Frequent flyer
     label: Travel frequency
     category: 'Interests: Culture'
-  att_public_transit:
-    value: Enthusiast
-    label: 'Attitude: Public transit'
-    category: 'Worldview: Beliefs'

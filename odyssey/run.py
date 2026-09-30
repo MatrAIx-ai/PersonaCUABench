@@ -16,7 +16,7 @@ Scoring each rubric item as met AND communicated keeps "the user never asked
 for that" apart from "the agent could not do it".
 
     python odyssey/run.py --list-suites
-    python odyssey/run.py --suite shopping --task 1 --persona elderly-novice
+    python odyssey/run.py --suite shopping --task 1 --persona travel-senior
     python odyssey/run.py --all --persona none        # default suite, verbatim control
 
 Keys come from the repo's .env / env vars (OPENROUTER_API_KEY, OPENAI_API_KEY ...).
@@ -1656,7 +1656,7 @@ def main() -> None:
                     help="validate and list tasks in the selected suite/file, then exit")
     ap.add_argument("--task", help="1-based ordinal, task_id prefix, or comma-separated list")
     ap.add_argument("--all", action="store_true", help="run every task in the selected suite")
-    ap.add_argument("--persona", default="elderly-novice",
+    ap.add_argument("--persona", default="travel-senior",
                     help="the user asking: a suite-scoped matched-pair name, a name "
                          "under odyssey/personas/ (omit .yaml), or 'none' for the "
                          "Odysseys task text verbatim")

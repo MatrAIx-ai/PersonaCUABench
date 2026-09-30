@@ -1,9 +1,9 @@
-persona_id: odyssey-budget-student
+persona_id: odyssey-travel-practical
 version: '2.1'
 family: travel
 source: hand-specified from dimensions.json (MatrAIx 1290-dim schema)
-note: 'College student on a tight budget: phone-first, fluent with apps but no travel
-  expertise, spontaneous, wants it quick and cheap.'
+note: 'Recent immigrant with limited English: capable adult on a schedule, uses a
+  phone translator, unfamiliar with local booking sites and customs.'
 evaluation_dimensions:
 - tech_savviness
 - risk_tolerance
@@ -18,154 +18,150 @@ evaluation_dimensions:
 - economic_motivation
 attributes:
   age_bracket:
-    value: 18-24
+    value: 25-34
     label: Age bracket
     category: 'Demographic: Core'
-  region:
-    value: North America
-    label: Region
+  highest_education:
+    value: Bachelor's
+    label: Highest education
+    category: 'Learning: Academic'
+  demo_household_income:
+    value: $25k-50k
+    label: Household income band
     category: 'Demographic: Core'
-  urbanicity:
-    value: Dense urban
-    label: Urbanicity
-    category: 'Demographic: Core'
-  socioeconomic_band:
-    value: Low income
-    label: Socioeconomic band
-    category: 'Demographic: Core'
-  lifex_geographic_mobility:
-    value: Moved nationally
-    label: Geographic mobility
-    category: 'Demographic: Life Events'
+  time_pressure:
+    value: Deadline
+    label: Time pressure
+    category: 'Behavior: Time'
   seniority:
-    value: Student / intern
+    value: Entry
     label: Seniority
     category: 'Professional: Career'
   tech_savviness:
-    value: Digital native
+    value: Comfortable
     label: Tech savviness
     category: 'Expertise: Domains'
+  region:
+    value: East Asia
+    label: Region
+    category: 'Demographic: Core'
+  urbanicity:
+    value: Suburban
+    label: Urbanicity
+    category: 'Demographic: Core'
+  socioeconomic_band:
+    value: Lower-middle
+    label: Socioeconomic band
+    category: 'Demographic: Core'
+  lifex_geographic_mobility:
+    value: Moved internationally
+    label: Geographic mobility
+    category: 'Demographic: Life Events'
   skill_budgeting:
-    value: Beginner
+    value: Intermediate
     label: 'Skill: Budgeting'
     category: 'Expertise: Skills'
-  topic_technology:
-    value: Interested
-    label: 'Interest: Technology'
-    category: 'Interests: Topics'
-  lstyle_planning_horizon:
-    value: Day-to-day
-    label: Planning horizon
-    category: 'Interests: Culture'
   lstyle_frugality:
     value: Frugal saver
     label: Spending vs saving
     category: 'Interests: Culture'
+  economic_motivation:
+    value: Cost-sensitive
+    label: Economic motivation
+    category: Values & Motivation
+  habit_budget_tracking:
+    value: Weekly
+    label: 'Habit: Budget tracking'
+    category: 'Behavior: Habits'
+  pref_save_vs_spend:
+    value: Saver-leaning
+    label: Save vs spend
+    category: 'Behavior: Preferences'
+  topic_technology:
+    value: Neutral
+    label: 'Interest: Technology'
+    category: 'Interests: Topics'
   att_new_technology:
-    value: Enthusiast
+    value: Neutral
     label: 'Attitude: New technology'
     category: 'Worldview: Beliefs'
+  device_context:
+    value: Mobile, on-the-go
+    label: Device context
+    category: 'State: Emotional'
   risk_tolerance:
-    value: Risk-tolerant
+    value: Cautious
     label: Risk tolerance
     category: Risk & Decision
   dospert_financial_risk_tolerance:
-    value: High
+    value: Low
     label: DOSPERT Financial Risk Tolerance
     category: Risk & Decision
+  cog_risk_framing:
+    value: Threat-focused
+    label: Risk framing
+    category: 'Linguistic: Communication'
   cog_detail_orientation:
-    value: Low
+    value: Moderate
     label: Detail orientation
     category: 'Linguistic: Communication'
   cog_patience:
-    value: Low
+    value: High
     label: Patience
     category: 'Linguistic: Communication'
   cog_attention_span:
-    value: Short
+    value: Average
     label: Attention span
     category: 'Linguistic: Communication'
   cog_big_picture_vs_detail:
-    value: Big-picture
+    value: Both
     label: Big-picture vs detail
     category: 'Linguistic: Communication'
-  cog_risk_framing:
-    value: Opportunity-focused
-    label: Risk framing
-    category: 'Linguistic: Communication'
+  pref_detail_brief_vs_full:
+    value: Brief-leaning
+    label: Brief vs full detail
+    category: 'Behavior: Preferences'
+  lstyle_planning_horizon:
+    value: Weekly
+    label: Planning horizon
+    category: 'Interests: Culture'
+  pref_plan_vs_spontaneous:
+    value: Planned
+    label: Planned vs spontaneous
+    category: 'Behavior: Preferences'
   health_mobility:
     value: Full
     label: Mobility
     category: 'Health: Physical'
   health_vision:
-    value: Corrected
+    value: Normal
     label: Vision
     category: 'Health: Physical'
   health_assistive_tech:
     value: None
     label: Assistive technology
     category: 'Health: Physical'
-  pref_plan_vs_spontaneous:
-    value: Spontaneous
-    label: Planned vs spontaneous
-    category: 'Behavior: Preferences'
-  pref_save_vs_spend:
-    value: Hard saver
-    label: Save vs spend
-    category: 'Behavior: Preferences'
-  pref_detail_brief_vs_full:
-    value: Brief-leaning
-    label: Brief vs full detail
-    category: 'Behavior: Preferences'
   accessibility_needs:
-    value: None
+    value: Language barrier
     label: Accessibility needs
     category: 'Behavior: Preferences'
-  device_context:
-    value: Mobile, on-the-go
-    label: Device context
-    category: 'State: Emotional'
-  economic_motivation:
-    value: Cost-sensitive
-    label: Economic motivation
-    category: Values & Motivation
-  habit_budget_tracking:
-    value: Rarely
-    label: 'Habit: Budget tracking'
-    category: 'Behavior: Habits'
-  demo_driver_status:
-    value: Non-driver
-    label: Driving status
-    category: 'Demographic: Core'
+  ind_travel_tourism:
+    value: Some exposure
+    label: 'Industry: Travel & tourism'
+    category: 'Professional: Industry'
+  ind_transportation:
+    value: Some exposure
+    label: 'Industry: Transportation'
+    category: 'Professional: Industry'
   lifex_travel_breadth:
     value: A few countries
     label: Travel breadth
     category: 'Demographic: Life Events'
-  ind_travel_tourism:
-    value: None
-    label: 'Industry: Travel & tourism'
-    category: 'Professional: Industry'
-  ind_transportation:
-    value: None
-    label: 'Industry: Transportation'
-    category: 'Professional: Industry'
-  skill_driving:
-    value: None
-    label: 'Skill: Driving'
-    category: 'Expertise: Skills'
-  fam_urban_planning:
-    value: Aware
-    label: 'Familiarity: Urban planning'
-    category: 'Expertise: Domains'
   topic_travel:
-    value: Interested
+    value: Neutral
     label: 'Interest: Travel'
     category: 'Interests: Topics'
   lstyle_travel_freq:
     value: Occasional
     label: Travel frequency
     category: 'Interests: Culture'
-  att_public_transit:
-    value: Positive
-    label: 'Attitude: Public transit'
-    category: 'Worldview: Beliefs'

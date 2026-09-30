@@ -21,6 +21,26 @@ attributes:
     value: 45-54
     label: Age bracket
     category: 'Demographic: Core'
+  highest_education:
+    value: Bachelor's
+    label: Highest education
+    category: 'Learning: Academic'
+  demo_household_income:
+    value: $50k-100k
+    label: Household income band
+    category: 'Demographic: Core'
+  time_pressure:
+    value: Deadline
+    label: Time pressure
+    category: 'Behavior: Time'
+  seniority:
+    value: Manager
+    label: Seniority
+    category: 'Professional: Career'
+  tech_savviness:
+    value: Comfortable
+    label: Tech savviness
+    category: 'Expertise: Domains'
   region:
     value: Western Europe
     label: Region
@@ -37,34 +57,38 @@ attributes:
     value: Moved nationally
     label: Geographic mobility
     category: 'Demographic: Life Events'
-  seniority:
-    value: Manager
-    label: Seniority
-    category: 'Professional: Career'
-  tech_savviness:
-    value: Comfortable
-    label: Tech savviness
-    category: 'Expertise: Domains'
   skill_budgeting:
     value: Intermediate
     label: 'Skill: Budgeting'
     category: 'Expertise: Skills'
-  topic_technology:
-    value: Neutral
-    label: 'Interest: Technology'
-    category: 'Interests: Topics'
-  lstyle_planning_horizon:
-    value: Day-to-day
-    label: Planning horizon
-    category: 'Interests: Culture'
   lstyle_frugality:
     value: Balanced
     label: Spending vs saving
     category: 'Interests: Culture'
+  economic_motivation:
+    value: Value-driven
+    label: Economic motivation
+    category: Values & Motivation
+  habit_budget_tracking:
+    value: Weekly
+    label: 'Habit: Budget tracking'
+    category: 'Behavior: Habits'
+  pref_save_vs_spend:
+    value: Balanced
+    label: Save vs spend
+    category: 'Behavior: Preferences'
+  topic_technology:
+    value: Neutral
+    label: 'Interest: Technology'
+    category: 'Interests: Topics'
   att_new_technology:
     value: Positive
     label: 'Attitude: New technology'
     category: 'Worldview: Beliefs'
+  device_context:
+    value: Mobile, on-the-go
+    label: Device context
+    category: 'State: Emotional'
   risk_tolerance:
     value: Cautious
     label: Risk tolerance
@@ -73,6 +97,10 @@ attributes:
     value: Low
     label: DOSPERT Financial Risk Tolerance
     category: Risk & Decision
+  cog_risk_framing:
+    value: Opportunity-focused
+    label: Risk framing
+    category: 'Linguistic: Communication'
   cog_detail_orientation:
     value: Moderate
     label: Detail orientation
@@ -89,10 +117,18 @@ attributes:
     value: Big-picture
     label: Big-picture vs detail
     category: 'Linguistic: Communication'
-  cog_risk_framing:
-    value: Opportunity-focused
-    label: Risk framing
-    category: 'Linguistic: Communication'
+  pref_detail_brief_vs_full:
+    value: Just the gist
+    label: Brief vs full detail
+    category: 'Behavior: Preferences'
+  lstyle_planning_horizon:
+    value: Day-to-day
+    label: Planning horizon
+    category: 'Interests: Culture'
+  pref_plan_vs_spontaneous:
+    value: Balanced
+    label: Planned vs spontaneous
+    category: 'Behavior: Preferences'
   health_mobility:
     value: Full
     label: Mobility
@@ -105,34 +141,10 @@ attributes:
     value: None
     label: Assistive technology
     category: 'Health: Physical'
-  pref_plan_vs_spontaneous:
-    value: Balanced
-    label: Planned vs spontaneous
-    category: 'Behavior: Preferences'
-  pref_save_vs_spend:
-    value: Balanced
-    label: Save vs spend
-    category: 'Behavior: Preferences'
-  pref_detail_brief_vs_full:
-    value: Just the gist
-    label: Brief vs full detail
-    category: 'Behavior: Preferences'
   accessibility_needs:
     value: None
     label: Accessibility needs
     category: 'Behavior: Preferences'
-  device_context:
-    value: Mobile, on-the-go
-    label: Device context
-    category: 'State: Emotional'
-  economic_motivation:
-    value: Value-driven
-    label: Economic motivation
-    category: Values & Motivation
-  habit_budget_tracking:
-    value: Weekly
-    label: 'Habit: Budget tracking'
-    category: 'Behavior: Habits'
   ind_apparel:
     value: None
     label: 'Industry: Apparel'
