@@ -1818,6 +1818,79 @@ def real_llm_boolean(check: dict, task: dict, run: dict, *, judge_model: str,
     raise RuntimeError(last_error or "the judge never returned a usable boolean")
 
 
+def real_intent(task: dict, run: dict, *, judge_model: str, judge_provider: str,
+                meter: "Meter | None") -> dict:
+    """raised and engaged per requirement, for a REAL task.
+
+    The checker owns `met` and stays untouched, but it collapses everything into
+    one SUCCESS, so the subjective half had nothing to range over: half the
+    benchmark carried no intent data at all. tasks_real.json now lists what each
+    task actually requires -- recovered from the instruction and the vendored
+    checker, reviewable as data -- and those are the items judged here.
+    """
+    real = task.get("real") or {}
+    reqs = real.get("requirements") or []
+    if not reqs and real.get("id"):
+        # A record frozen before requirements existed carries none. Looking them
+        # up by REAL id is safe where re-reading the rubric would not be: these
+        # feed only raised and engaged, and `met` stays the checker's own
+        # verdict against the frozen task.
+        for candidate in TASK_CATALOG.get_suite("real").tasks:
+            if (candidate.get("real") or {}).get("id") == real["id"]:
+                reqs = (candidate.get("real") or {}).get("requirements") or []
+                break
+    if not reqs or not judge_model:
+        return {}
+    # R-prefixed, because both prompts show {"R1": ...} in their output example
+    # and a model handed Q1..Qn answers in R1..Rn anyway.
+    ids = [f"R{i}" for i in range(1, len(reqs) + 1)]
+    rubric = "\n".join(f"- {rid}: {text}" for rid, text in zip(ids, reqs))
+    conversation = "\n".join(
+        f"{'USER' if t['role'] == 'user' else 'AGENT'}: {t['text']}"
+        for t in run.get("conversation") or []) or "(none)"
+    actions = "\n".join(
+        f"{t['step']}. {t['tool']}({json.dumps(t['args'], ensure_ascii=False)[:200]}) -> "
+        f"{t['result_preview'][:160]}" for t in run.get("trajectory") or []) or "(no actions)"
+    answer = run.get("answer") or "(the agent produced no final answer)"
+    client, resolved = _client(judge_model, judge_provider)
+
+    key = raised_cache_key({"task_id": task.get("task_id"),
+                            "rubrics": {i: {"requirement": r} for i, r in zip(ids, reqs)}},
+                           conversation, judge_model)
+    raised_v = cached_raised(key)
+    hit = raised_v is not None
+    if not hit:
+        raised_v, _ = _ask_judge(client, meter, "raised_judge", provider=resolved,
+                                 model=judge_model,
+                                 text=RAISED_PROMPT.format(rubric=rubric,
+                                                           conversation=conversation))
+        if raised_v is not None:
+            store_raised(key, raised_v)
+    engaged_v, _ = _ask_judge(
+        client, meter, "engagement_judge", provider=resolved, model=judge_model,
+        text=ENGAGEMENT_PROMPT.format(rubric=rubric, conversation=conversation,
+                                      answer=answer, actions=actions))
+    if raised_v is None and engaged_v is None:
+        return {}
+    items, outcomes = {}, {name: 0 for name in INTENT_OUTCOMES.values()}
+    for rid, text in zip(ids, reqs):
+        r = (raised_v or {}).get(rid) or {}
+        e = (engaged_v or {}).get(rid) or {}
+        raised = r.get("raised") if raised_v is not None else None
+        engaged = e.get("engaged") if engaged_v is not None else None
+        items[rid] = {"requirement": text, "raised": raised,
+                      "raised_reason": r.get("reason"), "engaged": engaged,
+                      "engaged_reason": e.get("reason")}
+        if raised is not None and engaged is not None:
+            outcomes[INTENT_OUTCOMES[(bool(raised), bool(engaged))]] += 1
+    asked = outcomes["understood"] + outcomes["not_understood"]
+    return {"intent_items": items, "intent_outcomes": outcomes,
+            "intent_graded": sum(outcomes.values()),
+            "communicated": asked,
+            "engagement": round(outcomes["understood"] / asked, 3) if asked else None,
+            "raised_cache": {"key": key[:16], "hit": hit}}
+
+
 def judge_real(task: dict, run: dict, *, judge_model: str = "",
                judge_provider: str = "", meter: "Meter | None" = None) -> dict:
     """Score a REAL task with its own checks against the site's final state.
@@ -1914,11 +1987,21 @@ def judge_real(task: dict, run: dict, *, judge_model: str = "",
         # left unscored and a resume retries it.
         return {**base, "verdicts": {"R1": {"met": None, "reason": json.dumps(outputs)}},
                 "met": None, "score": None, "error": "; ".join(errors)}
-    return {**base,
-            "verdicts": {"R1": {"met": passed, "communicated": None,
-                                "reason": json.dumps(outputs)}},
-            "met": int(passed), "score": float(passed),
-            "trajectory_efficiency": round(float(passed) / max(run["steps"], 1), 4)}
+    out = {**base,
+           "verdicts": {"R1": {"met": passed, "communicated": None,
+                               "reason": json.dumps(outputs)}},
+           "met": int(passed), "score": float(passed),
+           "trajectory_efficiency": round(float(passed) / max(run["steps"], 1), 4)}
+    # The checker decided met; this adds what the person raised and what the
+    # agent took up, which the checker cannot see.
+    try:
+        out.update(real_intent(task, run, judge_model=judge_model,
+                               judge_provider=judge_provider, meter=meter))
+    except (NameError, TypeError, AttributeError):
+        raise
+    except Exception as exc:
+        out["intent_judge_error"] = f"{type(exc).__name__}: {exc}"
+    return out
 
 
 # What (raised, engaged) says happened, in the benchmark's own terms. `met`

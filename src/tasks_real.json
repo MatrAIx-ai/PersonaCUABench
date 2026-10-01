@@ -13,7 +13,12 @@
       "eval_scripts": [
         "eval_dashdish_3.py"
       ],
-      "checks": []
+      "checks": [],
+      "requirements": [
+        "The order includes a pizza.",
+        "The order total is under $30."
+      ],
+      "requirements_source": "derived from instruction + checker by gpt-5.6-terra"
     },
     "rubrics": {
       "R1": {
@@ -36,7 +41,13 @@
       "eval_scripts": [
         "eval_dashdish_12.py"
       ],
-      "checks": []
+      "checks": [],
+      "requirements": [
+        "The order includes at least one meal containing rice.",
+        "Every meal in the order contains rice.",
+        "The order costs less than $30."
+      ],
+      "requirements_source": "derived from instruction + checker by gpt-5.6-terra"
     },
     "rubrics": {
       "R1": {
@@ -59,7 +70,15 @@
       "eval_scripts": [
         "eval_opendining_5.py"
       ],
-      "checks": []
+      "checks": [],
+      "requirements": [
+        "A restaurant reservation is booked.",
+        "The restaurant has a rating of at least 4 stars.",
+        "The reservation is for 2 people.",
+        "The reservation is marked as a birthday occasion.",
+        "The reservation includes a date and time."
+      ],
+      "requirements_source": "derived from instruction + checker by gpt-5.6-terra"
     },
     "rubrics": {
       "R1": {
@@ -82,7 +101,13 @@
       "eval_scripts": [
         "eval_staynb_1.py"
       ],
-      "checks": []
+      "checks": [],
+      "requirements": [
+        "The places are in Austria.",
+        "The trip dates are August 1st to 5th, 2024.",
+        "The trip is for 3 guests."
+      ],
+      "requirements_source": "derived from instruction + checker by gpt-5.6-terra"
     },
     "rubrics": {
       "R1": {
@@ -105,7 +130,15 @@
       "eval_scripts": [
         "eval_staynb_6.py"
       ],
-      "checks": []
+      "checks": [],
+      "requirements": [
+        "The place is in Cape Town.",
+        "The stay is from October 1, 2024 to October 6, 2024.",
+        "The booking is for 4 guests.",
+        "A place with at least 2 bedrooms is added to the wishlist.",
+        "The wishlisted place has at least 2 beds."
+      ],
+      "requirements_source": "derived from instruction + checker by gpt-5.6-terra"
     },
     "rubrics": {
       "R1": {
@@ -128,7 +161,13 @@
       "eval_scripts": [
         "eval_staynb_19.py"
       ],
-      "checks": []
+      "checks": [],
+      "requirements": [
+        "The place is in Vancouver, Canada.",
+        "The stay is from November 15, 2024 to November 18, 2024.",
+        "The place accommodates 5 people."
+      ],
+      "requirements_source": "derived from instruction + checker by gpt-5.6-terra"
     },
     "rubrics": {
       "R1": {
@@ -151,7 +190,13 @@
       "eval_scripts": [
         "eval_udriver_11.py"
       ],
-      "checks": []
+      "checks": [],
+      "requirements": [
+        "A ride is booked from Club X to Fox Plaza Apartments.",
+        "A ride from Club X to Fox Plaza Apartments is completed.",
+        "The wallet is charged for the trip to Fox Plaza Apartments, with a charge matching the ride fare."
+      ],
+      "requirements_source": "derived from instruction + checker by gpt-5.6-terra"
     },
     "rubrics": {
       "R1": {
@@ -174,7 +219,14 @@
       "eval_scripts": [
         "eval_udriver_15.py"
       ],
-      "checks": []
+      "checks": [],
+      "requirements": [
+        "The ride pickup is at 388 Beale.",
+        "The ride destination is Amber India.",
+        "The ride uses the XL vehicle option.",
+        "The ride is booked."
+      ],
+      "requirements_source": "derived from instruction + checker by gpt-5.6-terra"
     },
     "rubrics": {
       "R1": {
@@ -197,7 +249,15 @@
       "eval_scripts": [
         "eval_zilloft_15.py"
       ],
-      "checks": []
+      "checks": [],
+      "requirements": [
+        "A home tour is requested.",
+        "The home is in the San Francisco Bay Area.",
+        "The home costs no more than $1,000,000.",
+        "The home has at least 3 bedrooms.",
+        "The tour is scheduled for a Saturday or Sunday at or after 12:00 PM."
+      ],
+      "requirements_source": "derived from instruction + checker by gpt-5.6-terra"
     },
     "rubrics": {
       "R1": {
@@ -220,7 +280,13 @@
       "eval_scripts": [
         "eval_zilloft_22.py"
       ],
-      "checks": []
+      "checks": [],
+      "requirements": [
+        "The houses are in Southern California.",
+        "The houses cost less than one million dollars.",
+        "At least one house tour is booked."
+      ],
+      "requirements_source": "derived from instruction + checker by gpt-5.6-terra; zilloft-22 corrected by hand (the checker only verifies the tour, but the person was asked to convey the location and the price cap too)"
     },
     "rubrics": {
       "R1": {
@@ -243,7 +309,13 @@
       "eval_scripts": [
         "eval_opendining_17.py"
       ],
-      "checks": []
+      "checks": [],
+      "requirements": [
+        "The dinner reservation is for 6 people.",
+        "The dinner reservation time is between 8:00 PM and 10:00 PM, inclusive.",
+        "The reservation is for a business meal."
+      ],
+      "requirements_source": "derived from instruction + checker by gpt-5.6-terra"
     },
     "rubrics": {
       "R1": {
@@ -266,7 +338,14 @@
       "eval_scripts": [
         "eval_gomail_5.py"
       ],
-      "checks": []
+      "checks": [],
+      "requirements": [
+        "All starred emails are cleared out.",
+        "An email is sent to Alexa Richardson.",
+        "The email subject mentions the work permit.",
+        "The email has non-empty message content."
+      ],
+      "requirements_source": "derived from instruction + checker by gpt-5.6-terra"
     },
     "rubrics": {
       "R1": {
@@ -289,7 +368,12 @@
       "eval_scripts": [
         "eval_gomail_9.py"
       ],
-      "checks": []
+      "checks": [],
+      "requirements": [
+        "An email is sent to Barbara Thomas.",
+        "The email mentions the project plan in its subject or message content."
+      ],
+      "requirements_source": "derived from instruction + checker by gpt-5.6-terra"
     },
     "rubrics": {
       "R1": {
@@ -312,7 +396,13 @@
       "eval_scripts": [
         "eval_gomail_13.py"
       ],
-      "checks": []
+      "checks": [],
+      "requirements": [
+        "An email is sent to Carol.",
+        "The email mentions a meeting.",
+        "The email states a time of 8:30."
+      ],
+      "requirements_source": "derived from instruction + checker by gpt-5.6-terra"
     },
     "rubrics": {
       "R1": {
@@ -335,7 +425,12 @@
       "eval_scripts": [
         "eval_gomail_15.py"
       ],
-      "checks": []
+      "checks": [],
+      "requirements": [
+        "Danielle is sent an email.",
+        "The email informs Danielle that a system or software update has been launched or released."
+      ],
+      "requirements_source": "derived from instruction + checker by gpt-5.6-terra"
     },
     "rubrics": {
       "R1": {
@@ -358,7 +453,12 @@
       "eval_scripts": [
         "eval_gomail_23.py"
       ],
-      "checks": []
+      "checks": [],
+      "requirements": [
+        "Reply to Jane Smith by email.",
+        "Delete at least 10 but no more than 30 emails."
+      ],
+      "requirements_source": "derived from instruction + checker by gpt-5.6-terra"
     },
     "rubrics": {
       "R1": {
@@ -381,7 +481,12 @@
       "eval_scripts": [
         "eval_gocalendar_4.py"
       ],
-      "checks": []
+      "checks": [],
+      "requirements": [
+        "A reminder is scheduled for September 20 from 7:45pm to 8:45pm.",
+        "The reminder’s location mentions the gym."
+      ],
+      "requirements_source": "derived from instruction + checker by gpt-5.6-terra"
     },
     "rubrics": {
       "R1": {
@@ -404,7 +509,13 @@
       "eval_scripts": [
         "eval_networkin_11.py"
       ],
-      "checks": []
+      "checks": [],
+      "requirements": [
+        "Create a post about a networking event.",
+        "The post asks interested people to DM or direct message the person.",
+        "Send the post to at least two connected people."
+      ],
+      "requirements_source": "derived from instruction + checker by gpt-5.6-terra"
     },
     "rubrics": {
       "R1": {
@@ -427,7 +538,14 @@
       "eval_scripts": [
         "eval_networkin_19.py"
       ],
-      "checks": []
+      "checks": [],
+      "requirements": [
+        "A self-post is made by you.",
+        "The post mentions an internship.",
+        "The post mentions AGI INC.",
+        "Only one such post is made."
+      ],
+      "requirements_source": "derived from instruction + checker by gpt-5.6-terra"
     },
     "rubrics": {
       "R1": {
@@ -450,7 +568,12 @@
       "eval_scripts": [
         "eval_networkin_25.py"
       ],
-      "checks": []
+      "checks": [],
+      "requirements": [
+        "An event is found or opened.",
+        "Alternatively, the person is marked as attending an event."
+      ],
+      "requirements_source": "derived from instruction + checker by gpt-5.6-terra"
     },
     "rubrics": {
       "R1": {
@@ -473,7 +596,12 @@
       "eval_scripts": [
         "eval_networkin_26.py"
       ],
-      "checks": []
+      "checks": [],
+      "requirements": [
+        "The person searches for a Software Engineer.",
+        "Alternatively, the person sends a software-related message seeking advice."
+      ],
+      "requirements_source": "derived from instruction + checker by gpt-5.6-terra"
     },
     "rubrics": {
       "R1": {
@@ -496,7 +624,12 @@
       "eval_scripts": [
         "eval_topwork_2.py"
       ],
-      "checks": []
+      "checks": [],
+      "requirements": [
+        "The invitation is sent to a backend or full-stack developer.",
+        "The invitation asks whether they are interested in building a fitness app."
+      ],
+      "requirements_source": "derived from instruction + checker by gpt-5.6-terra"
     },
     "rubrics": {
       "R1": {
@@ -519,7 +652,12 @@
       "eval_scripts": [
         "eval_topwork_7.py"
       ],
-      "checks": []
+      "checks": [],
+      "requirements": [
+        "A candidate is hired with a structured offer that has an ID, contract title, and freelancer ID.",
+        "A valid offer message is sent in a conversation."
+      ],
+      "requirements_source": "derived from instruction + checker by gpt-5.6-terra"
     },
     "rubrics": {
       "R1": {
@@ -542,7 +680,14 @@
       "eval_scripts": [
         "eval_topwork_9.py"
       ],
-      "checks": []
+      "checks": [],
+      "requirements": [
+        "A job opening is created for a Financial Analyst role.",
+        "The job's hourly pay starts at least at $45 per hour.",
+        "The job's hourly pay ends at no more than $65 per hour.",
+        "The job opening is not in draft, archived, or closed status."
+      ],
+      "requirements_source": "derived from instruction + checker by gpt-5.6-terra"
     },
     "rubrics": {
       "R1": {
@@ -565,7 +710,12 @@
       "eval_scripts": [
         "eval_topwork_12.py"
       ],
-      "checks": []
+      "checks": [],
+      "requirements": [
+        "At least one reply is sent to a contact.",
+        "At least one sent reply explicitly mentions “tomorrow.”"
+      ],
+      "requirements_source": "derived from instruction + checker by gpt-5.6-terra"
     },
     "rubrics": {
       "R1": {
@@ -588,7 +738,16 @@
       "eval_scripts": [
         "eval_topwork_13.py"
       ],
-      "checks": []
+      "checks": [],
+      "requirements": [
+        "The job posting is for a Data Annotator.",
+        "The job posting mentions Verita AI.",
+        "The job pays $20 to $25 per hour.",
+        "The job is a small project lasting 1 to 3 months.",
+        "The job is entry-level and does not offer an opportunity for ongoing hire.",
+        "The job posting is published."
+      ],
+      "requirements_source": "derived from instruction + checker by gpt-5.6-terra"
     },
     "rubrics": {
       "R1": {
@@ -611,7 +770,13 @@
       "eval_scripts": [
         "eval_gomail_4.py"
       ],
-      "checks": []
+      "checks": [],
+      "requirements": [
+        "An email is sent to Alexa Richardson.",
+        "The email has a non-empty subject.",
+        "The email asks to let me know when the files come in."
+      ],
+      "requirements_source": "derived from instruction + checker by gpt-5.6-terra"
     },
     "rubrics": {
       "R1": {
@@ -634,7 +799,13 @@
       "eval_scripts": [
         "eval_gocalendar_8.py"
       ],
-      "checks": []
+      "checks": [],
+      "requirements": [
+        "A task is created to send an email to Ashley.",
+        "The task is scheduled on a Monday.",
+        "The task is scheduled in the morning."
+      ],
+      "requirements_source": "derived from instruction + checker by gpt-5.6-terra"
     },
     "rubrics": {
       "R1": {
@@ -657,7 +828,12 @@
       "eval_scripts": [
         "eval_gocalendar_23.py"
       ],
-      "checks": []
+      "checks": [],
+      "requirements": [
+        "The calendar event titled “project sync” is deleted.",
+        "The deleted project sync event starts on a Wednesday."
+      ],
+      "requirements_source": "derived from instruction + checker by gpt-5.6-terra"
     },
     "rubrics": {
       "R1": {
@@ -680,7 +856,12 @@
       "eval_scripts": [
         "eval_networkin_1.py"
       ],
-      "checks": []
+      "checks": [],
+      "requirements": [
+        "The person follows Microsoft.",
+        "The person follows at least one other company."
+      ],
+      "requirements_source": "derived from instruction + checker by gpt-5.6-terra"
     },
     "rubrics": {
       "R1": {
@@ -703,7 +884,12 @@
       "eval_scripts": [
         "eval_networkin_6.py"
       ],
-      "checks": []
+      "checks": [],
+      "requirements": [
+        "Invite someone to join the project.",
+        "Target someone who works in tech or lives in New York."
+      ],
+      "requirements_source": "derived from instruction + checker by gpt-5.6-terra"
     },
     "rubrics": {
       "R1": {
@@ -726,7 +912,11 @@
       "eval_scripts": [
         "eval_networkin_10.py"
       ],
-      "checks": []
+      "checks": [],
+      "requirements": [
+        "The person connects with at least 3 new people."
+      ],
+      "requirements_source": "derived from instruction + checker by gpt-5.6-terra"
     },
     "rubrics": {
       "R1": {
@@ -749,7 +939,12 @@
       "eval_scripts": [
         "eval_topwork_11.py"
       ],
-      "checks": []
+      "checks": [],
+      "requirements": [
+        "Exactly one new offer is created.",
+        "The offer is for a Project Lead role."
+      ],
+      "requirements_source": "derived from instruction + checker by gpt-5.6-terra"
     },
     "rubrics": {
       "R1": {
@@ -772,7 +967,12 @@
       "eval_scripts": [
         "eval_topwork_21.py"
       ],
-      "checks": []
+      "checks": [],
+      "requirements": [
+        "Sarah Johnson sends someone a message.",
+        "The message asks about the person’s availability."
+      ],
+      "requirements_source": "derived from instruction + checker by gpt-5.6-terra"
     },
     "rubrics": {
       "R1": {
@@ -824,7 +1024,14 @@
           "expected_value": "Basic Economy",
           "query": "differences.bookedFlights.added.\"0\".flight.outboundFlight.selectedPrice.type"
         }
-      ]
+      ],
+      "requirements": [
+        "The flight departs from Orlando.",
+        "The flight arrives in Milwaukee.",
+        "The passenger is John Doe.",
+        "The fare is Basic Economy."
+      ],
+      "requirements_source": "derived from instruction + checker by gpt-5.6-terra"
     },
     "rubrics": {
       "R1": {
@@ -887,7 +1094,15 @@
           "expected_value": "2024-12-10T16:00:00.000Z",
           "query": "differences.bookedFlights.added.\"0\".flight.outboundFlight.info.segments[0].departureTime"
         }
-      ]
+      ],
+      "requirements": [
+        "The flight is the cheapest Economy option from Charlotte to Norfolk on December 10th.",
+        "The flight departs before noon, specifically at 8:00 AM.",
+        "The booking is for passenger Sarah White.",
+        "The flight is booked.",
+        "The response states the flight's departure time and whether it was booked."
+      ],
+      "requirements_source": "derived from instruction + checker by gpt-5.6-terra"
     },
     "rubrics": {
       "R1": {
