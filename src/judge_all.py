@@ -41,7 +41,11 @@ def needs(record: dict, args) -> tuple[bool, bool]:
     # A REAL task is scored by its own checkers, so a different rubric-judge
     # model is no reason to redo it; only a missing score is.
     by_checker = str(j.get("judge_model") or "").startswith("real-state-checker")
-    need_rubric = args.redo or j.get("score") is None or (
+    # A checker-scored record also needs redoing when it predates the intent
+    # items: the checker's own verdict is unchanged, but raised and engaged
+    # were never computed for it.
+    missing_intent = by_checker and j.get("intent_outcomes") is None
+    need_rubric = args.redo or j.get("score") is None or missing_intent or (
         not by_checker and j.get("judge_model") != args.judge_model)
     e = record.get("experience") or {}
     a_ok = "error" not in (e.get("a") or {"error": 1}) and (e.get("a") or {}).get("model") == args.judge_model

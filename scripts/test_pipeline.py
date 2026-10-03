@@ -1093,6 +1093,73 @@ def test_skip_existing_ignores_unscored(tmp: Path = Path("/tmp")):
         )
 
 
+def test_grid_tasks_selector():
+    """TASKS takes an index or an id, and an empty grid must not report DONE.
+
+    The per-task persona assignment emits task_ids, so TASKS="1 2 3" -- the
+    documented form -- silently matched nothing and run_grid printed GRID DONE
+    and exited 0 without running a cell.
+    """
+    env = {**os.environ, "DRY_RUN": "1", "JOBS": "3", "TASK_SUITE": "odysseys",
+           "PYTHON_BIN": sys.executable}
+    first = R.TASKS[0]["task_id"]
+
+    def cells(tasks):
+        out = subprocess.run(
+            ["bash", str(SRC / "run_grid.sh"), "--setting", "s1",
+             "--model", "gpt-6-sol"],
+            cwd=REPO, env={**env, "TASKS": tasks},
+            capture_output=True, text=True, timeout=180)
+        return out, sum(1 for l in out.stdout.splitlines() if l.startswith("DRY:"))
+
+    # One task is one control plus its family's four personas.
+    _, by_index = cells("1")
+    assert by_index == 5, by_index
+    _, by_id = cells(first)
+    assert by_id == 5, by_id
+    _, by_prefix = cells(first[:8])
+    assert by_prefix == 5, by_prefix
+    # A bare index must not also prefix-match every id starting with that digit.
+    _, two = cells("1 2")
+    assert two == 10, two
+
+    # Matching nothing is an error, not a silent success.
+    out, none = cells("no-such-task")
+    assert none == 0, none
+    assert out.returncode != 0, "an empty grid reported success"
+    assert "matched nothing" in out.stderr, out.stderr[:200]
+
+
+def test_embedded_python_runs_on_older_pythons():
+    """run_grid.sh embeds Python; it must parse on the Pythons people have.
+
+    A collaborator's server died on a double-quoted f-string whose replacement
+    field also used double quotes around a dict key. PEP 701 allows that only
+    from 3.12; it ran here because this machine is 3.12, and it broke the grid
+    for everyone else before a single cell was enumerated. ast.parse cannot
+    catch it, because it uses the grammar of whatever Python runs the test, so
+    the shape is matched directly -- including in this file, which is why the
+    offending form is described here rather than written out.
+    """
+    import re
+
+    nested = re.compile(r'f"[^"\n]*\{[^}\n]*"[^"\n]*"[^}\n]*\}')
+    offenders = []
+    for path in list(SRC.rglob("*.py")) + list(SRC.rglob("*.sh")) \
+            + list((REPO / "scripts").rglob("*.py")) \
+            + list((REPO / "scripts").rglob("*.sh")):
+        for i, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+            if nested.search(line):
+                offenders.append(f"{path.name}:{i}")
+    assert not offenders, (
+        f"f-strings with nested same-type quotes need Python 3.12: {offenders}")
+
+    # And the heredoc itself must be valid Python at all.
+    script = (SRC / "run_grid.sh").read_text(encoding="utf-8")
+    for body in re.findall(r"<<'PY[A-Z]*'\n(.*?)\nPY[A-Z]*\n", script, re.S):
+        compile(body, "run_grid.sh:embedded", "exec")
+
+
 def test_cli_defaults_do_not_override_routing():
     """--provider must default to empty, or the registry is overruled.
 
@@ -1317,6 +1384,8 @@ if __name__ == "__main__":
     test_persona_fidelity_contract()
     test_experience_uses_frozen_profile()
     test_skip_existing_ignores_unscored()
+    test_grid_tasks_selector()
+    test_embedded_python_runs_on_older_pythons()
     test_cli_defaults_do_not_override_routing()
     test_typing_failure_says_why()
     test_judge(run)

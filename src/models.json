@@ -51,7 +51,9 @@
         "out": 50.0
       },
       "cache_read_multiplier": 0.09,
-      "cache_note": "automatic; $0.1211 -> $0.0105; deployed on Azure (probed 2026-09-27), so free here"
+      "cache_note": "automatic; $0.1211 -> $0.0105; deployed on Azure (probed 2026-09-27), so free here",
+      "responses_api": true,
+      "route_note": "Reached through the shared Azure deployment, or direct on api.openai.com with GPT6_BASE_URL + GPT6_API_KEY. Either way it needs /v1/responses for function tools: chat completions refuses them outright. Azure got that for free because the openai provider always used the shim; the direct route did not until this flag was set."
     },
     "muse-spark-1.1": {
       "label": "Muse Spark 1.1",
