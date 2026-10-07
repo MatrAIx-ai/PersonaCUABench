@@ -201,6 +201,47 @@ AGENT_RULES = prompt("agent").format(max_questions=MAX_QUESTIONS)
 # never be mixed in one comparison, and the run config records which was used.
 PROACTIVE_NUDGE = prompt("agent_proactive_nudge").format(
     max_questions=MAX_QUESTIONS)
+# The persona-profile ablation, off by default. The main experiment gives the
+# agent only what the persona said; this arm also hands it the persona's
+# profile, so the difference between the two is what knowing the person is
+# worth. Filled by str.replace, not format(): a profile value may hold braces.
+AGENT_PERSONA_PROFILE = prompt("agent_persona_profile")
+# The forced-clarification ablation, off by default. Where the nudge above
+# only encourages asking, this arm requires it: clarify as fully as possible,
+# at any point, before finishing. Its prompt REPLACES AGENT_RULES rather than
+# being appended, so the agent never reads the main prompt's "ask only when
+# genuinely unclear" next to an instruction overriding it; it differs from
+# agent.md in that one paragraph only. The prompt carries the behaviour; the
+# loop enforces only the floor of one question, by sending back a finish that
+# comes before any question -- at most CLARIFY_REFUSALS times, so a model that
+# will not ask still ends instead of burning its whole step budget.
+FORCE_CLARIFY = prompt("agent_force_clarify").format(max_questions=MAX_QUESTIONS)
+CLARIFY_REFUSALS = 2
+CLARIFY_REFUSAL_MESSAGE = (
+    "Not finished: you have not asked the user anything yet. In this session "
+    "you must clarify with the user before finishing -- ask with ask_user, "
+    "then complete the task and call finish.")
+
+
+def agent_system_prompt(task: dict, *, nudge_proactive: bool = False,
+                        persona_profile: str | None = None,
+                        force_clarify: bool = False) -> str:
+    """The agent's whole system prompt for one cell, as a pure function."""
+    # In the main arm the CUA carries no persona: it knows the user only
+    # through what they say. persona_profile is the ablation that changes that.
+    system = ((FORCE_CLARIFY if force_clarify else AGENT_RULES)
+              + (f"\n\n{PROACTIVE_NUDGE}" if nudge_proactive else ""))
+    if persona_profile is not None:
+        system += "\n\n" + AGENT_PERSONA_PROFILE.replace("{profile}", persona_profile)
+    real = task.get("real")
+    if real:
+        # As in REAL's own harness, the user is already on the site; without
+        # this the agent wastes steps searching the open web for a sandbox.
+        system += (f"\n\n# Where you are\n\nThe user's browser is already open on "
+                   f"{real['site']} in tab 1 ({real['url']}). Do the task on that "
+                   f"site; it is a self-contained replica, so do not look for the "
+                   f"real one.")
+    return system
 
 TOOLS = [
     {"type": "function", "function": {
@@ -1423,18 +1464,15 @@ def run_agent(task: dict, user: PersonaUser, model: str, *, max_steps: int,
               profile_dir: str | os.PathLike = DEFAULT_PROFILE,
               provider: str = "", meter: "Meter | None" = None,
               shots_dir: str | os.PathLike | None = None,
-              nudge_proactive: bool = False) -> dict:
+              nudge_proactive: bool = False,
+              persona_profile: str | None = None,
+              force_clarify: bool = False) -> dict:
     client, provider = _client(model, provider)
-    # The CUA carries no persona: it knows the user only through what they say.
-    system = AGENT_RULES + (f"\n\n{PROACTIVE_NUDGE}" if nudge_proactive else "")
+    system = agent_system_prompt(task, nudge_proactive=nudge_proactive,
+                                 persona_profile=persona_profile,
+                                 force_clarify=force_clarify)
+    clarify_refusals = 0
     real = task.get("real")
-    if real:
-        # As in REAL's own harness, the user is already on the site; without
-        # this the agent wastes steps searching the open web for a sandbox.
-        system += (f"\n\n# Where you are\n\nThe user's browser is already open on "
-                   f"{real['site']} in tab 1 ({real['url']}). Do the task on that "
-                   f"site; it is a self-contained replica, so do not look for the "
-                   f"real one.")
     messages = [{"role": "system", "content": system},
                 {"role": "user", "content": user.opening}]
     questions = 0
@@ -1507,7 +1545,11 @@ def run_agent(task: dict, user: PersonaUser, model: str, *, max_steps: int,
                     args = json.loads(call.function.arguments or "{}")
                 except json.JSONDecodeError:
                     args = {}
-                if name == "finish":
+                if (name == "finish" and force_clarify and questions == 0
+                        and clarify_refusals < CLARIFY_REFUSALS):
+                    clarify_refusals += 1
+                    result = CLARIFY_REFUSAL_MESSAGE
+                elif name == "finish":
                     answer, stop_reason = str(args.get("summary", "")).strip(), "finish"
                     result = "ok"
                 elif name == "ask_user":
@@ -1599,6 +1641,14 @@ def run_agent(task: dict, user: PersonaUser, model: str, *, max_steps: int,
             "arm": {"model": model, "provider": provider,
                     "backend": _provider_backend(provider), "temperature": temperature,
                     "proactive_nudge": nudge_proactive,
+                    "agent_sees_persona": persona_profile is not None,
+                    # The exact text the agent was given, so a reader can
+                    # check what it knew without reconstructing the prompt.
+                    "agent_persona_profile": persona_profile,
+                    "force_clarify": force_clarify,
+                    # How often a finish was sent back for coming before any
+                    # question; a cell that hit the cap finished unasked.
+                    "clarify_refusals": clarify_refusals,
                     "prompt_cache": ("explicit_breakpoints"
                                      if needs_explicit_cache(model)
                                      else "provider_automatic_only"
@@ -2220,6 +2270,19 @@ def main() -> None:
                          "missing, instead of leaving it to decide. An arm of "
                          "its own: the default prompt is neutral, so how often "
                          "a model asks unprompted stays measurable")
+    ap.add_argument("--agent-sees-persona", action="store_true",
+                    help="also give the agent the persona's profile in its "
+                         "system prompt, alongside what the persona said. An "
+                         "ablation arm: the main experiment gives it only the "
+                         "persona's words. Part of the run identity, so it never "
+                         "resumes or overwrites a main-arm cell")
+    ap.add_argument("--force-clarify", action="store_true",
+                    help="require the agent to clarify with the user: ask as "
+                         "fully as it can, at any point, at least once and at "
+                         "most the question limit, before finishing. Stronger "
+                         "than --nudge-proactive, which only encourages it; a "
+                         "finish before any question is sent back. Part of the "
+                         "run identity")
     ap.add_argument("--no-responses-api", action="store_true",
                     help="call Azure/OpenAI through chat completions instead of "
                          "the Responses API. The Responses API is the default "
@@ -2290,6 +2353,15 @@ def main() -> None:
         persona_document.get("matched_pair")
         if isinstance(persona_document, dict) else None
     )
+    # The control has no profile to give, so the flag would label a cell that
+    # is identical to the main arm's as part of the ablation.
+    if args.agent_sees_persona and persona_document is None:
+        raise SystemExit("--agent-sees-persona needs a persona; the 'none' "
+                         "control has no profile to show the agent")
+    agent_persona_profile = (
+        "\n\n".join(persona_lib.build_dimension_narrative(persona_document))
+        if args.agent_sees_persona else None
+    )
     if matched_pair_document is not None:
         if args.pair_order is None and not args.preview:
             raise SystemExit(
@@ -2355,6 +2427,21 @@ def main() -> None:
         "screenshots": not args.no_screenshots,
         "responses_api": not args.no_responses_api,
         "proactive_nudge": args.nudge_proactive,
+        # Present only when on: adding the key to every config would change
+        # the hash of every main-arm cell already run, and --skip-existing
+        # would then re-run all of them.
+        **({"agent_sees_persona": True,
+            "agent_persona_profile_sha256": hashlib.sha256(
+                agent_persona_profile.encode("utf-8")).hexdigest(),
+            "agent_persona_prompt_sha256": hashlib.sha256(
+                AGENT_PERSONA_PROFILE.encode("utf-8")).hexdigest()}
+           if agent_persona_profile is not None else {}),
+        # Likewise present only when on.
+        **({"force_clarify": True,
+            "force_clarify_prompt_sha256": hashlib.sha256(
+                FORCE_CLARIFY.encode("utf-8")).hexdigest(),
+            "clarify_refusals_max": CLARIFY_REFUSALS}
+           if args.force_clarify else {}),
         "persona": args.persona,
         "replicate_id": args.replicate_id,
         "pair_order": args.pair_order,
@@ -2474,13 +2561,20 @@ def main() -> None:
                                temperature=args.temperature,
                                opening_cache=opening_cache, meter=meter)
             print(f"  user says: {user.opening[:300]!r}", flush=True)
+            if agent_persona_profile is not None:
+                print(f"  agent also sees the persona profile "
+                      f"({len(agent_persona_profile)} chars)", flush=True)
+            if args.force_clarify:
+                print("  agent is required to clarify with the user", flush=True)
             run = run_agent(task, user, args.model, max_steps=args.max_steps,
                             headless=args.headless, temperature=args.temperature,
                             profile_dir=profile_dir, provider=args.provider,
                             meter=meter,
                             shots_dir=None if args.no_screenshots
                             else out_dir / "shots",
-                            nudge_proactive=args.nudge_proactive)
+                            nudge_proactive=args.nudge_proactive,
+                            persona_profile=agent_persona_profile,
+                            force_clarify=args.force_clarify)
         except Exception as exc:  # a dead task must not take the grid with it
             had_failures = True
             print(f"FAILED: {type(exc).__name__}: {exc}")

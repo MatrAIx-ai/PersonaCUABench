@@ -105,6 +105,8 @@ def cells(results: Path):
                 if t.get("tool") == "type_text"
                 and str(t.get("result_preview") or "").startswith("typing failed")),
             "proactive_nudge": bool((run.get("arm") or {}).get("proactive_nudge")),
+            "agent_sees_persona": bool((run.get("arm") or {}).get("agent_sees_persona")),
+            "force_clarify": bool((run.get("arm") or {}).get("force_clarify")),
             "score": (record.get("judgement") or {}).get("score"),
             "wall_seconds": acct.get("cell_wall_seconds") or 0.0,
             "agent_ms": (by_role.get("agent") or {}).get("ms", 0),
@@ -215,7 +217,8 @@ def main() -> None:
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("results", nargs="?", default=str(HERE / "results"))
     ap.add_argument("--by", default="",
-                    choices=["", "persona", "replicate", "level", "proactive_nudge"],
+                    choices=["", "persona", "replicate", "level", "proactive_nudge",
+                             "agent_sees_persona", "force_clarify"],
                     help="one extra breakdown beyond setting / model / task")
     ap.add_argument("--csv", help="also write one row per cell here, for the paper")
     args = ap.parse_args()
