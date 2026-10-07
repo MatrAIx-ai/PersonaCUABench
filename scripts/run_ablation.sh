@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # One Setting 1 ablation arm over the same grid as the main experiment, with
 # one change to the agent. Everything it writes -- results, trajectories,
-# screenshots, logs, Chrome profiles -- goes under ABL_ROOT, not the repo.
+# screenshots, logs, Chrome profiles -- goes under ABL_ROOT, separate from the
+# main run's src/results and logs.
 #
 #   ARM=agent-persona   the agent also gets the persona's profile in its system
 #                       prompt. 74 tasks x 4 personas = 296 cells: the `none`
@@ -14,6 +15,7 @@
 #   ARM=force-clarify bash scripts/run_ablation.sh              # preflight, then the grid
 #   ARM=force-clarify DRY_RUN=1 bash scripts/run_ablation.sh    # preflight and plan only
 #   ARM=force-clarify CHECK_ONLY=1 bash scripts/run_ablation.sh # preflight only
+#   ARM=force-clarify ABL_ROOT=/big/disk/clarify bash scripts/run_ablation.sh
 #
 # Safe to re-run: finished cells are skipped, so an interrupted night resumes
 # by running the same command again.
@@ -27,12 +29,14 @@ cd "$(dirname "$0")/.."
 
 ARM="${ARM:-}"
 case "$ARM" in
-  agent-persona) ARM_ENV=(AGENT_PERSONA=on); DEFAULT_ROOT=/data/dal170519/PersonaCUABench ;;
-  force-clarify) ARM_ENV=(FORCE_CLARIFY=on); DEFAULT_ROOT=/data/dal170519/PersonaCUABench/force-clarify ;;
+  agent-persona) ARM_ENV=(AGENT_PERSONA=on) ;;
+  force-clarify) ARM_ENV=(FORCE_CLARIFY=on) ;;
   *) echo "ARM must be agent-persona or force-clarify (got '$ARM')" >&2; exit 2 ;;
 esac
-# agent-persona keeps the root it was first run with, so re-running it resumes.
-ABL_ROOT="${ABL_ROOT:-$DEFAULT_ROOT}"
+# One root per arm, under the gitignored artifacts/ by default. Point ABL_ROOT
+# at another disk to keep a run's bulk off the repo's; to resume a run, pass
+# the same ABL_ROOT it started with.
+ABL_ROOT="${ABL_ROOT:-artifacts/ablations/$ARM}"
 MODEL="${MODEL:-gpt-6-astra}"
 # The main run whose conditions this one must match.
 MAIN_RESULTS="${MAIN_RESULTS:-src/results/s1}"
