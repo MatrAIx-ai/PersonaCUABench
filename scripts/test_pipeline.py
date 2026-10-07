@@ -1263,6 +1263,77 @@ def test_typing_failure_says_why():
     assert "nothing on the page matches" not in gone, gone
 
 
+def test_agent_sees_persona_prompt():
+    """The persona-profile ablation adds the profile and nothing else.
+
+    The main arm's prompt must be untouched by the feature existing, or every
+    finished main-arm cell would stop matching its own identity.
+    """
+    task = {"real": {"site": "Zilloft", "url": "http://localhost/zilloft"}}
+    plain = R.agent_system_prompt(task)
+    profile = "### Identity\n- Age bracket: 75-84\n- Note: {not a placeholder}"
+    seen = R.agent_system_prompt(task, persona_profile=profile)
+    assert plain.startswith(R.AGENT_RULES) and "# The person you are working for" not in plain
+    assert "# The person you are working for" in seen and profile in seen
+    # The profile sits before "Where you are", and removing it gives back the
+    # main arm's prompt exactly: the arm differs by the profile alone.
+    assert seen.index(profile) < seen.index("# Where you are")
+    section = "\n\n" + R.AGENT_PERSONA_PROFILE.replace("{profile}", profile)
+    assert seen.replace(section, "", 1) == plain
+    # Neutral on purpose: it says who the person is, not how to adapt.
+    lowered = R.AGENT_PERSONA_PROFILE.lower()
+    for steer in ("tailor", "adapt", "should ask", "ask the user"):
+        assert steer not in lowered, f"profile prompt steers the agent: {steer!r}"
+
+
+class _ScriptedClient(_StubClient):
+    """Plays a given list of tool calls, one per turn."""
+
+    def __init__(self, turns):
+        super().__init__()
+        self.turns = list(turns)
+
+
+def test_force_clarify():
+    """The forced-clarification arm: the prompt asks, the loop holds the floor."""
+    plain = R.agent_system_prompt({})
+    forced = R.agent_system_prompt({}, force_clarify=True)
+    # A replacement, not an addition: the main arm's asking rule is not in it.
+    assert plain == R.AGENT_RULES and forced == R.FORCE_CLARIFY
+    assert "do\nnot ask about what you can reasonably decide yourself" in plain
+    assert "reasonably decide yourself" not in forced
+    assert "{" not in forced and f"at most {R.MAX_QUESTIONS}\nquestions" in forced
+    assert "do your utmost to remove every ambiguity" in forced
+    # Apart from the paragraph on asking, the two prompts are the same text, so
+    # an edit to agent.md that is not carried over fails here.
+    def paragraphs(text):
+        return [p for p in text.split("\n\n") if not p.startswith("Users differ:")]
+    assert paragraphs(plain) == paragraphs(forced)
+    R.Browser = _StubBrowser
+
+    def play(turns, **kw):
+        R._client = lambda model, provider="": (_ScriptedClient(turns), "stub")
+        return R.run_agent(R.TASKS[0], _StubUser(), "stub-model",
+                           max_steps=8, headless=True, temperature=0.0, **kw)
+
+    ask = _tool_call("q", "ask_user", {"question": "Which days?"})
+    done = _tool_call("f", "finish", {"summary": "done"})
+    # A finish before any question is sent back; after asking, it finishes.
+    run = play([done, ask, done], force_clarify=True)
+    assert [t["tool"] for t in run["trajectory"]] == ["finish", "ask_user", "finish"]
+    assert run["trajectory"][0]["result_preview"] == R.CLARIFY_REFUSAL_MESSAGE
+    assert run["stop_reason"] == "finish" and run["answer"] == "done"
+    assert run["arm"]["force_clarify"] and run["arm"]["clarify_refusals"] == 1
+    # A model that never asks is refused only CLARIFY_REFUSALS times, then ends.
+    run = play([done] * (R.CLARIFY_REFUSALS + 1), force_clarify=True)
+    assert run["stop_reason"] == "finish"
+    assert run["arm"]["clarify_refusals"] == R.CLARIFY_REFUSALS
+    # Off, a first-step finish is taken as before: the main arm is unchanged.
+    run = play([done])
+    assert run["steps"] == 1 and run["stop_reason"] == "finish"
+    assert not run["arm"]["force_clarify"] and run["arm"]["clarify_refusals"] == 0
+
+
 def test_judge(run):
     """Three fields from two judges, and the four outcomes they encode.
 
@@ -1388,5 +1459,7 @@ if __name__ == "__main__":
     test_embedded_python_runs_on_older_pythons()
     test_cli_defaults_do_not_override_routing()
     test_typing_failure_says_why()
+    test_agent_sees_persona_prompt()
+    test_force_clarify()
     test_judge(run)
     print("odyssey pipeline self-check OK")
