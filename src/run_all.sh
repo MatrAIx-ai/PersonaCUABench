@@ -17,6 +17,10 @@
 #   PROMPT_CACHE=off SETTING=s1 MODELS=terra bash src/run_all.sh  # uncached cost
 #   JUDGE_B=off SETTING=s1 MODELS="<key>" bash src/run_all.sh    # skip the paid judge
 #   NUDGE=both SETTING=s1 MODELS="<key>" bash src/run_all.sh    # proactivity ablation
+#   AGENT_PERSONA=on SETTING=s1 MODELS="<key>" bash src/run_all.sh  # agent sees the profile
+#   FORCE_CLARIFY=on SETTING=s1 MODELS="<key>" bash src/run_all.sh  # agent must clarify
+#   RESULTS_ROOT=/data/x/results LOG_DIR=/data/x/logs PROFILE_ROOT=/data/x/chrome \
+#     SETTING=s1 MODELS="<key>" bash src/run_all.sh                 # keep a run off this disk
 #   DRY_RUN=1 SETTING=s2 MODELS=terra bash src/run_all.sh   # plan only, no spend
 #
 # MODELS takes keys from src/models.json (`python src/models.py` lists
@@ -67,9 +71,42 @@ case "$NUDGE" in
   both) NUDGE_ARMS=("plain" "nudge") ;;
   *) echo "NUDGE must be off, on or both (got '$NUDGE')" >&2; exit 2 ;;
 esac
+# The persona-profile ablation. AGENT_PERSONA=on also gives the agent the
+# persona's profile in its system prompt; the main experiment gives it only
+# what the persona said. Like NUDGE it is part of every cell's identity. The
+# `none` control has no profile, so on turns it off unless CONTROL is set.
+AGENT_PERSONA="${AGENT_PERSONA:-off}"
+PERSONA_ARGS=(__sentinel__)
+case "$AGENT_PERSONA" in
+  off) ;;
+  on) PERSONA_ARGS+=(--agent-sees-persona); export CONTROL="${CONTROL:-0}" ;;
+  *) echo "AGENT_PERSONA must be off or on (got '$AGENT_PERSONA')" >&2; exit 2 ;;
+esac
+# The forced-clarification ablation. FORCE_CLARIFY=on requires the agent to
+# clarify with the user -- as fully as it can, at any point, at least once --
+# before finishing. Unlike AGENT_PERSONA it keeps the `none` control: that user
+# can answer questions too.
+FORCE_CLARIFY="${FORCE_CLARIFY:-off}"
+case "$FORCE_CLARIFY" in
+  off) ;;
+  on) PERSONA_ARGS+=(--force-clarify) ;;
+  *) echo "FORCE_CLARIFY must be off or on (got '$FORCE_CLARIFY')" >&2; exit 2 ;;
+esac
 DRY_RUN="${DRY_RUN:-}"
-RESULTS="src/results/$SETTING"
-mkdir -p logs
+# Where results, logs and Chrome profiles go. The defaults are the repo's own;
+# an arm that must live on another disk points all three elsewhere.
+RESULTS_ROOT="${RESULTS_ROOT:-src/results}"
+RESULTS="$RESULTS_ROOT/$SETTING"
+OUT_ARGS=(__sentinel__)
+[[ "$RESULTS_ROOT" != src/results ]] && OUT_ARGS+=(--out "$RESULTS_ROOT")
+if [[ "$RESULTS_ROOT" != src/results && "$SETTING" == s2 ]]; then
+  # run_matched_pairs.py writes under src/results itself; the judges would
+  # then read an empty directory and report nothing.
+  echo "RESULTS_ROOT is Setting 1 only for now" >&2; exit 2
+fi
+LOG_DIR="${LOG_DIR:-logs}"
+export LOG_DIR PROFILE_ROOT="${PROFILE_ROOT:-artifacts/chrome-profiles}"
+mkdir -p "$LOG_DIR"
 
 case "$SETTING" in
   s1|s2) ;;
@@ -95,10 +132,10 @@ for model in $MODELS; do
           if ! PERSONAS="$PERSONAS" TASK_SUITE="$suite" PYTHON_BIN="$PY" JOBS="$JOBS" \
                run bash src/run_grid.sh --setting "$SETTING" --model "$model" \
                  --replicate-id "$r" --headless "${CACHE_ARGS[@]:1}" \
-                 "${NUDGE_ARGS[@]:1}" \
-                 >> "logs/$tag-$r-$suite-$arm.log" 2>&1; then
+                 "${NUDGE_ARGS[@]:1}" "${PERSONA_ARGS[@]:1}" "${OUT_ARGS[@]:1}" \
+                 >> "$LOG_DIR/$tag-$r-$suite-$arm.log" 2>&1; then
             failed="$failed $SETTING/$model/$r/$suite/$arm"
-            say "$model $r $suite $arm reported failed cells (see logs/$tag-$r-$suite-$arm.log)"
+            say "$model $r $suite $arm reported failed cells (see $LOG_DIR/$tag-$r-$suite-$arm.log)"
           fi
         done
       done
@@ -112,9 +149,9 @@ for model in $MODELS; do
       if ! run $PY src/run_matched_pairs.py --suite "${SUITE:-shopping}" \
              --replicate-id "$r" --headless "${execute[@]+"${execute[@]}"}" \
              -- --setting "$SETTING" --model "$model" "${CACHE_ARGS[@]:1}" \
-             >> "logs/$tag-$r.log" 2>&1; then
+             >> "$LOG_DIR/$tag-$r.log" 2>&1; then
         failed="$failed $SETTING/$model/$r"
-        say "$model $r reported failed cells (see logs/$tag-$r.log)"
+        say "$model $r reported failed cells (see $LOG_DIR/$tag-$r.log)"
       fi
     done
   fi
@@ -125,35 +162,47 @@ done
 # judgement.communicated.
 say "experience judge"
 run $PY src/experience_judge.py --results "$RESULTS" --judge-b "$JUDGE_B" \
-  > "logs/$SETTING-experience_judge.log" 2>&1 \
-  || say "experience judge reported errors (see logs/$SETTING-experience_judge.log)"
+  > "$LOG_DIR/$SETTING-experience_judge.log" 2>&1 \
+  || say "experience judge reported errors (see $LOG_DIR/$SETTING-experience_judge.log)"
 
 if [[ "$SETTING" == s2 ]]; then
   say "persona fidelity judge"
   run $PY src/persona_fidelity_judge.py --results "$RESULTS" \
-    > "logs/$SETTING-fidelity_judge.log" 2>&1 \
-    || say "fidelity judge reported errors (see logs/$SETTING-fidelity_judge.log)"
+    > "$LOG_DIR/$SETTING-fidelity_judge.log" 2>&1 \
+    || say "fidelity judge reported errors (see $LOG_DIR/$SETTING-fidelity_judge.log)"
 
   say "pair separation"
   run $PY src/pair_separation.py "$RESULTS" --evidence 2>&1 \
-    | tee "logs/$SETTING-pair_separation.log"
+    | tee "$LOG_DIR/$SETTING-pair_separation.log"
 fi
 
 say "scores"
 # report.py otherwise falls back to the catalog default suite.
 for suite in $SUITES; do
   run $PY src/report.py "$RESULTS" --suite "$suite" 2>&1 \
-    | tee "logs/$SETTING-report-$suite.log"
+    | tee "$LOG_DIR/$SETTING-report-$suite.log"
 done
 
 say "cost and time"
-run $PY src/cost_report.py "$RESULTS" --csv "logs/$SETTING-cells.csv" 2>&1 \
-  | tee "logs/$SETTING-cost.log"
+run $PY src/cost_report.py "$RESULTS" --csv "$LOG_DIR/$SETTING-cells.csv" 2>&1 \
+  | tee "$LOG_DIR/$SETTING-cost.log"
 
 if [[ "$NUDGE" == both ]]; then
   say "proactivity ablation: asking versus guessing"
   run $PY src/cost_report.py "$RESULTS" --by proactive_nudge 2>&1 \
-    | tee "logs/$SETTING-nudge.log"
+    | tee "$LOG_DIR/$SETTING-nudge.log"
+fi
+
+if [[ "$AGENT_PERSONA" == on ]]; then
+  say "persona-profile ablation"
+  run $PY src/cost_report.py "$RESULTS" --by agent_sees_persona 2>&1 \
+    | tee "$LOG_DIR/$SETTING-agent-persona.log"
+fi
+
+if [[ "$FORCE_CLARIFY" == on ]]; then
+  say "forced-clarification ablation"
+  run $PY src/cost_report.py "$RESULTS" --by force_clarify 2>&1 \
+    | tee "$LOG_DIR/$SETTING-force-clarify.log"
 fi
 
 say "done${failed:+; failed:$failed}"

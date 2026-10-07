@@ -19,7 +19,7 @@
 # instances cannot fight over one user-data-dir. Budget roughly 1.5 GB of RAM per
 # worker -- Chrome, not the model, is what runs a machine out of memory -- and
 # expect the provider to rate-limit; 429s are retried with backoff. Per-cell
-# output goes to logs/cells/<suite>-<persona>-<task>.log so concurrent runs do
+# output goes to $LOG_DIR/cells/<suite>-<persona>-<task>.log so concurrent runs do
 # not interleave into one unreadable stream.
 set -u
 cd "$(dirname "$0")/.."
@@ -31,6 +31,10 @@ JOBS="${JOBS:-1}"
 DRY_RUN="${DRY_RUN:-}"
 TASK_SUITE="${TASK_SUITE:-}"
 TASKS_FILE="${TASKS_FILE:-}"
+# Where per-cell logs and per-worker Chrome profiles go. The defaults are the
+# repo's own; an arm that must live on another disk points both elsewhere.
+LOG_DIR="${LOG_DIR:-logs}"
+PROFILE_ROOT="${PROFILE_ROOT:-artifacts/chrome-profiles}"
 # A sentinel keeps empty-array expansion compatible with macOS Bash 3.2 under
 # `set -u`; every use below slices it back out.
 EXTRA_ARGS=(__sentinel__)
@@ -104,7 +108,7 @@ fi
 TASKS="${TASKS//,/ }"
 
 GRID_STATUS=0
-FAILED_MARK="logs/cells/.failed"
+FAILED_MARK="$LOG_DIR/cells/.failed"
 
 # The profile path must separate models as well as cells. Two grids running at
 # once -- one per model, in separate terminals -- reach the same (persona, task)
@@ -127,7 +131,7 @@ MODEL_TAG="${MODEL_TAG//[^A-Za-z0-9._-]/}"
 MODEL_TAG="${MODEL_TAG:-shared}"
 
 cell_profile() {   # one Chrome per worker, or two workers corrupt one profile
-  printf 'artifacts/chrome-profiles/parallel/%s/%s/%s/%s' \
+  printf '%s/parallel/%s/%s/%s/%s' "$PROFILE_ROOT" \
     "${TASK_SUITE:-adhoc}" "$MODEL_TAG" "$1" "$2"
 }
 
@@ -141,13 +145,13 @@ run_cell() {
   fi
   if [[ "$JOBS" -gt 1 ]]; then
     extra=(--profile "$(cell_profile "$persona" "$task")")
-    mkdir -p logs/cells
+    mkdir -p "$LOG_DIR/cells"
     # The model and replicate belong in the name: without them a second model
     # overwrites the first model's per-cell logs and the evidence is gone.
     local tag="${EXTRA_ARGS[*]:1}"
     tag="${tag//[^A-Za-z0-9._-]/}"
     # (No ${tag: -40} here: bash 3.2 returns empty for a negative offset.)
-    local log="logs/cells/${TASK_SUITE:-adhoc}-$persona-${task:0:12}-$tag.log"
+    local log="$LOG_DIR/cells/${TASK_SUITE:-adhoc}-$persona-${task:0:12}-$tag.log"
     if "$PYTHON_BIN" -u src/run.py "${ROUTE_ARGS[@]:1}" \
         --task "$task" --persona "$persona" --headless --skip-existing \
         "${extra[@]}" "${EXTRA_ARGS[@]:1}" > "$log" 2>&1; then
@@ -167,7 +171,7 @@ run_cell() {
 }
 
 if [[ "$JOBS" -gt 1 ]]; then
-  mkdir -p logs/cells
+  mkdir -p "$LOG_DIR/cells"
   rm -f "$FAILED_MARK"
 fi
 # Either an explicit persona list crossed with the task list, or the per-task
