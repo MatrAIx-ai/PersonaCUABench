@@ -897,7 +897,10 @@ def _create_with_retry(client, *, attempts: int = MAX_RETRIES + 1, create=None,
     # named throughout the runbook and the Shopping suite cannot drive the agent at
     # all. gpt-5.5 accepts the same argument, so this is safe across both.
     model_id = str(kwargs.get("model") or "")
-    if kwargs.get("tools") and "reasoning_effort" not in kwargs and model_id.startswith("gpt-5"):
+    # Chat completions only: the Responses shim (`create`) accepts tools with
+    # any effort, and leaves it at the deployment's default unless one is asked.
+    if (create is None and kwargs.get("tools") and "reasoning_effort" not in kwargs
+            and model_id.startswith("gpt-5")):
         kwargs["reasoning_effort"] = "none"
 
     retryable = (openai_sdk.RateLimitError, openai_sdk.APIConnectionError,
@@ -1098,10 +1101,19 @@ def metered(client, meter: Meter | None, role: str, *, provider: str, **kwargs):
         # chat-completions terms.
         kwargs["create"] = lambda **call_kwargs: responses_shim.create(
             client, **call_kwargs)
+    # The agent's reasoning effort, said the way each route takes it: the
+    # Responses shim and any OpenAI-compatible endpoint take `reasoning_effort`
+    # as is; OpenRouter takes it in its own `reasoning` object.
+    effort = kwargs.pop("reasoning_effort", None)
+    openrouter_chat = provider == "openrouter" and "create" not in kwargs
+    if effort and not openrouter_chat:
+        kwargs["reasoning_effort"] = effort
     if provider == "openrouter":
         # Ask OpenRouter to report the charge for this call.
         body = dict(kwargs.get("extra_body") or {})
         body.setdefault("usage", {"include": True})
+        if effort and openrouter_chat:
+            body["reasoning"] = {"effort": effort}
         kwargs["extra_body"] = body
     started = time.monotonic()
     try:
@@ -1468,6 +1480,7 @@ def run_agent(task: dict, user: PersonaUser, model: str, *, max_steps: int,
               persona_profile: str | None = None,
               force_clarify: bool = False) -> dict:
     client, provider = _client(model, provider)
+    effort = {"reasoning_effort": e} if (e := model_registry.reasoning_effort(model)) else {}
     system = agent_system_prompt(task, nudge_proactive=nudge_proactive,
                                  persona_profile=persona_profile,
                                  force_clarify=force_clarify)
@@ -1498,7 +1511,7 @@ def run_agent(task: dict, user: PersonaUser, model: str, *, max_steps: int,
             resp, call = metered(
                 client, meter, "agent", provider=provider,
                 model=model, messages=cache_marked(messages, model), tools=TOOLS,
-                temperature=temperature)
+                temperature=temperature, **effort)
             msg = resp.choices[0].message
             # The whole response, reasoning and tool calls included: a provider
             # that returns a reasoning trace puts it on the message, and the
@@ -1593,7 +1606,7 @@ def run_agent(task: dict, user: PersonaUser, model: str, *, max_steps: int,
                 final, summary_call = metered(
                     client, meter, "agent_summary", provider=provider,
                     model=model, messages=cache_marked(messages, model),
-                    temperature=temperature)
+                    temperature=temperature, **effort)
                 turns.append({"step": len(turns), "kind": "agent_summary",
                               "response": dump_response(final),
                               "call": summary_call})
@@ -2462,6 +2475,9 @@ def main() -> None:
             "endpoint_sha256": _endpoint_sha256(resolved_agent_provider),
             "temperature": args.temperature,
             "max_steps": args.max_steps,
+            # Only when set, so every cell run before it existed keeps its hash.
+            **({"reasoning_effort": e}
+               if (e := model_registry.reasoning_effort(args.model)) else {}),
         },
         "persona_user": {
             "model": args.persona_model,

@@ -68,6 +68,20 @@ def wants_responses_api(model_id: str, provider: str) -> bool:
     return False
 
 
+def reasoning_effort(model_id: str) -> str | None:
+    """The effort the agent runs this model at, or None for the provider default.
+
+    Looked up by any of the model's ids, as wants_responses_api is, because the
+    runner holds the resolved id by the time it calls.
+    """
+    for entry in MODELS.values():
+        endpoint = entry.get("endpoint") or {}
+        if model_id in (endpoint.get("model"), entry.get("azure"),
+                        entry.get("openrouter")):
+            return entry.get("reasoning_effort")
+    return None
+
+
 def routes(key: str) -> list[tuple[str, str, bool]]:
     """Every way this model could be reached: (provider, model id, available)."""
     entry = MODELS.get(key)

@@ -141,14 +141,17 @@ def from_response(response) -> ChatLike:
 
 def create(client, *, model: str, messages: list[dict], tools=None,
            max_completion_tokens: int | None = None, summary: str = "auto",
-           **ignored) -> ChatLike:
+           reasoning_effort: str | None = None, **ignored) -> ChatLike:
     """One Responses call, argued and answered in chat-completions terms.
 
     temperature is dropped on purpose: the reasoning deployments accept only
     their default, which is what the chat path was already sending.
     """
+    reasoning: dict[str, Any] = {"summary": summary}
+    if reasoning_effort:
+        reasoning["effort"] = reasoning_effort
     kwargs: dict[str, Any] = {"model": model, "input": to_input(messages),
-                              "reasoning": {"summary": summary}}
+                              "reasoning": reasoning}
     flat_tools = to_tools(tools)
     if flat_tools:
         kwargs["tools"] = flat_tools

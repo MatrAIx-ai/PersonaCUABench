@@ -16,7 +16,10 @@
     "cost for a repeated prefix. 1.0 = the provider reported no cached tokens,",
     "null = not measured.",
     "Gemini is Gemini 3.8 Flash, the model the team named; Google has shipped no",
-    "Gemini 4 (training confirmed July 2026, no model card, id or price)."
+    "Gemini 4 (training confirmed July 2026, no model card, id or price).",
+    "reasoning_effort: the effort the AGENT runs at (low|medium|high). Only the",
+    "agent's calls send it; persona and judge are unchanged. Absent = the",
+    "provider's default, which is how the first nine backbones were run."
   ],
   "models": {
     "opus-5.5": {
@@ -212,7 +215,8 @@
       "cache_read_multiplier": 0.25,
       "cache_note": "OpenAI caches automatically; multiplier is the published cached-input rate, not measured here",
       "route_note": "Direct OpenAI. Same price as gpt-6.1-sol ($2/$10 per Mtok); kept alongside it so the two can be compared rather than one being assumed better for being newer.",
-      "responses_api": true
+      "responses_api": true,
+      "reasoning_effort": "medium"
     },
     "terra": {
       "label": "GPT 5.6 Terra (persona and judge model; free on Azure)",
@@ -224,7 +228,130 @@
       },
       "cache_read_multiplier": 0.25,
       "cache_note": "Azure/OpenAI automatic; free here either way",
-      "endpoint": null
+      "endpoint": null,
+      "reasoning_effort": "medium"
+    },
+    "fable-5.1": {
+      "label": "Claude Fable 5.1",
+      "endpoint": null,
+      "azure": null,
+      "openrouter": "anthropic/claude-fable-5.1",
+      "price": {
+        "in": 10.0,
+        "out": 50.0
+      },
+      "cache_read_multiplier": null,
+      "reasoning_effort": "medium"
+    },
+    "sonnet-5.5": {
+      "label": "Claude Sonnet 5.5",
+      "endpoint": null,
+      "azure": null,
+      "openrouter": "anthropic/claude-sonnet-5.5",
+      "price": {
+        "in": 2.0,
+        "out": 10.0
+      },
+      "cache_read_multiplier": null,
+      "reasoning_effort": "medium"
+    },
+    "haiku-5.5": {
+      "label": "Claude Haiku 5.5",
+      "endpoint": null,
+      "azure": null,
+      "openrouter": "anthropic/claude-haiku-5.5",
+      "price": {
+        "in": 0.1,
+        "out": 0.5
+      },
+      "cache_read_multiplier": null,
+      "reasoning_effort": "medium"
+    },
+    "gpt-6-luna": {
+      "label": "GPT 6 Luna",
+      "endpoint": null,
+      "azure": null,
+      "openrouter": "openai/gpt-6-luna",
+      "price": {
+        "in": 0.1,
+        "out": 0.5
+      },
+      "cache_read_multiplier": null,
+      "reasoning_effort": "medium"
+    },
+    "muse-spark-1.3": {
+      "label": "Muse Spark 1.3",
+      "endpoint": null,
+      "azure": null,
+      "openrouter": "meta/muse-spark-1.3",
+      "price": {
+        "in": 1.25,
+        "out": 4.25
+      },
+      "cache_read_multiplier": null,
+      "reasoning_effort": "medium",
+      "route_note": "OpenRouter gates meta/* behind a one-time 18+ attestation on the account; without it every call is a 403."
+    },
+    "gemini-3.7-flash": {
+      "label": "Gemini 3.7 Flash",
+      "endpoint": null,
+      "azure": null,
+      "openrouter": "google/gemini-3.7-flash",
+      "price": {
+        "in": 0.75,
+        "out": 3.75
+      },
+      "cache_read_multiplier": null,
+      "reasoning_effort": "medium",
+      "route_note": "The team's list says Gemini 3.7; Flash is the only 3.7 model OpenRouter serves."
+    },
+    "glm-5.3-flash": {
+      "label": "GLM 5.3 Flash",
+      "endpoint": null,
+      "azure": null,
+      "openrouter": "z-ai/glm-5.3-flash",
+      "price": {
+        "in": 0.15,
+        "out": 0.5
+      },
+      "cache_read_multiplier": null,
+      "reasoning_effort": "medium"
+    },
+    "qwen3.8-flash": {
+      "label": "Qwen 3.8 Flash",
+      "endpoint": null,
+      "azure": null,
+      "openrouter": "qwen/qwen3.8-flash",
+      "price": {
+        "in": 0.15,
+        "out": 0.47
+      },
+      "cache_read_multiplier": null,
+      "reasoning_effort": "medium"
+    },
+    "grok-4.6": {
+      "label": "Grok 4.6",
+      "endpoint": null,
+      "azure": null,
+      "openrouter": "x-ai/grok-4.6",
+      "price": {
+        "in": 2.0,
+        "out": 6.0
+      },
+      "cache_read_multiplier": null,
+      "route_note": "Already run at the provider's default effort; registered so its results are priced. No reasoning_effort, so a re-run matches the finished cells."
+    },
+    "muse-glimmer-30b": {
+      "label": "Muse Glimmer 30B",
+      "endpoint": null,
+      "azure": null,
+      "openrouter": "meta/muse-glimmer-30b",
+      "price": {
+        "in": 0.3,
+        "out": 1.2
+      },
+      "cache_read_multiplier": null,
+      "route_note": "Already run at the provider's default effort; registered so its results are priced. No reasoning_effort, so a re-run matches the finished cells. 131k context."
     }
   }
 }
