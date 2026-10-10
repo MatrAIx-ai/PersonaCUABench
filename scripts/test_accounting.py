@@ -66,6 +66,15 @@ def check_registry() -> None:
     assert registry.cost_of("minimax/minimax-m3", 1_000_000, 0) == 0.3
     assert registry.cost_of("gpt-5.6-terra", 1_000_000, 1_000_000) == 0.0
     assert registry.cost_of("not/a-model", 1_000_000, 0) is None
+    # Effort is looked up by any id; the first nine backbones ran at the
+    # provider's default and must stay unset, or their finished cells rehash.
+    assert registry.reasoning_effort("anthropic/claude-sonnet-5.5") == "medium"
+    assert registry.reasoning_effort("gpt-5.6-terra") == "medium"
+    for done in ("claude-opus-5-5", "gpt-6-astra", "gemini-3.8-flash", "x-ai/grok-4.6",
+                 "kimi-k3", "MiniMax-M3", "meta/muse-glimmer-30b", "Qwen/Qwen3.8-27B",
+                 "deepseek-v4.1-flash"):
+        assert registry.reasoning_effort(done) is None, done
+    assert registry.reasoning_effort("not/a-model") is None
 
 
 def check_model_routes() -> None:
@@ -241,8 +250,26 @@ def check_metered_call() -> None:
         R.metered(Client(), meter, "agent", provider="openai",
                   model="gpt-5.6-terra", messages=[])
         assert "extra_body" not in sent and sent["model"] == "gpt-5.6-terra"
+        # An asked-for effort replaces the chat path's tools workaround ("none").
+        sent.clear()
+        R.metered(Client(), meter, "agent", provider="openai", model="gpt-5.6-terra",
+                  messages=[], tools=R.TOOLS, reasoning_effort="medium")
+        assert sent["reasoning_effort"] == "medium"
     finally:
         R.RESPONSES_API = True
+
+    # The agent's effort, the way each route takes it.
+    sent.clear()
+    R.metered(Client(), meter, "agent", provider="openrouter",
+              model="anthropic/claude-sonnet-5.5", messages=[], reasoning_effort="medium")
+    assert sent["extra_body"] == {"usage": {"include": True},
+                                  "reasoning": {"effort": "medium"}}
+    assert "reasoning_effort" not in sent
+    responses_sent.clear()
+    R.metered(Azure(), R.Meter(), "agent", provider="openai", model="gpt-5.6-terra",
+              messages=[{"role": "user", "content": "hi"}], tools=R.TOOLS,
+              reasoning_effort="medium")
+    assert responses_sent["reasoning"] == {"summary": "auto", "effort": "medium"}
 
 
 def cell_record(setting, model, task, cost, judge_cost, wall, steps=10):
